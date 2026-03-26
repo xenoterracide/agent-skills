@@ -111,3 +111,6 @@ Skills are recognized by Kimi when:
 3. **Specific triggers** - Describe exact scenarios for skill usage
 4. **Progressive disclosure** - Put detailed info in references/, keep
    SKILL.md focused
+5. **Fix broken commands immediately** - If you discover a skill's command
+   or example doesn't work, update the skill right away. Skills are living
+   documents that must be kept accurate.

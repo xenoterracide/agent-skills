@@ -172,11 +172,11 @@ When addressing review comments on a PR:
    }' --jq '.data.repository.pullRequest.reviewThreads.nodes | map(select(.isResolved == false))'
    ```
 3. **Process unresolved** - The jq filter already returns only threads where `isResolved: false`
-4. **Reply to each comment** - After making changes, reply to each review comment:
+4. **Reply to each comment** - After making changes, reply to each review comment by posting a general PR comment that references the reviewer's comment:
+   - Quote the relevant part of the comment you're responding to
    - Fixed: `Fixed in commit SHA`
    - Not an issue: `Not applicable: [reason]`
    - Question: `Question: [clarification needed]`
-   - Use `gh pr comment <number> --reply-to <comment-id>` if available, or quote the comment
 5. **Verify fixes** - Confirm changes address the current code state
 
 ## Important Note on Comment APIs
