@@ -105,6 +105,15 @@ var config = Config.builder()
     .build();
 ```
 
+**Avoid setters** - Instead of anemic data objects with getters/setters, prefer domain-driven design with rich behavior:
+```java
+// BAD - anemic object with setter
+person.setStatus("APPROVED");
+
+// GOOD - tell, don't ask
+person.approve();
+```
+
 **When mutability is acceptable:**
 - Performance-critical code where immutability causes measurable overhead
 - Accumulators/builders during object construction
