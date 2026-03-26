@@ -233,6 +233,17 @@ fi
 
 **When uncertain, verify** rather than assuming state is as you left it.
 
+## Rule 6: Fix Skills When Commands Don't Work
+
+**Skills are living documents.** If you discover a command or example in a skill doesn't work:
+
+- Fix the skill immediately - don't leave it broken for the next session
+- Update the command to the correct working version
+- Remove outdated examples that no longer apply
+- Add notes about environment-specific requirements if needed
+
+This applies to all documentation you maintain - keep it accurate and working.
+
 ---
 
 SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
