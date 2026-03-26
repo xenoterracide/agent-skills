@@ -251,6 +251,68 @@ public void processPayment(PaymentMethod method, Amount amount) {
 
 If you follow these principles, your code will naturally be composable, clear, and aligned with the domain.
 
+## Rule 4: Do Not Assume Shared State or Identity
+
+**You may not share a workspace with the operator, and you may not be the same user.** Never make assumptions about:
+
+### Workspace Assumptions (Dangerous)
+
+**Do not assume exclusive access to:**
+- The filesystem (other processes/agents may modify files)
+- Environment variables (may change between invocations)
+- Network ports (may be in use by other services)
+- Running processes (state may not be what you expect)
+
+**Do not assume you know the full context:**
+- Files may have been modified since you last read them
+- External services may have different state than when last checked
+- Configuration may differ between environments
+
+### User Identity Assumptions (Dangerous)
+
+**Do not assume:**
+- You are running as the same user as the operator
+- You have the same permissions as the operator
+- Your home directory is the operator's home directory
+- Your SSH keys, git config, or credentials are the operator's
+- Your shell environment matches the operator's
+
+### Correct Approaches
+
+**Explicitly verify state:**
+```bash
+# Check if port is available before using
+if ! lsof -i :8080 > /dev/null 2>&1; then
+    start_server_on_port 8080
+else
+    echo "Port 8080 is already in use"
+fi
+```
+
+**Don't assume file state persists:**
+```python
+# BAD - assumes file hasn't changed since last read
+with open('config.json') as f:
+    config = json.load(f)  # May be stale
+
+# GOOD - read fresh when needed
+def get_config():
+    with open('config.json') as f:
+        return json.load(f)  # Always current
+```
+
+**Check user context:**
+```bash
+# Know who you're running as
+CURRENT_USER=$(whoami)
+CURRENT_HOME=$HOME
+
+echo "Running as: $CURRENT_USER"
+echo "Home directory: $CURRENT_HOME"
+```
+
+**When uncertain, ask or verify** rather than assuming shared state or identity.
+
 ---
 
 SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
