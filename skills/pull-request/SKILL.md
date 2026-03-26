@@ -44,10 +44,10 @@ description: ALWAYS use this skill when ANY files are modified, created, or dele
 
 When committing and creating/updating a PR, follow this workflow:
 
-1. **Check current branch status** - Run `git status` and `gh pr view --json number,url,headRefName,state` to determine:
-   - What branch you're currently on
-   - Whether a PR already exists for this branch
-   - Whether the PR is OPEN, CLOSED, or MERGED
+1. **Check current branch status** - Use MCP tools (preferred) or `gh` CLI:
+   - Use `pull_request_read` or `list_pull_requests` MCP tools to check PR state
+   - Or run `git status` and `gh pr view --json number,url,headRefName,state`
+   - Determine: current branch, existing PR status (OPEN/CLOSED/MERGED)
 
 2. **Handle closed/merged PRs:**
    - If the current branch has a CLOSED or MERGED PR, delete the local branch:

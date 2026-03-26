@@ -17,8 +17,13 @@ When starting a new session, always verify the current repository state to avoid
 
 ## Mandatory Startup Checks
 
-Run these commands **first** before any investigation or code changes:
+Run these checks **first** before any investigation or code changes:
 
+**Preferred: Use MCP tools when available:**
+- Use `list_pull_requests` or `pull_request_read` to check PR state for current branch
+- This gives structured data without parsing shell output
+
+**Alternative: Use git and GitHub CLI:**
 ```bash
 # 1. Check current branch and git status
 git status
@@ -26,7 +31,7 @@ git status
 # 2. Check if current branch has a PR and its state
 gh pr view --json number,url,headRefName,state,baseRefName
 
-# 3. Get the default branch name (usually develop or main)
+# 3. Get the default branch name
 git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'
 ```
 
