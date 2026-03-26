@@ -70,13 +70,15 @@ void parserSetsStateCorrectly() {
 
 **Testing trivial code:**
 ```java
-// BAD - don't test getters/setters
+// BAD - don't explicitly test getters/setters
 @Test
 void getterReturnsValue() {
     var person = new Person("Alice");
-    assertThat(person.getName()).isEqualTo("Alice");  // No logic
+    assertThat(person.getName()).isEqualTo("Alice");  // No logic - redundant
 }
 ```
+
+Trivial code should be exercised by other tests, not explicitly tested. If it isn't covered, question whether it's needed (libraries may need explicit tests to hit coverage targets).
 
 ## Correct Approaches
 

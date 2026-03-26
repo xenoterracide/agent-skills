@@ -74,9 +74,43 @@ Before considering any task complete, run the relevant tests. See the `testing` 
 - Prefer **narrow integration tests** (test one integration point) over broad end-to-end tests
 - Test observable behavior through public APIs, not implementation details
 - Use stubs/fakes for external services; avoid mocks unless necessary
-- Don't test trivial code (getters/setters)
 
-## Rule 3: SOLID Design and Polymorphic Behavior
+**Coverage targets:**
+- Maintain high coverage (90%+)
+- Trivial code (getters/setters) should be exercised by other tests, not explicitly tested
+- If trivial code isn't covered, question whether it's needed (libraries may be an exception)
+
+## Rule 3: Prefer Immutability
+
+Prefer immutable objects and data structures where immutability doesn't reduce comprehension.
+
+**Benefits:**
+- Thread safety without synchronization
+- Predictable behavior - no surprise state changes
+- Easier to reason about code
+- Fewer defensive copies needed
+
+**Examples:**
+```java
+// GOOD - immutable record
+public record Person(String name, int age) {}
+
+// GOOD - immutable collections
+var items = List.of("a", "b", "c");  // Cannot be modified
+
+// GOOD - builder pattern for complex immutables
+var config = Config.builder()
+    .timeout(Duration.ofSeconds(30))
+    .retries(3)
+    .build();
+```
+
+**When mutability is acceptable:**
+- Performance-critical code where immutability causes measurable overhead
+- Accumulators/builders during object construction
+- Cases where it significantly reduces comprehension
+
+## Rule 4: SOLID Design and Polymorphic Behavior
 
 Design code that follows SOLID principles with a focus on polymorphic behavior:
 
@@ -144,7 +178,7 @@ public void processPayment(PaymentMethod method, Amount amount) {
 
 If you follow these principles, your code will naturally be composable, clear, and aligned with the domain.
 
-## Rule 4: Do Not Assume Synchronized State
+## Rule 5: Do Not Assume Synchronized State
 
 **Your local repository state may be stale.** The operator may merge PRs, change branches, or modify files outside your session. Never assume:
 
