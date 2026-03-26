@@ -124,13 +124,23 @@ gh pr create --title "$TITLE" --body "- Bullet point describing change 1
 gh pr edit --title "$TITLE" --body "- Updated bullet points"
 ```
 
-### PR Body Format
+### PR Body Format (MANDATORY)
 
-- Short summary paragraph (optional)
-- Bullet points explaining main changes
-- Each bullet describes one complete logical change
-- Explain WHAT and WHY
-- Wrap lines to <= 72 characters
+PR description MUST include a body explaining the change:
+
+1. **Why paragraph (REQUIRED)** - Start with a paragraph explaining WHY this change exists:
+   - What problem does this solve?
+   - What motivated this change?
+   - Why is this the right approach?
+   - This context is crucial for code review and future maintainers
+
+2. **What bullets** - Follow with bullet points describing WHAT changed:
+   - Each bullet describes one complete logical change
+   - Be specific about what was modified
+   - Reference specific files or components if helpful
+
+- Wrap all lines to <= 72 characters
+- Use plain bullet lists (`- item`) not checkboxes
 
 ## Handling Review Comments
 

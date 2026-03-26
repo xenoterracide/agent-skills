@@ -20,13 +20,13 @@ description: When you need to describe what code changes do - whether for a comm
 - First line MUST be a valid Conventional Commit subject.
 - Keep the FIRST line <= 72 characters.
 - Use a specific scope when possible.
-- Body:
-  - a short summary of the PR
-  - a few bullet points explaining the main changes
-  - Each bullet must describe one complete logical change,
-    including purpose or impact
+- Body (MANDATORY - must explain WHY):
+  - Start with a paragraph explaining WHY this change is being made
+    - The "why" provides context for future readers
+    - Explain the problem, motivation, or rationale
+  - Follow with bullet points explaining the main changes (WHAT)
+  - Each bullet must describe one complete logical change
   - Do not split a single idea across multiple bullets
-  - Explain WHAT and WHY
   - Wrap lines to <= 72 chars
 
 ## Template
