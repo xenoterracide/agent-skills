@@ -29,23 +29,6 @@ try {
 }
 ```
 
-```python
-# BAD - exception is silently lost
-try:
-    risky_operation()
-except:
-    pass
-```
-
-```javascript
-// BAD - error is silently lost
-try {
-    riskyOperation();
-} catch (e) {
-    // do nothing
-}
-```
-
 ### Correct Approaches
 
 **Rethrow when you cannot handle it:**
@@ -58,30 +41,14 @@ try {
 }
 ```
 
-```python
-# GOOD - reraise to let caller handle
-try:
-    risky_operation()
-except IOError as e:
-    raise ApplicationError("Failed to process file") from e
-```
-
 **Log when you need to continue:**
 ```java
 // GOOD - log with context before continuing
 try {
     optionalCleanup();
 } catch (Exception e) {
-    logger.warn("Cleanup failed for resource {}, continuing anyway", resourceId, e);
+    log.warn("Cleanup failed for resource {}, continuing anyway", resourceId, e);
 }
-```
-
-```python
-# GOOD - log with context before continuing
-try:
-    optional_cleanup()
-except Exception as e:
-    logger.warning(f"Cleanup failed for resource {resource_id}, continuing anyway: {e}")
 ```
 
 ### Error Handling Decision Tree
@@ -106,17 +73,16 @@ Before considering any task complete, run the relevant tests. Tests provide conf
 
 We follow the **testing trophy** approach, which values integration-style testing over isolated unit testing:
 
-**Sociable Tests (preferred)**
+**Sociable/Integration Tests (preferred)**
+- Integration tests are an extension of sociable tests - the concepts are closely related
 - Tests that use real collaborating objects, not mocks
 - Named by Martin Fowler: tests are "sociable" when they interact with real dependencies
+- Prefer calling through public APIs rather than testing internals
+- Exercise the code paths users will actually trigger
 - Only mock when absolutely necessary (external services, non-deterministic behavior)
 - Tests the actual behavior of the system as it will run in production
 
-**Integration Tests (preferred)**
-- Test real workflows end-to-end using real objects
-- Verify components work together correctly
-- Prefer calling through public APIs rather than testing internals
-- Exercise the code paths users will actually trigger
+**Note on "Mock" MVC**: MockMvc is not a mock in the Mockito sense - it's more of a stub or fake that stands in for the HTTP layer while still exercising real controllers.
 
 **When to Mock (exceptions)**
 - External services you don't control
@@ -150,7 +116,7 @@ void processOrder() {
 void parserSetsStateCorrectly() {
     var parser = new Parser();
     parser.parse("input");
-    assertEquals(3, parser.getTokenCount());  // Internal detail that may change
+    assertThat(parser.getTokenCount()).isEqualTo(3);  // Internal detail that may change
 }
 ```
 
@@ -183,8 +149,8 @@ void checkoutFlow() {
         .quantity(2)
         .build());
     
-    assertEquals(OrderStatus.CONFIRMED, result.status());
-    assertNotNull(result.confirmationNumber());
+    assertThat(result.status()).isEqualTo(OrderStatus.CONFIRMED);
+    assertThat(result.confirmationNumber()).isNotNull();
 }
 ```
 
@@ -215,7 +181,12 @@ Design code that follows SOLID principles with a focus on polymorphic behavior:
 
 ### Polymorphic Behavior is Key
 
-**Encapsulate behavior so it's polymorphic** - let the unit decide how to act rather than orchestrating externally:
+**Encapsulate behavior so it's polymorphic** - let the unit decide how to act rather than orchestrating externally.
+
+**Polymorphism takes many forms:**
+- Traditional inheritance and interfaces
+- Lambdas and functional programming (passing behavior as data)
+- Strategy patterns and dependency injection
 
 ```java
 // BAD - external orchestration with conditionals
@@ -251,9 +222,17 @@ public void processPayment(PaymentMethod method, Amount amount) {
 
 If you follow these principles, your code will naturally be composable, clear, and aligned with the domain.
 
-## Rule 4: Do Not Assume Shared State or Identity
+## Rule 4: Do Not Assume Synchronized State
 
-**You may not share a workspace with the operator, and you may not be the same user.** Never make assumptions about:
+**Your local repository state may be stale.** The operator may merge PRs, change branches, or modify files outside your session. Never assume:
+
+### Git/Repository Assumptions (Dangerous)
+
+**Do not assume:**
+- Your local `develop` (or default branch) is current with `origin`
+- Files haven't changed since you last read them
+- Branches you created are still valid (PRs may have been merged/closed)
+- Your working directory is clean or as you left it
 
 ### Workspace Assumptions (Dangerous)
 
@@ -263,23 +242,30 @@ If you follow these principles, your code will naturally be composable, clear, a
 - Network ports (may be in use by other services)
 - Running processes (state may not be what you expect)
 
-**Do not assume you know the full context:**
-- Files may have been modified since you last read them
-- External services may have different state than when last checked
-- Configuration may differ between environments
-
-### User Identity Assumptions (Dangerous)
-
-**Do not assume:**
-- You are running as the same user as the operator
-- You have the same permissions as the operator
-- Your home directory is the operator's home directory
-- Your SSH keys, git config, or credentials are the operator's
-- Your shell environment matches the operator's
-
 ### Correct Approaches
 
-**Explicitly verify state:**
+**Verify git state at session start:**
+```bash
+# Always check if local HEAD is behind origin
+git fetch origin
+git status
+
+# Pull latest before starting work
+git pull origin develop
+```
+
+**Don't assume file state persists:**
+```java
+// BAD - assumes file hasn't changed since last read
+private Config cachedConfig;  // May be stale
+
+// GOOD - read fresh when needed
+public Config getConfig() {
+    return ConfigLoader.load("config.json");  // Always current
+}
+```
+
+**Explicitly verify external state:**
 ```bash
 # Check if port is available before using
 if ! lsof -i :8080 > /dev/null 2>&1; then
@@ -289,29 +275,7 @@ else
 fi
 ```
 
-**Don't assume file state persists:**
-```python
-# BAD - assumes file hasn't changed since last read
-with open('config.json') as f:
-    config = json.load(f)  # May be stale
-
-# GOOD - read fresh when needed
-def get_config():
-    with open('config.json') as f:
-        return json.load(f)  # Always current
-```
-
-**Check user context:**
-```bash
-# Know who you're running as
-CURRENT_USER=$(whoami)
-CURRENT_HOME=$HOME
-
-echo "Running as: $CURRENT_USER"
-echo "Home directory: $CURRENT_HOME"
-```
-
-**When uncertain, ask or verify** rather than assuming shared state or identity.
+**When uncertain, verify** rather than assuming state is as you left it.
 
 ---
 
