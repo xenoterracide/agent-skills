@@ -147,61 +147,16 @@ PR description MUST include a body explaining the change:
 When addressing review comments on a PR:
 
 1. **Pull first** - Always pull the latest changes before starting
-2. **Query unresolved comments** - Use GraphQL to get only unresolved review threads:
-   ```bash
-   gh api graphql -f query='
-   query {
-     repository(owner: "OWNER", name: "REPO") {
-       pullRequest(number: N) {
-         reviewThreads(first: 100) {
-           nodes {
-             id
-             isResolved
-             comments(first: 1) {
-               nodes {
-                 id
-                 body
-                 path
-                 originalLine
-               }
-             }
-           }
-         }
-       }
-     }
-   }' --jq '.data.repository.pullRequest.reviewThreads.nodes | map(select(.isResolved == false))'
-   ```
-3. **Process unresolved** - The jq filter already returns only threads where `isResolved: false`
-4. **Reply to each comment** - After making changes, reply to each review comment using GraphQL:
-   ```bash
-   gh api graphql -f query='
-   mutation {
-     addPullRequestReviewThreadReply(
-       input: {
-         pullRequestReviewThreadId: "THREAD_ID"
-         body: "Fixed in commit SHA"
-       }
-     ) {
-       comment {
-         id
-       }
-     }
-   }'
-   ```
-   Alternative if thread ID is unavailable: Post a general PR comment quoting the review comment and indicating status:
-   - Fixed: `Fixed in commit SHA`
-   - Not an issue: `Not applicable: [reason]`
-   - Question: `Question: [clarification needed]`
-5. **Verify fixes** - Confirm changes address the current code state
+2. **Query unresolved comments** - Use MCP tools or GraphQL (see `github` skill for GraphQL examples):
+   - Query review threads with `isResolved` field to find unresolved comments
+   - Get thread IDs for replying
+3. **Reply to each comment** - Use MCP tools or GraphQL mutation `addPullRequestReviewThreadReply` (see `github` skill):
+   - Fixed: "Fixed in commit SHA"
+   - Not an issue: "Not applicable: [reason]"
+   - Question: "Question: [clarification needed]"
+4. **Verify fixes** - Confirm changes address the current code state
 
-## Important Note on Comment APIs
-
-The GitHub REST API (`/repos/{owner}/{repo}/pulls/{pull_number}/comments`) does NOT expose the "resolved" state of review comments. The resolution state is only available via:
-
-- GraphQL API (`reviewThreads.isResolved`)
-- GitHub Web UI
-
-Always use GraphQL to check which review threads are actually unresolved.
+**Note:** REST API doesn't expose resolved state - use GraphQL (`reviewThreads.isResolved`) or MCP tools to check unresolved comments.
 
 ## AI Attribution
 
