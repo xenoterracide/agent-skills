@@ -172,8 +172,23 @@ When addressing review comments on a PR:
    }' --jq '.data.repository.pullRequest.reviewThreads.nodes | map(select(.isResolved == false))'
    ```
 3. **Process unresolved** - The jq filter already returns only threads where `isResolved: false`
-4. **Reply to each comment** - After making changes, reply to each review comment by posting a general PR comment that references the reviewer's comment:
-   - Quote the relevant part of the comment you're responding to
+4. **Reply to each comment** - After making changes, reply to each review comment using GraphQL:
+   ```bash
+   gh api graphql -f query='
+   mutation {
+     addPullRequestReviewThreadReply(
+       input: {
+         pullRequestReviewThreadId: "THREAD_ID"
+         body: "Fixed in commit SHA"
+       }
+     ) {
+       comment {
+         id
+       }
+     }
+   }'
+   ```
+   Alternative if thread ID is unavailable: Post a general PR comment quoting the review comment and indicating status:
    - Fixed: `Fixed in commit SHA`
    - Not an issue: `Not applicable: [reason]`
    - Question: `Question: [clarification needed]`
