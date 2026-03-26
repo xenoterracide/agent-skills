@@ -71,24 +71,32 @@ Before considering any task complete, run the relevant tests. Tests provide conf
 
 ### Testing Philosophy: Prefer Sociable and Integration Tests
 
-We follow the **testing trophy** approach, which values integration-style testing over isolated unit testing:
+We follow the **testing trophy** approach, which values sociable and integration tests over solitary unit tests with mocks.
+
+**Key Concepts (from Martin Fowler)**
+
+- **Sociable Tests**: Tests that use real collaborating objects. Coined by Jay Fields, these tests let the unit under test interact with real dependencies, assuming they work correctly (and usually they have their own tests). See: https://martinfowler.com/bliki/UnitTest.html
+- **Solitary Tests**: Tests where all collaborators are replaced with mocks/stubs. We avoid this style unless necessary.
+- **Integration Tests**: Tests that verify independently developed units work correctly when connected. Prefer "narrow" integration tests that test one integration point at a time. See: https://martinfowler.com/bliki/IntegrationTest.html
 
 **Sociable/Integration Tests (preferred)**
-- Integration tests are an extension of sociable tests - the concepts are closely related
 - Tests that use real collaborating objects, not mocks
-- Named by Martin Fowler: tests are "sociable" when they interact with real dependencies
 - Prefer calling through public APIs rather than testing internals
 - Exercise the code paths users will actually trigger
-- Only mock when absolutely necessary (external services, non-deterministic behavior)
 - Tests the actual behavior of the system as it will run in production
+- Narrow integration tests test one integration point at a time with test doubles for external services
 
-**Note on "Mock" MVC**: MockMvc is not a mock in the Mockito sense - it's more of a stub or fake that stands in for the HTTP layer while still exercising real controllers.
-
-**When to Mock (exceptions)**
-- External services you don't control
+**When to Use Test Doubles (exceptions)**
+- External services you don't control (use stubs/fakes, not mocks)
 - Non-deterministic behavior (random, time, etc.)
 - Extremely slow operations that would make tests impractical
 - Infrastructure you can't easily run locally
+
+**Note on "Mock" MVC**: MockMvc is not a mock in the Mockito sense - it's more of a stub or fake that stands in for the HTTP layer while still exercising real controllers.
+
+**Further Reading:**
+- Martin Fowler on test shapes and terminology: https://martinfowler.com/articles/2021-test-shapes.html
+- Practical Test Pyramid: https://martinfowler.com/articles/practical-test-pyramid.html
 
 ### Anti-patterns
 
@@ -109,14 +117,24 @@ void processOrder() {
 }
 ```
 
-**Testing implementation details:**
+**Testing implementation details or internal state:**
 ```java
-// BAD - testing internal state, not behavior
+// BAD - testing internal state, not observable behavior
 @Test
 void parserSetsStateCorrectly() {
     var parser = new Parser();
     parser.parse("input");
     assertThat(parser.getTokenCount()).isEqualTo(3);  // Internal detail that may change
+}
+```
+
+**Testing trivial code:**
+```java
+// BAD - don't test getters/setters or trivial code
+@Test
+void getterReturnsValue() {
+    var person = new Person("Alice");
+    assertThat(person.getName()).isEqualTo("Alice");  // No logic to test
 }
 ```
 
