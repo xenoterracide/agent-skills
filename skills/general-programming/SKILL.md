@@ -1,6 +1,6 @@
 ---
 name: general-programming
-description: General programming principles and best practices that apply across all languages and tasks. This skill is always consumed first. Use for all coding tasks to ensure consistent quality and robustness.
+description: General programming principles and best practices that apply across all languages and tasks. Use for all coding tasks to ensure consistent quality and robustness. Consumed after session-init.
 # SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
 #
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
