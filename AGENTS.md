@@ -109,11 +109,13 @@ The `description` field determines when the skill triggers - be specific about u
 
 ## Development Workflow
 
+> **REMINDER:** If Kimi isn't automatically using the `pull-request` skill when you make changes, explicitly tell it to: `/skill pull-request`. This skill handles committing, pushing, and PR creation - it should ALWAYS be used when any files are modified.
+
 ### Making Changes
 
 1. **Start with session-init skill** - Verify branch state before any work
 2. **Apply domain-specific skills** as needed for the task
-3. **Always use pull-request skill** when modifying files
+3. **Always use pull-request skill** when modifying files (use `/skill pull-request` if not auto-triggered)
 4. **Follow commit-message skill** for commit/PR formatting
 
 ### Formatting Skills
