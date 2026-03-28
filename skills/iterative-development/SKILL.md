@@ -182,7 +182,127 @@ Requirements are not fully knowable upfront:
 - Transaction boundaries feel forced
 - Invariants are becoming complex
 
-## Integration with Other Skills
+## AI Usage Guide - How to Apply This Skill
+
+### When to Activate This Skill
+
+**Trigger this skill BEFORE writing code when:**
+
+- User mentions starting a new feature, epic, or user story
+- User says something like "I need to build..." or "How should I approach..."
+- There's uncertainty about domain concepts, boundaries, or requirements
+- Current model feels wrong or is getting complex
+- Planning an iteration or sprint
+
+**Do NOT use this skill when:**
+
+- User has a clear, specific coding task ("fix this bug", "add this method")
+- The code change is mechanical (refactoring, dependency updates)
+- Working within an established, well-understood domain
+
+### AI Role - The Facilitator, Not the Coder
+
+Your job is to **guide the user through analysis**, not to write code. Ask questions. Challenge assumptions. Help them think through the domain before committing to implementation.
+
+### The Planning Conversation Flow
+
+#### Phase 1: Establish Context (Questions to Ask)
+
+**If starting completely new:**
+
+- "What business problem are we solving?"
+- "Who are the users/actors involved?"
+- "What's the simplest scenario that demonstrates value?"
+- "What are the biggest unknowns or risks?"
+
+**If extending existing code:**
+
+- "What new behavior are we adding?"
+- "Does this fit the current model, or is it stretching?"
+- "Are we discovering new language, or reusing existing terms?"
+
+#### Phase 2: Identify the Walking Skeleton
+
+Guide the user to identify the thinnest possible vertical slice:
+
+- "What's the minimum that demonstrates end-to-end value?"
+- "Can we fake the complex parts initially?"
+- "What would we show in a demo?"
+
+**Rule:** If it can't be demonstrated, it's too big. Break it down.
+
+#### Phase 3: Risk Assessment
+
+Ask about risks that should drive the iteration:
+
+- "What technical pieces are uncertain?"
+- "What domain concepts are we fuzzy on?"
+- "What integrations or dependencies worry us?"
+
+**Priority:** Highest risk first, even if lower business value.
+
+#### Phase 4: Define the First Iteration Goal
+
+Before any code, establish:
+
+- "What's the specific goal for this iteration?"
+- "What will we have working by the end?"
+- "What are we explicitly NOT doing yet?"
+
+**Document this.** Create a simple statement: _"This iteration will [goal], demonstrating [scenario], while deferring [out-of-scope items]."_
+
+#### Phase 5: Ubiquitous Language Check
+
+Before coding, clarify language:
+
+- "What are we calling this concept?"
+- "Are we using terms consistently with the existing codebase?"
+- "Should we rename existing concepts to match new understanding?"
+
+**If language is unclear, the model is unclear.** Do not proceed.
+
+### When to Transition to Coding
+
+**Signal it's time to code:**
+
+1. Walking skeleton is defined and agreed upon
+2. Ubiquitous language is documented
+3. Out-of-scope items are explicitly listed
+4. User says "let's build this" or similar
+
+**Transition phrase:**
+
+> "Okay, let's build the walking skeleton for [goal]. I'll start with [first test/scenario]."
+
+### During Development - Stay Alert for Whirlpool Moments
+
+As you write code together, watch for signals that the model needs refinement:
+
+**If the user says:**
+
+- "This feels complicated" → Suggest: "Is there a missing concept? Should we refactor?"
+- "Actually, we also need to..." → Suggest: "Is this in scope for this iteration?"
+- "Hmm, that's not quite right" → Stop. Ask: "What did we get wrong about the domain?"
+
+**If the code shows:**
+
+- Complex conditionals → "Is there a missing aggregate or value object?"
+- Many null checks → "Should this be optional? Is there a missing concept?"
+- Comments explaining business rules → "Should this be explicit in the model?"
+
+### Anti-Pattern: AI Jumping to Code
+
+❌ **Wrong:**
+
+> User: "I need to handle order fulfillment"
+> AI: "Here's the OrderFulfillmentService with methods..."
+
+✅ **Right:**
+
+> User: "I need to handle order fulfillment"
+> AI: "Let's understand this before coding. What's the simplest fulfillment scenario? Who are the actors? What does 'fulfilled' mean in your domain?"
+
+### Integration with Other Skills
 
 - **use-case-creator** - Use cases evolve; update them as understanding grows
 - **testing** - Tests capture and protect domain understanding
