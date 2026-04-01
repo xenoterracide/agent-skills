@@ -321,7 +321,6 @@ Before considering code complete:
 4. **Verify documentation** - is the why explained? Are complex parts clear?
 
 **Don't waste reviewer time on issues you could have caught yourself.**
-
 ---
 
 SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
