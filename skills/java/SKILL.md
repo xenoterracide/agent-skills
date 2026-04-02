@@ -28,6 +28,62 @@ Let your domain language define the responsibilities in your system. Build each 
   - Error Prone [Var](https://errorprone.info/bugpattern/Var) rule is enforced to prevent mutable variables. If you need mutability, you must explicitly annotate with `@Var` and justify why mutability is necessary.
 - prefer non nullability. Using [jspecify](https://jspecify.dev/docs/spec/) and [Nullaway](https://github.com/uber/NullAway/wiki) we enforce non nullability by default and explicitly annotate nullable types with `@Nullable`. This helps prevent null pointer exceptions and makes it clear when a value can be null. `Optional` is preferred when mapping or filtering would be clearer than procedural logic.
 
+## Nullability with JSpecify
+
+This codebase uses [JSpecify](https://jspecify.dev/) for nullness annotations and [NullAway](https://github.com/uber/NullAway/wiki) for compile-time null safety.
+
+### The Rule: Non-Null by Default
+
+All types are **non-null by default**. You must explicitly mark nullable types:
+
+```java
+// GOOD - parameter is non-null (default), return is nullable
+public @Nullable User findById(String id) {
+    // ... may return null if not found
+}
+
+// GOOD - both parameters nullable
+public void merge(@Nullable User first, @Nullable User second) {
+    // ...
+}
+```
+
+### When to Use @Nullable
+
+Mark a type `@Nullable` when:
+
+- A method may return `null` (e.g., finders, lookups)
+- A parameter may accept `null` (avoid if possible)
+- A field may be uninitialized or set to `null`
+
+### Prefer Optional for Chain Operations
+
+Use `Optional` when you need to map/filter over potentially absent values:
+
+```java
+// GOOD - Optional for chaining
+return findById(id)
+    .map(User::getEmail)
+    .filter(Email::isValid)
+    .orElse(defaultEmail);
+
+// BAD - null check with intermediate variables
+User user = findById(id);
+if (user == null) return defaultEmail;
+Email email = user.getEmail();
+if (email == null || !email.isValid()) return defaultEmail;
+return email;
+```
+
+### NullAway Suppressions
+
+If NullAway cannot prove non-nullness but you know it's safe, suppress at the source with explanation:
+
+```java
+@SuppressWarnings("NullAway") // Validated by constructor
+private final String id;
+```
+
 ## Style
 
 ### var keyword
