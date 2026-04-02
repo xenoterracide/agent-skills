@@ -77,12 +77,52 @@ return email;
 
 ### NullAway Suppressions
 
-If NullAway cannot prove non-nullness but you know it's safe, suppress at the source with explanation:
+If NullAway cannot prove non-nullness, first exhaust these options in order:
+
+### 1. Fix the Code
+
+Restructure to make non-nullness provable. This is almost always possible:
 
 ```java
-@SuppressWarnings("NullAway") // Validated by constructor
+// BEFORE - NullAway complains
+private String id;
+
+public void setId(String id) {
+    this.id = Objects.requireNonNull(id);
+}
+
+// AFTER - field is final, initialized in constructor
 private final String id;
+
+public Foo(String id) {
+    this.id = Objects.requireNonNull(id);
+}
 ```
+
+### 2. Use @Initializer
+
+For framework initialization methods (e.g., `@PostConstruct`, `@BeforeEach`), use `@Initializer`:
+
+```java
+@Initializer
+@PostConstruct
+public void init() {
+    // NullAway understands this method initializes fields
+    this.service = createService();
+}
+```
+
+### 3. Suppression (Last Resort)
+
+Only suppress if NullAway is fundamentally wrong about the analysis. This is rare:
+
+```java
+// Only when NullAway's analysis is incorrect
+@SuppressWarnings("NullAway") // Validated by external framework contract
+private final String generatedId;
+```
+
+**Default to fixing the code, not suppressing.**
 
 ## Style
 
