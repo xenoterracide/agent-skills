@@ -185,18 +185,26 @@ Avoid `internal` packages. Package-private visibility should be preferred to hid
 
 ### Builders
 
-prefer builder pattern over complex constructors with immutables library `@Builder` and a static factory. e.g.
+Prefer builder pattern over complex constructors with immutables library `@Builder` and a static factory. Also use `@Data` for generating type-safe field constants for testing.
+
+Required dependencies:
+- `org.immutables:value-annotations` (compile-only)
+- `org.immutables:datatype` (compile-only, for `@Data`)
 
 ```java
 import org.immutables.builder.Builder;
+import org.immutables.datatype.Data;
 
 @Builder
+@Data
 record Bar(String foo) {
   public static BarBuilder builder() {
     return new BarBuilder();
   }
 }
 ```
+
+The `@Data` annotation generates `Bar_.FOO_` constants for type-safe field references in tests (see AssertJ section below).
 
 ## Idiomatic AssertJ
 
