@@ -192,10 +192,10 @@ Required dependencies:
 - `org.immutables:datatype` (compile-only, for `@Data`)
 
 ```java
-import org.immutables.builder.Builder;
 import org.immutables.datatype.Data;
+import org.immutables.value.Value;
 
-@Builder
+@Value.Builder
 @Data
 record Bar(String foo) {
   public static BarBuilder builder() {
