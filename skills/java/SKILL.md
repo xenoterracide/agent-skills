@@ -158,6 +158,94 @@ record Bar(String foo) {
 }
 ```
 
+## Idiomatic AssertJ
+
+AssertJ provides a rich fluent API. Use it instead of manual extraction or property access.
+
+### Common Patterns
+
+```java
+// BAD - manual extraction
+assertThat(list.getUsers().get(0).getName()).isEqualTo("Alice");
+
+// GOOD - use first() and extracting()
+assertThat(list.getUsers())
+    .first()
+    .extracting(User::getName)
+    .isEqualTo("Alice");
+
+// EVEN BETTER - flat extracting
+assertThat(list.getUsers())
+    .extracting(User::getName)
+    .containsExactly("Alice", "Bob", "Carol");
+```
+
+### Use the Fluent API
+
+```java
+// BAD - chaining assertions
+assertThat(user.getName()).isEqualTo("Alice");
+assertThat(user.getAge()).isEqualTo(30);
+assertThat(user.isActive()).isTrue();
+
+// GOOD - satisfies with multiple checks
+assertThat(user)
+    .satisfies(u -> {
+        assertThat(u.getName()).isEqualTo("Alice");
+        assertThat(u.getAge()).isEqualTo(30);
+        assertThat(u.isActive()).isTrue();
+    });
+
+// EVEN BETTER - returning extracted values
+assertThat(user)
+    .returns("Alice", User::getName)
+    .returns(30, User::getAge);
+```
+
+### Collection Assertions
+
+```java
+// BAD - size check then element check
+assertThat(users).hasSize(3);
+assertThat(users.get(0)).isEqualTo(alice);
+
+// GOOD - containsExactly with varargs
+assertThat(users).containsExactly(alice, bob, carol);
+
+// For partial matching
+assertThat(users)
+    .extracting(User::getName)
+    .contains("Alice", "Bob")
+    .doesNotContain("Dave");
+```
+
+### Exception Assertions
+
+```java
+// BAD - try-catch
+try {
+    service.doSomething();
+    fail("Expected exception");
+} catch (IllegalArgumentException e) {
+    assertThat(e.getMessage()).contains("invalid");
+}
+
+// GOOD - assertThatThrownBy
+assertThatThrownBy(() -> service.doSomething())
+    .isInstanceOf(IllegalArgumentException.class)
+    .hasMessageContaining("invalid");
+```
+
+### Check Available Methods
+
+Use the **javadocs MCP server** to look up AssertJ's fluent API methods for the type you're asserting:
+
+- `AbstractObjectAssert` for object assertions
+- `AbstractListAssert` for list assertions
+- `AbstractThrowableAssert` for exception assertions
+
+Before writing manual extraction code, check if AssertJ already has a method for it.
+
 ## Use What's Already On The Classpath
 
 **Before writing any code, check if the functionality already exists in your dependencies.**
