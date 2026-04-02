@@ -130,7 +130,18 @@ private final String generatedId;
 
 prefer `var` keyword to explicit local variable type declaration. using var reduces quantity of code but more importantly coupling as sometimes it means classes no longer have to be imported and thus class name changes do not impact client code in some cases.
 
-note: `@Var` is unrelated to this.
+note: Error Prone's `@Var` annotation (unrelated to `var` keyword) marks intentionally mutable local variables. Use it instead of `@SuppressWarnings("Var")` when you need mutability:
+
+```java
+// Error Prone requires variables to be effectively final by default
+@Var  // Use @Var annotation, not @SuppressWarnings("Var")
+var counter = 0;
+for (var item : items) {
+    if (item.isValid()) {
+        counter++;  // Mutation allowed because of @Var
+    }
+}
+```
 
 Examples:
 
