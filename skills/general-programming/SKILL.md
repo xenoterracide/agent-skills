@@ -321,6 +321,14 @@ Before considering code complete:
 4. **Verify documentation** - is the why explained? Are complex parts clear?
 
 **Don't waste reviewer time on issues you could have caught yourself.**
+
+## Shell Scripts
+
+When writing shell scripts:
+
+- Always verify with `shellcheck` for best practices, and fix any issues
+- Only write a POSIX-compliant shell script unless otherwise specified or in a shell-specific file such as `.zshrc` or files with extensions like `.bash` or `.zsh`
+
 ---
 
 SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
