@@ -241,7 +241,7 @@ assertThat(user)
     .returns("Alice", User::getName)
     .returns(30, User::getAge);
 
-// ALSO GOOD - hasFieldOrPropertyWithValue with Immutables datatype
+// BEST - hasFieldOrPropertyWithValue with Immutables datatype for fields
 // Immutables generates type-safe string constants: User_.NAME_
 // (accessed via Datatypes_User.User_.NAME_ or just User_.NAME_ if imported)
 assertThat(user)
