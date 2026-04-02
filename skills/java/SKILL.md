@@ -68,9 +68,9 @@ return findById(id)
     .orElse(defaultEmail);
 
 // BAD - null check with intermediate variables
-User user = findById(id);
+var user = findById(id);
 if (user == null) return defaultEmail;
-Email email = user.getEmail();
+var email = user.getEmail();
 if (email == null || !email.isValid()) return defaultEmail;
 return email;
 ```
@@ -228,7 +228,7 @@ assertThat(user.getName()).isEqualTo("Alice");
 assertThat(user.getAge()).isEqualTo(30);
 assertThat(user.isActive()).isTrue();
 
-// GOOD - satisfies with multiple checks
+// GOOD - satisfies with multiple checks (soft assertions)
 assertThat(user)
     .satisfies(u -> {
         assertThat(u.getName()).isEqualTo("Alice");
@@ -236,10 +236,15 @@ assertThat(user)
         assertThat(u.isActive()).isTrue();
     });
 
-// EVEN BETTER - returning extracted values
+// EVEN BETTER - returns for single property checks
 assertThat(user)
     .returns("Alice", User::getName)
     .returns(30, User::getAge);
+
+// ALSO GOOD - hasFieldOrPropertyWithValue for quick checks
+assertThat(user)
+    .hasFieldOrPropertyWithValue("name", "Alice")
+    .hasFieldOrPropertyWithValue("age", 30);
 ```
 
 ### Collection Assertions
