@@ -242,10 +242,10 @@ assertThat(user)
     .returns(30, User::getAge);
 
 // ALSO GOOD - hasFieldOrPropertyWithValue with Immutables datatype
-// Immutables datatype module generates type-safe field constants (User_.name_, User_.age_)
+// Immutables generates type-safe field constants like Datatype_User_.NAME_
 assertThat(user)
-    .hasFieldOrPropertyWithValue(User_.name_, "Alice")
-    .hasFieldOrPropertyWithValue(User_.age_, 30);
+    .hasFieldOrPropertyWithValue(Datatype_User_.NAME_, "Alice")
+    .hasFieldOrPropertyWithValue(Datatype_User_.AGE_, 30);
 ```
 
 ### Collection Assertions
