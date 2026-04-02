@@ -147,6 +147,23 @@ Follow conventional commit format for PR titles (they become the squash merge co
 - Keep title <= 72 characters
 - Use specific scope when possible
 
+### Commit Message Rules
+
+When writing commit messages or PR descriptions:
+
+- Output plain text only. No markdown fences.
+- First line MUST be a valid Conventional Commit subject.
+- Keep the FIRST line <= 72 characters.
+- Use a specific scope when possible.
+- Body (MANDATORY - must explain WHY):
+  - Start with a paragraph explaining WHY this change is being made
+    - The "why" provides context for future readers
+    - Explain the problem, motivation, or rationale
+  - Follow with bullet points explaining the main changes (WHAT)
+  - Each bullet must describe one complete logical change
+  - Do not split a single idea across multiple bullets
+  - Wrap lines to <= 72 chars
+
 ### Creating a New PR
 
 Always provide explicit title and body. Do NOT use `--fill` as it may use the branch name instead of a proper conventional commit message:
