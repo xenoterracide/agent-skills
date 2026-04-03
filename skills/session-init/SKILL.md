@@ -4,7 +4,6 @@ description: |
   ALWAYS use this skill at the start of EVERY new session before any other work.
   Use when beginning work in a repository, verifying branch or PR state,
   refreshing the default branch, or confirming you are on current code.
-allowed-tools: bash
 ---
 
 <!--

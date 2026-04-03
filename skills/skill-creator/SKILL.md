@@ -53,7 +53,10 @@ Optional field:
 - **`allowed-tools`**: Tools that may be pre-approved for the skill
   - Experimental; support may vary by agent implementation
   - Use only when a skill repeatedly needs the same trusted tool
-  - Prefer a narrow allowlist such as `bash`, not a broad list
+  - Prefer specific tool names such as `git` or `gh` when the runtime supports
+    them
+  - Avoid broad approvals like `bash` or `shell` unless the skill is explicitly
+    about running trusted shell scripts
   - Do **not** use this as a substitute for clear instructions in the body
 
 Avoid adding unrelated metadata just because the format permits it. Keep
@@ -67,7 +70,7 @@ name: skill-name
 description: |
   When to use this skill. Be specific about triggers.
   Include the kinds of user requests or file changes that should activate it.
-allowed-tools: bash
+allowed-tools: git gh
 ---
 
 <!--
@@ -151,6 +154,8 @@ Skills are recognized by Kimi when:
    documents that must be kept accurate.
 6. **Use `allowed-tools` sparingly** - Pre-approve tools only when the skill
    consistently needs them and the trade-off is worth reducing prompts
+7. **Default to no pre-approval** - If a skill works fine without
+   `allowed-tools`, leave the field out
 
 ## Discoverability Checklist
 

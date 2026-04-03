@@ -54,7 +54,6 @@ Each skill is a directory containing `SKILL.md` with this structure:
 ---
 name: skill-name
 description: When to use this skill. Be specific about triggers.
-allowed-tools: bash
 ---
 
 <!--
@@ -86,9 +85,11 @@ machine-readable routing surface. Keep descriptions specific, concrete, and easy
 to match against user intent.
 
 `allowed-tools` is an optional, experimental field you may use when a skill
-needs to pre-approve a small, trusted tool set such as `bash`. Keep broader
-routing guidance such as anti-triggers, related skills, and detailed examples
-in the body of the skill file rather than overloading frontmatter.
+needs to pre-approve a small, trusted tool set. Prefer omitting it by default,
+and only add it when a runtime supports specific tool names such as `git` or
+`gh` and the skill repeatedly needs them. Keep broader routing guidance such as
+anti-triggers, related skills, and detailed examples in the body of the skill
+file rather than overloading frontmatter.
 
 ## Skill Categories
 
