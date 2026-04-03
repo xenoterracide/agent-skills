@@ -2,9 +2,9 @@
 name: shell-script
 description: |
   Write or modify shell scripts and command-line automation. Use when creating
-  or editing `.sh` files, shell functions, portable shell snippets, or Bash
-  pipelines, especially when quoting, error handling, and safe command
-  composition matter.
+  or editing `.sh` files, shell functions, portable shell snippets, Zsh
+  configuration, or Bash pipelines, especially when quoting, error handling,
+  and safe command composition matter.
 ---
 
 <!--
@@ -23,7 +23,9 @@ automation.
 Use this skill when:
 
 - Creating or editing `.sh` files
+- Editing `.zsh`, `.zshrc`, or other Zsh-specific shell files
 - Writing Bash functions, loops, or pipelines
+- Writing Zsh functions, aliases, widgets, or completion helpers
 - Automating CLI workflows with shell scripts
 - Debugging quoting, expansion, or exit-status behavior
 
@@ -40,8 +42,8 @@ Do **not** use this skill when:
 
 ### 1. Match the Target Shell Explicitly
 
-Default to POSIX shell for `.sh` scripts unless Bash is explicitly specified or
-the file is clearly Bash-specific.
+Default to POSIX shell for `.sh` scripts unless Bash or Zsh is explicitly
+specified or the file is clearly shell-specific.
 
 ```sh
 #!/bin/sh
@@ -49,8 +51,8 @@ set -eu
 ```
 
 - Use POSIX-compatible syntax in `.sh` files by default
-- Only switch to Bash-specific features when Bash is explicitly requested or
-  the file is clearly Bash-specific
+- Only switch to Bash-specific or Zsh-specific features when that shell is
+  explicitly requested or the file is clearly shell-specific
 - Make the target shell obvious with the shebang and the constructs you choose
 
 When Bash is the right target, say so explicitly and then use Bash features
@@ -59,6 +61,14 @@ deliberately.
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail
+```
+
+When Zsh is the right target, say so explicitly and use Zsh features in
+shell-specific files such as `.zshrc`, `.zsh`, or Zsh plugin/config files.
+
+```zsh
+#!/usr/bin/env zsh
+set -eu
 ```
 
 ### 2. Prefer Explicit Error Handling
@@ -84,7 +94,7 @@ cp "$source_file" "$target_file"
 cp $source_file $target_file
 ```
 
-Prefer arrays over string-building for command arguments in Bash.
+Prefer arrays over string-building for command arguments in Bash or Zsh.
 
 ```bash
 args=(--flag "$value" --output "$target")
@@ -92,7 +102,7 @@ command "${args[@]}"
 ```
 
 For POSIX shell, prefer positional parameters or helper functions instead of
-Bash arrays.
+Bash/Zsh arrays.
 
 ### 4. Keep Scripts Composable
 
@@ -125,6 +135,8 @@ trap 'rm -rf "$tmpdir"' EXIT
 - Review commands for spaces, newlines, and special characters in input values
 - Run `shellcheck` and `shfmt` when available, consistent with the broader
   shell guidance in `general-programming`
+- Remember that Zsh startup files often optimize for interactive shell behavior,
+  so keep interactive customizations separate from portable script logic
 
 ## Related Skills
 
