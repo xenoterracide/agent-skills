@@ -65,30 +65,37 @@ When committing and creating/updating a PR, follow this workflow:
    - Or run `git status` and `gh pr view --json number,url,headRefName,state`
    - Determine: current branch, existing PR status (OPEN/CLOSED/MERGED)
 
-2. **Handle closed/merged PRs:**
+2. **Fetch and determine default branch:**
+   - Run `git fetch --all --prune` to update remotes and prune stale branches
+   - Get the default branch from `origin/HEAD`:
+     ```bash
+     DEFAULT_BRANCH=$(git rev-parse --abbrev-ref origin/HEAD | sed 's@^origin/@@')
+     ```
+
+3. **Handle closed/merged PRs:**
    - If the current branch has a CLOSED or MERGED PR, delete the local branch:
-     - `git checkout develop` (the default HEAD branch)
+     - `git checkout "$DEFAULT_BRANCH"`
      - `git branch -D <old-branch-name>`
    - Then create a new branch off the updated HEAD for new work
 
-3. **Pull latest changes before starting work:**
-   - Run `git pull origin develop` to get the latest changes
+4. **Pull latest changes before starting work:**
+   - Run `git pull origin "$DEFAULT_BRANCH"` to get the latest changes
    - This ensures you're working on the current state and not outdated code
    - This also ensures you don't address review comments that are already resolved
 
-4. **If already on a feature branch with an existing OPEN PR:**
+5. **If already on a feature branch with an existing OPEN PR:**
    - Do NOT create a new branch
    - Pull latest changes first
    - Commit changes to the current branch
    - Push to update the existing PR
    - Update PR description/title if needed using `gh pr edit`
 
-5. **If on develop or no PR exists for current branch:**
+6. **If on the default branch or no PR exists for current branch:**
    - Create a new feature branch (if not already on one)
    - Commit changes
    - Push and create a new PR
 
-6. **Before finalizing:**
+7. **Before finalizing:**
    - Review if documentation needs updates (README.md, AGENTS.md)
    - Ensure PR description accurately reflects all changes including doc updates
 
