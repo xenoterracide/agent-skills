@@ -162,7 +162,7 @@ Skills are recognized by Kimi when:
 When updating a skill, verify that:
 
 1. The `description` is specific enough to trigger on real user requests
-2. The wording in `AGENTS.md` and the skill description describes the same
+2. The wording in `AGENTS.md` and the skill description describe the same
    routing signals
 3. The body explains confusing boundaries with nearby skills
 4. The skill avoids claiming files, tools, or workflows that no longer exist

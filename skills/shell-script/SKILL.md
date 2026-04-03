@@ -133,8 +133,7 @@ trap 'rm -rf "$tmpdir"' EXIT
 - Avoid unbounded globs on user-controlled paths
 - Prefer exact command invocation over dynamically constructed shell fragments
 - Review commands for spaces, newlines, and special characters in input values
-- Run `shellcheck` and `shfmt` when available, consistent with the broader
-  shell guidance in `coding-standards`
+- Run `shellcheck` and `shfmt` when available
 - Remember that Zsh startup files often optimize for interactive shell behavior,
   so keep interactive customizations separate from portable script logic
 
