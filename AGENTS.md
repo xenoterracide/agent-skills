@@ -21,7 +21,7 @@ The project is hosted at: https://github.com/xenoterracide/subtree-ai
 │   └── mcp.json.license    # CC0-1.0 license for config files
 ├── skills/                  # AI skills organized by concern
 │   ├── commit-message/     # Conventional commit and PR description format
-│   ├── general-programming/ # Cross-cutting programming principles
+│   ├── coding-standards/    # Cross-cutting coding principles and quality
 │   ├── github/             # GitHub and GraphQL interaction patterns
 │   ├── gradle/             # Gradle build system and dependency management
 │   ├── iterative-development/ # Planning and iterative design guidance
@@ -97,7 +97,7 @@ file rather than overloading frontmatter.
 Skills fall into four activation categories:
 
 - **Workflow** (`session-init`, `pull-request`, `commit-message`): Apply on every session or file change
-- **Cross-cutting** (`general-programming`): Apply to all coding tasks regardless of language
+- **Cross-cutting** (`coding-standards`): Apply to all coding tasks regardless of language
 - **Domain** (`github`, `java`, `gradle`, `shell-script`, `testing`, `use-case-creator`): Apply by file type or tool context
 - **Planning** (`iterative-development`, `skill-creator`): Apply when designing features or maintaining skills
 
@@ -110,7 +110,7 @@ Use this table as the canonical routing guide when deciding which skill to load.
 | `session-init` | Git state verification at session start | Starting work in a repo session | "start work", "new session", "check branch" |
 | `pull-request` | Commit, push, and PR lifecycle (platform-agnostic) | Any repository file is created, modified, or deleted | "fix", "update", "add", "refactor" |
 | `commit-message` | Conventional commit and PR description formatting | Writing a commit message, PR title, or PR description | "write commit", "PR title", "PR description" |
-| `general-programming` | Cross-language coding principles and quality standards | Implementing or changing code in any language | "implement", "refactor", "bug", "error handling" |
+| `coding-standards` | Cross-language coding principles and quality standards | Implementing or changing code in any language | "implement", "refactor", "bug", "error handling" |
 | `github` | GitHub platform tools, APIs, and GraphQL queries | Querying or interacting with GitHub-hosted resources | "GitHub", "issue", "gh", "GraphQL" |
 | `java` | Java language conventions and null-safety | Creating or modifying `.java` source files | `.java`, class, interface, record, enum |
 | `gradle` | Gradle build system and dependency management | Editing Gradle build files or resolving dependency issues | `build.gradle.kts`, `settings.gradle.kts`, dependency |

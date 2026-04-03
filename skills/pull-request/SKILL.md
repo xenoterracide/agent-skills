@@ -16,7 +16,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 **This skill applies whenever files are created, modified, or deleted.**
 
-- Apply `general-programming` rules — review your code against them before submitting
+- Apply `coding-standards` rules — review your code against them before submitting
 - Use `commit-message` skill for all commit messages and PR descriptions
 - Keep the PR description up to date (it becomes the squash-merge commit message)
   - Do NOT use checkboxes (`- [x]`) — use plain bullet lists (`- item`)
@@ -86,7 +86,7 @@ Before creating or updating a PR:
 2. Review your own diff — would you approve this if someone else wrote it?
 3. Check for obvious issues (debug prints, TODOs without tickets, unjustified suppressions)
 
-See `general-programming` (Rule 6: Code Quality Standards) for the full checklist.
+See `coding-standards` (Rule 5: Code Quality Standards) for the full checklist.
 
 **Fix issues yourself before requesting human review.**
 

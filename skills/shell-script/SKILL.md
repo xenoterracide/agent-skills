@@ -134,13 +134,13 @@ trap 'rm -rf "$tmpdir"' EXIT
 - Prefer exact command invocation over dynamically constructed shell fragments
 - Review commands for spaces, newlines, and special characters in input values
 - Run `shellcheck` and `shfmt` when available, consistent with the broader
-  shell guidance in `general-programming`
+  shell guidance in `coding-standards`
 - Remember that Zsh startup files often optimize for interactive shell behavior,
   so keep interactive customizations separate from portable script logic
 
 ## Related Skills
 
-- `general-programming` - broader design, testing, and quality guidance
+- `coding-standards` - broader design, testing, and quality guidance
 - `github` - GitHub and GraphQL operations
 - `pull-request` - committing, pushing, and PR updates for script changes
 - `gradle` - Gradle build logic rather than shell automation
