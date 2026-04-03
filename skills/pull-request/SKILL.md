@@ -35,7 +35,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
   - verify GitHub PR checks pass after pushing
     - use available tools to check workflow status
     - fix any failures before requesting review
-    - if Github checks fail after pushing, fix before requesting review
+    - if GitHub checks fail after pushing, fix before requesting review
 - Do not rewrite remote history — `git push --force` and `git push --force-with-lease` are both banned
 - must be synchronized with HEAD branch using a merge strategy
   - it is easier to delete and regenerate lockfiles than merge them
