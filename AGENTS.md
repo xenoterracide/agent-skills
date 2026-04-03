@@ -27,6 +27,7 @@ The project is hosted at: https://github.com/xenoterracide/subtree-ai
 │   ├── iterative-development/ # Planning and iterative design guidance
 │   ├── java/               # Java coding style and null-safety guidance
 │   ├── pull-request/       # Commit, push, and PR workflow management
+│   ├── shell-script/       # Shell scripting and command automation guidance
 │   ├── session-init/       # Mandatory session startup workflow
 │   ├── skill-creator/      # Creating and maintaining skills
 │   ├── testing/            # Testing philosophy and patterns
@@ -114,6 +115,7 @@ file rather than overloading frontmatter.
 | `github` | Interacting with GitHub repos, issues, pull requests, or GraphQL | `pull-request` |
 | `java` | Creating or modifying `.java` source files | `general-programming`, `testing`, `gradle` |
 | `gradle` | Editing `build.gradle.kts`, `settings.gradle.kts`, `gradle.properties`, or dependency versions | `java`, `pull-request` |
+| `shell-script` | Writing or editing `.sh` files, Bash pipelines, or shell automation | `general-programming`, `pull-request` |
 | `testing` | Creating, modifying, or discussing tests | `general-programming`, language-specific skills |
 | `use-case-creator` | Writing use cases or documenting system behavior in AsciiDoc | `iterative-development` |
 
@@ -137,6 +139,7 @@ Use this table as the canonical routing guide when deciding which skill to load.
 | `github` | Using GitHub issues, PRs, reviews, comments, or GraphQL | Purely local git or filesystem work | "GitHub", "review comments", "issue", "PR thread" |
 | `java` | Touching `.java` files or Java language constructs | Only build config or docs are changing | `.java`, class, interface, record, enum |
 | `gradle` | Touching Gradle files or dependency-locking/build problems | Non-build files only | `build.gradle.kts`, `settings.gradle.kts`, `gradle.properties`, dependency |
+| `shell-script` | Writing shell scripts, Bash snippets, or CLI automation | One-off shell commands with no script design | `.sh`, bash, shell script, quoting, pipeline |
 | `testing` | Adding, updating, debugging, or discussing tests | Feature work with no test impact or discussion | test, coverage, fixture, integration |
 | `use-case-creator` | Writing or revising use cases and business behavior docs | Implementation-only work | use case, scenario, semantic anchor, ubiquitous language |
 | `iterative-development` | Scoping a feature, selecting an iteration, or refining the model | Mechanical single-file edits with no design work | iteration, vertical slice, domain model, risk |
