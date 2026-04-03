@@ -327,6 +327,7 @@ Before considering code complete:
 When writing shell scripts:
 
 - Always verify with `shellcheck` for best practices, and fix any issues
+- Format shell scripts with `shfmt` for consistent style
 - Only write a POSIX-compliant shell script unless otherwise specified or in a shell-specific file such as `.zshrc` or files with extensions like `.bash` or `.zsh`
 
 ---
