@@ -1,6 +1,9 @@
 ---
 name: gradle
-description: Working with Gradle build system and Kotlin DSL. Use when editing build.gradle.kts, settings.gradle.kts, gradle.properties, or any Gradle configuration files. Also use when analyzing dependencies, updating versions, or troubleshooting Gradle build issues.
+description: |
+  Work with the Gradle build system and Kotlin DSL. Use when editing
+  `build.gradle.kts`, `settings.gradle.kts`, `gradle.properties`, lockfiles,
+  dependency versions, or troubleshooting Gradle build behavior.
 ---
 
 <!--

@@ -1,10 +1,16 @@
 ---
 name: testing
-description: Writing automated tests for software. Use when creating, modifying, or discussing tests. Covers test philosophy, sociable vs solitary tests, integration testing, and anti-patterns.
-# SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
-#
-# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+description: |
+  Writing automated tests for software. Use when creating, modifying,
+  debugging, or discussing tests, including test strategy, coverage,
+  integration testing, and testing anti-patterns.
 ---
+
+<!--
+SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
+
+SPDX-License-Identifier: CC-BY-NC-SA-4.0
+-->
 
 # Testing
 

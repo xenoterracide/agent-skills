@@ -1,10 +1,16 @@
 ---
 name: session-init
-description: ALWAYS use this skill at the start of EVERY new session before any other work. This skill is always consumed first. Use when beginning work in a repository to verify the current branch state and ensure you're working from a clean, up-to-date foundation.
-# SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
-#
-# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+description: |
+  ALWAYS use this skill at the start of EVERY new session before any other work.
+  Use when beginning work in a repository, verifying branch or PR state,
+  refreshing the default branch, or confirming you are on current code.
 ---
+
+<!--
+SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
+
+SPDX-License-Identifier: CC-BY-NC-SA-4.0
+-->
 
 # Session Initialization
 

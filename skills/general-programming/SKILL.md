@@ -1,10 +1,16 @@
 ---
 name: general-programming
-description: General programming principles and best practices that apply across all languages and tasks. Use for all coding tasks to ensure consistent quality and robustness. Consumed after session-init.
-# SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
-#
-# SPDX-License-Identifier: CC-BY-NC-SA-4.0
+description: |
+  General programming principles and best practices that apply across languages.
+  Use for coding, refactoring, and bug-fixing tasks to guide error handling,
+  tests, reuse, immutability, and overall code quality.
 ---
+
+<!--
+SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
+
+SPDX-License-Identifier: CC-BY-NC-SA-4.0
+-->
 
 # General Programming Principles
 
