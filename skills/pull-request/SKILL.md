@@ -86,7 +86,7 @@ Before creating or updating a PR:
 2. Review your own diff — would you approve this if someone else wrote it?
 3. Check for obvious issues (debug prints, TODOs without tickets, unjustified suppressions)
 
-See `general-programming` (Rule 7: Code Quality Standards) for the full checklist.
+See `general-programming` (Rule 6: Code Quality Standards) for the full checklist.
 
 **Fix issues yourself before requesting human review.**
 

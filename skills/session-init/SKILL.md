@@ -149,6 +149,27 @@ The few seconds spent on these checks prevents:
 - Merge conflicts from stale branches
 - Duplicate work from outdated codebases
 
+## Do Not Assume Synchronized State
+
+Your local state may be stale. The operator may merge PRs, change branches, or
+modify files outside your session.
+
+### Do not assume:
+
+- Your local default branch is current with `origin`
+- Files haven't changed since you last read them
+- Branches you created are still valid (PRs may have been merged/closed)
+- Your working directory is clean or as you left it
+
+### Do not assume exclusive access to:
+
+- The filesystem (other processes/agents may modify files)
+- Environment variables (may change between invocations)
+- Network ports (may be in use by other services)
+- Running processes (state may not be what you expect)
+
+**When uncertain, verify** rather than assuming state is as you left it.
+
 ---
 
 SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing

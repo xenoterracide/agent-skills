@@ -196,71 +196,11 @@ public void processPayment(PaymentMethod method, Amount amount) {
 
 If you follow these principles, your code will naturally be composable, clear, and aligned with the domain.
 
-## Rule 5: Do Not Assume Synchronized State
-
-**Your local repository state may be stale.** The operator may merge PRs, change branches, or modify files outside your session. Never assume:
-
-### Git/Repository Assumptions (Dangerous)
-
-**Do not assume:**
-
-- Your local `develop` (or default branch) is current with `origin`
-- Files haven't changed since you last read them
-- Branches you created are still valid (PRs may have been merged/closed)
-- Your working directory is clean or as you left it
-
-### Workspace Assumptions (Dangerous)
-
-**Do not assume exclusive access to:**
-
-- The filesystem (other processes/agents may modify files)
-- Environment variables (may change between invocations)
-- Network ports (may be in use by other services)
-- Running processes (state may not be what you expect)
-
-### Correct Approaches
-
-**Verify git state at session start:**
-
-```bash
-# Always check if local HEAD is behind origin
-git fetch origin
-git status
-
-# Pull latest before starting work
-git pull origin develop
-```
-
-**Don't assume file state persists:**
-
-```java
-// BAD - assumes file hasn't changed since last read
-private Config cachedConfig;  // May be stale
-
-// GOOD - read fresh when needed
-public Config getConfig() {
-    return ConfigLoader.load("config.json");  // Always current
-}
-```
-
-**Explicitly verify external state:**
-
-```bash
-# Check if port is available before using
-if ! lsof -i :8080 > /dev/null 2>&1; then
-    start_server_on_port 8080
-else
-    echo "Port 8080 is already in use"
-fi
-```
-
-**When uncertain, verify** rather than assuming state is as you left it.
-
-## Rule 6: Use Libraries When Available
+## Rule 5: Use Libraries When Available
 
 Before implementing new functionality, check if it's already provided by standard libraries or existing dependencies. **Prefer existing code over writing your own**, even for seemingly "trivial" functions.
 
-## Rule 7: Code Quality Standards
+## Rule 6: Code Quality Standards
 
 ### Coverage Requirements
 
@@ -307,22 +247,10 @@ public static User create(String email) {
 
 ### Self-Review Before Submitting
 
-Before considering code complete:
-
-1. **Run all quality checks locally** - coverage, static analysis, formatting
-2. **Review your own diff** - would you approve this if someone else wrote it?
-3. **Check for obvious issues** - commented-out code, debug prints, TODOs without tickets
-4. **Verify documentation** - is the why explained? Are complex parts clear?
+See `pull-request` skill for the full self-review checklist before creating or
+updating a PR.
 
 **Don't waste reviewer time on issues you could have caught yourself.**
-
-## Shell Scripts
-
-When writing shell scripts:
-
-- Always verify with `shellcheck` for best practices, and fix any issues
-- Format shell scripts with `shfmt` for consistent style
-- Only write a POSIX-compliant shell script unless otherwise specified or in a shell-specific file such as `.zshrc` or files with extensions like `.bash` or `.zsh`
 
 ---
 
