@@ -7,6 +7,7 @@ description: |
 
   Use when: making file changes, adding features, fixing bugs, refactoring,
   updating docs or configs. Must be used with domain-specific skills.
+allowed-tools: bash
 ---
 
 <!--

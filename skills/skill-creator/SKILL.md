@@ -32,7 +32,7 @@ first line in the file.
 
 ### Frontmatter Fields
 
-Only two fields allowed in frontmatter:
+Required fields:
 
 - **`name`**: Skill identifier
   - Max 64 characters
@@ -48,7 +48,16 @@ Only two fields allowed in frontmatter:
     conditions
   - Reuse the same trigger vocabulary that appears in `AGENTS.md`
 
-Do not include other fields like `license` in frontmatter.
+Optional field:
+
+- **`allowed-tools`**: Tools that may be pre-approved for the skill
+  - Experimental; support may vary by agent implementation
+  - Use only when a skill repeatedly needs the same trusted tool
+  - Prefer a narrow allowlist such as `bash`, not a broad list
+  - Do **not** use this as a substitute for clear instructions in the body
+
+Avoid adding unrelated metadata just because the format permits it. Keep
+frontmatter small and focused on activation plus carefully chosen pre-approval.
 
 ### Correct Structure
 
@@ -58,6 +67,7 @@ name: skill-name
 description: |
   When to use this skill. Be specific about triggers.
   Include the kinds of user requests or file changes that should activate it.
+allowed-tools: bash
 ---
 
 <!--
@@ -139,6 +149,8 @@ Skills are recognized by Kimi when:
 5. **Fix broken commands immediately** - If you discover a skill's command
    or example doesn't work, update the skill right away. Skills are living
    documents that must be kept accurate.
+6. **Use `allowed-tools` sparingly** - Pre-approve tools only when the skill
+   consistently needs them and the trade-off is worth reducing prompts
 
 ## Discoverability Checklist
 
@@ -149,3 +161,4 @@ When updating a skill, verify that:
    routing signals
 3. The body explains confusing boundaries with nearby skills
 4. The skill avoids claiming files, tools, or workflows that no longer exist
+5. Any `allowed-tools` entry is minimal, trusted, and justified by the skill

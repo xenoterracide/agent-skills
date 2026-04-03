@@ -4,6 +4,7 @@ description: |
   Use when you need a commit message, PR title, or PR description that reflects
   the actual changes. Reads the git diff to produce conventional commit output
   with a clear subject, rationale, and summary of what changed.
+allowed-tools: bash
 ---
 
 <!--

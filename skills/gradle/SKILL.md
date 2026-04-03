@@ -4,6 +4,7 @@ description: |
   Work with the Gradle build system and Kotlin DSL. Use when editing
   `build.gradle.kts`, `settings.gradle.kts`, `gradle.properties`, lockfiles,
   dependency versions, or troubleshooting Gradle build behavior.
+allowed-tools: bash
 ---
 
 <!--
