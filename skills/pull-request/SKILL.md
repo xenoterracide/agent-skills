@@ -36,7 +36,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
     - use available tools to check workflow status
     - fix any failures before requesting review
     - if Github checks fail after pushing, fix before requesting review
-- git push --force is not allowed
+- Do not rewrite remote history — `git push --force` and `git push --force-with-lease` are both banned
 - must be synchronized with HEAD branch using a merge strategy
   - it is easier to delete and regenerate lockfiles than merge them
 - respond to ALL pr comments.
@@ -103,7 +103,7 @@ This repository uses **squash merge** for PRs. This means:
 
 - If develop has moved forward and you need those changes: `git merge origin/develop`
 - If review feedback requires changes: commit and push to same branch
-- Avoid force push - repository rules may block it, and it's unnecessary with squash merge
+- Never force push (including `--force-with-lease`) — it's unnecessary with squash merge and may be blocked by repository rules
 
 ## Creating/Updating PRs
 
