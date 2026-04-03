@@ -1,9 +1,10 @@
 ---
 name: pull-request
 description: |
-  ALWAYS use when files are modified, created, or deleted. Handles committing,
-  pushing, and PR lifecycle management. Platform-agnostic workflow that pairs
-  with domain-specific skills and commit-message.
+  ALWAYS use when files are modified, created, or deleted — including bugs,
+  features, refactoring, or config changes. Also use when addressing PR review
+  comments or feedback. Handles committing, pushing, and PR management through
+  GitHub.
 ---
 
 <!--
