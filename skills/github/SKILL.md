@@ -14,6 +14,10 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 # GitHub Skill
 
+This skill covers **GitHub platform tools and APIs** — MCP tools, the `gh` CLI,
+and GraphQL queries. It is GitHub-specific; for commit/push/PR workflow
+mechanics (which are platform-agnostic), use the `pull-request` skill instead.
+
 ## Tool Priority
 
 1. **Prefer MCP tools** - Use GitHub MCP tools when available (e.g., `pull_request_read`, `issue_write`)

@@ -1,12 +1,9 @@
 ---
 name: pull-request
 description: |
-  ALWAYS use when files are modified, created, or deleted - including bugs,
-  features, refactoring, or config changes. Handles committing, pushing, and
-  PR management through GitHub.
-
-  Use when: making file changes, adding features, fixing bugs, refactoring,
-  updating docs or configs. Must be used with domain-specific skills.
+  ALWAYS use when files are modified, created, or deleted. Handles committing,
+  pushing, and PR lifecycle management. Platform-agnostic workflow that pairs
+  with domain-specific skills and commit-message.
 ---
 
 <!--
@@ -15,19 +12,14 @@ SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
 SPDX-License-Identifier: CC-BY-NC-SA-4.0
 -->
 
-**CRITICAL: This skill must ALWAYS be used whenever files are created, modified, or deleted, regardless of what other skills are also being applied.**
+# Pull Request
 
-**CRITICAL: Apply general-programming rules** - All code changes must follow the
-rules in `general-programming` skill (error handling, tests, immutability,
-libraries, code quality). Review your own code against these rules before
-submitting.
+**This skill applies whenever files are created, modified, or deleted.**
 
-- use commit-message
-- keep the pull request message up to date
-  - NOTE: The PR description becomes the commit message when the PR is squash-merged
-  - Follow the commit-message format for PR descriptions since they become permanent commit history
-  - DO NOT use checkboxes (`- [x]`) in PR descriptions - they render poorly in commit messages
-  - Use plain bullet lists (`- item`) instead of GitHub task lists
+- Apply `general-programming` rules — review your code against them before submitting
+- Use `commit-message` skill for all commit messages and PR descriptions
+- Keep the PR description up to date (it becomes the squash-merge commit message)
+  - Do NOT use checkboxes (`- [x]`) — use plain bullet lists (`- item`)
 - files should be committed and pushed
   - ensure code compiles and tests pass before committing
     - run relevant, specific tests first for quick feedback
@@ -65,63 +57,36 @@ When committing and creating/updating a PR, follow this workflow:
    - Or run `git status` and `gh pr view --json number,url,headRefName,state`
    - Determine: current branch, existing PR status (OPEN/CLOSED/MERGED)
 
-2. **Fetch and determine default branch:**
-   - Run `git fetch --all --prune` to update remotes and prune stale branches
-   - Get the default branch from `origin/HEAD`:
-     ```bash
-     DEFAULT_BRANCH=$(git rev-parse --abbrev-ref origin/HEAD | sed 's@^origin/@@')
-     ```
+2. **Ensure branch is current** — see `session-init` for full startup checks:
+   - Fetch and prune: `git fetch --all --prune`
+   - If the current branch has a CLOSED or MERGED PR, switch to the default branch and create a new one
+   - Pull latest changes before starting work
 
-3. **Handle closed/merged PRs:**
-   - If the current branch has a CLOSED or MERGED PR, delete the local branch:
-     - `git checkout "$DEFAULT_BRANCH"`
-     - `git branch -D <old-branch-name>`
-   - Then create a new branch off the updated HEAD for new work
-
-4. **Pull latest changes before starting work:**
-   - Run `git pull origin "$DEFAULT_BRANCH"` to get the latest changes
-   - This ensures you're working on the current state and not outdated code
-   - This also ensures you don't address review comments that are already resolved
-
-5. **If already on a feature branch with an existing OPEN PR:**
+3. **If already on a feature branch with an existing OPEN PR:**
    - Do NOT create a new branch
    - Pull latest changes first
    - Commit changes to the current branch
    - Push to update the existing PR
    - Update PR description/title if needed using `gh pr edit`
 
-6. **If on the default branch or no PR exists for current branch:**
+4. **If on the default branch or no PR exists for current branch:**
    - Create a new feature branch (if not already on one)
    - Commit changes
    - Push and create a new PR
 
-7. **Before finalizing:**
+5. **Before finalizing:**
    - Review if documentation needs updates (README.md, AGENTS.md)
    - Ensure PR description accurately reflects all changes including doc updates
 
 ### Self-Review Before Submitting
 
-Before creating or updating a PR, review your own code:
+Before creating or updating a PR:
 
-1. **Run quality checks locally:**
-   - Tests pass with adequate coverage
-   - Static analysis passes (Checkstyle, SpotBugs, Error Prone, etc.)
-   - Code formatting is correct
+1. Run quality checks locally (tests, static analysis, formatting)
+2. Review your own diff — would you approve this if someone else wrote it?
+3. Check for obvious issues (debug prints, TODOs without tickets, unjustified suppressions)
 
-2. **Review against general-programming rules:**
-   - Error handling is explicit (no silent catches)
-   - Immutability preferred where appropriate
-   - Existing libraries used instead of reinventing
-   - Code quality standards met (Rule 7)
-
-3. **Check for obvious issues:**
-   - No commented-out code or debug prints
-   - No TODOs without ticket references
-   - No suppressions without justification
-
-4. **Review the diff:**
-   - Would you approve this if someone else wrote it?
-   - Is the "why" clear from comments and documentation?
+See `general-programming` (Rule 7: Code Quality Standards) for the full checklist.
 
 **Fix issues yourself before requesting human review.**
 
@@ -154,22 +119,11 @@ Follow conventional commit format for PR titles (they become the squash merge co
 - Keep title <= 72 characters
 - Use specific scope when possible
 
-### Commit Message Rules
+### Commit Message and PR Body Format
 
-When writing commit messages or PR descriptions:
-
-- Output plain text only. No markdown fences.
-- First line MUST be a valid Conventional Commit subject.
-- Keep the FIRST line <= 72 characters.
-- Use a specific scope when possible.
-- Body (MANDATORY - must explain WHY):
-  - Start with a paragraph explaining WHY this change is being made
-    - The "why" provides context for future readers
-    - Explain the problem, motivation, or rationale
-  - Follow with bullet points explaining the main changes (WHAT)
-  - Each bullet must describe one complete logical change
-  - Do not split a single idea across multiple bullets
-  - Wrap lines to <= 72 chars
+Follow the `commit-message` skill for commit message format, PR body structure,
+and the mandatory "why" paragraph. PR descriptions become permanent commit
+history via squash merge.
 
 ### Creating a New PR
 
@@ -189,24 +143,6 @@ gh pr create --title "$TITLE" --body "- Bullet point describing change 1
 ```bash
 gh pr edit --title "$TITLE" --body "- Updated bullet points"
 ```
-
-### PR Body Format (MANDATORY)
-
-PR description MUST include a body explaining the change:
-
-1. **Why paragraph (REQUIRED)** - Start with a paragraph explaining WHY this change exists:
-   - What problem does this solve?
-   - What motivated this change?
-   - Why is this the right approach?
-   - This context is crucial for code review and future maintainers
-
-2. **What bullets** - Follow with bullet points describing WHAT changed:
-   - Each bullet describes one complete logical change
-   - Be specific about what was modified
-   - Reference specific files or components if helpful
-
-- Wrap all lines to <= 72 characters
-- Use plain bullet lists (`- item`) not checkboxes
 
 ## Handling Review Comments
 

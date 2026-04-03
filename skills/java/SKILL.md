@@ -1,12 +1,8 @@
 ---
 name: java
 description: |
-  Write code in the Java programming language.
-
-  ALWAYS apply this skill when:
-  - Creating or modifying `.java` source files
-  - Working with Java classes, interfaces, records, or enums
-  - Writing or refactoring Java code of any kind
+  Write code in the Java programming language. ALWAYS apply when creating
+  or modifying `.java` source files.
 ---
 
 <!--

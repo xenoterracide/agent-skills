@@ -92,58 +92,33 @@ and only add it when a runtime supports specific tool names such as `git` or
 anti-triggers, related skills, and detailed examples in the body of the skill
 file rather than overloading frontmatter.
 
-## Skill Categories
+## Skill Routing
 
-### Workflow Skills (Always Apply)
+Skills fall into four activation categories:
 
-| Skill | Primary Trigger | Pair With |
-|-------|-----------------|-----------|
-| `session-init` | **ALWAYS** at the start of every new session | Everything else |
-| `pull-request` | **ALWAYS** when files are modified, created, or deleted | Relevant domain skill(s), `commit-message`, `general-programming` |
-| `commit-message` | Writing a commit message or PR description | `pull-request` |
+- **Workflow** (`session-init`, `pull-request`, `commit-message`): Apply on every session or file change
+- **Cross-cutting** (`general-programming`): Apply to all coding tasks regardless of language
+- **Domain** (`github`, `java`, `gradle`, `shell-script`, `testing`, `use-case-creator`): Apply by file type or tool context
+- **Planning** (`iterative-development`, `skill-creator`): Apply when designing features or maintaining skills
 
-### Cross-Cutting Skills
-
-| Skill | Primary Trigger | Pair With |
-|-------|-----------------|-----------|
-| `general-programming` | Any coding, refactoring, or bug-fixing task | Language, build, and testing skills |
-
-### Domain Skills (Apply by Context)
-
-| Skill | Primary Trigger | Pair With |
-|-------|-----------------|-----------|
-| `github` | Interacting with GitHub repos, issues, pull requests, or GraphQL | `pull-request` |
-| `java` | Creating or modifying `.java` source files | `general-programming`, `testing`, `gradle` |
-| `gradle` | Editing `build.gradle.kts`, `settings.gradle.kts`, `gradle.properties`, or dependency versions | `java`, `pull-request` |
-| `shell-script` | Writing or editing `.sh`, `.zsh`, `.zshrc`, Bash pipelines, or shell automation | `general-programming`, `pull-request` |
-| `testing` | Creating, modifying, or discussing tests | `general-programming`, language-specific skills |
-| `use-case-creator` | Writing use cases or documenting system behavior in AsciiDoc | `iterative-development` |
-
-### Planning and Meta Skills
-
-| Skill | Primary Trigger | Pair With |
-|-------|-----------------|-----------|
-| `iterative-development` | Starting a feature, planning an iteration, or evolving the domain model | `use-case-creator`, implementation skills |
-| `skill-creator` | Creating or updating skills, or fixing skill formatting/trigger problems | `pull-request` |
-
-## AI Discoverability Index
+### Discoverability Index
 
 Use this table as the canonical routing guide when deciding which skill to load.
 
-| Skill | Use When | Avoid When | Common Signals |
-|-------|----------|------------|----------------|
-| `session-init` | Beginning repository work in a new session | You already completed startup checks in this session | "start work", "new session", "check branch" |
-| `pull-request` | Any repository file will change | Read-only investigation with no edits | "fix", "update", "add", "refactor", "rename" |
-| `commit-message` | You need a commit subject/body or PR description | General prose that is not commit/PR text | "write commit", "PR title", "PR description" |
-| `general-programming` | Implementing or changing code in any language | Pure repo administration with no code changes | "implement", "refactor", "bug", "error handling" |
-| `github` | Using GitHub issues, PRs, reviews, comments, or GraphQL | Purely local git or filesystem work | "GitHub", "review comments", "issue", "PR thread" |
-| `java` | Touching `.java` files or Java language constructs | Only build config or docs are changing | `.java`, class, interface, record, enum |
-| `gradle` | Touching Gradle files or dependency-locking/build problems | Non-build files only | `build.gradle.kts`, `settings.gradle.kts`, `gradle.properties`, dependency |
-| `shell-script` | Writing shell scripts, Zsh config, Bash snippets, or CLI automation | One-off shell commands with no script design | `.sh`, `.zsh`, `.zshrc`, bash, zsh, quoting, pipeline |
-| `testing` | Adding, updating, debugging, or discussing tests | Feature work with no test impact or discussion | test, coverage, fixture, integration |
-| `use-case-creator` | Writing or revising use cases and business behavior docs | Implementation-only work | use case, scenario, semantic anchor, ubiquitous language |
-| `iterative-development` | Scoping a feature, selecting an iteration, or refining the model | Mechanical single-file edits with no design work | iteration, vertical slice, domain model, risk |
-| `skill-creator` | Working on `skills/**/SKILL.md` or skill trigger behavior | Normal product/application code changes | skill, frontmatter, trigger wording, discoverability |
+| Skill | Scope | Activate When | Signals |
+|-------|-------|---------------|---------|
+| `session-init` | Git state verification at session start | Starting work in a repo session | "start work", "new session", "check branch" |
+| `pull-request` | Commit, push, and PR lifecycle (platform-agnostic) | Any repository file is created, modified, or deleted | "fix", "update", "add", "refactor" |
+| `commit-message` | Conventional commit and PR description formatting | Writing a commit message, PR title, or PR description | "write commit", "PR title", "PR description" |
+| `general-programming` | Cross-language coding principles and quality standards | Implementing or changing code in any language | "implement", "refactor", "bug", "error handling" |
+| `github` | GitHub platform tools, APIs, and GraphQL queries | Querying or interacting with GitHub-hosted resources | "GitHub", "issue", "gh", "GraphQL" |
+| `java` | Java language conventions and null-safety | Creating or modifying `.java` source files | `.java`, class, interface, record, enum |
+| `gradle` | Gradle build system and dependency management | Editing Gradle build files or resolving dependency issues | `build.gradle.kts`, `settings.gradle.kts`, dependency |
+| `shell-script` | Shell scripting for POSIX, Bash, and Zsh | Writing or editing shell scripts, functions, or shell config | `.sh`, `.zsh`, `.zshrc`, bash, zsh, pipeline |
+| `testing` | Test philosophy, patterns, and anti-patterns | Adding, updating, debugging, or discussing tests | test, coverage, fixture, integration |
+| `use-case-creator` | Use case specifications in Cockburn/AsciiDoc format | Writing or revising use cases and business behavior docs | use case, scenario, ubiquitous language |
+| `iterative-development` | Iteration planning and domain model evolution | Scoping a feature, selecting an iteration, or refining design | iteration, vertical slice, domain model, risk |
+| `skill-creator` | Creating and maintaining AI skill definitions | Working on `SKILL.md` files or skill trigger behavior | skill, frontmatter, trigger, discoverability |
 
 ## Development Workflow
 
@@ -165,47 +140,26 @@ yarn exec prettier --write skills/<skill-name>/SKILL.md
 
 ### Creating New Skills
 
-1. Create directory: `skills/<skill-name>/`
-2. Create `SKILL.md` with proper frontmatter (see `skill-creator` skill)
-3. Add SPDX license comment after frontmatter
-4. Add a precise trigger-oriented `description`
-5. Add clear "when not to use" and related skill guidance in the body
-6. Run prettier to format
-7. Follow pull-request workflow to submit
+See the `skill-creator` skill for the full creation workflow and format contract.
 
 ## Code Style Guidelines
 
-### For Java Projects (referenced skills)
-
-- Prefer `var` keyword over explicit types
-- Prefer immutability (`final` fields, `record` classes, `List.of()`)
-- Prefer package-private visibility over `private` (except fields)
-- Use non-nullability by default with `@Nullable` for nullable types
-- Avoid `internal` packages - use package-private instead
-- Use builder pattern with `@Builder` from immutables library
+See language-specific skills (`java`, `shell-script`) for detailed style guidance.
 
 ### For Skill Files
 
-- Keep skills concise - they share context window
-- Use clear, specific descriptions for triggers
-- Use the same trigger vocabulary in `AGENTS.md` and each skill description
-- Add negative guidance when confusion with another skill is likely
-- Put detailed info in references/, keep `SKILL.md` focused
-- Fix broken commands immediately - skills are living documents
+- Keep skills concise — they share context window with everything else
+- Align description wording between `AGENTS.md` and each skill
+- Add boundary notes when confusion with a related skill is likely
+- Put detailed reference material in `references/`, keep `SKILL.md` focused
 
 ## Testing
 
-Skills themselves don't have automated tests (they're documentation). However:
+Skills themselves don't have automated tests (they're documentation). They are
+validated by correct frontmatter format and tested by usage — if a skill's
+command doesn't work, update it immediately.
 
-- Skills should be validated for correct frontmatter format
-- Prettier ensures consistent Markdown formatting
-- Skills are tested by usage - if a skill's command doesn't work, update it immediately
-
-For testing strategies in code projects, see the `testing` skill which covers:
-- Prefer sociable and integration tests over solitary unit tests
-- Use real collaborators, not mocks
-- Test observable behavior through public APIs
-- Target 90%+ coverage
+For testing strategies in code projects, see the `testing` skill.
 
 ## Pull Request Workflow
 

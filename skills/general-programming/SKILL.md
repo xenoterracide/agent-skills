@@ -76,20 +76,8 @@ try {
 
 ## Rule 2: Always Run Tests
 
-Before considering any task complete, run the relevant tests. See the `testing` skill for detailed guidance on test philosophy and patterns.
-
-**Key principles:**
-
-- Prefer **sociable tests** (real collaborators) over **solitary tests** (mocks)
-- Prefer **narrow integration tests** (test one integration point) over broad end-to-end tests
-- Test observable behavior through public APIs, not implementation details
-- Use stubs/fakes for external services; avoid mocks unless necessary
-
-**Coverage targets:**
-
-- Maintain high coverage (90%+)
-- Trivial code (getters/setters) should be exercised by other tests, not explicitly tested
-- If trivial code isn't covered, question whether it's needed (libraries may be an exception)
+Before considering any task complete, run the relevant tests. See the `testing`
+skill for test philosophy, patterns, and anti-patterns.
 
 ## Rule 3: Prefer Immutability
 
