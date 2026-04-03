@@ -68,6 +68,7 @@ Content here...
 ```
 
 **CRITICAL FORMATTING RULES:**
+
 1. `---` must be the VERY FIRST line in the file - no comments, no blank lines before
 2. Frontmatter must include `name` and `description` fields
 3. SPDX copyright comment goes AFTER frontmatter, in an HTML comment block
@@ -76,6 +77,7 @@ Content here...
 ### How Skills Work
 
 Skills are recognized by Kimi when:
+
 1. File is named exactly `SKILL.md`
 2. Located in `.agents/skills/<skill-name>/` or `skills/<skill-name>/`
 3. Frontmatter is valid (starts with `---`)
@@ -105,20 +107,20 @@ Skills fall into four activation categories:
 
 Use this table as the canonical routing guide when deciding which skill to load.
 
-| Skill | Scope | Activate When | Signals |
-|-------|-------|---------------|---------|
-| `session-init` | Git state verification at session start | Starting work in a repo session | "start work", "new session", "check branch" |
-| `pull-request` | Commit, push, and PR lifecycle; addressing review feedback | Any repository file is created, modified, or deleted; PR review comments need addressing | "fix", "update", "add", "refactor", "address PR comments" |
-| `commit-message` | Conventional commit and PR description formatting | Writing a commit message, PR title, or PR description | "write commit", "PR title", "PR description" |
-| `coding-standards` | Cross-language coding principles and quality standards | Implementing or changing code in any language | "implement", "refactor", "bug", "error handling" |
-| `github` | GitHub platform tools, APIs, and GraphQL queries | Querying or interacting with GitHub-hosted resources | "GitHub", "issue", "gh", "GraphQL" |
-| `java` | Java language conventions and null-safety | Creating or modifying `.java` source files | `.java`, class, interface, record, enum |
-| `gradle` | Gradle build system and dependency management | Editing Gradle build files or resolving dependency issues | `build.gradle.kts`, `settings.gradle.kts`, dependency |
-| `shell-script` | Shell scripting for POSIX, Bash, and Zsh | Writing or editing shell scripts, functions, or shell config | `.sh`, `.zsh`, `.zshrc`, bash, zsh, pipeline |
-| `testing` | Test philosophy, patterns, and anti-patterns | Adding, updating, debugging, or discussing tests | test, coverage, fixture, integration |
-| `use-case-creator` | Use case specifications in Cockburn/AsciiDoc format | Writing or revising use cases and business behavior docs | use case, scenario, ubiquitous language |
-| `iterative-development` | Iteration planning and domain model evolution | Scoping a feature, selecting an iteration, or refining design | iteration, vertical slice, domain model, risk |
-| `skill-creator` | Creating and maintaining AI skill definitions | Working on `SKILL.md` files or skill trigger behavior | skill, frontmatter, trigger, discoverability |
+| Skill                   | Scope                                                      | Activate When                                                                            | Signals                                                   |
+| ----------------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| `session-init`          | Git state verification at session start                    | Starting work in a repo session                                                          | "start work", "new session", "check branch"               |
+| `pull-request`          | Commit, push, and PR lifecycle; addressing review feedback | Any repository file is created, modified, or deleted; PR review comments need addressing | "fix", "update", "add", "refactor", "address PR comments" |
+| `commit-message`        | Conventional commit and PR description formatting          | Writing a commit message, PR title, or PR description                                    | "write commit", "PR title", "PR description"              |
+| `coding-standards`      | Cross-language coding principles and quality standards     | Implementing or changing code in any language                                            | "implement", "refactor", "bug", "error handling"          |
+| `github`                | GitHub platform tools, APIs, and GraphQL queries           | Querying or interacting with GitHub-hosted resources                                     | "GitHub", "issue", "gh", "GraphQL"                        |
+| `java`                  | Java language conventions and null-safety                  | Creating or modifying `.java` source files                                               | `.java`, class, interface, record, enum                   |
+| `gradle`                | Gradle build system and dependency management              | Editing Gradle build files or resolving dependency issues                                | `build.gradle.kts`, `settings.gradle.kts`, dependency     |
+| `shell-script`          | Shell scripting for POSIX, Bash, and Zsh                   | Writing or editing shell scripts, functions, or shell config                             | `.sh`, `.zsh`, `.zshrc`, bash, zsh, pipeline              |
+| `testing`               | Test philosophy, patterns, and anti-patterns               | Adding, updating, debugging, or discussing tests                                         | test, coverage, fixture, integration                      |
+| `use-case-creator`      | Use case specifications in Cockburn/AsciiDoc format        | Writing or revising use cases and business behavior docs                                 | use case, scenario, ubiquitous language                   |
+| `iterative-development` | Iteration planning and domain model evolution              | Scoping a feature, selecting an iteration, or refining design                            | iteration, vertical slice, domain model, risk             |
+| `skill-creator`         | Creating and maintaining AI skill definitions              | Working on `SKILL.md` files or skill trigger behavior                                    | skill, frontmatter, trigger, discoverability              |
 
 ## Development Workflow
 

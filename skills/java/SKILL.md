@@ -35,12 +35,12 @@ All types are **non-null by default**. You must explicitly mark nullable types:
 ```java
 // GOOD - parameter is non-null (default), return is nullable
 public @Nullable User findById(String id) {
-    // ... may return null if not found
+  // ... may return null if not found
 }
 
 // GOOD - both parameters nullable
 public void merge(@Nullable User first, @Nullable User second) {
-    // ...
+  // ...
 }
 ```
 
@@ -103,8 +103,8 @@ For framework initialization methods (e.g., `@PostConstruct`, `@BeforeEach`), us
 @Initializer
 @PostConstruct
 public void init() {
-    // NullAway understands this method initializes fields
-    this.service = createService();
+  // NullAway understands this method initializes fields
+  this.service = createService();
 }
 ```
 
@@ -202,6 +202,7 @@ Avoid `internal` packages. Package-private visibility should be preferred to hid
 Prefer builder pattern over complex constructors with immutables library `@Builder` and a static factory. Also use `@Data` for generating type-safe field constants for testing.
 
 Required dependencies:
+
 - `org.immutables:value-annotations` (compile-only)
 - `org.immutables:datatype` (compile-only, for `@Data`)
 

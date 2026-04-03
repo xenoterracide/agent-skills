@@ -59,32 +59,33 @@ Design code that follows SOLID principles with a focus on polymorphic behavior:
 ```java
 // BAD - external orchestration with conditionals
 public void processPayment(PaymentType type, Amount amount) {
-    if (type == PaymentType.CREDIT_CARD) {
-        processCreditCard(amount);
-    } else if (type == PaymentType.PAYPAL) {
-        processPayPal(amount);
-    } else if (type == PaymentType.BANK_TRANSFER) {
-        processBankTransfer(amount);
-    }
+  if (type == PaymentType.CREDIT_CARD) {
+    processCreditCard(amount);
+  } else if (type == PaymentType.PAYPAL) {
+    processPayPal(amount);
+  } else if (type == PaymentType.BANK_TRANSFER) {
+    processBankTransfer(amount);
+  }
 }
 ```
 
 ```java
 // GOOD - polymorphic behavior, each type decides how to act
 public interface PaymentMethod {
-    void pay(Amount amount);
+  void pay(Amount amount);
 }
 
 public class CreditCardPayment implements PaymentMethod {
-    @Override
-    public void pay(Amount amount) {
-        // Credit card specific implementation
-    }
+
+  @Override
+  public void pay(Amount amount) {
+    // Credit card specific implementation
+  }
 }
 
 // Usage - no conditionals, behavior is encapsulated
 public void processPayment(PaymentMethod method, Amount amount) {
-    method.pay(amount);  // Polymorphic dispatch
+  method.pay(amount); // Polymorphic dispatch
 }
 ```
 
@@ -108,13 +109,10 @@ Prefer immutable objects and data structures where immutability doesn't reduce c
 public record Person(String name, int age) {}
 
 // GOOD - immutable collections
-var items = List.of("a", "b", "c");  // Cannot be modified
+var items = List.of("a", "b", "c"); // Cannot be modified
 
 // GOOD - builder pattern for complex immutables
-var config = Config.builder()
-    .timeout(Duration.ofSeconds(30))
-    .retries(3)
-    .build();
+var config = Config.builder().timeout(Duration.ofSeconds(30)).retries(3).build();
 ```
 
 **Avoid setters** - Instead of anemic data objects with getters/setters, prefer domain-driven design with rich behavior:
@@ -234,8 +232,8 @@ Suppress static analysis warnings **only when:**
 // GOOD - suppression is right at the source, with explanation
 @SuppressWarnings("NullAway") // Factory method ensures non-null via validation
 public static User create(String email) {
-    // ... validation logic ...
-    return new User(email); // NullAway can't see validation
+  // ... validation logic ...
+  return new User(email); // NullAway can't see validation
 }
 ```
 
