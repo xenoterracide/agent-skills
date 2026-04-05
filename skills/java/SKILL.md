@@ -267,6 +267,9 @@ assertThat(user)
 // BEST - hasFieldOrPropertyWithValue with Immutables datatype for fields
 // Immutables generates type-safe string constants: User_.NAME_
 // (accessed via Datatypes_User.User_.NAME_ or just User_.NAME_ if imported)
+// This method is preferred because when assertions fail, the error message
+// includes the field name (e.g., "expected field/property 'name' value"),
+// unlike approaches that result in unhelpful messages like "expected:<true> but was:<false>"
 assertThat(user)
     .hasFieldOrPropertyWithValue(User_.NAME_, "Alice")
     .hasFieldOrPropertyWithValue(User_.AGE_, 30);
