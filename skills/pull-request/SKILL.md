@@ -37,7 +37,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
     - use available tools to check workflow status
     - fix any failures before requesting review
     - if GitHub checks fail after pushing, fix before requesting review
-- Do not rewrite remote history — `git push --force` and `git push --force-with-lease` are both banned
+- **NEVER force push.** Force pushes (`--force` and `--force-with-lease`) are **blocked by repository rules** and will always fail. If a push is rejected, do not attempt force push — create a new commit instead.
 - must be synchronized with HEAD branch using a merge strategy
   - it is easier to delete and regenerate lockfiles than merge them
 - respond to ALL pr comments.
