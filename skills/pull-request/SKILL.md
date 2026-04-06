@@ -51,6 +51,8 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 ## Workflow
 
+**NEVER update MERGED PRs.** If a PR is merged, create a new branch for any follow-up work.
+
 When committing and creating/updating a PR, follow this workflow:
 
 1. **Check current branch status** - Use MCP tools (preferred) or `gh` CLI:
@@ -146,8 +148,6 @@ gh pr edit --title "$TITLE" --body "- Updated bullet points"
 ```
 
 ## Handling Review Comments
-
-**Do not update MERGED PRs.** Once a PR is merged, any new work requires a new branch and PR. Never push additional commits to an already-merged PR branch.
 
 When addressing review comments on a PR:
 
