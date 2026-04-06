@@ -147,6 +147,8 @@ gh pr edit --title "$TITLE" --body "- Updated bullet points"
 
 ## Handling Review Comments
 
+**Do not update MERGED PRs.** Once a PR is merged, any new work requires a new branch and PR. Never push additional commits to an already-merged PR branch.
+
 When addressing review comments on a PR:
 
 1. **Pull first** - Always pull the latest changes before starting
