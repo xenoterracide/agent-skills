@@ -192,8 +192,7 @@ When creating plans that involve workflow changes:
 3. [HUMAN] Update .github/workflows/ci.yml:
    - Add new job step after "Run Tests":
      ```yaml
-     - name: Run Integration Tests
-       run: <build-tool> integration-test
+     - run: <build-tool> integration-test
      ```
 4. [AI] Update documentation to reflect new CI step
 ````
