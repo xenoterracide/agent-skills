@@ -187,13 +187,13 @@ When creating plans that involve workflow changes:
 ````markdown
 ## Plan
 
-1. [AI] Update build configuration in build.gradle.kts
+1. [AI] Update build configuration
 2. [AI] Add new test cases for the feature
 3. [HUMAN] Update .github/workflows/ci.yml:
    - Add new job step after "Run Tests":
      ```yaml
      - name: Run Integration Tests
-       run: ./gradlew integrationTest
+       run: <build-tool> integration-test
      ```
 4. [AI] Update documentation to reflect new CI step
 ````
