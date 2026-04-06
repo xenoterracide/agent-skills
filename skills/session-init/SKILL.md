@@ -172,7 +172,7 @@ modify files outside your session.
 
 ## GitHub Workflow Limitations
 
-AI agents **cannot edit GitHub workflow files** (`.github/workflows/*.yml` or `.yaml`). This is a hard limitation — workflow file modifications will fail.
+AI agents **cannot edit GitHub workflow files** (`.github/workflows/*.yml`). This is a hard limitation — workflow file modifications will fail. Other YAML files (`.yaml`) are not affected.
 
 ### Planning Implications
 
