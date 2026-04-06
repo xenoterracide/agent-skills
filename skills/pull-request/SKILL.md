@@ -161,6 +161,25 @@ When addressing review comments on a PR:
 
 **Note:** REST API doesn't expose resolved state - use GraphQL (`reviewThreads.isResolved`) or MCP tools to check unresolved comments.
 
+## File Change Limitations
+
+### GitHub Workflows
+
+AI agents **cannot edit GitHub workflow files** (`.github/workflows/*.yml`). This is a hard limitation — workflow file modifications will fail.
+
+When workflow changes are needed:
+
+- Identify them as **human-required tasks** in PR descriptions
+- Provide clear instructions for the human to make the changes
+- Do not attempt to create or modify workflow files yourself
+
+Example PR description note:
+
+```
+**Note:** This PR requires human follow-up to update `.github/workflows/ci.yml`:
+- Add new job step: `- run: <build-tool> integration-test`
+```
+
 ## AI Attribution
 
 When creating commits for a PR, include AI attribution in commit messages using a Co-authored-by trailer:
