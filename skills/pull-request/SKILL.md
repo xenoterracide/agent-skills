@@ -34,7 +34,9 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
     - update `AGENTS.md` if build processes, tools, or agent workflows change
     - when renaming workflows or changing their interface, update both README and AGENTS.md
   - verify GitHub PR checks pass after pushing
-    - use available tools to check workflow status
+    - ALWAYS check the status of required checks before returning to the user
+    - use `gh pr checks` or available tools to check workflow status
+    - remediate any failures found — do not return with failing checks
     - fix any failures before requesting review
     - if GitHub checks fail after pushing, fix before requesting review
 - **NEVER force push.** Force pushes (`--force` and `--force-with-lease`) are **blocked by repository rules** and will always fail. If a push is rejected, do not attempt force push — create a new commit instead.
@@ -80,6 +82,11 @@ When committing and creating/updating a PR, follow this workflow:
 5. **Before finalizing:**
    - Review if documentation needs updates (README.md, AGENTS.md)
    - Ensure PR description accurately reflects all changes including doc updates
+
+6. **After pushing, before returning to the user:**
+   - Run `gh pr checks` (or MCP equivalent) to verify all required checks pass
+   - If any check fails, diagnose and remediate the issue before returning
+   - Do not consider the task complete while required checks are failing
 
 ### Self-Review Before Submitting
 
