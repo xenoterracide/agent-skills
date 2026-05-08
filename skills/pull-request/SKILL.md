@@ -35,7 +35,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
     - when renaming workflows or changing their interface, update both README and AGENTS.md
   - verify GitHub PR checks pass after pushing
     - ALWAYS check the status of required checks before returning to the user
-    - use `gh pr checks` or available tools to check workflow status
+    - use `gh pr checks --watch` or available tools to check workflow status
     - remediate any failures found — do not return with failing checks
     - fix any failures before requesting review
     - if GitHub checks fail after pushing, fix before requesting review
@@ -84,7 +84,7 @@ When committing and creating/updating a PR, follow this workflow:
    - Ensure PR description accurately reflects all changes including doc updates
 
 6. **After pushing, before returning to the user:**
-   - Run `gh pr checks` (or MCP equivalent) to verify all required checks pass
+   - Run `gh pr checks --watch --required` (or MCP equivalent) to verify all required checks pass
    - If any check fails, diagnose and remediate the issue before returning
    - Do not consider the task complete while required checks are failing
    - Always print the PR URL when returning so the user can easily review
