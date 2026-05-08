@@ -87,6 +87,7 @@ When committing and creating/updating a PR, follow this workflow:
    - Run `gh pr checks` (or MCP equivalent) to verify all required checks pass
    - If any check fails, diagnose and remediate the issue before returning
    - Do not consider the task complete while required checks are failing
+   - Always print the PR URL when returning so the user can easily review
 
 ### Self-Review Before Submitting
 
