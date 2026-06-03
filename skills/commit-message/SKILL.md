@@ -26,8 +26,10 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 - Output plain text only. No markdown fences.
 - First line MUST be a valid Conventional Commit subject.
-- Keep the FIRST line <= 72 characters.
+- Keep the FIRST line <= 50 characters.
 - Use a specific scope when possible.
+- Use directional verbs that reflect what happened in the diff (e.g. add, remove,
+  update, refactor, fix) rather than neutral nouns.
 - Body (MANDATORY - must explain WHY):
   - Start with a paragraph explaining WHY this change is being made
     - The "why" provides context for future readers
@@ -35,7 +37,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
   - Follow with bullet points explaining the main changes (WHAT)
   - Each bullet must describe one complete logical change
   - Do not split a single idea across multiple bullets
-  - Wrap lines to <= 72 chars
+  - Wrap lines to <= 75 chars
 
 ## Template
 
