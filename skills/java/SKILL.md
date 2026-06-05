@@ -3,6 +3,9 @@ name: java
 description: |
   Write code in the Java programming language. ALWAYS apply when creating
   or modifying `.java` source files.
+license: CC-BY-NC-SA-4.0
+metadata:
+  author: Caleb Cushing <caleb.cushing@gmail.com>
 ---
 
 <!--

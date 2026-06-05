@@ -6,6 +6,9 @@ description: |
   existing code, or when the domain model needs to evolve. Guides short
   timeboxed iterations, risk-driven development, and continuous refactoring
   toward deeper insight.
+license: CC-BY-NC-SA-4.0
+metadata:
+  author: Caleb Cushing <caleb.cushing@gmail.com>
 ---
 
 <!--

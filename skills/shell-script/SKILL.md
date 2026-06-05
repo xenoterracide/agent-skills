@@ -5,6 +5,9 @@ description: |
   or editing `.sh` files, shell functions, portable shell snippets, Zsh
   configuration, or Bash pipelines, especially when quoting, error handling,
   and safe command composition matter.
+license: CC-BY-NC-SA-4.0
+metadata:
+  author: Caleb Cushing <caleb.cushing@gmail.com>
 ---
 
 <!--

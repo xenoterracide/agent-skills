@@ -32,8 +32,6 @@ The project is hosted at: https://github.com/xenoterracide/subtree-ai
 │   ├── skill-creator/      # Creating and maintaining skills
 │   ├── testing/            # Testing philosophy and patterns
 │   └── use-case-creator/   # Use case documentation guidance
-└── .agents/                # Symlink to root (self-referential)
-    └── skills/             # Same as ./skills/
 ```
 
 ## Technology Stack
@@ -79,7 +77,7 @@ Content here...
 Skills are recognized by Kimi when:
 
 1. File is named exactly `SKILL.md`
-2. Located in `.agents/skills/<skill-name>/` or `skills/<skill-name>/`
+2. Located in `skills/<skill-name>/` within the plugin root (or `.agents/skills/<skill-name>/` in non-plugin projects)
 3. Frontmatter is valid (starts with `---`)
 4. Has both `name` and `description` fields
 

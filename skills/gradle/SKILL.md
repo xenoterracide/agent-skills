@@ -4,6 +4,9 @@ description: |
   Work with the Gradle build system and Kotlin DSL. Use when editing
   `build.gradle.kts`, `settings.gradle.kts`, `gradle.properties`, lockfiles,
   dependency versions, or troubleshooting Gradle build behavior.
+license: CC-BY-NC-SA-4.0
+metadata:
+  author: Caleb Cushing <caleb.cushing@gmail.com>
 ---
 
 <!--

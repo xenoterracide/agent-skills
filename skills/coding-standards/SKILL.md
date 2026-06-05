@@ -4,6 +4,9 @@ description: |
   ALWAYS apply when writing or modifying code in any language. Cross-cutting
   principles for design, error handling, immutability, and quality that apply
   alongside language-specific skills.
+license: CC-BY-NC-SA-4.0
+metadata:
+  author: Caleb Cushing <caleb.cushing@gmail.com>
 ---
 
 <!--

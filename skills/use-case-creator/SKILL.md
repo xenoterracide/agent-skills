@@ -4,6 +4,9 @@ description: |
   Create and maintain use case specifications following Cockburn format with
   semantic anchors and ubiquitous language. Use when writing use cases,
   specifying requirements, or documenting system behavior in AsciiDoc.
+license: CC-BY-NC-SA-4.0
+metadata:
+  author: Caleb Cushing <caleb.cushing@gmail.com>
 ---
 
 <!--

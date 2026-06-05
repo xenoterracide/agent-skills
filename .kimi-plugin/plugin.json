@@ -1,0 +1,38 @@
+{
+  "name": "xenoterracide-agent-skills",
+  "version": "0.1.0",
+  "description": "AI coding agent skills for Java, Gradle, GitHub, shell scripting, and iterative development workflows.",
+  "author": {
+    "name": "Caleb Cushing"
+  },
+  "homepage": "https://github.com/xenoterracide/agent-skills",
+  "license": "CC-BY-NC-SA-4.0",
+  "keywords": [
+    "java",
+    "gradle",
+    "github",
+    "testing",
+    "coding-standards",
+    "shell-script",
+    "skills",
+    "session-init",
+    "conventional-commits",
+    "pull-request"
+  ],
+  "skills": "./skills/",
+  "sessionStart": {
+    "skill": "session-init"
+  },
+  "mcpServers": {
+    "javadocs": {
+      "url": "https://www.javadocs.dev/mcp"
+    }
+  },
+  "interface": {
+    "displayName": "Xenoterracide's Skills",
+    "shortDescription": "Java, Gradle, GitHub, and development workflow skills",
+    "longDescription": "A collection of AI agent skills covering Java coding conventions with JSpecify/NullAway, Gradle build system guidance, GitHub CLI and GraphQL patterns, shell scripting standards, iterative development planning, conventional commits, PR workflows, and session initialization checks.",
+    "developerName": "Caleb Cushing",
+    "websiteURL": "https://github.com/xenoterracide/agent-skills"
+  }
+}

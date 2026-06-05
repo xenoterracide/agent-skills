@@ -4,6 +4,9 @@ description: |
   Create and maintain AI skills for this project. Use when adding new skills,
   updating existing `SKILL.md` files, fixing frontmatter, or improving skill
   trigger wording and discoverability.
+license: CC-BY-NC-SA-4.0
+metadata:
+  author: Caleb Cushing <caleb.cushing@gmail.com>
 ---
 
 <!--
@@ -48,7 +51,17 @@ Required fields:
     conditions
   - Reuse the same trigger vocabulary that appears in `AGENTS.md`
 
-Optional field:
+Optional fields:
+
+- **`license`**: SPDX license identifier for the skill
+  - Example: `CC-BY-NC-SA-4.0`, `MIT`, `Apache-2.0`
+  - Use the same license as the overall project unless there's a reason to
+    differ
+
+- **`metadata`**: Key-value map for additional metadata
+  - **`author`**: Name and optional email (e.g., `Caleb Cushing <email>`)
+  - **`version`**: Skill version string
+  - Avoid adding unrelated metadata just because the format permits it
 
 - **`allowed-tools`**: Tools that may be pre-approved for the skill
   - Experimental; support may vary by agent implementation
@@ -59,8 +72,8 @@ Optional field:
     about running trusted shell scripts
   - Do **not** use this as a substitute for clear instructions in the body
 
-Avoid adding unrelated metadata just because the format permits it. Keep
-frontmatter small and focused on activation plus carefully chosen pre-approval.
+Keep frontmatter small and focused on activation plus carefully chosen
+pre-approval.
 
 ### Correct Structure
 
@@ -70,6 +83,9 @@ name: skill-name
 description: |
   When to use this skill. Be specific about triggers.
   Include the kinds of user requests or file changes that should activate it.
+license: CC-BY-NC-SA-4.0
+metadata:
+  author: Caleb Cushing <caleb.cushing@gmail.com>
 allowed-tools: git gh
 ---
 
@@ -113,6 +129,9 @@ name: skill-name
 ---
 name: skill-name
 description: ...
+license: CC-BY-NC-SA-4.0
+metadata:
+  author: Caleb Cushing <caleb.cushing@gmail.com>
 ---
 
 <!--
