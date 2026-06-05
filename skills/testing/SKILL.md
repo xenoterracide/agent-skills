@@ -4,6 +4,9 @@ description: |
   Writing automated tests for software. Use when creating, modifying,
   debugging, or discussing tests, including test strategy, coverage,
   integration testing, and testing anti-patterns.
+license: CC-BY-NC-SA-4.0
+metadata:
+  author: Caleb Cushing <caleb.cushing@gmail.com>
 ---
 
 <!--
