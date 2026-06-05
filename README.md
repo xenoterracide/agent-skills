@@ -1,7 +1,7 @@
 <!--
 SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
 
-SPDX-License-Identifier: CC-BY-NC-4.0
+SPDX-License-Identifier: CC-BY-NC-SA-4.0
 -->
 
 # Xenoterracide's Agent Skills
@@ -44,6 +44,14 @@ Copy the `skills/` directory into your agent's skill discovery path:
 | `iterative-development` | Planning and domain model evolution               |
 | `use-case-creator`      | Cockburn/AsciiDoc use case specifications         |
 | `skill-creator`         | Creating and maintaining agent skills             |
+
+## Commercial Use
+
+These skills are provided for personal and non-commercial use only. They are
+**not intended for use in the development of commercial software** without
+explicit permission.
+
+For commercial licensing inquiries, please contact the author.
 
 ## License
 
