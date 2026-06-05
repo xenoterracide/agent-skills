@@ -50,8 +50,6 @@ Copy the `skills/` directory into your agent's skill discovery path:
 - **Skills and documentation**: [CC-BY-NC-SA-4.0](LICENSES/CC-BY-NC-SA-4.0.txt)
 - **Configuration files**: [CC0-1.0](LICENSES/CC0-1.0.txt)
 
-## Commercial Use
-
 These skills are provided for personal and non-commercial use only. They are
 **not intended for use in the development of commercial software** without
 explicit permission.
