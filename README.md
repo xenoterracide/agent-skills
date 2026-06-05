@@ -45,6 +45,11 @@ Copy the `skills/` directory into your agent's skill discovery path:
 | `use-case-creator`      | Cockburn/AsciiDoc use case specifications         |
 | `skill-creator`         | Creating and maintaining agent skills             |
 
+## License
+
+- **Skills and documentation**: [CC-BY-NC-SA-4.0](LICENSES/CC-BY-NC-SA-4.0.txt)
+- **Configuration files**: [CC0-1.0](LICENSES/CC0-1.0.txt)
+
 ## Commercial Use
 
 These skills are provided for personal and non-commercial use only. They are
@@ -52,8 +57,3 @@ These skills are provided for personal and non-commercial use only. They are
 explicit permission.
 
 For commercial licensing inquiries, please contact the author.
-
-## License
-
-- **Skills and documentation**: [CC-BY-NC-SA-4.0](LICENSES/CC-BY-NC-SA-4.0.txt)
-- **Configuration files**: [CC0-1.0](LICENSES/CC0-1.0.txt)
