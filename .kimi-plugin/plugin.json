@@ -29,7 +29,7 @@
     }
   },
   "interface": {
-    "displayName": "Subtree AI",
+    "displayName": "Xenoterracide Agent Skills",
     "shortDescription": "Java, Gradle, GitHub, and development workflow skills",
     "longDescription": "A collection of AI agent skills covering Java coding conventions with JSpecify/NullAway, Gradle build system guidance, GitHub CLI and GraphQL patterns, shell scripting standards, iterative development planning, conventional commits, PR workflows, and session initialization checks.",
     "developerName": "Caleb Cushing",
