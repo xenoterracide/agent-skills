@@ -29,16 +29,13 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 - Output plain text only. No markdown fences.
 - First line MUST be a valid Conventional Commit subject.
-- Keep the FIRST line <= 72 characters.
+- First line: aim for ≤ 50 characters, hard limit ≤ 72.
 - Use a specific scope when possible.
-- Body (MANDATORY - must explain WHY):
-  - Start with a paragraph explaining WHY this change is being made
-    - The "why" provides context for future readers
-    - Explain the problem, motivation, or rationale
-  - Follow with bullet points explaining the main changes (WHAT)
+- Body (MANDATORY - must explain WHAT):
+  - Use bullet points explaining the main changes
   - Each bullet must describe one complete logical change
   - Do not split a single idea across multiple bullets
-  - Wrap lines to <= 72 chars
+  - Wrap lines to <= 75 chars
 
 ## Template
 
