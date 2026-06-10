@@ -12,6 +12,10 @@ This repository contains **AI coding agent skills** designed for use with Kimi C
 
 The project is hosted at: https://github.com/xenoterracide/subtree-ai
 
+> **Agent Note:** Always read `README.md` before answering questions about installing, updating, or using this plugin. It contains the canonical instructions for the current Kimi Code CLI plugin system.
+>
+> **Source of Truth:** This repository IS the `xenoterracide-agent-skills` plugin. Never edit installed plugin files in `~/.kimi-code/plugins/`, `~/.kimi-code/skills/`, or any Kimi installation directory. Make all changes in this repo and reinstall from here when needed.
+
 ## Repository Structure
 
 ```
