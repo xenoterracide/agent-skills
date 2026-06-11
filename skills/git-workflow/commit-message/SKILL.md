@@ -1,9 +1,7 @@
 ---
 name: commit-message
 description: |
-  Use when you need a commit message, PR title, or PR description that reflects
-  the actual changes. Reads the git diff to produce conventional commit output
-  with a clear subject, rationale, and summary of what changed.
+  Use when writing a commit message, PR title, or PR description.
 license: CC-BY-NC-SA-4.0
 metadata:
   author: Caleb Cushing <caleb.cushing@gmail.com>

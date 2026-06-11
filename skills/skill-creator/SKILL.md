@@ -1,9 +1,8 @@
 ---
 name: skill-creator
 description: |
-  Create and maintain AI skills for this project. Use when adding new skills,
-  updating existing `SKILL.md` files, fixing frontmatter, or improving skill
-  trigger wording and discoverability.
+  Use when adding new skills, updating existing `SKILL.md` files, fixing
+  frontmatter, or improving skill trigger wording and discoverability.
 license: CC-BY-NC-SA-4.0
 metadata:
   author: Caleb Cushing <caleb.cushing@gmail.com>
