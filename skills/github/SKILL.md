@@ -1,9 +1,8 @@
 ---
 name: github
 description: |
-  Interact with GitHub repositories, issues, pull requests, review comments, and
-  GraphQL operations. Prefer MCP tools when available, then fall back to the
-  GitHub CLI `gh` for repository-hosted workflows.
+  Use when interacting with GitHub repositories, issues, pull requests, review
+  comments, or GraphQL operations.
 license: CC-BY-NC-SA-4.0
 metadata:
   author: Caleb Cushing <caleb.cushing@gmail.com>
