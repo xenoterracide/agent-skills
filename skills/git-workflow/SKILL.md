@@ -17,4 +17,11 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 # Git Workflow
 
-Sub-skills for repository workflow management.
+## Sub-skills
+
+- **`session-init`** — Use at the start of every new session to verify branch
+  and PR state before any other work.
+- **`pull-request`** — Use whenever files are created, modified, or deleted;
+  handles committing, pushing, and PR lifecycle.
+- **`commit-message`** — Use when writing a commit message, PR title, or PR
+  description.
