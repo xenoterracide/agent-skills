@@ -1,11 +1,8 @@
 ---
 name: iterative-development
 description: |
-  Apply iterative development principles combining Craig Larman's RUP process
-  and Eric Evans' whirlpool design. Use when starting new features, refining
-  existing code, or when the domain model needs to evolve. Guides short
-  timeboxed iterations, risk-driven development, and continuous refactoring
-  toward deeper insight.
+  Use when starting new features, refining existing code, or when the domain
+  model needs to evolve.
 license: CC-BY-NC-SA-4.0
 metadata:
   author: Caleb Cushing <caleb.cushing@gmail.com>
