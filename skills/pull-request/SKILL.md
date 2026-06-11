@@ -2,10 +2,11 @@
 name: pull-request
 description: |
   ALWAYS use when files are modified, created, or deleted — including bugs,
-  features, refactoring, or config changes. Also use when creating a pull
-  request, opening a PR, making a PR, or submitting changes. Also use when
-  addressing PR review comments or feedback. Handles committing, pushing, and
-  PR management through GitHub.
+  features, refactoring, or config changes. Also use when creating a PR,
+  opening a PR, making a PR, updating a PR, or submitting changes. Also use
+  when addressing PR review comments or feedback. Triggers on: pr, pull
+  request, commit, push. Handles committing, pushing, and PR management
+  through GitHub.
 license: CC-BY-NC-SA-4.0
 metadata:
   author: Caleb Cushing <caleb.cushing@gmail.com>
