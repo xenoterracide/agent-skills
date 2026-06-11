@@ -23,19 +23,22 @@ The project is hosted at: https://github.com/xenoterracide/subtree-ai
 ├── mcp/                     # Model Context Protocol configuration
 │   ├── mcp.json            # MCP server configuration (currently empty {})
 │   └── mcp.json.license    # CC0-1.0 license for config files
-├── skills/                  # AI skills organized by concern
-│   ├── commit-message/     # Conventional commit and PR description format
-│   ├── coding-standards/    # Cross-cutting coding principles and quality
-│   ├── github/             # GitHub and GraphQL interaction patterns
-│   ├── gradle/             # Gradle build system and dependency management
-│   ├── iterative-development/ # Planning and iterative design guidance
-│   ├── java/               # Java coding style and null-safety guidance
-│   ├── pull-request/       # Commit, push, and PR workflow management
-│   ├── shell-script/       # Shell scripting and command automation guidance
-│   ├── session-init/       # Mandatory session startup workflow
-│   ├── skill-creator/      # Creating and maintaining skills
-│   ├── testing/            # Testing philosophy and patterns
-│   └── use-case-creator/   # Use case documentation guidance
+├── skills/                          # AI skills organized by concern
+│   ├── code-quality/               # Cross-cutting quality and testing
+│   │   ├── coding-standards/       # Coding principles and quality
+│   │   └── testing/                # Testing philosophy and patterns
+│   ├── development-planning/       # Feature scoping and requirements
+│   │   ├── iterative-development/  # Planning and iterative design
+│   │   └── use-case-creator/       # Use case documentation
+│   ├── git-workflow/               # Repository workflow lifecycle
+│   │   ├── commit-message/         # Conventional commit formatting
+│   │   ├── pull-request/           # Commit, push, and PR management
+│   │   └── session-init/           # Mandatory session startup
+│   ├── github/                     # GitHub and GraphQL interaction
+│   ├── gradle/                     # Gradle build system
+│   ├── java/                       # Java coding style
+│   ├── shell-script/               # Shell scripting guidance
+│   └── skill-creator/              # Creating and maintaining skills
 ```
 
 ## Technology Stack
@@ -100,38 +103,45 @@ file rather than overloading frontmatter.
 
 Skills fall into four activation categories:
 
-- **Workflow** (`session-init`, `pull-request`, `commit-message`): Apply on every session or file change
-- **Cross-cutting** (`coding-standards`): Apply to all coding tasks regardless of language
-- **Domain** (`github`, `java`, `gradle`, `shell-script`, `testing`, `use-case-creator`): Apply by file type or tool context
-- **Planning** (`iterative-development`, `skill-creator`): Apply when designing features or maintaining skills
+- **Workflow** (`git-workflow`): Apply on every session or file change
+  - `session-init` — start of every session
+  - `pull-request` — any file creation, modification, or deletion
+  - `commit-message` — writing commits or PR descriptions
+- **Cross-cutting** (`code-quality`): Apply to all coding tasks regardless of language
+  - `coding-standards` — general code quality principles
+  - `testing` — test strategy and patterns
+- **Domain** (`github`, `java`, `gradle`, `shell-script`): Apply by file type or tool context
+- **Planning** (`development-planning`, `skill-creator`): Apply when designing features or maintaining skills
+  - `iterative-development` — iteration and domain model design
+  - `use-case-creator` — requirements documentation
 
 ### Discoverability Index
 
 Use this table as the canonical routing guide when deciding which skill to load.
 
-| Skill                   | Scope                                                      | Activate When                                                                            | Signals                                                   |
-| ----------------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| `session-init`          | Git state verification at session start                    | Starting work in a repo session                                                          | "start work", "new session", "check branch"               |
-| `pull-request`          | Commit, push, and PR lifecycle; addressing review feedback | Any repository file is created, modified, or deleted; PR review comments need addressing | "fix", "update", "add", "refactor", "address PR comments" |
-| `commit-message`        | Conventional commit and PR description formatting          | Writing a commit message, PR title, or PR description                                    | "write commit", "PR title", "PR description"              |
-| `coding-standards`      | Cross-language coding principles and quality standards     | Implementing or changing code in any language                                            | "implement", "refactor", "bug", "error handling"          |
-| `github`                | GitHub platform tools, APIs, and GraphQL queries           | Querying or interacting with GitHub-hosted resources                                     | "GitHub", "issue", "gh", "GraphQL"                        |
-| `java`                  | Java language conventions and null-safety                  | Creating or modifying `.java` source files                                               | `.java`, class, interface, record, enum                   |
-| `gradle`                | Gradle build system and dependency management              | Editing Gradle build files or resolving dependency issues                                | `build.gradle.kts`, `settings.gradle.kts`, dependency     |
-| `shell-script`          | Shell scripting for POSIX, Bash, and Zsh                   | Writing or editing shell scripts, functions, or shell config                             | `.sh`, `.zsh`, `.zshrc`, bash, zsh, pipeline              |
-| `testing`               | Test philosophy, patterns, and anti-patterns               | Adding, updating, debugging, or discussing tests                                         | test, coverage, fixture, integration                      |
-| `use-case-creator`      | Use case specifications in Cockburn/AsciiDoc format        | Writing or revising use cases and business behavior docs                                 | use case, scenario, ubiquitous language                   |
-| `iterative-development` | Iteration planning and domain model evolution              | Scoping a feature, selecting an iteration, or refining design                            | iteration, vertical slice, domain model, risk             |
-| `skill-creator`         | Creating and maintaining AI skill definitions              | Working on `SKILL.md` files or skill trigger behavior                                    | skill, frontmatter, trigger, discoverability              |
+| Skill                                        | Scope                                                  | Activate When                                                            | Signals                                                         |
+| -------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------ | --------------------------------------------------------------- |
+| `git-workflow/session-init`                  | Git state verification at session start                | Starting work in a repo session                                          | "start work", "new session", "check branch"                     |
+| `git-workflow/pull-request`                  | Commit, push, and PR lifecycle                         | Any repository file is created, modified, or deleted; PR review comments | "fix", "update", "add", "refactor", "pr", "address PR comments" |
+| `git-workflow/commit-message`                | Conventional commit and PR description formatting      | Writing a commit message, PR title, or PR description                    | "write commit", "PR title", "PR description"                    |
+| `code-quality/coding-standards`              | Cross-language coding principles and quality standards | Implementing or changing code in any language                            | "implement", "refactor", "bug", "error handling"                |
+| `code-quality/testing`                       | Test philosophy, patterns, and anti-patterns           | Adding, updating, debugging, or discussing tests                         | test, coverage, fixture, integration                            |
+| `development-planning/iterative-development` | Iteration planning and domain model evolution          | Scoping a feature, selecting an iteration, or refining design            | iteration, vertical slice, domain model, risk                   |
+| `development-planning/use-case-creator`      | Use case specifications in Cockburn/AsciiDoc format    | Writing or revising use cases and business behavior docs                 | use case, scenario, ubiquitous language                         |
+| `github`                                     | GitHub platform tools, APIs, and GraphQL queries       | Querying or interacting with GitHub-hosted resources                     | "GitHub", "issue", "gh", "GraphQL"                              |
+| `java`                                       | Java language conventions and null-safety              | Creating or modifying `.java` source files                               | `.java`, class, interface, record, enum                         |
+| `gradle`                                     | Gradle build system and dependency management          | Editing Gradle build files or resolving dependency issues                | `build.gradle.kts`, `settings.gradle.kts`, dependency           |
+| `shell-script`                               | Shell scripting for POSIX, Bash, and Zsh               | Writing or editing shell scripts, functions, or shell config             | `.sh`, `.zsh`, `.zshrc`, bash, zsh, pipeline                    |
+| `skill-creator`                              | Creating and maintaining AI skill definitions          | Working on `SKILL.md` files or skill trigger behavior                    | skill, frontmatter, trigger, discoverability                    |
 
 ## Development Workflow
 
 ### Making Changes
 
-1. **Start with session-init skill** - Verify branch state before any work
+1. **Start with `git-workflow/session-init` skill** - Verify branch state before any work
 2. **Apply cross-cutting and domain-specific skills** as needed for the task
-3. **Always use pull-request skill** when modifying files
-4. **Follow commit-message skill** for commit/PR formatting
+3. **Always use `git-workflow/pull-request` skill** when modifying files
+4. **Follow `git-workflow/commit-message` skill** for commit/PR formatting
 5. **Use the AI Discoverability Index above** when the correct skill is not obvious
 
 ### Formatting Skills
@@ -140,6 +150,8 @@ After editing any `SKILL.md` file:
 
 ```bash
 yarn exec prettier --write skills/<skill-name>/SKILL.md
+# or for sub-skills:
+yarn exec prettier --write skills/<parent>/<child>/SKILL.md
 ```
 
 ### Creating New Skills
