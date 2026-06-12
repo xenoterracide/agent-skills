@@ -42,6 +42,19 @@ would be better expressed as a reusable skill.
 - Build, test, lint, and formatting commands
 - License and copyright requirements
 - Skill routing guidance for the repository
+- References to source-of-truth files (not copies of their contents)
+
+## Reference Source-of-Truth Files
+
+Do not duplicate information that is already maintained in another file.
+Instead, point agents to the canonical source:
+
+- Tool versions → `.tool-versions`, `package.json` engines, `pyproject.toml`
+- Dependencies → `package.json`, `build.gradle.kts`, `uv.lock`
+- Scripts → `package.json` scripts, `Makefile`, `Taskfile.yml`
+- CI configuration → `.github/workflows/*.yml`
+
+This prevents `AGENTS.md` from drifting out of sync with the project.
 
 ## What Does NOT Belong in AGENTS.md
 
