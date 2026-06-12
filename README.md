@@ -6,9 +6,13 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 # Xenoterracide's Agent Skills
 
-AI coding agent skills for Java, Gradle, GitHub, and development workflows.
-Designed for [Kimi Code CLI](https://kimi.com/code) and compatible with any
-[agentskills.io](https://agentskills.io)-standard agent.
+A user-level skill plugin for AI coding agents. It ships reusable skills for
+Java, Gradle, GitHub, shell scripting, development planning, and documentation
+workflows.
+
+- **Primary target**: [Kimi Code CLI](https://kimi.com/code)
+- **Compatible with**: any [agentskills.io](https://agentskills.io)-standard
+  agent such as Claude Code, Copilot CLI, or Gemini CLI
 
 ## Installation
 

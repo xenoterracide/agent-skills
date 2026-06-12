@@ -150,16 +150,16 @@ SPDX-FileCopyrightText: ...
 
 ## Code Style
 
-- Run `yarn exec prettier --write SKILL.md` after editing
-- Prettier handles Markdown formatting
-- No additional linting tools required for skills
+- Format `SKILL.md` with the project's Markdown formatter (e.g., Prettier)
+- No additional linting tools are required for skills
 
 ## Testing Skills
 
-Skills are recognized by Kimi when:
+Skills are recognized by Kimi and other agentskills.io-standard agents when:
 
 1. File is named `SKILL.md`
-2. Located in `.agents/skills/<skill-name>/`
+2. Located in the agent's skill discovery path, such as `.agents/skills/<skill-name>/`
+   for per-project skills or the plugin root for distributed plugins
 3. Frontmatter is valid (starts with `---`)
 4. Has both `name` and `description` fields
 

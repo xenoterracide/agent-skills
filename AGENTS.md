@@ -8,12 +8,15 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 ## Project Overview
 
-This repository is **Subtree AI**, also published as the Kimi plugin
-`xenoterracide-agent-skills`. It ships modular AI coding agent skills for Java,
-Gradle, GitHub, shell scripting, development planning, and Git workflows.
+This repository is **Subtree AI**, also published as the user-level skill plugin
+`xenoterracide-agent-skills`. It ships reusable AI coding agent skills for Java,
+Gradle, GitHub, shell scripting, development planning, and documentation
+workflows.
 
 - **Repository**: https://github.com/xenoterracide/agent-skills
-- **Distribution**: Kimi Code CLI plugin via `.kimi-plugin/plugin.json`
+- **Primary target**: Kimi Code CLI via `.kimi-plugin/plugin.json`
+- **Compatible agents**: any [agentskills.io](https://agentskills.io)-standard
+  agent such as Claude Code, Copilot CLI, or Gemini CLI
 - **Content type**: Markdown documentation/knowledge files (no compiled
   application code in `skills/`)
 - **License for skills and docs**: CC-BY-NC-SA-4.0

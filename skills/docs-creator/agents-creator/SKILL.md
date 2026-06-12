@@ -89,13 +89,13 @@ One-line description.
 
 ## Build and Test
 
-- Run tests: `yarn test`
-- Run lint: `yarn lint`
+- Run tests: `<test-command>`
+- Run lint: `<lint-command>`
 
 ## Source of Truth
 
-- Tool versions → `.tool-versions`
-- Scripts → `package.json`
+- Tool versions → `<version-file>`
+- Scripts → `<script-source>`
 
 ## Maintenance
 
