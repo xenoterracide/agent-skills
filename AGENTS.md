@@ -58,9 +58,11 @@ Gradle, GitHub, shell scripting, development planning, and Git workflows.
 │   ├── gradle/
 │   ├── java/
 │   ├── shell-script/
-│   ├── skill-creator/
-│   ├── readme-creator/
-│   └── contributing-creator/
+│   └── docs-creator/                # Project docs and skill authoring
+│       ├── skill-creator/
+│       ├── agents-creator/
+│       ├── readme-creator/
+│       └── contributing-creator/
 └── .share/                      # Shared tooling subtree (template-main)
     ├── git/hooks/               # Pre-commit, commit-msg, post-checkout, post-merge
     ├── node/packages/merge/     # TypeScript AI-assisted PR merge tool
@@ -300,10 +302,10 @@ right skill is not obvious:
 | `java`                                       | Java language conventions and null-safety              | Creating or modifying `.java` source files                                            |
 | `gradle`                                     | Gradle build system and dependency management          | Editing Gradle build files or resolving dependency issues                             |
 | `shell-script`                               | Shell scripting for POSIX, Bash, and Zsh               | Writing or editing shell scripts, functions, or shell config                          |
-| `skill-creator`                              | Creating and maintaining AI skill definitions          | Working on `SKILL.md` files or skill trigger behavior                                 |
-| `agents-creator`                             | Creating and maintaining project `AGENTS.md` files     | Writing, revising, or generating agent instructions at the project or directory level |
-| `readme-creator`                             | Creating and maintaining project `README.md` files     | Writing or revising the project README                                                |
-| `contributing-creator`                       | Creating and maintaining `CONTRIBUTING.md` files       | Writing or revising human contributor guidance                                        |
+| `docs-creator/skill-creator`                 | Creating and maintaining AI skill definitions          | Working on `SKILL.md` files or skill trigger behavior                                 |
+| `docs-creator/agents-creator`                | Creating and maintaining project `AGENTS.md` files     | Writing, revising, or generating agent instructions at the project or directory level |
+| `docs-creator/readme-creator`                | Creating and maintaining project `README.md` files     | Writing or revising the project README                                                |
+| `docs-creator/contributing-creator`          | Creating and maintaining `CONTRIBUTING.md` files       | Writing or revising human contributor guidance                                        |
 
 ### Maintenance Rule
 
