@@ -68,7 +68,6 @@ yarn lint
 
 - Follow conventional commits.
 - Squash merge is used.
-- Do not force push.
 
 ## License
 

@@ -61,7 +61,6 @@ Skill files are documentation and have no automated tests. Verify them by:
 
 This repository uses squash merge.
 
-- Do not force push.
 - Use `git merge origin/develop` to update your branch.
 - Commit additional changes to the same PR branch.
 - PR titles must follow conventional commit format.
