@@ -54,25 +54,33 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 ## Setup
 
 ```bash
-yarn install
+<install-command>
 ```
 
 ## Build, Test, and Lint
 
 ```bash
-yarn test
-yarn lint
+<build-command>
+<test-command>
+<lint-command>
 ```
 
 ## Pull Requests
 
-- Follow conventional commits.
-- Squash merge is used.
+- Follow the project's commit conventions.
+- Update related documentation in the same change.
 
 ## License
 
 By contributing, you agree to license your work under the project's license.
 ````
+
+Replace placeholders with commands from the project's actual tooling.
+
+## Tool-Specific Examples
+
+See `references/examples.md` for concrete command examples for Yarn, Gradle,
+Maven, and Python projects.
 
 ## Format
 
