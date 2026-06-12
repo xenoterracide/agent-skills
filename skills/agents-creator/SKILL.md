@@ -45,12 +45,14 @@ would be better expressed as a reusable skill.
 
 ## What Does NOT Belong in AGENTS.md
 
-Avoid high-churn content:
+Avoid high-churn and rarely-needed content:
 
 - Specific bug workarounds
 - Temporary migration steps
 - Per-feature or per-ticket instructions
 - Detailed API or library documentation
+- Instructions for tasks that will rarely be needed; tell agents about
+  one-off or infrequent work in the moment instead
 
 For reusable techniques, write a skill instead. For temporary or personal
 project guidance, use agent-specific files such as `CLAUDE.md` or `GEMINI.md`.
