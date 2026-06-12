@@ -1,9 +1,10 @@
 ---
 name: agents-creator
 description: |
-  Use when creating, updating, or reviewing `AGENTS.md` files that provide
-  project-level guidance to AI coding agents. Use when deciding whether
-  guidance belongs in `AGENTS.md`, a reusable skill, or another document.
+  Use when initializing, creating, updating, reviewing, or generating
+  `AGENTS.md` files that provide project-level guidance to AI coding agents.
+  Use when analyzing a codebase to decide whether guidance belongs in
+  `AGENTS.md`, a reusable skill, or another document.
 license: CC-BY-NC-SA-4.0
 metadata:
   author: Caleb Cushing <caleb.cushing@gmail.com>
@@ -56,6 +57,21 @@ Instead, point agents to the canonical source:
 
 This prevents `AGENTS.md` from drifting out of sync with the project.
 
+## Prefer Tool Retrieval Over Documentation
+
+Do not write instructions that duplicate information an agent can retrieve at
+runtime with local tools. Point agents to the tool or command instead:
+
+- Installed packages or dependency versions → `package.json`, `yarn list`, or
+  `uv pip list`
+- Available scripts → `package.json`, `yarn run`, or `--help`
+- File contents or structure → `ls`, `find`, `fd`, or `rg`
+- Git state → `git status`, `git log`, `gh pr view`
+- Environment details → `env`, `asdf current`, `.tool-versions`
+
+If a value can change between sessions, prefer live retrieval over hard-coding
+it in `AGENTS.md`.
+
 ## What Does NOT Belong in AGENTS.md
 
 Avoid high-churn and rarely-needed content:
@@ -69,6 +85,21 @@ Avoid high-churn and rarely-needed content:
 
 For reusable techniques, write a skill instead. For temporary or personal
 project guidance, use agent-specific files such as `CLAUDE.md` or `GEMINI.md`.
+
+## CONTRIBUTING.md for Human Contributors
+
+`AGENTS.md` is for agent instructions, not human contributors. Put
+human-oriented contribution guidance in `CONTRIBUTING.md` instead:
+
+- How to set up a development environment
+- How to run tests and linting
+- How to submit issues and pull requests
+- Coding standards for human reviewers
+- Community guidelines
+
+Always load `CONTRIBUTING.md` when it exists and reference it from `README.md`.
+Update `CONTRIBUTING.md` when you change workflows that affect human
+contributors.
 
 ## Format
 
