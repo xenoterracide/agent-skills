@@ -40,6 +40,41 @@ is, how to install and use it, and where to find more information.
 - Detailed API documentation → dedicated docs or `--help`
 - Temporary or high-churn notes
 
+## Template
+
+A minimal `README.md`:
+
+````markdown
+<!--
+SPDX-FileCopyrightText: Copyright © 2026 Author Name
+
+SPDX-License-Identifier: CC-BY-NC-SA-4.0
+-->
+
+# Project Name
+
+One-line description.
+
+## Installation
+
+```bash
+npm install package-name
+```
+
+## Usage
+
+Brief example or link to docs.
+
+## Development
+
+- See `AGENTS.md` for agent guidance.
+- See `CONTRIBUTING.md` for human contributors.
+
+## License
+
+[CC-BY-NC-SA-4.0](LICENSES/CC-BY-NC-SA-4.0.txt)
+````
+
 ## Format
 
 - Lead with the most important information

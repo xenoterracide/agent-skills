@@ -38,6 +38,43 @@ development environment, run checks, and submit changes.
 - End-user installation and usage → `README.md`
 - High-churn command output or screenshots
 
+## Template
+
+A minimal `CONTRIBUTING.md`:
+
+````markdown
+<!--
+SPDX-FileCopyrightText: Copyright © 2026 Author Name
+
+SPDX-License-Identifier: CC-BY-NC-SA-4.0
+-->
+
+# Contributing
+
+## Setup
+
+```bash
+yarn install
+```
+
+## Build, Test, and Lint
+
+```bash
+yarn test
+yarn lint
+```
+
+## Pull Requests
+
+- Follow conventional commits.
+- Squash merge is used.
+- Do not force push.
+
+## License
+
+By contributing, you agree to license your work under the project's license.
+````
+
 ## Format
 
 - Keep it concise and task-oriented

@@ -101,6 +101,36 @@ Always load `CONTRIBUTING.md` when it exists and reference it from `README.md`.
 Update `CONTRIBUTING.md` when you change workflows that affect human
 contributors.
 
+## Template
+
+A minimal `AGENTS.md`:
+
+```markdown
+<!--
+SPDX-FileCopyrightText: Copyright © 2026 Author Name
+
+SPDX-License-Identifier: CC-BY-NC-SA-4.0
+-->
+
+# Project Name
+
+One-line description.
+
+## Build and Test
+
+- Run tests: `yarn test`
+- Run lint: `yarn lint`
+
+## Source of Truth
+
+- Tool versions → `.tool-versions`
+- Scripts → `package.json`
+
+## Maintenance
+
+Update this file when you change workflows it describes.
+```
+
 ## Format
 
 - Keep it concise; agents load this on every session
