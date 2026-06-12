@@ -44,6 +44,16 @@ Copy the `skills/` directory into your agent's skill discovery path:
 | `iterative-development` | Planning and domain model evolution               |
 | `use-case-creator`      | Cockburn/AsciiDoc use case specifications         |
 | `skill-creator`         | Creating and maintaining agent skills             |
+| `agents-creator`        | Creating and maintaining project `AGENTS.md`      |
+
+## Development
+
+- See [`AGENTS.md`](AGENTS.md) for project conventions, skill routing, and
+  agent-specific guidance.
+- Use the [`skill-creator`](skills/skill-creator/SKILL.md) skill when adding or
+  updating skills.
+- Use the [`agents-creator`](skills/agents-creator/SKILL.md) skill when writing
+  or revising `AGENTS.md` files.
 
 ## License
 

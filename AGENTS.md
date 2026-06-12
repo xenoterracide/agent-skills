@@ -38,7 +38,8 @@ The project is hosted at: https://github.com/xenoterracide/subtree-ai
 │   ├── gradle/                     # Gradle build system
 │   ├── java/                       # Java coding style
 │   ├── shell-script/               # Shell scripting guidance
-│   └── skill-creator/              # Creating and maintaining skills
+│   ├── skill-creator/              # Creating and maintaining skills
+│   └── agents-creator/             # Creating and maintaining AGENTS.md
 ```
 
 ## Technology Stack
@@ -111,9 +112,10 @@ Skills fall into four activation categories:
   - `coding-standards` — general code quality principles
   - `testing` — test strategy and patterns
 - **Domain** (`github`, `java`, `gradle`, `shell-script`): Apply by file type or tool context
-- **Planning** (`development-planning`, `skill-creator`): Apply when designing features or maintaining skills
+- **Planning** (`development-planning`, `skill-creator`, `agents-creator`): Apply when designing features, maintaining skills, or authoring agent instructions
   - `iterative-development` — iteration and domain model design
   - `use-case-creator` — requirements documentation
+  - `agents-creator` — project agent instructions
 
 ### Discoverability Index
 
@@ -133,6 +135,7 @@ Use this table as the canonical routing guide when deciding which skill to load.
 | `gradle`                                     | Gradle build system and dependency management          | Editing Gradle build files or resolving dependency issues                | `build.gradle.kts`, `settings.gradle.kts`, dependency           |
 | `shell-script`                               | Shell scripting for POSIX, Bash, and Zsh               | Writing or editing shell scripts, functions, or shell config             | `.sh`, `.zsh`, `.zshrc`, bash, zsh, pipeline                    |
 | `skill-creator`                              | Creating and maintaining AI skill definitions          | Working on `SKILL.md` files or skill trigger behavior                    | skill, frontmatter, trigger, discoverability                    |
+| `agents-creator`                             | Creating and maintaining project `AGENTS.md` files     | Writing or revising agent instructions at the project or directory level | `AGENTS.md`, agent instructions, project conventions            |
 
 ## Development Workflow
 

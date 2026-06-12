@@ -24,6 +24,18 @@ When starting a new session, always verify the current repository state to avoid
 - Investigating code that doesn't include recent fixes
 - Addressing review comments on outdated code
 
+## Read Project Documentation First
+
+Before any investigation or code changes, read the project's canonical
+documentation:
+
+- **`README.md`** — always read this first for install, update, usage, and
+  contribution instructions
+- **`AGENTS.md`** — read any `AGENTS.md` files that apply to the directories you
+  will work in; deeper files take precedence over parent ones
+
+User instructions in these files take precedence over general skill guidance.
+
 ## Mandatory Startup Checks
 
 Run these checks **first** before any investigation or code changes:

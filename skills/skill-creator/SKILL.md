@@ -18,6 +18,9 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 Guidance for creating and maintaining AI skills.
 
+**REQUIRED SUB-SKILL:** Use `superpowers:writing-skills` for the skill authoring
+workflow and quality standards.
+
 ## File Structure
 
 ```
@@ -162,17 +165,20 @@ Skills are recognized by Kimi when:
 
 ## Best Practices
 
-1. **Keep it concise** - Skills share context window with everything else
-2. **Clear description** - The description determines when skill triggers
-3. **Specific triggers** - Describe exact scenarios for skill usage
-4. **Progressive disclosure** - Put detailed info in references/, keep
+1. **Follow the writing-skills workflow** - Skills are documentation;
+   create and refine them using the RED-GREEN-REFACTOR process in
+   `superpowers:writing-skills`.
+2. **Keep it concise** - Skills share context window with everything else
+3. **Clear description** - The description determines when skill triggers
+4. **Specific triggers** - Describe exact scenarios for skill usage
+5. **Progressive disclosure** - Put detailed info in references/, keep
    SKILL.md focused
-5. **Fix broken commands immediately** - If you discover a skill's command
+6. **Fix broken commands immediately** - If you discover a skill's command
    or example doesn't work, update the skill right away. Skills are living
    documents that must be kept accurate.
-6. **Use `allowed-tools` sparingly** - Pre-approve tools only when the skill
+7. **Use `allowed-tools` sparingly** - Pre-approve tools only when the skill
    consistently needs them and the trade-off is worth reducing prompts
-7. **Default to no pre-approval** - If a skill works fine without
+8. **Default to no pre-approval** - If a skill works fine without
    `allowed-tools`, leave the field out
 
 ## Discoverability Checklist
