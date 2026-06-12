@@ -32,83 +32,54 @@ would be better expressed as a reusable skill.
 
 ## When to Create or Update
 
-- A project has conventions agents must follow on every session
+- Conventions agents must follow on every session
 - Directory-specific rules differ from parent directories
-- You modify files, styles, structures, workflows, or configurations that
-  `AGENTS.md` describes
+- You modify files, styles, structures, workflows, or configs `AGENTS.md`
+  describes
 
 ## What Belongs in AGENTS.md
 
-- Stable, project-wide conventions with low churn
+- Stable, low-churn conventions
 - Build, test, lint, and formatting commands
 - License and copyright requirements
-- Skill routing guidance for the repository
-- References to source-of-truth files (not copies of their contents)
-
-## Reference Source-of-Truth Files
-
-Do not duplicate information that is already maintained in another file.
-Instead, point agents to the canonical source:
-
-- Tool versions → `.tool-versions`, `package.json` engines, `pyproject.toml`
-- Dependencies → `package.json`, `build.gradle.kts`, `uv.lock`
-- Scripts → `package.json` scripts, `Makefile`, `Taskfile.yml`
-- CI configuration → `.github/workflows/*.yml`
-
-This prevents `AGENTS.md` from drifting out of sync with the project.
-
-## Prefer Tool Retrieval Over Documentation
-
-Do not write instructions that duplicate information an agent can retrieve at
-runtime with local tools. Point agents to the tool or command instead:
-
-- Installed packages or dependency versions → `package.json`, `yarn list`, or
-  `uv pip list`
-- Available scripts → `package.json`, `yarn run`, or `--help`
-- File contents or structure → `ls`, `find`, `fd`, or `rg`
-- Git state → `git status`, `git log`, `gh pr view`
-- Environment details → `env`, `asdf current`, `.tool-versions`
-
-If a value can change between sessions, prefer live retrieval over hard-coding
-it in `AGENTS.md`.
+- Skill routing guidance
+- References to source-of-truth files and retrievable state
 
 ## What Does NOT Belong in AGENTS.md
 
-Avoid high-churn and rarely-needed content:
+Avoid duplicating or high-churn content:
 
-- Specific bug workarounds
-- Temporary migration steps
-- Per-feature or per-ticket instructions
+- Bug workarounds, migration steps, or per-ticket instructions
 - Detailed API or library documentation
-- Instructions for tasks that will rarely be needed; tell agents about
-  one-off or infrequent work in the moment instead
+- Rarely-needed tasks; tell agents in the moment instead
+- Human contributor guidance → `CONTRIBUTING.md`
+- Values retrievable with local tools → point to the tool or file
 
-For reusable techniques, write a skill instead. For temporary or personal
-project guidance, use agent-specific files such as `CLAUDE.md` or `GEMINI.md`.
+For reusable techniques, write a skill. For temporary guidance, use
+`CLAUDE.md` or `GEMINI.md`.
+
+## Reference, Do Not Duplicate
+
+Point agents to the canonical source rather than copying it:
+
+- Tool versions → `.tool-versions`, `package.json`
+- Dependencies → `package.json`, `build.gradle.kts`, `uv.lock`
+- Scripts → `package.json`, `Makefile`, `--help`
+- Git state → `git status`, `git log`, `gh pr view`
+- Environment → `env`, `asdf current`
+
+If a value can change between sessions, prefer live retrieval.
 
 ## CONTRIBUTING.md for Human Contributors
 
-`AGENTS.md` is for agent instructions, not human contributors. Put
-human-oriented contribution guidance in `CONTRIBUTING.md` instead:
-
-- How to set up a development environment
-- How to run tests and linting
-- How to submit issues and pull requests
-- Coding standards for human reviewers
-- Community guidelines
-
-Always load `CONTRIBUTING.md` when it exists and reference it from `README.md`.
-Update `CONTRIBUTING.md` when you change workflows that affect human
-contributors.
+Put human-oriented contribution guidance in `CONTRIBUTING.md`. Load it when it
+exists and reference it from `README.md`.
 
 ## Template
-
-A minimal `AGENTS.md`:
 
 ```markdown
 <!--
 SPDX-FileCopyrightText: Copyright © 2026 Author Name
-
 SPDX-License-Identifier: CC-BY-NC-SA-4.0
 -->
 
@@ -140,20 +111,14 @@ Update this file when you change workflows it describes.
 
 ## Token Efficiency
 
-`AGENTS.md` consumes context on every session, so brevity matters. Treat it like
-a frequently-loaded skill:
+`AGENTS.md` consumes context on every session:
 
-- Keep the file short; move detailed reference material into skills or separate
-  documents
-- Cross-reference skills instead of duplicating their guidance
-- Prefer bullets and tables over long paragraphs
-- Avoid copy-pasting command help or API docs; point to `--help` or external
-  references instead
-
-If a convention is reusable across projects, write a skill instead of expanding
-`AGENTS.md`.
+- Move detailed reference to skills or separate docs
+- Cross-reference skills instead of duplicating guidance
+- Prefer bullets and tables over paragraphs
+- Point to `--help` or external references instead of copying them
 
 ## Maintenance Rule
 
 If you modify anything `AGENTS.md` describes, update `AGENTS.md` in the same
-change. Do not let agent instructions drift out of sync with the project.
+change.
