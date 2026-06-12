@@ -77,6 +77,21 @@ project guidance, use agent-specific files such as `CLAUDE.md` or `GEMINI.md`.
 - Include SPDX copyright and license identifiers
 - Place the file at the root or directory level it governs
 
+## Token Efficiency
+
+`AGENTS.md` consumes context on every session, so brevity matters. Treat it like
+a frequently-loaded skill:
+
+- Keep the file short; move detailed reference material into skills or separate
+  documents
+- Cross-reference skills instead of duplicating their guidance
+- Prefer bullets and tables over long paragraphs
+- Avoid copy-pasting command help or API docs; point to `--help` or external
+  references instead
+
+If a convention is reusable across projects, write a skill instead of expanding
+`AGENTS.md`.
+
 ## Maintenance Rule
 
 If you modify anything `AGENTS.md` describes, update `AGENTS.md` in the same

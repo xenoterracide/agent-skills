@@ -168,7 +168,9 @@ Skills are recognized by Kimi when:
 1. **Follow the writing-skills workflow** - Skills are documentation;
    create and refine them using the RED-GREEN-REFACTOR process in
    `superpowers:writing-skills`.
-2. **Keep it concise** - Skills share context window with everything else
+2. **Keep it concise** - Skills share context window with everything else;
+   follow the word-count targets in `superpowers:writing-skills` and move
+   heavy reference to separate files
 3. **Clear description** - The description determines when skill triggers
 4. **Specific triggers** - Describe exact scenarios for skill usage
 5. **Progressive disclosure** - Put detailed info in references/, keep
