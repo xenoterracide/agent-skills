@@ -203,6 +203,21 @@ Skills are recognized by Kimi and other agentskills.io-standard agents when:
 8. **Default to no pre-approval** - If a skill works fine without
    `allowed-tools`, leave the field out
 
+## Validation Checklist
+
+Before considering a skill change complete, verify:
+
+1. **Frontmatter is valid** — `---` is the very first line, and both `name` and
+   `description` are present.
+2. **Copyright is correct** — SPDX block is in an HTML comment immediately after
+   the frontmatter, with the current year.
+3. **Formatting passes** — `yarn exec prettier --write <file>` produces no
+   changes.
+4. **Non-Markdown assets are REUSE-compliant** — run `yarn lint:reuse` and fix
+   any missing headers or licenses.
+5. **Trigger matches content** — read the skill as if you were an agent and
+   confirm the body addresses the scenarios in the `description`.
+
 ## Discoverability Checklist
 
 When updating a skill, verify that:

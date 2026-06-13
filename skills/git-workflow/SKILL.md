@@ -26,9 +26,8 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 ## Git Hooks
 
-Hooks live in `.share/git/hooks` and are configured via
-`git config core.hooksPath .share/git/hooks` (run automatically by
-`yarn contribute`):
+Hooks live in `.share/git/hooks`. `yarn contribute` sets `core.hooksPath` to
+that directory automatically.
 
 - **pre-commit**: Runs `lint-staged` to format and annotate licenses.
 - **commit-msg**: Validates conventional commit messages against

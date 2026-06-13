@@ -22,7 +22,7 @@ published as the user-level skill plugin `xenoterracide-agent-skills`.
 
 | For                                  | See                             |
 | ------------------------------------ | ------------------------------- |
-| Install, update, usage, contribution | `README.md`                     |
+| Install, update, usage, contribution | `README.md` (read this first)   |
 | Plugin manifest and skill layout     | `.kimi-plugin/plugin.json`      |
 | Node version                         | `.tool-versions`                |
 | Scripts and Node dependencies        | `package.json`                  |
@@ -140,6 +140,8 @@ when you change contributor-facing workflows or commands.
 - **CI detection**: Git hooks exit early when `CI` is set.
 - **Lockfile integrity**: Use `yarn install --immutable` and `uv sync --frozen`.
 - **No force push**: Repository rules block force pushes.
+- **Command injection**: The merge tool prefers `execFileSync` with argv arrays
+  for safe command execution.
 - **No secrets**: This repository contains no credentials or private
   configuration.
 
