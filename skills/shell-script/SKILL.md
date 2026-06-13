@@ -142,7 +142,7 @@ trap 'rm -rf "$tmpdir"' EXIT
 
 ## Related Skills
 
-- `coding-standards` - broader design, testing, and quality guidance
+- `code-quality.coding-standards` - broader design, testing, and quality guidance
 - `github` - GitHub and GraphQL operations
-- `pull-request` - committing, pushing, and PR updates for script changes
+- `git-workflow.pull-request` - committing, pushing, and PR updates for script changes
 - `gradle` - Gradle build logic rather than shell automation
