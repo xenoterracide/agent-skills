@@ -46,6 +46,20 @@ skill-name/
 └── (optional resources)
 ```
 
+## Naming Conventions
+
+**Prefer nouns over gerunds.** This repository uses concise noun-based names
+for skills rather than action-phrase names.
+
+- ✅ `skill-creator`
+- ✅ `commit-message`
+- ❌ `writing-skills`
+- ❌ `creating-commits`
+
+This convention produces shorter identifiers and clearer activation triggers.
+It intentionally overrides the `superpowers:writing-skills` naming preference
+when creating skills in this repository.
+
 ## SKILL.md Format
 
 **CRITICAL:** Skills are fussy with frontmatter. The `---` must be the very
