@@ -112,23 +112,23 @@ when creating new files:
 
 Load the relevant skill when the trigger applies:
 
-| Skill                                        | Activate When                                               |
-| -------------------------------------------- | ----------------------------------------------------------- |
-| `session-init`                               | Starting work in a repo session                             |
-| `git-workflow/pull-request`                  | Creating/updating PRs, committing, pushing, review comments |
-| `git-workflow/commit-message`                | Writing commit messages, PR titles, or PR descriptions      |
-| `code-quality/coding-standards`              | Writing or modifying code in any language                   |
-| `code-quality/testing`                       | Adding, updating, debugging, or discussing tests            |
-| `development-planning/iterative-development` | Scoping or refining designs                                 |
-| `development-planning/use-case-creator`      | Writing use cases or business behavior docs                 |
-| `github`                                     | GitHub APIs, issues, GraphQL, review threads                |
-| `java`                                       | Creating or modifying `.java` files                         |
-| `gradle`                                     | Editing Gradle build files or resolving dependencies        |
-| `shell-script`                               | Writing or editing shell scripts or shell config            |
-| `docs-creator/skill-creator`                 | Creating or editing `SKILL.md` files                        |
-| `docs-creator/agents-creator`                | Creating or editing `AGENTS.md` files                       |
-| `docs-creator/readme-creator`                | Writing or revising `README.md`                             |
-| `docs-creator/contributing-creator`          | Writing or revising `CONTRIBUTING.md`                       |
+| Skill                   | Activate When                                               |
+| ----------------------- | ----------------------------------------------------------- |
+| `session-init`          | Starting work in a repo session                             |
+| `pull-request`          | Creating/updating PRs, committing, pushing, review comments |
+| `commit-message`        | Writing commit messages, PR titles, or PR descriptions      |
+| `coding-standards`      | Writing or modifying code in any language                   |
+| `testing`               | Adding, updating, debugging, or discussing tests            |
+| `iterative-development` | Scoping or refining designs                                 |
+| `use-case-creator`      | Writing use cases or business behavior docs                 |
+| `github`                | GitHub APIs, issues, GraphQL, review threads                |
+| `java`                  | Creating or modifying `.java` files                         |
+| `gradle`                | Editing Gradle build files or resolving dependencies        |
+| `shell-script`          | Writing or editing shell scripts or shell config            |
+| `skill-creator`         | Creating or editing `SKILL.md` files                        |
+| `agents-creator`        | Creating or editing `AGENTS.md` files                       |
+| `readme-creator`        | Writing or revising `README.md`                             |
+| `contributing-creator`  | Writing or revising `CONTRIBUTING.md`                       |
 
 ## Maintenance
 

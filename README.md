@@ -34,23 +34,11 @@ Copy the `skills/` directory into your agent's skill discovery path:
 
 ## Skills
 
-| Skill                                        | Scope                                             |
-| -------------------------------------------- | ------------------------------------------------- |
-| `session-init`                               | Branch and PR state verification at session start |
-| `code-quality/coding-standards`              | Cross-language principles and quality standards   |
-| `java`                                       | Java conventions, JSpecify/NullAway, AssertJ      |
-| `gradle`                                     | Build system and dependency management            |
-| `github`                                     | GitHub CLI, GraphQL, and platform patterns        |
-| `shell-script`                               | POSIX, Bash, and Zsh scripting guidance           |
-| `code-quality/testing`                       | Test philosophy, patterns, and anti-patterns      |
-| `git-workflow/commit-message`                | Conventional commit and PR description format     |
-| `git-workflow/pull-request`                  | Commit, push, and PR lifecycle management         |
-| `development-planning/iterative-development` | Planning and domain model evolution               |
-| `development-planning/use-case-creator`      | Cockburn/AsciiDoc use case specifications         |
-| `docs-creator/skill-creator`                 | Creating and maintaining agent skills             |
-| `docs-creator/agents-creator`                | Creating and maintaining project `AGENTS.md`      |
-| `docs-creator/readme-creator`                | Creating and maintaining project `README.md`      |
-| `docs-creator/contributing-creator`          | Creating and maintaining `CONTRIBUTING.md`        |
+Skills are organized into bundles — `code-quality`, `git-workflow`,
+`development-planning`, and `docs-creator` — plus standalone skills for `java`,
+`gradle`, `github`, `shell-script`, and `session-init`.
+
+See [`AGENTS.md`](AGENTS.md#skill-routing) for the full skill routing table.
 
 ## Development
 
@@ -58,13 +46,13 @@ Copy the `skills/` directory into your agent's skill discovery path:
   agent-specific guidance.
 - See [`CONTRIBUTING.md`](CONTRIBUTING.md) for human contributor setup, linting,
   testing, and pull request workflow.
-- Use the [`docs-creator/skill-creator`](skills/docs-creator/skill-creator/SKILL.md)
+- Use the [`skill-creator`](skills/docs-creator/skill-creator/SKILL.md)
   skill when adding or updating skills.
-- Use the [`docs-creator/agents-creator`](skills/docs-creator/agents-creator/SKILL.md)
+- Use the [`agents-creator`](skills/docs-creator/agents-creator/SKILL.md)
   skill when writing or revising `AGENTS.md` files.
-- Use the [`docs-creator/readme-creator`](skills/docs-creator/readme-creator/SKILL.md)
+- Use the [`readme-creator`](skills/docs-creator/readme-creator/SKILL.md)
   skill when writing or revising `README.md` files.
-- Use the [`docs-creator/contributing-creator`](skills/docs-creator/contributing-creator/SKILL.md)
+- Use the [`contributing-creator`](skills/docs-creator/contributing-creator/SKILL.md)
   skill when writing or revising `CONTRIBUTING.md` files.
 
 ## License

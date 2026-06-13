@@ -29,6 +29,8 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 - First line MUST be a valid Conventional Commit subject.
 - First line: aim for ≤ 50 characters, hard limit ≤ 72.
 - Use a specific scope when possible.
+- Use directional verbs that reflect what happened in the diff (e.g. add, remove,
+  update, refactor, fix) rather than neutral nouns.
 - Body (MANDATORY - must explain WHAT):
   - Use bullet points explaining the main changes
   - Each bullet must describe one complete logical change
