@@ -146,9 +146,9 @@ Errors must never be silently ignored. Always handle errors explicitly by either
 ```java
 // BAD - exception is silently lost
 try {
-    riskyOperation();
+  riskyOperation();
 } catch (Exception e) {
-    // ignored
+  // ignored
 }
 ```
 
@@ -159,9 +159,9 @@ try {
 ```java
 // GOOD - rethrow to let caller handle
 try {
-    riskyOperation();
+  riskyOperation();
 } catch (IOException e) {
-    throw new ApplicationException("Failed to process file", e);
+  throw new ApplicationException("Failed to process file", e);
 }
 ```
 
@@ -170,9 +170,9 @@ try {
 ```java
 // GOOD - log with context before continuing
 try {
-    optionalCleanup();
+  optionalCleanup();
 } catch (Exception e) {
-    log.warn("Cleanup failed for resource {}, continuing anyway", resourceId, e);
+  log.warn("Cleanup failed for resource {}, continuing anyway", resourceId, e);
 }
 ```
 

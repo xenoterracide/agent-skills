@@ -60,16 +60,17 @@ Use `Optional` when you need to map/filter over potentially absent values:
 
 ```java
 // GOOD - Optional for chaining
-return findById(id)
-    .map(User::getEmail)
-    .filter(Email::isValid)
-    .orElse(defaultEmail);
+return findById(id).map(User::getEmail).filter(Email::isValid).orElse(defaultEmail);
 
 // BAD - null check with intermediate variables
 var user = findById(id);
+
 if (user == null) return defaultEmail;
+
 var email = user.getEmail();
+
 if (email == null || !email.isValid()) return defaultEmail;
+
 return email;
 ```
 
@@ -136,16 +137,15 @@ note: Error Prone's `@Var` annotation (unrelated to `var` keyword) marks intenti
 // BAD - requires @Var because of mutation
 @Var
 var counter = 0;
+
 for (var item : items) {
-    if (item.isValid()) {
-        counter++;
-    }
+  if (item.isValid()) {
+    counter++;
+  }
 }
 
 // GOOD - no mutation needed
-var count = items.stream()
-    .filter(Item::isValid)
-    .count();
+var count = items.stream().filter(Item::isValid).count();
 ```
 
 Examples:
@@ -234,15 +234,10 @@ AssertJ provides a rich fluent API. Use it instead of manual extraction or prope
 assertThat(list.getUsers().get(0).getName()).isEqualTo("Alice");
 
 // GOOD - use first() and extracting()
-assertThat(list.getUsers())
-    .first()
-    .extracting(User::getName)
-    .isEqualTo("Alice");
+assertThat(list.getUsers()).first().extracting(User::getName).isEqualTo("Alice");
 
 // EVEN BETTER - flat extracting
-assertThat(list.getUsers())
-    .extracting(User::getName)
-    .containsExactly("Alice", "Bob", "Carol");
+assertThat(list.getUsers()).extracting(User::getName).containsExactly("Alice", "Bob", "Carol");
 ```
 
 ### Use the Fluent API
@@ -250,21 +245,20 @@ assertThat(list.getUsers())
 ```java
 // BAD - chaining assertions
 assertThat(user.getName()).isEqualTo("Alice");
+
 assertThat(user.getAge()).isEqualTo(30);
+
 assertThat(user.isActive()).isTrue();
 
 // GOOD - satisfies with multiple checks (soft assertions)
-assertThat(user)
-    .satisfies(u -> {
-        assertThat(u.getName()).isEqualTo("Alice");
-        assertThat(u.getAge()).isEqualTo(30);
-        assertThat(u.isActive()).isTrue();
-    });
+assertThat(user).satisfies((u) -> {
+  assertThat(u.getName()).isEqualTo("Alice");
+  assertThat(u.getAge()).isEqualTo(30);
+  assertThat(u.isActive()).isTrue();
+});
 
 // EVEN BETTER - returns for single property checks
-assertThat(user)
-    .returns("Alice", User::getName)
-    .returns(30, User::getAge);
+assertThat(user).returns("Alice", User::getName).returns(30, User::getAge);
 
 // BEST - hasFieldOrPropertyWithValue with Immutables datatype for fields
 // The @Data annotation generates a class named Datatypes_<Type> containing
@@ -277,9 +271,7 @@ assertThat(user)
 // This method is preferred because when assertions fail, the error message
 // includes the field name (e.g., "expected field/property 'name' value"),
 // unlike approaches that result in unhelpful messages like "expected:<true> but was:<false>"
-assertThat(user)
-    .hasFieldOrPropertyWithValue(User_.NAME_, "Alice")
-    .hasFieldOrPropertyWithValue(User_.AGE_, 30);
+assertThat(user).hasFieldOrPropertyWithValue(User_.NAME_, "Alice").hasFieldOrPropertyWithValue(User_.AGE_, 30);
 ```
 
 ### Collection Assertions
@@ -287,16 +279,14 @@ assertThat(user)
 ```java
 // BAD - size check then element check
 assertThat(users).hasSize(3);
+
 assertThat(users.get(0)).isEqualTo(alice);
 
 // GOOD - containsExactly with varargs
 assertThat(users).containsExactly(alice, bob, carol);
 
 // For partial matching
-assertThat(users)
-    .extracting(User::getName)
-    .contains("Alice", "Bob")
-    .doesNotContain("Dave");
+assertThat(users).extracting(User::getName).contains("Alice", "Bob").doesNotContain("Dave");
 ```
 
 ### Exception Assertions
@@ -304,16 +294,16 @@ assertThat(users)
 ```java
 // BAD - try-catch
 try {
-    service.doSomething();
-    fail("Expected exception");
+  service.doSomething();
+  fail("Expected exception");
 } catch (IllegalArgumentException e) {
-    assertThat(e.getMessage()).contains("invalid");
+  assertThat(e.getMessage()).contains("invalid");
 }
 
 // GOOD - assertThatThrownBy
 assertThatThrownBy(() -> service.doSomething())
-    .isInstanceOf(IllegalArgumentException.class)
-    .hasMessageContaining("invalid");
+  .isInstanceOf(IllegalArgumentException.class)
+  .hasMessageContaining("invalid");
 ```
 
 ### Check Available Methods
@@ -335,7 +325,7 @@ If Guava's `Strings`, Apache Commons, or the JDK already has it → **use it**. 
 ```java
 // BAD - even though it's "just" one line
 if (str == null) {
-    throw new NullPointerException("str must not be null");
+  throw new NullPointerException("str must not be null");
 }
 
 // GOOD - it's already there, use it
