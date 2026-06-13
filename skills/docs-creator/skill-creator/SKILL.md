@@ -18,10 +18,9 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 Guidance for creating and maintaining AI skills.
 
-**REQUIRED SUB-SKILL:** Use `superpowers:writing-skills` for the skill authoring
-workflow and quality standards. This skill is provided by the Superpowers
-plugin; install it alongside this plugin for the referenced workflow to be
-available.
+**REQUIRED SUB-SKILL:** Use `writing-skills` for the skill authoring workflow
+and quality standards. This skill is provided by the Superpowers plugin; install
+it alongside this plugin for the referenced workflow to be available.
 
 ## Source of Truth
 
@@ -45,6 +44,20 @@ skill-name/
 │   └── Markdown instructions
 └── (optional resources)
 ```
+
+## Naming Conventions
+
+**Prefer nouns over gerunds.** This repository uses concise noun-based names
+for skills rather than action-phrase names.
+
+- ✅ `skill-creator`
+- ✅ `commit-message`
+- ❌ `writing-skills`
+- ❌ `creating-commits`
+
+This convention produces shorter identifiers and clearer activation triggers.
+It intentionally overrides the `writing-skills` naming preference when creating
+skills in this repository.
 
 ## SKILL.md Format
 
@@ -187,10 +200,10 @@ Skills are recognized by Kimi and other agentskills.io-standard agents when:
 
 1. **Follow the writing-skills workflow** - Skills are documentation;
    create and refine them using the RED-GREEN-REFACTOR process in
-   `superpowers:writing-skills`.
+   `writing-skills`.
 2. **Keep it concise** - Skills share context window with everything else;
-   follow the word-count targets in `superpowers:writing-skills` and move
-   heavy reference to separate files
+   follow the word-count targets in `writing-skills` and move heavy reference
+   to separate files
 3. **Clear description** - The description determines when skill triggers
 4. **Specific triggers** - Describe exact scenarios for skill usage
 5. **Progressive disclosure** - Put detailed info in references/, keep
@@ -202,6 +215,21 @@ Skills are recognized by Kimi and other agentskills.io-standard agents when:
    consistently needs them and the trade-off is worth reducing prompts
 8. **Default to no pre-approval** - If a skill works fine without
    `allowed-tools`, leave the field out
+
+## Validation Checklist
+
+Before considering a skill change complete, verify:
+
+1. **Frontmatter is valid** — `---` is the very first line, and both `name` and
+   `description` are present.
+2. **Copyright is correct** — SPDX block is in an HTML comment immediately after
+   the frontmatter, with the current year.
+3. **Formatting passes** — `yarn exec prettier --write <file>` produces no
+   changes.
+4. **Non-Markdown assets are REUSE-compliant** — run `yarn lint:reuse` and fix
+   any missing headers or licenses.
+5. **Trigger matches content** — read the skill as if you were an agent and
+   confirm the body addresses the scenarios in the `description`.
 
 ## Discoverability Checklist
 
