@@ -18,10 +18,9 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 Guidance for creating and maintaining AI skills.
 
-**REQUIRED SUB-SKILL:** Use `superpowers:writing-skills` for the skill authoring
-workflow and quality standards. This skill is provided by the Superpowers
-plugin; install it alongside this plugin for the referenced workflow to be
-available.
+**REQUIRED SUB-SKILL:** Use `writing-skills` for the skill authoring workflow
+and quality standards. This skill is provided by the Superpowers plugin; install
+it alongside this plugin for the referenced workflow to be available.
 
 ## Source of Truth
 
@@ -57,8 +56,8 @@ for skills rather than action-phrase names.
 - ❌ `creating-commits`
 
 This convention produces shorter identifiers and clearer activation triggers.
-It intentionally overrides the `superpowers:writing-skills` naming preference
-when creating skills in this repository.
+It intentionally overrides the `writing-skills` naming preference when creating
+skills in this repository.
 
 ## SKILL.md Format
 
@@ -201,10 +200,10 @@ Skills are recognized by Kimi and other agentskills.io-standard agents when:
 
 1. **Follow the writing-skills workflow** - Skills are documentation;
    create and refine them using the RED-GREEN-REFACTOR process in
-   `superpowers:writing-skills`.
+   `writing-skills`.
 2. **Keep it concise** - Skills share context window with everything else;
-   follow the word-count targets in `superpowers:writing-skills` and move
-   heavy reference to separate files
+   follow the word-count targets in `writing-skills` and move heavy reference
+   to separate files
 3. **Clear description** - The description determines when skill triggers
 4. **Specific triggers** - Describe exact scenarios for skill usage
 5. **Progressive disclosure** - Put detailed info in references/, keep
