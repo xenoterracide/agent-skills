@@ -34,23 +34,11 @@ Copy the `skills/` directory into your agent's skill discovery path:
 
 ## Skills
 
-| Skill                   | Scope                                             |
-| ----------------------- | ------------------------------------------------- |
-| `session-init`          | Branch and PR state verification at session start |
-| `coding-standards`      | Cross-language principles and quality standards   |
-| `java`                  | Java conventions, JSpecify/NullAway, AssertJ      |
-| `gradle`                | Build system and dependency management            |
-| `github`                | GitHub CLI, GraphQL, and platform patterns        |
-| `shell-script`          | POSIX, Bash, and Zsh scripting guidance           |
-| `testing`               | Test philosophy, patterns, and anti-patterns      |
-| `commit-message`        | Conventional commit and PR description format     |
-| `pull-request`          | Commit, push, and PR lifecycle management         |
-| `iterative-development` | Planning and domain model evolution               |
-| `use-case-creator`      | Cockburn/AsciiDoc use case specifications         |
-| `skill-creator`         | Creating and maintaining agent skills             |
-| `agents-creator`        | Creating and maintaining project `AGENTS.md`      |
-| `readme-creator`        | Creating and maintaining project `README.md`      |
-| `contributing-creator`  | Creating and maintaining `CONTRIBUTING.md`        |
+Skills are organized into bundles — `code-quality`, `git-workflow`,
+`development-planning`, and `docs-creator` — plus standalone skills for `java`,
+`gradle`, `github`, `shell-script`, and `session-init`.
+
+See [`AGENTS.md`](AGENTS.md#skill-routing) for the full skill routing table.
 
 ## Development
 
