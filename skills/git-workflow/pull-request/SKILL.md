@@ -178,18 +178,26 @@ When addressing review comments on a PR:
 When creating commits for a PR, include AI attribution in commit messages using a Co-authored-by trailer:
 
 ```
-Co-authored-by: <AI_NAME> <AI_NOREPLY_EMAIL>
+Assisted-by: <AI_NAME>:<MODEL_VERSION> [TOOL1] [TOOL2]
 ```
 
-Use your AI identity:
+This follows the Linux kernel convention for AI attribution. `MODEL_VERSION`
+is the specific model or agent version used. Optional `[TOOL1] [TOOL2]` list
+specialized analysis tools (e.g., `coccinelle`, `sparse`). Do not list basic
+tools like `git`, `gcc`, or editors.
 
-| AI Name | `AI_NAME`        | `AI_NOREPLY_EMAIL`           |
-| ------- | ---------------- | ---------------------------- |
-| Kimi    | `Kimi`           | `kimi@moonshot.localhost`    |
-| Copilot | `GitHub Copilot` | `copilot@github.localhost`   |
-| Claude  | `Claude`         | `claude@anthropic.localhost` |
+Examples:
 
-Place the Co-authored-by trailer at the end of the commit message body, after the description.
+```
+Assisted-by: Kimi:kimi-code-cli
+Assisted-by: Claude:claude-3-opus coccinelle sparse
+```
+
+**Do not add `Signed-off-by` trailers.** Only humans can certify the Developer
+Certificate of Origin.
+
+Place the Assisted-by trailer at the end of the commit message body, after the
+description.
 
 ---
 
