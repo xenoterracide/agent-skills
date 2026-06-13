@@ -21,7 +21,7 @@
   ],
   "skills": "./skills/",
   "sessionStart": {
-    "skill": "git-workflow/session-init"
+    "skill": "session-init"
   },
   "mcpServers": {
     "javadocs": {
