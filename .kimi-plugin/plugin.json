@@ -1,7 +1,7 @@
 {
   "name": "xenoterracide-agent-skills",
-  "version": "0.1.2",
-  "description": "AI coding agent skills for Java, Gradle, GitHub, shell scripting, and iterative development workflows.",
+  "version": "0.1.3",
+  "description": "AI coding agent skills for Java, Gradle, GitHub, shell scripting, iterative development, documentation authoring, and Git workflows.",
   "author": {
     "name": "Caleb Cushing"
   },
@@ -17,11 +17,17 @@
     "skills",
     "session-init",
     "conventional-commits",
-    "pull-request"
+    "pull-request",
+    "docs-creator",
+    "agents-creator",
+    "readme-creator",
+    "contributing-creator",
+    "documentation",
+    "contributing"
   ],
   "skills": "./skills/",
   "sessionStart": {
-    "skill": "git-workflow/session-init"
+    "skill": "session-init"
   },
   "mcpServers": {
     "javadocs": {
@@ -30,8 +36,8 @@
   },
   "interface": {
     "displayName": "Xenoterracide's Skills",
-    "shortDescription": "Java, Gradle, GitHub, and development workflow skills",
-    "longDescription": "A collection of AI agent skills covering Java coding conventions with JSpecify/NullAway, Gradle build system guidance, GitHub CLI and GraphQL patterns, shell scripting standards, iterative development planning, conventional commits, PR workflows, and session initialization checks.",
+    "shortDescription": "Java, Gradle, GitHub, documentation authoring, and development workflow skills",
+    "longDescription": "A collection of AI agent skills covering Java coding conventions with JSpecify/NullAway, Gradle build system guidance, GitHub CLI and GraphQL patterns, shell scripting standards, iterative development planning, conventional commits, PR workflows, session initialization checks, and documentation authoring for README.md, AGENTS.md, CONTRIBUTING.md, and reusable skills.",
     "developerName": "Caleb Cushing",
     "websiteURL": "https://github.com/xenoterracide/agent-skills"
   }

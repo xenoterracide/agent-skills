@@ -8,62 +8,204 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 ## Project Overview
 
-This repository contains **AI coding agent skills** designed for use with Kimi Code CLI (and compatible AI coding agents). Skills are modular, composable capabilities that provide specialized knowledge, workflow patterns, and tool integrations to enhance AI agent effectiveness.
+This repository is **Subtree AI**, also published as the user-level skill plugin
+`xenoterracide-agent-skills`. It ships reusable AI coding agent skills for Java,
+Gradle, GitHub, shell scripting, development planning, and documentation
+workflows.
 
-The project is hosted at: https://github.com/xenoterracide/subtree-ai
+- **Repository**: https://github.com/xenoterracide/agent-skills
+- **Primary target**: Kimi Code CLI via `.kimi-plugin/plugin.json`
+- **Compatible agents**: any [agentskills.io](https://agentskills.io)-standard
+  agent such as Claude Code, Copilot CLI, or Gemini CLI
+- **Content type**: Markdown documentation/knowledge files (no compiled
+  application code in `skills/`)
+- **License for skills and docs**: CC-BY-NC-SA-4.0
+- **License for configuration files**: CC0-1.0
 
-> **Agent Note:** Always read `README.md` before answering questions about installing, updating, or using this plugin. It contains the canonical instructions for the current Kimi Code CLI plugin system.
+> **Agent Note:** Always read `README.md` before answering questions about
+> installing, updating, or using this plugin. It contains the canonical
+> instructions for the current Kimi Code CLI plugin system.
 >
-> **Source of Truth:** This repository IS the `xenoterracide-agent-skills` plugin. Never edit installed plugin files in `~/.kimi-code/plugins/`, `~/.kimi-code/skills/`, or any Kimi installation directory. Make all changes in this repo and reinstall from here when needed.
+> **Source of Truth:** This repository IS the `xenoterracide-agent-skills`
+> plugin. Agents **MUST NOT** edit installed plugin files in `~/.kimi-code/`,
+> `~/.kimi-plugin/`, or any agent installation directory. Treat installed plugins
+> as immutable binaries, not modifiable source. Make all changes in this repo and
+> reinstall from here when needed.
 
 ## Repository Structure
 
 ```
 .
-├── mcp/                     # Model Context Protocol configuration
-│   ├── mcp.json            # MCP server configuration (currently empty {})
-│   └── mcp.json.license    # CC0-1.0 license for config files
-├── skills/                          # AI skills organized by concern
-│   ├── code-quality/               # Cross-cutting quality and testing
-│   │   ├── coding-standards/       # Coding principles and quality
-│   │   └── testing/                # Testing philosophy and patterns
-│   ├── development-planning/       # Feature scoping and requirements
-│   │   ├── iterative-development/  # Planning and iterative design
-│   │   └── use-case-creator/       # Use case documentation
-│   ├── git-workflow/               # Repository workflow lifecycle
-│   │   ├── commit-message/         # Conventional commit formatting
-│   │   ├── pull-request/           # Commit, push, and PR management
-│   │   └── session-init/           # Mandatory session startup
-│   ├── github/                     # GitHub and GraphQL interaction
-│   ├── gradle/                     # Gradle build system
-│   ├── java/                       # Java coding style
-│   ├── shell-script/               # Shell scripting guidance
-│   └── skill-creator/              # Creating and maintaining skills
+├── .kimi-plugin/plugin.json     # Kimi plugin manifest
+├── .github/renovate.json5       # Renovate dependency update config
+├── .github/workflows/pre-commit.yml   # CI: REUSE + Prettier checks
+├── .lintstagedrc.cjs            # Per-file-type license + format rules
+├── .prettierrc.cjs              # Prettier config (printWidth 120)
+├── .tool-versions               # Node.js version for asdf
+├── git-conventional-commits.yaml    # Conventional commit types
+├── mcp/mcp.json                 # MCP server config (javadocs)
+├── package.json                 # Node project scripts and dev deps
+├── pyproject.toml               # Python project metadata (uv)
+├── skills/                      # Skill definitions
+│   ├── code-quality/
+│   │   ├── coding-standards/
+│   │   └── testing/
+│   ├── development-planning/
+│   │   ├── iterative-development/
+│   │   └── use-case-creator/
+│   ├── session-init/                # Git state verification at session start
+│   ├── git-workflow/
+│   │   ├── commit-message/
+│   │   └── pull-request/
+│   ├── github/
+│   ├── gradle/
+│   ├── java/
+│   ├── shell-script/
+│   └── docs-creator/                # Project docs and skill authoring
+│       ├── skill-creator/
+│       ├── agents-creator/
+│       ├── readme-creator/
+│       └── contributing-creator/
+└── .share/                      # Shared tooling subtree (template-main)
+    ├── git/hooks/               # Pre-commit, commit-msg, post-checkout, post-merge
+    ├── node/packages/merge/     # TypeScript AI-assisted PR merge tool
+    ├── package.json             # Root config for the shared tooling workspace
+    └── AGENTS.md                # Conventions for the shared tooling itself
 ```
 
 ## Technology Stack
 
-This is a **documentation/knowledge repository** (not a code project):
+- **Node.js**: 24.14.1 (managed by `asdf` via `.tool-versions`)
+- **Package manager**: Yarn 4.13.0 with Plug'n'Play (`.pnp.cjs`)
+- **Python**: 3.12+ (managed by `uv`)
+- **Formatting**: Prettier 3.6.2 with plugins for XML, Properties, Java, and
+  TOML
+- **License compliance**: REUSE specification via `reuse` (Python dev
+  dependency)
+- **Git hooks**: Stored in `.share/git/hooks`; active path is
+  `.share/git/hooks`
+- **CI**: GitHub Actions reusing workflows from
+  `xenoterracide/github/.github/workflows`
 
-- **Format**: Markdown with YAML frontmatter for skill definitions
-- **Documentation**: AsciiDoc for use case specifications
-- **Formatting**: Prettier for Markdown
-- **Licensing**: SPDX license identifiers (CC-BY-NC-SA-4.0 for content, CC0-1.0 for config)
+## Build and Test Commands
 
-## Skill System Architecture
+All commands below assume dependencies are installed. Run setup once with:
+
+```bash
+yarn contribute
+```
+
+This runs `uv sync --frozen` and configures `core.hooksPath` to
+`.share/git/hooks`.
+
+### Linting and Formatting
+
+```bash
+yarn lint                         # Run prettier + REUSE checks
+yarn lint:prettier                # Prettier check with cache
+yarn lint:reuse                   # REUSE license compliance check
+yarn exec prettier --write <file> # Format a single file
+```
+
+### Testing
+
+```bash
+yarn test                         # Run all workspace tests
+```
+
+The only current testable code lives in `.share/node/packages/merge/`. The
+skill files themselves are documentation and have no automated tests.
+
+### Merge Workflows (AI-Assisted PR Merge Tool)
+
+The `.share/node/packages/merge` package provides engine-specific merge scripts
+that generate conventional commit PR messages and drive squash merges:
+
+```bash
+yarn merge:kimi                   # Generate/update PR with Kimi engine
+yarn merge:junie                  # Generate/update PR with Junie engine
+yarn merge:copilot                # Generate/update PR with Copilot engine
+```
+
+### Dependency Management
+
+```bash
+yarn install --immutable          # Install Node dependencies
+uv sync --frozen                  # Sync Python dependencies
+```
+
+- `yarn.lock` and `uv.lock` are committed and checked for immutability in CI.
+- Renovate (`.github/renovate.json5`) manages npm, asdf, GitHub Actions,
+  Python, and Maven dependencies. It uses squash automerge for eligible minor,
+  patch, and pin updates.
+
+## Code Style Guidelines
+
+### EditorConfig
+
+- Charset: UTF-8
+- Line endings: LF
+- Indent: 2 spaces
+- Final newline: required
+
+The `.editorconfig` file lives inside `.share/` and is applied through the
+shared tooling subtree.
+
+### Prettier
+
+```javascript
+// .prettierrc.cjs
+{
+  printWidth: 120,
+  xmlWhitespaceSensitivity: "ignore",
+  keySeparator: "=",
+  plugins: [
+    "@prettier/plugin-xml",
+    "prettier-plugin-properties",
+    "prettier-plugin-java",
+    "prettier-plugin-toml",
+  ],
+}
+```
+
+### Licensing by File Type
+
+`.lintstagedrc.cjs` defines the license header applied by the pre-commit hook.
+Use it as the source of truth for new files:
+
+| File type                              | License           | Formatter        |
+| -------------------------------------- | ----------------- | ---------------- |
+| `*.ts`, `*.java`                       | GPL-3.0-or-later  | Prettier         |
+| `*.js`, `*.cjs`, `*.yml`               | MIT               | Prettier         |
+| `package.json`                         | MIT               | Prettier         |
+| `*.json` (non-package)                 | CC0-1.0           | Prettier         |
+| `*.md`, `*.adoc`                       | CC-BY-NC-SA-4.0   | Prettier         |
+| `*.xml`, `*.yaml`, `*.toml`, `*.json5` | CC0-1.0           | Prettier         |
+| `*.*sh`, `.config/git/hooks/*`         | MIT (shfmt style) | shfmt + Prettier |
+| `*.properties`                         | CC0-1.0           | Prettier         |
+| dotfiles (`.gitignore`, etc.)          | CC0-1.0           | Prettier         |
+
+> Markdown skill files do **not** receive REUSE headers in this repo because
+> REUSE does not handle YAML frontmatter correctly. The SPDX block is placed
+> inside an HTML comment immediately after the frontmatter.
 
 ### Skill File Format
 
-Each skill is a directory containing `SKILL.md` with this structure:
+Each skill is a directory containing `SKILL.md`:
 
 ```markdown
 ---
 name: skill-name
-description: When to use this skill. Be specific about triggers.
+description: |
+  When to use this skill. Be specific about triggers.
+license: CC-BY-NC-SA-4.0
+metadata:
+  author: Caleb Cushing <caleb.cushing@gmail.com>
 ---
 
 <!--
 SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
+
 SPDX-License-Identifier: CC-BY-NC-SA-4.0
 -->
 
@@ -72,127 +214,127 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 Content here...
 ```
 
-**CRITICAL FORMATTING RULES:**
+**Critical rules:**
 
-1. `---` must be the VERY FIRST line in the file - no comments, no blank lines before
-2. Frontmatter must include `name` and `description` fields
-3. SPDX copyright comment goes AFTER frontmatter, in an HTML comment block
-4. Use current year (2026) for new skills, not a range
+1. `---` must be the very first line of the file.
+2. Frontmatter must include `name` and `description`.
+3. SPDX copyright comment goes **after** frontmatter in an HTML comment block.
+4. Use the current year (2026) for new skills.
+5. Keep the body concise; put detailed reference material in a `references/`
+   directory when needed.
 
-### How Skills Work
+## Testing Instructions
 
-Skills are recognized by Kimi when:
+- **Skill files**: There are no automated tests. Validate by:
+  - Correct YAML frontmatter (use `---` first, include `name` and
+    `description`).
+  - Prettier formatting passes.
+  - REUSE compliance passes for non-Markdown assets.
+  - Manual verification that the skill content matches the stated trigger.
+- **Merge tool**: Run `yarn workspaces foreach --all run test` or
+  `yarn workspace merge run test` to execute TypeScript type checking and
+  Vitest tests in `.share/node/packages/merge/`.
 
-1. File is named exactly `SKILL.md`
-2. Located in `skills/<skill-name>/` within the plugin root (or `.agents/skills/<skill-name>/` in non-plugin projects)
-3. Frontmatter is valid (starts with `---`)
-4. Has both `name` and `description` fields
+When a skill contains shell commands or Gradle tasks, verify the commands work
+by running them directly and update the skill immediately if they fail.
 
-The `description` field determines when the skill triggers, so it is the primary
-machine-readable routing surface. Keep descriptions specific, concrete, and easy
-to match against user intent.
+## Git Workflow
 
-`allowed-tools` is an optional, experimental field you may use when a skill
-needs to pre-approve a small, trusted tool set. Prefer omitting it by default,
-and only add it when a runtime supports specific tool names such as `git` or
-`gh` and the skill repeatedly needs them. Keep broader routing guidance such as
-anti-triggers, related skills, and detailed examples in the body of the skill
-file rather than overloading frontmatter.
+### Conventional Commits
 
-## Skill Routing
+Allowed types are defined in `git-conventional-commits.yaml`:
 
-Skills fall into four activation categories:
-
-- **Workflow** (`git-workflow`): Apply on every session or file change
-  - `session-init` — start of every session
-  - `pull-request` — any file creation, modification, or deletion
-  - `commit-message` — writing commits or PR descriptions
-- **Cross-cutting** (`code-quality`): Apply to all coding tasks regardless of language
-  - `coding-standards` — general code quality principles
-  - `testing` — test strategy and patterns
-- **Domain** (`github`, `java`, `gradle`, `shell-script`): Apply by file type or tool context
-- **Planning** (`development-planning`, `skill-creator`): Apply when designing features or maintaining skills
-  - `iterative-development` — iteration and domain model design
-  - `use-case-creator` — requirements documentation
-
-### Discoverability Index
-
-Use this table as the canonical routing guide when deciding which skill to load.
-
-| Skill                                        | Scope                                                  | Activate When                                                            | Signals                                                         |
-| -------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------ | --------------------------------------------------------------- |
-| `git-workflow/session-init`                  | Git state verification at session start                | Starting work in a repo session                                          | "start work", "new session", "check branch"                     |
-| `git-workflow/pull-request`                  | Commit, push, and PR lifecycle                         | Any repository file is created, modified, or deleted; PR review comments | "fix", "update", "add", "refactor", "pr", "address PR comments" |
-| `git-workflow/commit-message`                | Conventional commit and PR description formatting      | Writing a commit message, PR title, or PR description                    | "write commit", "PR title", "PR description"                    |
-| `code-quality/coding-standards`              | Cross-language coding principles and quality standards | Implementing or changing code in any language                            | "implement", "refactor", "bug", "error handling"                |
-| `code-quality/testing`                       | Test philosophy, patterns, and anti-patterns           | Adding, updating, debugging, or discussing tests                         | test, coverage, fixture, integration                            |
-| `development-planning/iterative-development` | Iteration planning and domain model evolution          | Scoping a feature, selecting an iteration, or refining design            | iteration, vertical slice, domain model, risk                   |
-| `development-planning/use-case-creator`      | Use case specifications in Cockburn/AsciiDoc format    | Writing or revising use cases and business behavior docs                 | use case, scenario, ubiquitous language                         |
-| `github`                                     | GitHub platform tools, APIs, and GraphQL queries       | Querying or interacting with GitHub-hosted resources                     | "GitHub", "issue", "gh", "GraphQL"                              |
-| `java`                                       | Java language conventions and null-safety              | Creating or modifying `.java` source files                               | `.java`, class, interface, record, enum                         |
-| `gradle`                                     | Gradle build system and dependency management          | Editing Gradle build files or resolving dependency issues                | `build.gradle.kts`, `settings.gradle.kts`, dependency           |
-| `shell-script`                               | Shell scripting for POSIX, Bash, and Zsh               | Writing or editing shell scripts, functions, or shell config             | `.sh`, `.zsh`, `.zshrc`, bash, zsh, pipeline                    |
-| `skill-creator`                              | Creating and maintaining AI skill definitions          | Working on `SKILL.md` files or skill trigger behavior                    | skill, frontmatter, trigger, discoverability                    |
-
-## Development Workflow
-
-### Making Changes
-
-1. **Start with `git-workflow/session-init` skill** - Verify branch state before any work
-2. **Apply cross-cutting and domain-specific skills** as needed for the task
-3. **Always use `git-workflow/pull-request` skill** when modifying files
-4. **Follow `git-workflow/commit-message` skill** for commit/PR formatting
-5. **Use the AI Discoverability Index above** when the correct skill is not obvious
-
-### Formatting Skills
-
-After editing any `SKILL.md` file:
-
-```bash
-yarn exec prettier --write skills/<skill-name>/SKILL.md
-# or for sub-skills:
-yarn exec prettier --write skills/<parent>/<child>/SKILL.md
+```yaml
+- ci, feat, fix, perf, refactor, style, test
+- build, ops, docs, chore, merge, revert
 ```
 
-### Creating New Skills
+The `commit-msg` hook validates every commit message against this convention.
 
-See the `skill-creator` skill for the full creation workflow and format contract.
-
-## Code Style Guidelines
-
-See language-specific skills (`java`, `shell-script`) for detailed style guidance.
-
-### For Skill Files
-
-- Keep skills concise — they share context window with everything else
-- Align description wording between `AGENTS.md` and each skill
-- Add boundary notes when confusion with a related skill is likely
-- Put detailed reference material in `references/`, keep `SKILL.md` focused
-
-## Testing
-
-Skills themselves don't have automated tests (they're documentation). They are
-validated by correct frontmatter format and tested by usage — if a skill's
-command doesn't work, update it immediately.
-
-For testing strategies in code projects, see the `testing` skill.
-
-## Pull Request Workflow
+### Pull Request Workflow
 
 This repository uses **squash merge** for PRs:
 
-- Branch history doesn't matter - all commits get squashed
-- Use `git merge origin/develop` instead of rebase when updating
-- Don't create new branches for updates - commit to same branch
-- PR titles must follow conventional commit format (they become commit messages)
-- PR descriptions must explain WHY the change exists
-- Do NOT use checkboxes (`- [x]`) in PR descriptions - use plain bullets
+- Branch history does not matter; all commits are squashed.
+- Use `git merge origin/<default-branch>` instead of rebase to update a branch.
+- Do not create new branches for updates; commit to the same PR branch.
+- PR titles must follow conventional commit format.
+- PR descriptions must explain **why** the change exists.
+- Do **not** use checkboxes (`- [x]`) in PR descriptions; use plain bullets.
+- Never force push; force pushes are blocked by repository rules.
+
+### Git Hooks
+
+Hooks live in `.share/git/hooks` and are configured via
+`git config core.hooksPath .share/git/hooks`:
+
+- **pre-commit**: Runs `lint-staged` to format and annotate licenses.
+- **commit-msg**: Validates conventional commit messages.
+- **post-checkout / post-merge**: Syncs Node or Python dependencies when
+  lockfiles changed.
+
+All hooks exit early when `CI` is set.
+
+### Session Initialization
+
+At the start of every session, load the top-level `session-init` skill:
+
+1. Read `README.md` and this `AGENTS.md`.
+2. Run `git fetch --all --prune`.
+3. Check current branch and git status.
+4. Check PR state with `gh pr view --json number,url,headRefName,state` or an
+   MCP tool.
+5. If the current branch's PR is CLOSED or MERGED, switch to the default
+   branch, delete the stale branch, and pull latest before creating new work.
+
+## Skill Routing
+
+Skills are grouped into four activation categories. Use this index when the
+right skill is not obvious:
+
+| Skill                                        | Scope                                                  | Activate When                                                                         |
+| -------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| `session-init`                               | Git state verification at session start                | Starting work in a repo session                                                       |
+| `git-workflow/pull-request`                  | Commit, push, and PR lifecycle                         | Any repository file is created, modified, or deleted; PR review comments              |
+| `git-workflow/commit-message`                | Conventional commit and PR description formatting      | Writing a commit message, PR title, or PR description                                 |
+| `code-quality/coding-standards`              | Cross-language coding principles and quality standards | Implementing or changing code in any language                                         |
+| `code-quality/testing`                       | Test philosophy, patterns, and anti-patterns           | Adding, updating, debugging, or discussing tests                                      |
+| `development-planning/iterative-development` | Iteration planning and domain model evolution          | Scoping a feature, selecting an iteration, or refining design                         |
+| `development-planning/use-case-creator`      | Use case specifications in Cockburn/AsciiDoc format    | Writing or revising use cases and business behavior docs                              |
+| `github`                                     | GitHub platform tools, APIs, and GraphQL queries       | Querying or interacting with GitHub-hosted resources                                  |
+| `java`                                       | Java language conventions and null-safety              | Creating or modifying `.java` source files                                            |
+| `gradle`                                     | Gradle build system and dependency management          | Editing Gradle build files or resolving dependency issues                             |
+| `shell-script`                               | Shell scripting for POSIX, Bash, and Zsh               | Writing or editing shell scripts, functions, or shell config                          |
+| `docs-creator/skill-creator`                 | Creating and maintaining AI skill definitions          | Working on `SKILL.md` files or skill trigger behavior                                 |
+| `docs-creator/agents-creator`                | Creating and maintaining project `AGENTS.md` files     | Writing, revising, or generating agent instructions at the project or directory level |
+| `docs-creator/readme-creator`                | Creating and maintaining project `README.md` files     | Writing or revising the project README                                                |
+| `docs-creator/contributing-creator`          | Creating and maintaining `CONTRIBUTING.md` files       | Writing or revising human contributor guidance                                        |
+
+### Maintenance Rule
+
+If you modify anything this `AGENTS.md` describes (workflows, tools, file
+layouts, skill conventions, licensing, etc.), update `AGENTS.md` in the same
+change. If you modify contributor-facing workflows, tools, or commands, also
+update `CONTRIBUTING.md`. Do not let agent or contributor instructions drift
+out of sync with the project.
+
+## Security Considerations
+
+1. **CI detection**: All git hooks check `[ -n "$CI" ]` and exit early in CI
+   environments.
+2. **Lockfile integrity**: Use `yarn install --immutable` and `uv sync --frozen`
+   so lockfiles cannot change unexpectedly.
+3. **Command injection**: The merge tool prefers `execFileSync` with argv
+   arrays for safe command execution.
+4. **No secrets**: This repository contains no credentials or private
+   configuration. `mcp/mcp.json` only references a public javadocs MCP server.
+5. **Force push blocked**: Repository rules block force pushes; agents must
+   create new commits instead.
 
 ## License
 
-All skills are licensed under **CC-BY-NC-SA-4.0** (Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International).
-
-Configuration files (like `mcp.json`) are licensed under **CC0-1.0** (public domain dedication).
+- **Skills and documentation**: CC-BY-NC-SA-4.0
+- **Configuration files**: CC0-1.0
 
 ---
 

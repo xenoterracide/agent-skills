@@ -62,11 +62,34 @@ When investigating dependency issues:
 
 ## Common Build Tasks
 
+Gradle lifecycle tasks do different amounts of work. Choose the cheapest task
+that satisfies the goal:
+
+| Task          | What it does                                            |
+| ------------- | ------------------------------------------------------- |
+| `testClasses` | Compiles main and test code                             |
+| `assemble`    | Builds artifacts without running tests                  |
+| `build`       | Compiles, tests, and packages everything                |
+| `check`       | Runs tests and verification without producing artifacts |
+| `test`        | Runs unit tests                                         |
+| `clean`       | Deletes build outputs                                   |
+
 ```bash
-./gradlew build          # Build and test
-./gradlew check          # Run all checks (tests, linting)
-./gradlew test           # Run unit tests
+./gradlew testClasses    # Cheap compile check
+./gradlew assemble       # Build artifacts without tests
+./gradlew build          # Full build and test
+./gradlew check          # Verification only
+./gradlew test           # Unit tests only
 ./gradlew clean          # Clean build outputs
+```
+
+### Machine-Readable Output
+
+Use `--console plain` when parsing Gradle output programmatically or when
+rich terminal output interferes with tool processing:
+
+```bash
+./gradlew check --console plain
 ```
 
 ## Shadow Plugin

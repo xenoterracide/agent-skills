@@ -6,9 +6,13 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 # Xenoterracide's Agent Skills
 
-AI coding agent skills for Java, Gradle, GitHub, and development workflows.
-Designed for [Kimi Code CLI](https://kimi.com/code) and compatible with any
-[agentskills.io](https://agentskills.io)-standard agent.
+A user-level skill plugin for AI coding agents. It ships reusable skills for
+Java, Gradle, GitHub, shell scripting, development planning, and documentation
+workflows.
+
+- **Primary target**: [Kimi Code CLI](https://kimi.com/code)
+- **Compatible with**: any [agentskills.io](https://agentskills.io)-standard
+  agent such as Claude Code, Copilot CLI, or Gemini CLI
 
 ## Installation
 
@@ -30,20 +34,38 @@ Copy the `skills/` directory into your agent's skill discovery path:
 
 ## Skills
 
-| Skill                   | Scope                                             |
-| ----------------------- | ------------------------------------------------- |
-| `session-init`          | Branch and PR state verification at session start |
-| `coding-standards`      | Cross-language principles and quality standards   |
-| `java`                  | Java conventions, JSpecify/NullAway, AssertJ      |
-| `gradle`                | Build system and dependency management            |
-| `github`                | GitHub CLI, GraphQL, and platform patterns        |
-| `shell-script`          | POSIX, Bash, and Zsh scripting guidance           |
-| `testing`               | Test philosophy, patterns, and anti-patterns      |
-| `commit-message`        | Conventional commit and PR description format     |
-| `pull-request`          | Commit, push, and PR lifecycle management         |
-| `iterative-development` | Planning and domain model evolution               |
-| `use-case-creator`      | Cockburn/AsciiDoc use case specifications         |
-| `skill-creator`         | Creating and maintaining agent skills             |
+| Skill                                        | Scope                                             |
+| -------------------------------------------- | ------------------------------------------------- |
+| `session-init`                               | Branch and PR state verification at session start |
+| `code-quality/coding-standards`              | Cross-language principles and quality standards   |
+| `java`                                       | Java conventions, JSpecify/NullAway, AssertJ      |
+| `gradle`                                     | Build system and dependency management            |
+| `github`                                     | GitHub CLI, GraphQL, and platform patterns        |
+| `shell-script`                               | POSIX, Bash, and Zsh scripting guidance           |
+| `code-quality/testing`                       | Test philosophy, patterns, and anti-patterns      |
+| `git-workflow/commit-message`                | Conventional commit and PR description format     |
+| `git-workflow/pull-request`                  | Commit, push, and PR lifecycle management         |
+| `development-planning/iterative-development` | Planning and domain model evolution               |
+| `development-planning/use-case-creator`      | Cockburn/AsciiDoc use case specifications         |
+| `docs-creator/skill-creator`                 | Creating and maintaining agent skills             |
+| `docs-creator/agents-creator`                | Creating and maintaining project `AGENTS.md`      |
+| `docs-creator/readme-creator`                | Creating and maintaining project `README.md`      |
+| `docs-creator/contributing-creator`          | Creating and maintaining `CONTRIBUTING.md`        |
+
+## Development
+
+- See [`AGENTS.md`](AGENTS.md) for project conventions, skill routing, and
+  agent-specific guidance.
+- See [`CONTRIBUTING.md`](CONTRIBUTING.md) for human contributor setup, linting,
+  testing, and pull request workflow.
+- Use the [`docs-creator/skill-creator`](skills/docs-creator/skill-creator/SKILL.md)
+  skill when adding or updating skills.
+- Use the [`docs-creator/agents-creator`](skills/docs-creator/agents-creator/SKILL.md)
+  skill when writing or revising `AGENTS.md` files.
+- Use the [`docs-creator/readme-creator`](skills/docs-creator/readme-creator/SKILL.md)
+  skill when writing or revising `README.md` files.
+- Use the [`docs-creator/contributing-creator`](skills/docs-creator/contributing-creator/SKILL.md)
+  skill when writing or revising `CONTRIBUTING.md` files.
 
 ## License
 

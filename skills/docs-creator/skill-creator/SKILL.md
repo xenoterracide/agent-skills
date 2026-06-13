@@ -18,6 +18,25 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 Guidance for creating and maintaining AI skills.
 
+**REQUIRED SUB-SKILL:** Use `superpowers:writing-skills` for the skill authoring
+workflow and quality standards. This skill is provided by the Superpowers
+plugin; install it alongside this plugin for the referenced workflow to be
+available.
+
+## Source of Truth
+
+When maintaining a skill plugin, always edit the plugin's source repository.
+Installed plugin files in `~/.kimi-code/`, `~/.kimi-plugin/`, or any agent
+installation directory are immutable. Treat them as binaries, not source.
+
+If you discover an issue in an installed skill:
+
+1. Locate the source repository for the plugin
+2. Make the fix there
+3. Reinstall from the updated source
+
+Never edit installed plugin files unless the user explicitly asks you to.
+
 ## File Structure
 
 ```
@@ -70,6 +89,10 @@ Optional fields:
   - Avoid broad approvals like `bash` or `shell` unless the skill is explicitly
     about running trusted shell scripts
   - Do **not** use this as a substitute for clear instructions in the body
+
+- **`has-sub-skill`**: Set to `true` for parent bundles that contain sub-skills
+  - Example: `has-sub-skill: true`
+  - Required when the skill directory contains child skill directories
 
 Keep frontmatter small and focused on activation plus carefully chosen
 pre-approval.
@@ -147,32 +170,37 @@ SPDX-FileCopyrightText: ...
 
 ## Code Style
 
-- Run `yarn exec prettier --write SKILL.md` after editing
-- Prettier handles Markdown formatting
-- No additional linting tools required for skills
+- Format `SKILL.md` with the project's Markdown formatter (e.g., Prettier)
+- No additional linting tools are required for skills
 
 ## Testing Skills
 
-Skills are recognized by Kimi when:
+Skills are recognized by Kimi and other agentskills.io-standard agents when:
 
 1. File is named `SKILL.md`
-2. Located in `.agents/skills/<skill-name>/`
+2. Located in the agent's skill discovery path, such as `.agents/skills/<skill-name>/`
+   for per-project skills or the plugin root for distributed plugins
 3. Frontmatter is valid (starts with `---`)
 4. Has both `name` and `description` fields
 
 ## Best Practices
 
-1. **Keep it concise** - Skills share context window with everything else
-2. **Clear description** - The description determines when skill triggers
-3. **Specific triggers** - Describe exact scenarios for skill usage
-4. **Progressive disclosure** - Put detailed info in references/, keep
+1. **Follow the writing-skills workflow** - Skills are documentation;
+   create and refine them using the RED-GREEN-REFACTOR process in
+   `superpowers:writing-skills`.
+2. **Keep it concise** - Skills share context window with everything else;
+   follow the word-count targets in `superpowers:writing-skills` and move
+   heavy reference to separate files
+3. **Clear description** - The description determines when skill triggers
+4. **Specific triggers** - Describe exact scenarios for skill usage
+5. **Progressive disclosure** - Put detailed info in references/, keep
    SKILL.md focused
-5. **Fix broken commands immediately** - If you discover a skill's command
+6. **Fix broken commands immediately** - If you discover a skill's command
    or example doesn't work, update the skill right away. Skills are living
    documents that must be kept accurate.
-6. **Use `allowed-tools` sparingly** - Pre-approve tools only when the skill
+7. **Use `allowed-tools` sparingly** - Pre-approve tools only when the skill
    consistently needs them and the trade-off is worth reducing prompts
-7. **Default to no pre-approval** - If a skill works fine without
+8. **Default to no pre-approval** - If a skill works fine without
    `allowed-tools`, leave the field out
 
 ## Discoverability Checklist
