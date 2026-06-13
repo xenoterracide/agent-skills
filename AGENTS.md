@@ -27,9 +27,10 @@ workflows.
 > instructions for the current Kimi Code CLI plugin system.
 >
 > **Source of Truth:** This repository IS the `xenoterracide-agent-skills`
-> plugin. Never edit installed plugin files in `~/.kimi-code/plugins/`,
-> `~/.kimi-code/skills/`, or any Kimi installation directory. Make all changes in
-> this repo and reinstall from here when needed.
+> plugin. Agents **MUST NOT** edit installed plugin files in `~/.kimi-code/`,
+> `~/.kimi-plugin/`, or any agent installation directory. Treat installed plugins
+> as immutable binaries, not modifiable source. Make all changes in this repo and
+> reinstall from here when needed.
 
 ## Repository Structure
 
