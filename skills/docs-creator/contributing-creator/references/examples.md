@@ -31,8 +31,12 @@ yarn lint
 
 ## Gradle / Kotlin or Java
 
-`./gradlew build` compiles, tests, and packages. Use `./gradlew check` for
-verification without producing artifacts, or run phases separately.
+Gradle lifecycle tasks do different amounts of work:
+
+- `./gradlew testClasses` — compiles main and test code (cheap)
+- `./gradlew assemble` — builds artifacts without running tests
+- `./gradlew build` — compiles, tests, and packages everything
+- `./gradlew check` — runs tests and verification without producing artifacts
 
 ````markdown
 ## Setup
@@ -44,7 +48,7 @@ verification without producing artifacts, or run phases separately.
 ## Build, Test, and Lint
 
 ```bash
-./gradlew build
+./gradlew testClasses
 ./gradlew check
 ```
 ````
