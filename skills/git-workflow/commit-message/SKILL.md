@@ -29,8 +29,13 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 - First line MUST be a valid Conventional Commit subject.
 - First line: aim for ≤ 50 characters, hard limit ≤ 72.
 - Use a specific scope when possible.
-- Body (MANDATORY - must explain WHAT):
-  - Use bullet points explaining the main changes
+- Use directional verbs that reflect what happened in the diff (e.g. add, remove,
+  update, refactor, fix) rather than neutral nouns.
+- Body (MANDATORY - must explain WHY):
+  - Start with a paragraph explaining WHY this change is being made
+    - The "why" provides context for future readers
+    - Explain the problem, motivation, or rationale
+  - Follow with bullet points explaining the main changes (WHAT)
   - Each bullet must describe one complete logical change
   - Do not split a single idea across multiple bullets
   - Wrap lines to <= 75 chars
