@@ -20,16 +20,16 @@ published as the user-level skill plugin `xenoterracide-agent-skills`.
 
 ## Source of Truth
 
-| For                                  | See                             |
-| ------------------------------------ | ------------------------------- |
-| Install, update, usage, contribution | `README.md` (read this first)   |
-| Plugin manifest and skill layout     | `.kimi-plugin/plugin.json`      |
-| Node version                         | `.tool-versions`                |
-| Scripts and Node dependencies        | `package.json`                  |
-| Python dependencies                  | `pyproject.toml`, `uv.lock`     |
-| Conventional commit types            | `git-conventional-commits.yaml` |
-| Pre-commit rules (license + format)  | `.lintstagedrc.cjs`             |
-| Renovate config                      | `.github/renovate.json5`        |
+| For                                    | See                             |
+| -------------------------------------- | ------------------------------- |
+| Install, update, usage, contribution   | `README.md` (read this first)   |
+| Plugin manifest, skill layout, version | `.kimi-plugin/plugin.json`      |
+| Node version                           | `.tool-versions`                |
+| Scripts and Node dependencies          | `package.json`                  |
+| Python dependencies                    | `pyproject.toml`, `uv.lock`     |
+| Conventional commit types              | `git-conventional-commits.yaml` |
+| Pre-commit rules (license + format)    | `.lintstagedrc.cjs`             |
+| Renovate config                        | `.github/renovate.json5`        |
 
 ## Build and Test
 
@@ -132,8 +132,11 @@ Load the relevant skill when the trigger applies:
 
 ## Maintenance
 
-Update this file when you change workflows it describes. Update `CONTRIBUTING.md`
-when you change contributor-facing workflows or commands.
+- Update this file when you change workflows it describes.
+- Update `CONTRIBUTING.md` when you change contributor-facing workflows or
+  commands.
+- When modifying skills, ask the user whether to bump the plugin version in
+  `.kimi-plugin/plugin.json` before creating or updating the PR.
 
 ## Security Considerations
 
