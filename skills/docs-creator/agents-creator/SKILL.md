@@ -27,10 +27,9 @@ the directory it lives in and all subdirectories. Deeper `AGENTS.md` files take
 precedence over parent ones, and user instructions always take highest
 precedence.
 
-**REQUIRED SUB-SKILL:** Use `superpowers:writing-skills` when the guidance
-would be better expressed as a reusable skill. This skill is provided by the
-Superpowers plugin; install it alongside this plugin for the referenced
-workflow to be available.
+**REQUIRED SUB-SKILL:** Use `writing-skills` when the guidance would be better
+expressed as a reusable skill. This skill is provided by the Superpowers plugin;
+install it alongside this plugin for the referenced workflow to be available.
 
 ## When to Create or Update
 
