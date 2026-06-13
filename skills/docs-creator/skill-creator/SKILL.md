@@ -19,7 +19,9 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 Guidance for creating and maintaining AI skills.
 
 **REQUIRED SUB-SKILL:** Use `superpowers:writing-skills` for the skill authoring
-workflow and quality standards.
+workflow and quality standards. This skill is provided by the Superpowers
+plugin; install it alongside this plugin for the referenced workflow to be
+available.
 
 ## Source of Truth
 

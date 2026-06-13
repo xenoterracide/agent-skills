@@ -314,7 +314,9 @@ right skill is not obvious:
 
 If you modify anything this `AGENTS.md` describes (workflows, tools, file
 layouts, skill conventions, licensing, etc.), update `AGENTS.md` in the same
-change. Do not let agent instructions drift out of sync with the project.
+change. If you modify contributor-facing workflows, tools, or commands, also
+update `CONTRIBUTING.md`. Do not let agent or contributor instructions drift
+out of sync with the project.
 
 ## Security Considerations
 

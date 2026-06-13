@@ -28,7 +28,9 @@ precedence over parent ones, and user instructions always take highest
 precedence.
 
 **REQUIRED SUB-SKILL:** Use `superpowers:writing-skills` when the guidance
-would be better expressed as a reusable skill.
+would be better expressed as a reusable skill. This skill is provided by the
+Superpowers plugin; install it alongside this plugin for the referenced
+workflow to be available.
 
 ## When to Create or Update
 
@@ -67,6 +69,7 @@ Point agents to the canonical source rather than copying it:
 - Scripts → `package.json`, `Makefile`, `--help`
 - Git state → `git status`, `git log`, `gh pr view`
 - Environment → `env`, `asdf current`
+- Plugin manifest → `.kimi-plugin/plugin.json`
 
 If a value can change between sessions, prefer live retrieval.
 
