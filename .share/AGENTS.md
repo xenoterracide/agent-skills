@@ -24,7 +24,7 @@ The project uses a hybrid Python + Node.js architecture with Yarn workspaces for
 
 ## Project Structure
 
-```
+```text
 .
 ├── git/hooks/                  # Custom git hooks
 │   ├── commit-msg              # Conventional commits validation
@@ -118,7 +118,7 @@ All files MUST have SPDX license headers. The project uses:
 
 ## Testing Instructions
 
-1. **TypeScript type checking**: `yarn workspace merge run test` (runs `tsc --noEmit`)
+1. **TypeScript type checking**: `yarn workspace @xenoterracide/merge run test` (runs `tsc --noEmit`)
 2. **All workspace tests**: `yarn test`
 3. **License compliance**: `yarn lint:reuse`
 4. **Formatting**: `yarn lint:prettier`

@@ -2,17 +2,18 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import {
   findMainRepoRoot,
   parseAndWriteMessage,
   getBranch,
   hasPR,
   getHead,
+  isPRMerged,
+  createOrUpdatePR,
   type CommandRunner,
   type FileSystem,
 } from "./merge";
-import { join } from "path";
 
 describe("findMainRepoRoot", () => {
   it("should return the directory when .git exists and no parent .gitmodules", () => {
@@ -62,15 +63,14 @@ describe("findMainRepoRoot", () => {
 });
 
 describe("parseAndWriteMessage", () => {
-  const createMockFs = (): FileSystem =>
-    ({
-      existsSync: vi.fn(() => true),
-      readFileSync: vi.fn(() => ""),
-      writeFileSync: vi.fn(),
-      unlinkSync: vi.fn(),
-      mkdtempSync: vi.fn(() => "/tmp/test-123"),
-      rmSync: vi.fn(),
-    }) as unknown as FileSystem;
+  const createMockFs = (): FileSystem => ({
+    existsSync: vi.fn(() => true),
+    readFileSync: vi.fn(() => ""),
+    writeFileSync: vi.fn(),
+    unlinkSync: vi.fn(),
+    mkdtempSync: vi.fn(() => "/tmp/test-123"),
+    rmSync: vi.fn(),
+  });
 
   it("should extract conventional commit subject and body", async () => {
     const fs = createMockFs();
@@ -182,7 +182,7 @@ Let's also add filters.
     const mockExit = vi.spyOn(process, "exit").mockImplementation(() => {
       throw new Error("process.exit");
     });
-    const mockConsoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+    const mockConsoleError = vi.spyOn(console, "error").mockImplementation(vi.fn());
 
     await expect(parseAndWriteMessage("invalid output", "/tmp/title.txt", "/tmp/body.txt", fs)).rejects.toThrow(
       "process.exit",
@@ -202,7 +202,7 @@ Let's also add filters.
     const mockExit = vi.spyOn(process, "exit").mockImplementation(() => {
       throw new Error("process.exit");
     });
-    const mockConsoleLog = vi.spyOn(console, "log").mockImplementation(() => {});
+    const mockConsoleLog = vi.spyOn(console, "log").mockImplementation(vi.fn());
 
     await expect(parseAndWriteMessage("invalid output", "/tmp/title.txt", "/tmp/body.txt", fs)).rejects.toThrow(
       "process.exit",
@@ -213,6 +213,44 @@ Let's also add filters.
 
     mockExit.mockRestore();
     mockConsoleLog.mockRestore();
+  });
+
+  it("should handle AI output with prefixes", async () => {
+    const fs = createMockFs();
+    const aiOutput = `Here's a suggested commit:
+
+feat: add new feature
+
+- Implementation detail 1
+- Implementation detail 2`;
+
+    await parseAndWriteMessage(aiOutput, "/tmp/title.txt", "/tmp/body.txt", fs);
+
+    expect(fs.writeFileSync).toHaveBeenCalledWith("/tmp/title.txt", "feat: add new feature\n", { encoding: "utf8" });
+  });
+
+  it("should filter AI fluff from body", async () => {
+    const fs = createMockFs();
+    const aiOutput = `feat: implement search
+
+I'll implement the search feature.
+- Add search index
+Sure, here's the implementation:
+- Update UI
+Let's also add filters.
+- Add filters`;
+
+    await parseAndWriteMessage(aiOutput, "/tmp/title.txt", "/tmp/body.txt", fs);
+
+    const bodyCall = (fs.writeFileSync as ReturnType<typeof vi.fn>).mock.calls.find(
+      (call: [string, string, object]) => call[0] === "/tmp/body.txt",
+    );
+    expect(bodyCall?.[1]).not.toContain("I'll implement");
+    expect(bodyCall?.[1]).not.toContain("Sure, here's");
+    expect(bodyCall?.[1]).not.toContain("Let's also add");
+    expect(bodyCall?.[1]).toContain("- Add search index");
+    expect(bodyCall?.[1]).toContain("- Update UI");
+    expect(bodyCall?.[1]).toContain("- Add filters");
   });
 });
 
@@ -280,6 +318,84 @@ describe("getHead", () => {
     const result = getHead(runner);
     expect(result).toBe("abc123def456");
     expect(runner.run).toHaveBeenCalledWith("git rev-parse --verify HEAD");
+  });
+});
+
+describe("isPRMerged", () => {
+  it("should return true when PR state is MERGED", () => {
+    const runner: CommandRunner = {
+      run: vi.fn(),
+      runSilent: vi.fn(),
+      runArgv: vi.fn(() => '{"state": "MERGED"}'),
+    };
+
+    const result = isPRMerged("feature/test", runner);
+    expect(result).toBe(true);
+    expect(runner.runArgv).toHaveBeenCalledWith("gh", ["pr", "view", "feature/test", "--json", "state"]);
+  });
+
+  it("should return false when PR state is OPEN", () => {
+    const runner: CommandRunner = {
+      run: vi.fn(),
+      runSilent: vi.fn(),
+      runArgv: vi.fn(() => '{"state": "OPEN"}'),
+    };
+
+    const result = isPRMerged("feature/test", runner);
+    expect(result).toBe(false);
+  });
+
+  it("should return false when command fails", () => {
+    const runner: CommandRunner = {
+      run: vi.fn(),
+      runSilent: vi.fn(),
+      runArgv: vi.fn(() => {
+        throw new Error("not found");
+      }),
+    };
+
+    const result = isPRMerged("feature/test", runner);
+    expect(result).toBe(false);
+  });
+});
+
+describe("createOrUpdatePR", () => {
+  it("should skip update when PR is already merged", async () => {
+    const runner: CommandRunner = {
+      run: vi.fn(),
+      runSilent: vi.fn(),
+      runArgv: vi.fn((cmd: string, args: string[]) => {
+        if (args.includes("--json") && args.includes("number")) {
+          return '{"number": 42}';
+        }
+        if (args.includes("--json") && args.includes("state")) {
+          return '{"state": "MERGED"}';
+        }
+        return "";
+      }),
+    };
+
+    const fs: FileSystem = {
+      existsSync: vi.fn(() => true),
+      readFileSync: vi.fn(() => "feat: test message"),
+      writeFileSync: vi.fn(),
+      unlinkSync: vi.fn(),
+      mkdtempSync: vi.fn(() => "/tmp/test-123"),
+      rmSync: vi.fn(),
+    };
+
+    const consoleSpy = vi.spyOn(console, "log").mockImplementation(vi.fn());
+
+    await createOrUpdatePR("feature/test", runner, fs, "kimi");
+
+    expect(consoleSpy).toHaveBeenCalledWith("PR already merged, skipping title/description update.");
+    // Should not call pr edit
+    const editCall = (runner.runArgv as ReturnType<typeof vi.fn>).mock.calls.find((call: [string, string[]]) =>
+      call[1].includes("edit"),
+    );
+    expect(editCall).toBeUndefined();
+
+    consoleSpy.mockRestore();
   });
 });
 

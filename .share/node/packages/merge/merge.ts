@@ -4,18 +4,30 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+import { Command, Option, Cli } from "clipanion";
 import { execFileSync, execSync } from "child_process";
 import { existsSync, mkdtempSync, readFileSync, rmSync, unlinkSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
+import { logger } from "./logger";
 
-const ENGINE = process.env.ENGINE || "kimi";
+export type Engine = "kimi" | "junie" | "copilot";
+
+const ENGINES: Engine[] = ["kimi", "junie", "copilot"];
+
+function validateEngine(engine: string): Engine {
+  if (ENGINES.includes(engine as Engine)) {
+    return engine as Engine;
+  }
+  console.error(`Error: Invalid engine "${engine}". Valid engines: ${ENGINES.join(", ")}`);
+  process.exit(1);
+}
 
 export interface CommandRunner {
-  run(cmd: string, opts?: { cwd?: string; env?: Record<string, string> }): string;
-  runSilent(cmd: string, args: string[], opts?: { cwd?: string }): string;
+  run: (cmd: string, opts?: { cwd?: string; env?: Record<string, string> }) => string;
+  runSilent: (cmd: string, args: string[], opts?: { cwd?: string }) => string;
   // Safer argv-based execution to avoid shell injection
-  runArgv(cmd: string, args: string[], opts?: { cwd?: string; env?: Record<string, string> }): string;
+  runArgv: (cmd: string, args: string[], opts?: { cwd?: string; env?: Record<string, string> }) => string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -102,6 +114,16 @@ export function hasPR(branch?: string, runner: CommandRunner = defaultRunner): b
   }
 }
 
+export function isPRMerged(branch: string, runner: CommandRunner = defaultRunner): boolean {
+  try {
+    const output = runner.runArgv("gh", ["pr", "view", branch, "--json", "state"]);
+    const parsed = JSON.parse(output) as { state: string };
+    return parsed.state === "MERGED";
+  } catch {
+    return false;
+  }
+}
+
 export function getHead(runner: CommandRunner = defaultRunner): string {
   return runner.run("git rev-parse --verify HEAD");
 }
@@ -111,6 +133,7 @@ export async function generateMessage(
   bodyFile: string,
   tmpDir: string,
   runner: CommandRunner = defaultRunner,
+  engine: Engine = "kimi",
 ): Promise<void> {
   const diffRange = "origin/HEAD...HEAD";
 
@@ -119,23 +142,28 @@ export async function generateMessage(
     runner.run(`git diff --quiet --exit-code ${diffRange}`);
     console.log("No changes to generate message for");
     process.exit(2);
-  } catch {
-    // Has changes, continue
+  } catch (e) {
+    logger.debug("git diff-tree failed (expected if there are changes):", e instanceof Error ? e.message : String(e));
   }
 
   const changedFiles = runner.run(`git diff --name-only ${diffRange}`).split("\n").slice(0, 400).join("\n");
   const changedDiff = runner.run(`git diff ${diffRange}`).split("\n").slice(0, 2000).join("\n");
 
-  if (ENGINE === "kimi") {
+  if (engine === "kimi") {
     await generateWithKimi(titleFile, bodyFile, changedDiff, tmpDir);
-  } else if (ENGINE === "junie") {
+  } else if (engine === "junie") {
     await generateWithJunie(titleFile, bodyFile, changedDiff, tmpDir);
   } else {
     await generateWithCopilot(titleFile, bodyFile, changedDiff, changedFiles, tmpDir);
   }
 }
 
-async function generateWithKimi(titleFile: string, bodyFile: string, diff: string, tmpDir: string): Promise<void> {
+export async function generateWithKimi(
+  titleFile: string,
+  bodyFile: string,
+  diff: string,
+  tmpDir: string,
+): Promise<void> {
   const skillsDir = ".agents/skills";
   const hasSkillsDir = existsSync(skillsDir);
 
@@ -160,8 +188,8 @@ ${diff}`;
         encoding: "utf8",
         shell: "/bin/bash",
       });
-    } catch {
-      // Ignore errors, check output below
+    } catch (e) {
+      logger.debug("kimi output check failed:", e instanceof Error ? e.message : String(e));
     }
 
     try {
@@ -179,11 +207,18 @@ ${diff}`;
     try {
       unlinkSync(promptFile);
       unlinkSync(kimiOut);
-    } catch {}
+    } catch (e) {
+      logger.debug("Failed to cleanup temp file:", e instanceof Error ? e.message : String(e));
+    }
   }
 }
 
-async function generateWithJunie(titleFile: string, bodyFile: string, diff: string, tmpDir: string): Promise<void> {
+export async function generateWithJunie(
+  titleFile: string,
+  bodyFile: string,
+  diff: string,
+  tmpDir: string,
+): Promise<void> {
   const promptFile = join(tmpDir, "junie-prompt.txt");
   const prompt = `Generate a conventional commit message for the following diff and write the subject line to '${titleFile}' and the body to '${bodyFile}'. Do not run any tests or gradle commands.
 
@@ -212,11 +247,13 @@ ${diff}`;
   } finally {
     try {
       unlinkSync(promptFile);
-    } catch {}
+    } catch (e) {
+      logger.debug("Failed to cleanup junie temp file:", e instanceof Error ? e.message : String(e));
+    }
   }
 }
 
-async function generateWithCopilot(
+export async function generateWithCopilot(
   titleFile: string,
   bodyFile: string,
   diff: string,
@@ -257,8 +294,12 @@ ${diff}`;
 
   const copilotOut = join(tmpDir, "copilot-out.txt");
   const copilotErr = join(tmpDir, "copilot-err.txt");
+  // Ensure files exist even if copilot fails immediately
+  writeFileSync(copilotOut, "", "utf8");
+  writeFileSync(copilotErr, "", "utf8");
 
   try {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const model = process.env.COPILOT_PRMSG_MODEL || "gpt-5.1-codex-mini";
     try {
       const result = execFileSync("copilot", ["--model", model, "-s", "-p", promptFile], {
@@ -266,7 +307,7 @@ ${diff}`;
       });
       writeFileSync(copilotOut, result, "utf8");
     } catch (e: unknown) {
-      const stderr = e && typeof e === "object" && "stderr" in e ? String((e as { stderr: unknown }).stderr) : "";
+      const stderr = e && typeof e === "object" && "stderr" in e ? String(e.stderr) : "";
       writeFileSync(copilotErr, stderr, "utf8");
     }
 
@@ -274,6 +315,7 @@ ${diff}`;
     const err = readFileSync(copilotErr, "utf8");
 
     if (!output && err.includes("enable this model")) {
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       const fallback = process.env.COPILOT_PRMSG_FALLBACK_MODEL || "gpt-5.1-codex";
       try {
         const result = execFileSync("copilot", ["--model", fallback, "-s", "-p", promptFile], {
@@ -292,7 +334,9 @@ ${diff}`;
       unlinkSync(promptFile);
       unlinkSync(copilotOut);
       unlinkSync(copilotErr);
-    } catch {}
+    } catch (e) {
+      logger.debug("Failed to cleanup copilot temp files:", e instanceof Error ? e.message : String(e));
+    }
   }
 }
 
@@ -327,11 +371,13 @@ export async function parseAndWriteMessage(
     // Check if there's an existing valid PR message to preserve
     try {
       const existing = fs.readFileSync(titleFile, { encoding: "utf8" }).trim();
-      if (existing && !existing.match(/^error\([^)]+\):/)) {
+      if (existing && !/^error\([^)]+\):/.exec(existing)) {
         console.log("Preserving existing PR message");
         process.exit(0);
       }
-    } catch {}
+    } catch {
+      logger.debug("No existing PR message to preserve");
+    }
 
     console.error("ERROR: Failed to generate valid conventional commit subject");
     if (aiOutput) {
@@ -360,7 +406,7 @@ export async function parseAndWriteMessage(
 
   // Clean up body
   const body = bodyLines
-    .filter((l) => !l.match(/^(I'll|I will|Sure|Here's|Proposed|Suggested|I inspected|Let's)\b/i))
+    .filter((l) => !/^(I'll|I will|Sure|Here's|Proposed|Suggested|I inspected|Let's)\b/i.exec(l))
     .slice(0, 12)
     .join("\n")
     .trim();
@@ -369,7 +415,7 @@ export async function parseAndWriteMessage(
   fs.writeFileSync(bodyFile, body, { encoding: "utf8" });
 }
 
-async function waitForChecks(repoRoot: string = MAIN_REPO_ROOT): Promise<void> {
+export async function waitForChecks(repoRoot: string = MAIN_REPO_ROOT): Promise<void> {
   console.log("Waiting for PR checks to complete...");
 
   try {
@@ -384,6 +430,7 @@ export async function createOrUpdatePR(
   branch: string,
   runner: CommandRunner = defaultRunner,
   fs: FileSystem = { existsSync, readFileSync, writeFileSync, unlinkSync, mkdtempSync, rmSync },
+  engine: Engine = "kimi",
 ): Promise<void> {
   const tmpDir = fs.mkdtempSync(join(tmpdir(), "pr-"));
   const titleFile = join(tmpDir, "title.txt");
@@ -392,21 +439,33 @@ export async function createOrUpdatePR(
   const headBefore = getHead(runner);
 
   try {
-    if (hasPR(branch, runner)) {
+    const hasExistingPR = hasPR(branch, runner);
+
+    if (hasExistingPR && isPRMerged(branch, runner)) {
+      console.log("PR already merged, skipping title/description update.");
+      return;
+    }
+
+    if (hasExistingPR) {
       console.log("Updating PR message...");
     }
 
-    await generateMessage(titleFile, bodyFile, tmpDir, runner);
+    await generateMessage(titleFile, bodyFile, tmpDir, runner, engine);
     const headAfter = getHead(runner);
 
     // Regenerate if HEAD changed during generation
     if (headBefore !== headAfter) {
-      await generateMessage(titleFile, bodyFile, tmpDir, runner);
+      await generateMessage(titleFile, bodyFile, tmpDir, runner, engine);
     }
 
     const title = fs.readFileSync(titleFile, { encoding: "utf8" }).trim();
 
-    if (hasPR(branch, runner)) {
+    if (hasExistingPR) {
+      // Double-check merged status after generation
+      if (isPRMerged(branch, runner)) {
+        console.log("PR already merged, skipping title/description update.");
+        return;
+      }
       // Use runArgv to avoid shell injection with title
       runner.runArgv("gh", ["pr", "edit", branch, "--title", title, "--body-file", bodyFile]);
       try {
@@ -435,99 +494,147 @@ export async function createOrUpdatePR(
   } finally {
     try {
       fs.rmSync(tmpDir, { recursive: true, force: true });
-    } catch {}
+    } catch (e) {
+      logger.debug("Failed to cleanup temp directory:", e instanceof Error ? e.message : String(e));
+    }
   }
 }
 
-async function main(): Promise<void> {
-  const args = process.argv.slice(2);
-  const command = args[0];
-  const dryRun = args.includes("--dry-run");
+export class PrMessageCommand extends Command {
+  public static paths = [["pr-message"]];
 
-  if (command === "pr-message") {
-    let titleFile = "";
-    let bodyFile = "";
+  public titleFile = Option.String("--title-file", {
+    required: true,
+    description: "Path to write PR title",
+  });
 
-    for (let i = 1; i < args.length; i += 2) {
-      if (args[i] === "--title-file") titleFile = args[i + 1];
-      if (args[i] === "--body-file") bodyFile = args[i + 1];
-    }
+  public bodyFile = Option.String("--body-file", {
+    required: true,
+    description: "Path to write PR body",
+  });
 
-    if (!titleFile || !bodyFile) {
-      console.error("Usage: merge.ts pr-message --title-file PATH --body-file PATH");
-      process.exit(2);
-    }
+  public engine = Option.String("--engine,-e", "kimi", {
+    description: "AI engine to use (kimi, junie, copilot)",
+  });
 
+  private readonly runner: CommandRunner;
+
+  public constructor(runner: CommandRunner = defaultRunner) {
+    super();
+    this.runner = runner;
+  }
+
+  public async execute(): Promise<number> {
     const tmpDir = mkdtempSync(join(tmpdir(), "prmsg-"));
     try {
-      await generateMessage(titleFile, bodyFile, tmpDir);
+      await generateMessage(this.titleFile, this.bodyFile, tmpDir, this.runner, validateEngine(this.engine));
+      return 0;
+    } catch (e) {
+      console.error(e instanceof Error ? e.message : String(e));
+      return 1;
     } finally {
       try {
         rmSync(tmpDir, { recursive: true, force: true });
-      } catch {}
+      } catch (e) {
+        logger.debug("Failed to cleanup temp directory:", e instanceof Error ? e.message : String(e));
+      }
     }
-    return;
   }
-
-  // Full merge workflow
-  // Capture branch name BEFORE any git operations that might change it
-  const currentBranch = getBranch();
-  console.log(`Current branch: ${currentBranch}`);
-
-  console.log("Fetching and merging origin/HEAD...");
-  defaultRunner.run("git fetch --all --prune --prune-tags --tags --force");
-  defaultRunner.run("git merge origin/HEAD");
-
-  console.log("Pushing...");
-  defaultRunner.run("git push");
-
-  const hasExistingPR = hasPR(currentBranch);
-
-  if (hasExistingPR) {
-    await waitForChecks();
-    await createOrUpdatePR(currentBranch);
-  } else {
-    await createOrUpdatePR(currentBranch);
-    await waitForChecks();
-  }
-
-  if (dryRun) {
-    console.log("\n[Dry Run] Would proceed with squash merge. Exiting without merging.");
-    process.exit(0);
-  }
-
-  // Merge squash
-  const hasUncommitted = defaultRunner.runSilent("git", ["status", "--porcelain=1"]) !== "";
-  if (hasUncommitted) {
-    console.warn("WARNING: Uncommitted changes detected. Review before merge.");
-  }
-
-  process.stdout.write("Proceed with squash merge? [Y/n] ");
-
-  if (!process.stdin.isTTY) {
-    console.error("Interactive confirmation required, but no TTY is available. Aborting squash merge.");
-    process.exit(1);
-  }
-
-  const reply = await new Promise<string>((resolve) => {
-    process.stdin.once("data", (data) => resolve(data.toString().trim().toLowerCase()));
-  });
-
-  if (reply === "n" || reply === "no") {
-    console.log("Merge cancelled.");
-    process.exit(1);
-  }
-
-  defaultRunner.run("gh pr merge --squash --delete-branch");
-  process.exit(0);
 }
 
-// Only run main if this file is executed directly (not imported for testing)
-// Check if we're the entry point by comparing process.argv[1]
+export class MergeCommand extends Command {
+  public static paths = [["merge"], Command.Default];
+
+  public dryRun = Option.Boolean("--dry-run", false, {
+    description: "Show what would be done without making changes",
+  });
+
+  public engine = Option.String("--engine,-e", "kimi", {
+    description: "AI engine to use (kimi, junie, copilot)",
+  });
+
+  private readonly runner: CommandRunner;
+
+  public constructor(runner: CommandRunner = defaultRunner) {
+    super();
+    this.runner = runner;
+  }
+
+  public async execute(): Promise<number> {
+    try {
+      // Full merge workflow
+      // Capture branch name BEFORE any git operations that might change it
+      const currentBranch = getBranch(this.runner);
+      console.log(`Current branch: ${currentBranch}`);
+
+      console.log("Fetching and merging origin/HEAD...");
+      this.runner.run("git fetch --all --prune --prune-tags --tags --force");
+      this.runner.run("git merge origin/HEAD");
+
+      console.log("Pushing...");
+      this.runner.run("git push");
+
+      const hasExistingPR = hasPR(currentBranch, this.runner);
+
+      const engine = validateEngine(this.engine);
+      if (hasExistingPR) {
+        await waitForChecks();
+        await createOrUpdatePR(currentBranch, this.runner, undefined, engine);
+      } else {
+        await createOrUpdatePR(currentBranch, this.runner, undefined, engine);
+        await waitForChecks();
+      }
+
+      if (this.dryRun) {
+        console.log("\n[Dry Run] Would proceed with squash merge. Exiting without merging.");
+        return 0;
+      }
+
+      // Merge squash
+      const hasUncommitted = this.runner.runSilent("git", ["status", "--porcelain=1"]) !== "";
+      if (hasUncommitted) {
+        console.warn("WARNING: Uncommitted changes detected. Review before merge.");
+      }
+
+      process.stdout.write("Proceed with squash merge? [Y/n] ");
+
+      if (!process.stdin.isTTY) {
+        console.error("Interactive confirmation required, but no TTY is available. Aborting squash merge.");
+        return 1;
+      }
+
+      const reply = await new Promise<string>((resolve) => {
+        process.stdin.once("data", (data) => {
+          resolve(data.toString().trim().toLowerCase());
+        });
+      });
+
+      if (reply === "n" || reply === "no") {
+        console.log("Merge cancelled.");
+        return 1;
+      }
+
+      this.runner.run("gh pr merge --squash --delete-branch");
+      return 0;
+    } catch (e) {
+      console.error(e instanceof Error ? e.message : String(e));
+      return 1;
+    }
+  }
+}
+
+// Only run CLI if this file is executed directly (not imported for testing)
+// eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
 const isMainModule = process.argv[1]?.endsWith("merge.ts") || process.argv[1]?.endsWith("merge.js");
 if (isMainModule) {
-  main().catch((e) => {
-    console.error(e);
-    process.exit(1);
+  const cli = new Cli({
+    binaryLabel: "merge",
+    binaryName: "merge",
+    binaryVersion: "1.0.0",
   });
+
+  cli.register(PrMessageCommand);
+  cli.register(MergeCommand);
+
+  void cli.runExit(process.argv.slice(2), Cli.defaultContext);
 }
