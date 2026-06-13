@@ -19,5 +19,5 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 ## Sub-skills
 
-- **`coding-standards`** — Use when writing or modifying code in any language.
-- **`testing`** — Use when creating, modifying, debugging, or discussing tests.
+- **`code-quality.coding-standards`** — Use when writing or modifying code in any language.
+- **`code-quality.testing`** — Use when creating, modifying, debugging, or discussing tests.

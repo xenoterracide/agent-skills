@@ -19,10 +19,10 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 ## Sub-skills
 
-- **`pull-request`** — Use whenever files are created, modified, or deleted;
-  handles committing, pushing, and PR lifecycle.
-- **`commit-message`** — Use when writing a commit message, PR title, or PR
-  description.
+- **`git-workflow.pull-request`** — Use whenever files are created, modified,
+  or deleted; handles committing, pushing, and PR lifecycle.
+- **`git-workflow.commit-message`** — Use when writing a commit message, PR
+  title, or PR description.
 
 ## Git Hooks
 

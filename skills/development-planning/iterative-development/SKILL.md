@@ -304,10 +304,10 @@ As you write code together, watch for signals that the model needs refinement:
 
 ### Integration with Other Skills
 
-- **use-case-creator** - Use cases evolve; update them as understanding grows
-- **testing** - Tests capture and protect domain understanding
+- **development-planning.use-case-creator** - Use cases evolve; update them as understanding grows
+- **code-quality.testing** - Tests capture and protect domain understanding
 - **domain-driven-design** (if available) - Deep model refinement
-- **coding-standards** - Refactoring skills support iteration
+- **code-quality.coding-standards** - Refactoring skills support iteration
 
 ---
 

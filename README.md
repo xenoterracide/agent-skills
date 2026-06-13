@@ -46,13 +46,13 @@ See [`AGENTS.md`](AGENTS.md#skill-routing) for the full skill routing table.
   agent-specific guidance.
 - See [`CONTRIBUTING.md`](CONTRIBUTING.md) for human contributor setup, linting,
   testing, and pull request workflow.
-- Use the [`skill-creator`](skills/docs-creator/skill-creator/SKILL.md)
+- Use the [`docs-creator.skill-creator`](skills/docs-creator/skill-creator/SKILL.md)
   skill when adding or updating skills.
-- Use the [`agents-creator`](skills/docs-creator/agents-creator/SKILL.md)
+- Use the [`docs-creator.agents-creator`](skills/docs-creator/agents-creator/SKILL.md)
   skill when writing or revising `AGENTS.md` files.
-- Use the [`readme-creator`](skills/docs-creator/readme-creator/SKILL.md)
+- Use the [`docs-creator.readme-creator`](skills/docs-creator/readme-creator/SKILL.md)
   skill when writing or revising `README.md` files.
-- Use the [`contributing-creator`](skills/docs-creator/contributing-creator/SKILL.md)
+- Use the [`docs-creator.contributing-creator`](skills/docs-creator/contributing-creator/SKILL.md)
   skill when writing or revising `CONTRIBUTING.md` files.
 
 ## License

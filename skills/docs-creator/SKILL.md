@@ -22,9 +22,9 @@ Parent bundle for authoring and maintaining project documentation and skills.
 
 ## Sub-Skills
 
-- **`skill-creator`** — Creating and maintaining AI skill definitions
-- **`agents-creator`** — Creating and maintaining `AGENTS.md` files
-- **`readme-creator`** — Creating and maintaining `README.md` files
-- **`contributing-creator`** — Creating and maintaining `CONTRIBUTING.md` files
+- **`docs-creator.skill-creator`** — Creating and maintaining AI skill definitions
+- **`docs-creator.agents-creator`** — Creating and maintaining `AGENTS.md` files
+- **`docs-creator.readme-creator`** — Creating and maintaining `README.md` files
+- **`docs-creator.contributing-creator`** — Creating and maintaining `CONTRIBUTING.md` files
 
 Load the relevant sub-skill based on the file you are editing.

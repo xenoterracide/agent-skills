@@ -19,8 +19,8 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 **This skill applies whenever files are created, modified, or deleted.**
 
-- Apply `coding-standards` rules — review your code against them before submitting
-- Use `commit-message` skill for all commit messages and PR descriptions
+- Apply `code-quality.coding-standards` rules — review your code against them before submitting
+- Use `git-workflow.commit-message` skill for all commit messages and PR descriptions
 - Keep the PR description up to date (it becomes the squash-merge commit message)
   - Do NOT use checkboxes (`- [x]`) — use plain bullet lists (`- item`)
 - files should be committed and pushed
@@ -99,7 +99,7 @@ Before creating or updating a PR:
 2. Review your own diff — would you approve this if someone else wrote it?
 3. Check for obvious issues (debug prints, TODOs without tickets, unjustified suppressions)
 
-See `coding-standards` (Rule 5: Code Quality Standards) for the full checklist.
+See `code-quality.coding-standards` (Rule 5: Code Quality Standards) for the full checklist.
 
 **Fix issues yourself before requesting human review.**
 
@@ -134,7 +134,7 @@ Follow conventional commit format for PR titles (they become the squash merge co
 
 ### Commit Message and PR Body Format
 
-Follow the `commit-message` skill for commit message format, PR body structure,
+Follow the `git-workflow.commit-message` skill for commit message format, PR body structure,
 and the mandatory "why" paragraph. PR descriptions become permanent commit
 history via squash merge.
 
