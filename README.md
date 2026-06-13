@@ -43,8 +43,8 @@ Copy the `skills/` directory into your agent's skill discovery path:
 | `github`                            | GitHub CLI, GraphQL, and platform patterns        |
 | `shell-script`                      | POSIX, Bash, and Zsh scripting guidance           |
 | `testing`                           | Test philosophy, patterns, and anti-patterns      |
-| `commit-message`                    | Conventional commit and PR description format     |
-| `pull-request`                      | Commit, push, and PR lifecycle management         |
+| `git-workflow/commit-message`       | Conventional commit and PR description format     |
+| `git-workflow/pull-request`         | Commit, push, and PR lifecycle management         |
 | `iterative-development`             | Planning and domain model evolution               |
 | `use-case-creator`                  | Cockburn/AsciiDoc use case specifications         |
 | `docs-creator/skill-creator`        | Creating and maintaining agent skills             |

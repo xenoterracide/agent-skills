@@ -53,10 +53,10 @@ workflows.
 │   ├── development-planning/
 │   │   ├── iterative-development/
 │   │   └── use-case-creator/
+│   ├── session-init/                # Git state verification at session start
 │   ├── git-workflow/
 │   │   ├── commit-message/
-│   │   ├── pull-request/
-│   │   └── session-init/
+│   │   └── pull-request/
 │   ├── github/
 │   ├── gradle/
 │   ├── java/
@@ -294,7 +294,7 @@ right skill is not obvious:
 
 | Skill                                        | Scope                                                  | Activate When                                                                         |
 | -------------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| `git-workflow/session-init`                  | Git state verification at session start                | Starting work in a repo session                                                       |
+| `session-init`                               | Git state verification at session start                | Starting work in a repo session                                                       |
 | `git-workflow/pull-request`                  | Commit, push, and PR lifecycle                         | Any repository file is created, modified, or deleted; PR review comments              |
 | `git-workflow/commit-message`                | Conventional commit and PR description formatting      | Writing a commit message, PR title, or PR description                                 |
 | `code-quality/coding-standards`              | Cross-language coding principles and quality standards | Implementing or changing code in any language                                         |
