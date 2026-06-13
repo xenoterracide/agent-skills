@@ -31,12 +31,7 @@ yarn lint
 
 ## Gradle / Kotlin or Java
 
-Gradle lifecycle tasks do different amounts of work:
-
-- `./gradlew testClasses` — compiles main and test code (cheap)
-- `./gradlew assemble` — builds artifacts without running tests
-- `./gradlew build` — compiles, tests, and packages everything
-- `./gradlew check` — runs tests and verification without producing artifacts
+See the `gradle` skill for lifecycle task details. Common commands:
 
 ````markdown
 ## Setup
@@ -49,7 +44,7 @@ Gradle lifecycle tasks do different amounts of work:
 
 ```bash
 ./gradlew testClasses
-./gradlew check
+./gradlew check --console plain
 ```
 ````
 
