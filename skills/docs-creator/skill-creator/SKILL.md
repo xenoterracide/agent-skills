@@ -88,6 +88,10 @@ Optional fields:
     about running trusted shell scripts
   - Do **not** use this as a substitute for clear instructions in the body
 
+- **`has-sub-skill`**: Set to `true` for parent bundles that contain sub-skills
+  - Example: `has-sub-skill: true`
+  - Required when the skill directory contains child skill directories
+
 Keep frontmatter small and focused on activation plus carefully chosen
 pre-approval.
 

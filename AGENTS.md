@@ -47,7 +47,6 @@ workflows.
 ├── package.json                 # Node project scripts and dev deps
 ├── pyproject.toml               # Python project metadata (uv)
 ├── skills/                      # Skill definitions
-│   ├── agents-creator/
 │   ├── code-quality/
 │   │   ├── coding-standards/
 │   │   └── testing/
@@ -278,7 +277,7 @@ All hooks exit early when `CI` is set.
 
 ### Session Initialization
 
-At the start of every session, load `git-workflow/session-init` logic:
+At the start of every session, load the top-level `session-init` skill:
 
 1. Read `README.md` and this `AGENTS.md`.
 2. Run `git fetch --all --prune`.
