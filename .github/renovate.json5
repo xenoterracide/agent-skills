@@ -8,7 +8,7 @@
   dependencyDashboard: true,
   timezone: "UTC",
   platformAutomerge: true,
-  automergeStrategy: "squash",
+  automergeStrategy: "rebase",
   // Rebase whenever PR falls behind base branch to keep them mergeable
   rebaseWhen: "behind-base-branch",
   // Subtrees are excluded - updates should be pulled via git subtree pull, not Renovate
@@ -24,22 +24,8 @@
   ],
   packageRules: [
     {
-      matchManagers: ["maven"],
-      matchUpdateTypes: ["major", "minor", "patch"],
-      automerge: true,
-    },
-    {
-      // Python deps via uv: Run daily at 03:00 UTC (after update-java)
-      schedule: ["* 3 * * *"],
-      matchManagers: ["pep621"],
-      automerge: true,
-    },
-    {
-      matchManagers: ["pyenv"],
-      automerge: true,
-    },
-    {
-      matchManagers: ["github-actions"],
+      matchManagers: ["asdf", "maven", "npm", "pyenv", "pep621", "github-actions"],
+      branchTopic: "{{{depNameSanitized}}}-{{{newVersion}}}",
       automerge: true,
     },
     {
@@ -47,16 +33,8 @@
       // Only these get digest pins; other actions get normal version tag updates
       matchManagers: ["github-actions"],
       matchDepNames: ["xenoterracide/**"],
-      automerge: true,
-      pinDigests: true,
-    },
-    {
-      // Run every Wednesday
-      // Window: 04:00 UTC hour on Wednesday (Renovate cron uses '*' for minutes)
-      schedule: ["* 4 * * 3"],
-      matchManagers: ["npm", "asdf"],
-      groupName: "devDependencies",
-      matchUpdateTypes: ["minor", "patch", "pin"],
+      extends: ["helpers:pinGitHubActionDigests"],
+      branchTopic: "{{{depNameSanitized}}}-{{{newDigestShort}}}",
       automerge: true,
     },
   ],
