@@ -8,6 +8,9 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 Use these as starting points for the `Build, Test, and Lint` section.
 
+Different tools combine compile, test, and verification differently. Use the
+commands that match the project's tooling.
+
 ## Yarn / Node
 
 ````markdown
@@ -28,6 +31,9 @@ yarn lint
 
 ## Gradle / Kotlin or Java
 
+`./gradlew build` compiles, tests, and packages. Use `./gradlew check` for
+verification without producing artifacts, or run phases separately.
+
 ````markdown
 ## Setup
 
@@ -39,12 +45,14 @@ yarn lint
 
 ```bash
 ./gradlew build
-./gradlew test
 ./gradlew check
 ```
 ````
 
 ## Maven / Java
+
+`mvn compile` compiles. `mvn test` compiles and runs unit tests. `mvn verify`
+runs the full verification lifecycle including integration tests.
 
 ````markdown
 ## Setup
