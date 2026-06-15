@@ -112,23 +112,36 @@ when creating new files:
 
 Load the relevant skill when the trigger applies:
 
-| Skill                                        | Activate When                                               |
-| -------------------------------------------- | ----------------------------------------------------------- |
-| `session-init`                               | Starting work in a repo session                             |
-| `git-workflow.pull-request`                  | Creating/updating PRs, committing, pushing, review comments |
-| `git-workflow.commit-message`                | Writing commit messages, PR titles, or PR descriptions      |
-| `code-quality.coding-standards`              | Writing or modifying code in any language                   |
-| `code-quality.testing`                       | Adding, updating, debugging, or discussing tests            |
-| `development-planning.iterative-development` | Scoping or refining designs                                 |
-| `development-planning.use-case-creator`      | Writing use cases or business behavior docs                 |
-| `github`                                     | GitHub APIs, issues, GraphQL, review threads                |
-| `java`                                       | Creating or modifying `.java` files                         |
-| `gradle`                                     | Editing Gradle build files or resolving dependencies        |
-| `shell-script`                               | Writing or editing shell scripts or shell config            |
-| `docs-creator.skill-creator`                 | Creating or editing `SKILL.md` files                        |
-| `docs-creator.agents-creator`                | Creating or editing `AGENTS.md` files                       |
-| `docs-creator.readme-creator`                | Writing or revising `README.md`                             |
-| `docs-creator.contributing-creator`          | Writing or revising `CONTRIBUTING.md`                       |
+| Skill                                              | Activate When                                                |
+| -------------------------------------------------- | ------------------------------------------------------------ |
+| `session-init`                                     | Starting work in a repo session                              |
+| `session-init.using-skills`                        | Starting any conversation or deciding which skills to invoke |
+| `git-workflow.pull-request`                        | Creating/updating PRs, committing, pushing, review comments  |
+| `git-workflow.commit-message`                      | Writing commit messages, PR titles, or PR descriptions       |
+| `git-workflow.finishing-a-development-branch`      | Completing and merging a development branch                  |
+| `git-workflow.using-git-worktrees`                 | Using git worktrees for isolated feature work                |
+| `code-quality.coding-standards`                    | Writing or modifying code in any language                    |
+| `code-quality.testing`                             | Adding, updating, debugging, or discussing tests             |
+| `code-quality.test-driven-development`             | Implementing features or bugfixes with TDD                   |
+| `code-quality.systematic-debugging`                | Debugging test failures, flaky tests, or unexpected behavior |
+| `code-quality.verification-before-completion`      | Verifying work before claiming it is complete or passing     |
+| `code-quality.receiving-code-review`               | Responding to code review feedback or review comments        |
+| `code-quality.requesting-code-review`              | Requesting code review before merging                        |
+| `development-planning.iterative-development`       | Scoping or refining designs                                  |
+| `development-planning.use-case-creator`            | Writing use cases or business behavior docs                  |
+| `development-planning.brainstorming`               | Exploring ideas, requirements, or creative solutions         |
+| `development-planning.dispatching-parallel-agents` | Running independent tasks in parallel with subagents         |
+| `development-planning.executing-plans`             | Executing written implementation plans                       |
+| `development-planning.writing-plans`               | Creating implementation plans                                |
+| `docs-creator.skill-creator`                       | Creating or editing `SKILL.md` files                         |
+| `docs-creator.writing-skills`                      | Creating new skills or editing existing skills               |
+| `docs-creator.agents-creator`                      | Creating or editing `AGENTS.md` files                        |
+| `docs-creator.readme-creator`                      | Writing or revising `README.md`                              |
+| `docs-creator.contributing-creator`                | Writing or revising `CONTRIBUTING.md`                        |
+| `github`                                           | GitHub APIs, issues, GraphQL, review threads                 |
+| `java`                                             | Creating or modifying `.java` files                          |
+| `gradle`                                           | Editing Gradle build files or resolving dependencies         |
+| `shell-script`                                     | Writing or editing shell scripts or shell config             |
 
 ## Maintenance
 
@@ -152,6 +165,12 @@ Load the relevant skill when the trigger applies:
 
 - **Skills and documentation**: CC-BY-NC-SA-4.0
 - **Configuration files**: CC0-1.0
+- **Superpowers-derived skills**: MIT (see individual file headers and
+  `LICENSES/MIT.txt`)
+
+Several skills were derived from the MIT-licensed
+[superpowers](https://github.com/obra/superpowers) project by Jesse Vincent and
+contributors. Those files retain their MIT license and copyright notice.
 
 ---
 

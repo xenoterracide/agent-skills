@@ -47,6 +47,10 @@ module.exports = {
   // JetBrains obnoxiously assume that properties files aren't utf8 by default, and so to avoid rendering issues we
   // avoid adding the Unicode copyright symbol
   "*.properties": run([`${reuse} ${copyright} ${licenseConfiguration}`, prettier]),
-  // code our real business logic lives in
-  "*.{ts,java}": run([`${reuse} ${copyright} ${symbol} ${licenseCode}`, prettier]),
+  // Skill files carry their own SPDX headers (CC-BY-NC-SA-4.0 or MIT) and frontmatter;
+  // reuse annotate does not handle them correctly.
+  "skills/**": run([prettier]),
+  // code our real business logic lives in; exclude skill files which carry
+  // their own MIT or CC-BY-NC-SA-4.0 headers
+  "*.{ts,java},!skills/**/*.{ts,java}": run([`${reuse} ${copyright} ${symbol} ${licenseCode}`, prettier]),
 };

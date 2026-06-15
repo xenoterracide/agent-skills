@@ -38,6 +38,11 @@ Skills are organized into bundles — `code-quality`, `git-workflow`,
 `development-planning`, and `docs-creator` — plus standalone skills for `java`,
 `gradle`, `github`, `shell-script`, and `session-init`.
 
+The plugin also includes proven planning, debugging, review, and delivery
+workflows derived from the MIT-licensed
+[superpowers](https://github.com/obra/superpowers) project by Jesse Vincent and
+contributors. Those files retain their MIT license and copyright notice.
+
 See [`AGENTS.md`](AGENTS.md#skill-routing) for the full skill routing table.
 
 ## Development

@@ -39,3 +39,59 @@ SPDX-License-Identifier = "Apache-2.0"
 path = "mvnw.cmd"
 SPDX-FileCopyrightText = "Apache Software Foundation"
 SPDX-License-Identifier = "Apache-2.0"
+[[annotations]]
+path = "skills/development-planning/brainstorming/**"
+SPDX-FileCopyrightText = "Copyright © 2024-2026 Jesse Vincent and contributors"
+SPDX-License-Identifier = "MIT"
+[[annotations]]
+path = "skills/development-planning/dispatching-parallel-agents/**"
+SPDX-FileCopyrightText = "Copyright © 2024-2026 Jesse Vincent and contributors"
+SPDX-License-Identifier = "MIT"
+[[annotations]]
+path = "skills/development-planning/executing-plans/**"
+SPDX-FileCopyrightText = "Copyright © 2024-2026 Jesse Vincent and contributors"
+SPDX-License-Identifier = "MIT"
+[[annotations]]
+path = "skills/development-planning/subagent-driven-development/**"
+SPDX-FileCopyrightText = "Copyright © 2024-2026 Jesse Vincent and contributors"
+SPDX-License-Identifier = "MIT"
+[[annotations]]
+path = "skills/development-planning/writing-plans/**"
+SPDX-FileCopyrightText = "Copyright © 2024-2026 Jesse Vincent and contributors"
+SPDX-License-Identifier = "MIT"
+[[annotations]]
+path = "skills/git-workflow/finishing-a-development-branch/**"
+SPDX-FileCopyrightText = "Copyright © 2024-2026 Jesse Vincent and contributors"
+SPDX-License-Identifier = "MIT"
+[[annotations]]
+path = "skills/git-workflow/using-git-worktrees/**"
+SPDX-FileCopyrightText = "Copyright © 2024-2026 Jesse Vincent and contributors"
+SPDX-License-Identifier = "MIT"
+[[annotations]]
+path = "skills/code-quality/receiving-code-review/**"
+SPDX-FileCopyrightText = "Copyright © 2024-2026 Jesse Vincent and contributors"
+SPDX-License-Identifier = "MIT"
+[[annotations]]
+path = "skills/code-quality/requesting-code-review/**"
+SPDX-FileCopyrightText = "Copyright © 2024-2026 Jesse Vincent and contributors"
+SPDX-License-Identifier = "MIT"
+[[annotations]]
+path = "skills/code-quality/systematic-debugging/**"
+SPDX-FileCopyrightText = "Copyright © 2024-2026 Jesse Vincent and contributors"
+SPDX-License-Identifier = "MIT"
+[[annotations]]
+path = "skills/code-quality/test-driven-development/**"
+SPDX-FileCopyrightText = "Copyright © 2024-2026 Jesse Vincent and contributors"
+SPDX-License-Identifier = "MIT"
+[[annotations]]
+path = "skills/code-quality/verification-before-completion/**"
+SPDX-FileCopyrightText = "Copyright © 2024-2026 Jesse Vincent and contributors"
+SPDX-License-Identifier = "MIT"
+[[annotations]]
+path = "skills/docs-creator/writing-skills/**"
+SPDX-FileCopyrightText = "Copyright © 2024-2026 Jesse Vincent and contributors"
+SPDX-License-Identifier = "MIT"
+[[annotations]]
+path = "skills/session-init/using-skills/**"
+SPDX-FileCopyrightText = "Copyright © 2024-2026 Jesse Vincent and contributors"
+SPDX-License-Identifier = "MIT"
