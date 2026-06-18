@@ -103,6 +103,25 @@ See `code-quality.coding-standards` (Rule 5: Code Quality Standards) for the ful
 
 **Fix issues yourself before requesting human review.**
 
+## Troubleshooting
+
+### Push rejected for workflow files
+
+If a push fails with:
+
+```
+! [remote rejected] <branch> -> <branch> (refusing to allow an OAuth App to create or update workflow `.github/workflows/...` without `workflow` scope)
+```
+
+the local base branch is likely behind `origin/develop`. Workflow files are often updated by dependency bots on the remote. Before pushing:
+
+1. Fetch the latest remote state: `git fetch origin`
+2. Check if `origin/develop` is ahead of local `develop`: `git log --oneline develop..origin/develop`
+3. Merge the latest `develop` into your feature branch: `git merge origin/develop`
+4. Push again
+
+Do not force push. If merging does not resolve the error, the OAuth token may lack the `workflow` scope.
+
 ### Squash Merge Strategy
 
 This repository uses **squash merge** for PRs. This means:
