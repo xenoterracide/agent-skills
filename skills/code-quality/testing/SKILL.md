@@ -45,12 +45,24 @@ Follow the **testing trophy** approach - value sociable and integration tests ov
 
 ## When to Use Test Doubles
 
-Use stubs/fakes (not mocks) only when:
+No mocks. Prefer real collaborators. Use test doubles only when a real collaborator is impractical.
 
-- External services you don't control
-- Non-deterministic behavior (random, time, etc.)
-- Extremely slow operations
-- Infrastructure you can't run locally
+### Prefer real collaborators
+
+Sociable tests use real objects for all internal collaborators. Use dependency inversion to make non-deterministic concerns testable with real, controlled implementations:
+
+- **Randomness** — inject a `Supplier`, function, or equivalent. In tests, pass `() -> 42`.
+- **Time** — inject a `Clock`, function, or equivalent. In tests, pass a fixed clock.
+- **Configuration** — pass values or configuration objects directly.
+
+This is not mocking; it is wiring a real dependency with a controlled implementation.
+
+### Use stubs/fakes only for non-invertable boundaries
+
+When a real collaborator cannot be used directly, use stubs/fakes:
+
+- **Standard input/output** — prefer injectable streams/writers over mocking global `stdin`/`stdout`.
+- **Third-party network services / external services you don't control** — e.g., HTTP APIs, cloud services; use stubs/fakes such as WireMock or in-memory fakes, not interaction-verifying mocks.
 
 ## Anti-patterns
 
