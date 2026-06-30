@@ -22,9 +22,10 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 - Apply `code-quality.coding-standards` rules — review your code against them before submitting
 - Use `git-workflow.commit-message` skill for all commit messages and PR descriptions
 - Keep the PR description up to date (it becomes the squash-merge commit message)
-  - Write it as a plain-text conventional-commit body: an optional grounded
-    why, then `-` bullets. No Markdown headings (`##`), bold, or checkboxes
-    (`- [x]`) — they land verbatim as noise in `git log`.
+  - Write it as a plain-text conventional-commit body (see
+    `git-workflow.commit-message`): an optional grounded why, then `-` bullets.
+    No Markdown headings (`##`), bold, fenced blocks, or checkboxes (`- [x]`) —
+    they land verbatim as noise in `git log`.
 - files should be committed and pushed
   - ensure code compiles and tests pass before committing
     - run relevant, specific tests first for quick feedback

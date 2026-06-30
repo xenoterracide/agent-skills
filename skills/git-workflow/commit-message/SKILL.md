@@ -25,17 +25,20 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 ## Rules
 
-- Output plain text only — no Markdown headings (`##`), bold, or fenced code
-  blocks. The body is reused verbatim as the squash-merge commit message.
+- Output plain text only — no Markdown headings (`##`), bold, fenced code
+  blocks, or checkboxes (`- [x]`). The body is reused verbatim as the
+  squash-merge commit message.
 - First line MUST be a valid Conventional Commit subject.
 - First line: aim for ≤ 50 characters, hard limit ≤ 72.
 - Use a specific scope when possible.
 - Use directional verbs that reflect what happened in the diff (e.g. add, remove,
   update, refactor, fix) rather than neutral nouns.
-- Write impersonally: imperative mood, no second person ("you"), no first
-  person, and no naming who reported or requested the change. Future readers
-  lack this conversation's context, so state the problem and the change as
-  standing facts (git.git / linux.git convention).
+- Write the prose body impersonally: imperative mood, no second person ("you"),
+  no first person, and no naming who reported or requested the change in prose
+  — future readers lack this conversation's context, so state the problem and
+  the change as standing facts. Credit people in trailers instead
+  (`Assisted-by:`, and `Reported-by:` / `Suggested-by:` if used), per the
+  git.git / linux.git convention.
 - Body (MANDATORY): explain WHAT changed with bullets, and add WHY when the
   motivation is not obvious from the diff (see "Grounding the Why").
   - Use bullet points explaining the main changes
@@ -49,8 +52,9 @@ The "why" captures motivation the diff cannot show. It is valuable, but it MUST
 come from a real source — never invented to fill the field. Take it, in order
 of preference, from:
 
-1. The issue or ticket the change closes — link it (`Closes #123`) and let it
-   carry the rationale instead of restating a guess.
+1. The issue or ticket the change closes — summarize the real why in one line
+   and link the issue (`Closes #123`) for the full detail; do not restate a
+   guessed rationale.
 2. The reason the user gave in the request or conversation.
 3. The review comment, bug report, or failing test that triggered the change.
 
@@ -58,9 +62,9 @@ If none of these gives you the motivation, do not guess: ask the user for one
 line, or omit the why and state only the what. A fabricated rationale in
 permanent history is worse than no rationale.
 
-Source the why from the conversation, but render it as a standing problem
-statement — write "the rejection overrode the merge guidance," not "you
-reported" or "as requested in review."
+Keep the message self-contained: source the why from the conversation, but
+render it as a standing problem statement — write "the parser dropped trailing
+commas," not "you noticed the parser dropped commas."
 
 ## Template
 
