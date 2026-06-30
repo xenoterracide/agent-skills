@@ -186,7 +186,30 @@ modify files outside your session.
 
 ## GitHub Workflow Limitations
 
-AI agents **cannot edit GitHub workflow files** (`.github/workflows/*.yml`). This is a hard limitation — workflow file modifications will fail. Other YAML files (`.yaml`) are not affected.
+An AI agent's token usually lacks the `workflow` scope, so any push that
+**creates or modifies** a file under `.github/workflows/` is rejected:
+
+```
+! [remote rejected] <branch> -> <branch> (refusing to allow an OAuth App to create or update workflow `.github/workflows/...` without `workflow` scope)
+```
+
+This does **not** always mean you edited a workflow file. The same rejection
+commonly appears on an otherwise unrelated push when your local base branch is
+behind `origin/develop` and a dependency bot updated a workflow file on the
+remote — your push would carry that change. **Verify your base is current
+before concluding it is a scope limitation:**
+
+1. Fetch the latest remote state: `git fetch origin`
+2. Check whether `origin/develop` is ahead:
+   `git log --oneline develop..origin/develop`
+3. Merge the latest base into your branch: `git merge origin/develop`, then push
+   again
+
+See `git-workflow.pull-request` ("Push rejected for workflow files") for the
+full recovery steps. Only when an up-to-date base still hits this rejection are
+you genuinely trying to edit workflow files — and **that** requires a human.
+
+Other YAML files (`.yaml`) are not affected.
 
 ### Planning Implications
 

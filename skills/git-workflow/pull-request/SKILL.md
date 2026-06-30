@@ -120,7 +120,10 @@ the local base branch is likely behind `origin/develop`. Workflow files are ofte
 3. Merge the latest `develop` into your feature branch: `git merge origin/develop`
 4. Push again
 
-Do not force push. If merging does not resolve the error, the OAuth token may lack the `workflow` scope.
+Do not force push. If an up-to-date base still hits the error, you are
+genuinely editing a workflow file: the OAuth token lacks the `workflow` scope,
+so that change must be made by a human (see `session-init`, "GitHub Workflow
+Limitations").
 
 ### Squash Merge Strategy
 
