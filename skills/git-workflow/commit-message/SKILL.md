@@ -32,6 +32,10 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 - Use a specific scope when possible.
 - Use directional verbs that reflect what happened in the diff (e.g. add, remove,
   update, refactor, fix) rather than neutral nouns.
+- Write impersonally: imperative mood, no second person ("you"), no first
+  person, and no naming who reported or requested the change. Future readers
+  lack this conversation's context, so state the problem and the change as
+  standing facts (git.git / linux.git convention).
 - Body (MANDATORY): explain WHAT changed with bullets, and add WHY when the
   motivation is not obvious from the diff (see "Grounding the Why").
   - Use bullet points explaining the main changes
@@ -53,6 +57,10 @@ of preference, from:
 If none of these gives you the motivation, do not guess: ask the user for one
 line, or omit the why and state only the what. A fabricated rationale in
 permanent history is worse than no rationale.
+
+Source the why from the conversation, but render it as a standing problem
+statement — write "the rejection overrode the merge guidance," not "you
+reported" or "as requested in review."
 
 ## Template
 
