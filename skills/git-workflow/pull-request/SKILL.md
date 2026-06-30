@@ -22,7 +22,9 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 - Apply `code-quality.coding-standards` rules — review your code against them before submitting
 - Use `git-workflow.commit-message` skill for all commit messages and PR descriptions
 - Keep the PR description up to date (it becomes the squash-merge commit message)
-  - Do NOT use checkboxes (`- [x]`) — use plain bullet lists (`- item`)
+  - Write it as a plain-text conventional-commit body: an optional grounded
+    why, then `-` bullets. No Markdown headings (`##`), bold, or checkboxes
+    (`- [x]`) — they land verbatim as noise in `git log`.
 - files should be committed and pushed
   - ensure code compiles and tests pass before committing
     - run relevant, specific tests first for quick feedback
@@ -143,9 +145,10 @@ Follow conventional commit format for PR titles (they become the squash merge co
 
 ### Commit Message and PR Body Format
 
-Follow the `git-workflow.commit-message` skill for commit message format, PR body structure,
-and the mandatory "why" paragraph. PR descriptions become permanent commit
-history via squash merge.
+Follow the `git-workflow.commit-message` skill for commit message format, PR
+body structure, and the grounded "why" (sourced from the issue, the user's
+request, or review feedback — never fabricated). PR descriptions become
+permanent commit history via squash merge.
 
 ### Creating a New PR
 
