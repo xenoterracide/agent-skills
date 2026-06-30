@@ -107,23 +107,10 @@ See `code-quality.coding-standards` (Rule 5: Code Quality Standards) for the ful
 
 ### Push rejected for workflow files
 
-If a push fails with:
-
-```
-! [remote rejected] <branch> -> <branch> (refusing to allow an OAuth App to create or update workflow `.github/workflows/...` without `workflow` scope)
-```
-
-the local base branch is likely behind `origin/develop`. Workflow files are often updated by dependency bots on the remote. Before pushing:
-
-1. Fetch the latest remote state: `git fetch origin`
-2. Check if `origin/develop` is ahead of local `develop`: `git log --oneline develop..origin/develop`
-3. Merge the latest `develop` into your feature branch: `git merge origin/develop`
-4. Push again
-
-Do not force push. If an up-to-date base still hits the error, you are
-genuinely editing a workflow file: the OAuth token lacks the `workflow` scope,
-so that change must be made by a human (see `session-init`, "GitHub Workflow
-Limitations").
+If a push is rejected with `refusing to allow ... without workflow scope`, your
+base branch is usually behind `origin/develop` (a dependency bot updated a
+workflow file on the remote), not an intentional workflow edit. See
+`git-workflow.workflow-push-rejection` for the recovery steps.
 
 ### Squash Merge Strategy
 
