@@ -22,7 +22,10 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 - Apply `code-quality.coding-standards` rules — review your code against them before submitting
 - Use `git-workflow.commit-message` skill for all commit messages and PR descriptions
 - Keep the PR description up to date (it becomes the squash-merge commit message)
-  - Do NOT use checkboxes (`- [x]`) — use plain bullet lists (`- item`)
+  - Write it as a plain-text conventional-commit body (see
+    `git-workflow.commit-message`): an optional grounded why, then `-` bullets.
+    No Markdown headings (`##`), bold, fenced blocks, or checkboxes (`- [x]`) —
+    they land verbatim as noise in `git log`.
 - files should be committed and pushed
   - ensure code compiles and tests pass before committing
     - run relevant, specific tests first for quick feedback
@@ -107,20 +110,10 @@ See `code-quality.coding-standards` (Rule 5: Code Quality Standards) for the ful
 
 ### Push rejected for workflow files
 
-If a push fails with:
-
-```
-! [remote rejected] <branch> -> <branch> (refusing to allow an OAuth App to create or update workflow `.github/workflows/...` without `workflow` scope)
-```
-
-the local base branch is likely behind `origin/develop`. Workflow files are often updated by dependency bots on the remote. Before pushing:
-
-1. Fetch the latest remote state: `git fetch origin`
-2. Check if `origin/develop` is ahead of local `develop`: `git log --oneline develop..origin/develop`
-3. Merge the latest `develop` into your feature branch: `git merge origin/develop`
-4. Push again
-
-Do not force push. If merging does not resolve the error, the OAuth token may lack the `workflow` scope.
+If a push is rejected with `refusing to allow ... without workflow scope`, your
+base branch is usually behind `origin/develop` (a dependency bot updated a
+workflow file on the remote), not an intentional workflow edit. See
+`git-workflow.workflow-push-rejection` for the recovery steps.
 
 ### Squash Merge Strategy
 
@@ -153,9 +146,10 @@ Follow conventional commit format for PR titles (they become the squash merge co
 
 ### Commit Message and PR Body Format
 
-Follow the `git-workflow.commit-message` skill for commit message format, PR body structure,
-and the mandatory "why" paragraph. PR descriptions become permanent commit
-history via squash merge.
+Follow the `git-workflow.commit-message` skill for commit message format, PR
+body structure, and the grounded "why" (sourced from the issue, the user's
+request, or review feedback — never fabricated). PR descriptions become
+permanent commit history via squash merge.
 
 ### Creating a New PR
 

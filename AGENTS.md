@@ -117,6 +117,7 @@ Load the relevant skill when the trigger applies:
 | `session-init`                               | Starting work in a repo session                             |
 | `git-workflow.pull-request`                  | Creating/updating PRs, committing, pushing, review comments |
 | `git-workflow.commit-message`                | Writing commit messages, PR titles, or PR descriptions      |
+| `git-workflow.workflow-push-rejection`       | Push rejected for `.github/workflows` / `workflow` scope    |
 | `code-quality.coding-standards`              | Writing or modifying code in any language                   |
 | `code-quality.testing`                       | Adding, updating, debugging, or discussing tests            |
 | `development-planning.iterative-development` | Scoping or refining designs                                 |

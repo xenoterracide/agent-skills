@@ -23,6 +23,8 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
   or deleted; handles committing, pushing, and PR lifecycle.
 - **`git-workflow.commit-message`** — Use when writing a commit message, PR
   title, or PR description.
+- **`git-workflow.workflow-push-rejection`** — Use when a push is rejected for
+  `workflow` scope (`.github/workflows`), usually caused by a stale base.
 
 ## Git Hooks
 

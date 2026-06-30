@@ -186,7 +186,13 @@ modify files outside your session.
 
 ## GitHub Workflow Limitations
 
-AI agents **cannot edit GitHub workflow files** (`.github/workflows/*.yml`). This is a hard limitation — workflow file modifications will fail. Other YAML files (`.yaml`) are not affected.
+An AI agent's token usually lacks the `workflow` scope, so it cannot push
+changes to files under `.github/workflows/`. A push rejected with
+`refusing to allow ... without workflow scope` is **usually a stale base** (a
+dependency bot updated a workflow file on the remote), not an intentional
+workflow edit — see `git-workflow.workflow-push-rejection` to recover. Treat
+genuine workflow-file edits as human-required tasks, as below. Only files under
+`.github/workflows/` are restricted; YAML files elsewhere are not.
 
 ### Planning Implications
 
