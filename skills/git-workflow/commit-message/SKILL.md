@@ -33,12 +33,12 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 - Use a specific scope when possible.
 - Use directional verbs that reflect what happened in the diff (e.g. add, remove,
   update, refactor, fix) rather than neutral nouns.
-- Write the prose body impersonally: imperative mood, no second person ("you"),
-  no first person, and no naming who reported or requested the change in prose
-  — future readers lack this conversation's context, so state the problem and
-  the change as standing facts. Credit people in trailers instead
-  (`Assisted-by:`, and `Reported-by:` / `Suggested-by:` if used), per the
-  git.git / linux.git convention.
+- Write the prose body impersonally, in the imperative. Do not use second
+  person ("you") or first person ("I"): the body outlives this conversation, so
+  a reader years later cannot tell who "you" or "I" referred to. State the
+  problem and the change as standing facts. Name people only in trailers
+  (`Assisted-by:`, `Reported-by:`, `Suggested-by:`), where the reference is
+  unambiguous — never in the prose.
 - Body (MANDATORY): explain WHAT changed with bullets, and add WHY when the
   motivation is not obvious from the diff (see "Grounding the Why").
   - Use bullet points explaining the main changes
