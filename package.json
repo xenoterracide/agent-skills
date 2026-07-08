@@ -1,6 +1,6 @@
 {
   "name": "@xenoterracide/agents",
-  "packageManager": "yarn@4.17.0",
+  "packageManager": "yarn@4.17.1",
   "private": true,
   "license": "Apache-2.0",
   "devDependencies": {
