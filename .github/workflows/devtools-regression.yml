@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: Copyright © 2024-2026 Caleb Cushing
+#
+# SPDX-License-Identifier: MIT
+
+name: devtools-regression
+on: push
+permissions:
+  contents: read
+jobs:
+  regression-prettier:
+    uses: xenoterracide/github/.github/workflows/regression-devtool-prettier.yml@develop
+  regression-lint-staged:
+    uses: xenoterracide/github/.github/workflows/regression-devtool-lint-staged.yml@develop
+  regression-git-conventional-commits:
+    uses: xenoterracide/github/.github/workflows/regression-devtool-git-conventional-commits.yml@develop
+  regression-reuse:
+    uses: xenoterracide/github/.github/workflows/regression-devtool-reuse.yml@develop
