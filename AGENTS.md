@@ -14,9 +14,11 @@ published as the user-level skill plugin `xenoterracide-agent-skills`.
 - **License for skills/docs**: CC-BY-NC-SA-4.0
 - **License for configuration files**: CC0-1.0
 
-> **Agent Note:** This repo IS the plugin source. Do not edit installed plugin
-> files in `~/.kimi-code/`, `~/.kimi-plugin/`, or any agent installation
-> directory. Make changes here and reinstall from this repo.
+> **Agent Note:** This repo **IS** the plugin source for
+> `xenoterracide-agent-skills`. It is **NOT** the Superpowers plugin and it is
+> **NOT** an installed plugin directory. Make all skill and plugin changes in
+> this repository, then reinstall from here. Never edit files under
+> `~/.kimi-code/`, `~/.kimi-plugin/`, or any other agent installation directory.
 
 ## Source of Truth
 
@@ -130,17 +132,6 @@ Load the relevant skill when the trigger applies:
 | `docs-creator.agents-creator`                | Creating or editing `AGENTS.md` files                       |
 | `docs-creator.readme-creator`                | Writing or revising `README.md`                             |
 | `docs-creator.contributing-creator`          | Writing or revising `CONTRIBUTING.md`                       |
-
-## Before Marking Work Complete
-
-Before claiming any implementation is complete, fixed, or passing:
-
-1. Run the relevant verification commands from [Build and Test](#build-and-test).
-2. Review the diff for obvious issues such as duplicate license headers, stale
-   comments, or formatting problems.
-3. Invoke `requesting-code-review` and dispatch a reviewer subagent.
-4. Fix Critical issues immediately and Important issues before claiming
-   completion.
 
 ## Maintenance
 
