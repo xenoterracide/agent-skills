@@ -4,7 +4,7 @@ description: |
   Use when creating or modifying `.java` source files.
 license: CC-BY-NC-SA-4.0
 metadata:
-  author: Caleb Cushing <caleb.cushing@gmail.com>
+  copyright: Caleb Cushing
 ---
 
 <!--
@@ -359,9 +359,3 @@ Use the **javadocs MCP server** to search available classes before implementing:
 
 - The functionality truly doesn't exist in any on-classpath library
 - You need behavior that's fundamentally different from available options
-
----
-
-SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
-
-SPDX-License-Identifier: CC-BY-NC-SA-4.0

@@ -4,7 +4,7 @@ description: |
   Use when writing a commit message, PR title, or PR description.
 license: CC-BY-NC-SA-4.0
 metadata:
-  author: Caleb Cushing <caleb.cushing@gmail.com>
+  copyright: Caleb Cushing
 ---
 
 <!--
@@ -95,9 +95,3 @@ Assisted-by: Claude:claude-3-opus coccinelle sparse
 
 **Do not add `Signed-off-by` trailers.** Only humans can certify the Developer
 Certificate of Origin.
-
----
-
-SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
-
-SPDX-License-Identifier: CC-BY-NC-SA-4.0

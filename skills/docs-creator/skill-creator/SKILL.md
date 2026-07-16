@@ -5,7 +5,7 @@ description: |
   frontmatter, or improving skill trigger wording and discoverability.
 license: CC-BY-NC-SA-4.0
 metadata:
-  author: Caleb Cushing <caleb.cushing@gmail.com>
+  copyright: Caleb Cushing
 ---
 
 <!--
@@ -120,7 +120,7 @@ description: |
   Include the kinds of user requests or file changes that should activate it.
 license: CC-BY-NC-SA-4.0
 metadata:
-  author: Caleb Cushing <caleb.cushing@gmail.com>
+  copyright: Caleb Cushing
 allowed-tools: git gh
 ---
 

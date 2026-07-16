@@ -153,9 +153,3 @@ Load the relevant skill when the trigger applies:
 
 - **Skills and documentation**: CC-BY-NC-SA-4.0
 - **Configuration files**: CC0-1.0
-
----
-
-SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
-
-SPDX-License-Identifier: CC-BY-NC-SA-4.0

@@ -5,7 +5,7 @@ description: |
   refreshing the default branch, or confirming you are on current code.
 license: CC-BY-NC-SA-4.0
 metadata:
-  author: Caleb Cushing <caleb.cushing@gmail.com>
+  copyright: Caleb Cushing
 ---
 
 <!--
@@ -218,9 +218,3 @@ When creating plans that involve workflow changes:
 ````
 
 Flag workflow-related changes early so the human can prepare or execute them in parallel.
-
----
-
-SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
-
-SPDX-License-Identifier: CC-BY-NC-SA-4.0

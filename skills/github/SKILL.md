@@ -5,7 +5,7 @@ description: |
   comments, or GraphQL operations.
 license: CC-BY-NC-SA-4.0
 metadata:
-  author: Caleb Cushing <caleb.cushing@gmail.com>
+  copyright: Caleb Cushing
 ---
 
 <!--
