@@ -34,11 +34,8 @@ Copy the `skills/` directory into your agent's skill discovery path:
 
 ## Skills
 
-Skills are organized into bundles — `git-workflow`, `development-planning`,
-and `docs-creator` — plus standalone skills for `java-creator`,
-`gradle-creator`, `github`, `shell-script-creator`, and `session-init`.
-
-See [`AGENTS.md`](AGENTS.md#skill-routing) for the full skill routing table.
+Skills are organized as a flat collection. See
+[`AGENTS.md`](AGENTS.md#skill-routing) for the full skill routing table.
 
 ## Development
 
