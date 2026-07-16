@@ -117,7 +117,7 @@ Load the relevant skill when the trigger applies:
 | Skill                                        | Activate When                                               |
 | -------------------------------------------- | ----------------------------------------------------------- |
 | `session-init`                               | Starting work in a repo session                             |
-| `verification-before-completion`             | About to claim work is complete, fixed, or passing          |
+| `completion-checklist`                       | About to claim work is complete, fixed, or passing          |
 | `git-workflow.pull-request`                  | Creating/updating PRs, committing, pushing, review comments |
 | `git-workflow.commit-message`                | Writing commit messages, PR titles, or PR descriptions      |
 | `git-workflow.workflow-push-rejection`       | Push rejected for `.github/workflows` / `workflow` scope    |
