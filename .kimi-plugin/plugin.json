@@ -8,12 +8,12 @@
   "homepage": "https://github.com/xenoterracide/agent-skills",
   "license": "CC-BY-NC-SA-4.0",
   "keywords": [
-    "java",
-    "gradle",
+    "java-creator",
+    "gradle-creator",
     "github",
     "testing",
     "coding-standards",
-    "shell-script",
+    "shell-script-creator",
     "skills",
     "session-init",
     "conventional-commits",
@@ -22,6 +22,7 @@
     "agents-creator",
     "readme-creator",
     "contributing-creator",
+    "completion-checklist",
     "documentation",
     "contributing"
   ],

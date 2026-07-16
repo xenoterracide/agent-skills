@@ -290,9 +290,9 @@ plugin installed to confirm production behavior.
 8. **Default to no pre-approval** - If a skill works fine without
    `allowed-tools`, leave the field out
 9. **Reference `completion-checklist`** - Implementation skills that produce
-   code or config changes should add a "Before Claiming Completion" section
-   that invokes `completion-checklist`. Do not rely on the description alone
-   to trigger the completion gate.
+   code or config changes should add a "Required Companion Skills" section
+   that lists `coding-standards` and `completion-checklist`. Do not rely on
+   the description alone to trigger the completion gate.
 
 ## Validation Checklist
 
