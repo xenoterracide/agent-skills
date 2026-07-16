@@ -4,8 +4,7 @@ description: |
   Use when writing a commit message, PR title, or PR description.
 license: CC-BY-NC-SA-4.0
 metadata:
-  author: Caleb Cushing <caleb.cushing@gmail.com>
-  copyright: Copyright © 2026 Caleb Cushing
+  copyright: Caleb Cushing
 ---
 
 <!--
