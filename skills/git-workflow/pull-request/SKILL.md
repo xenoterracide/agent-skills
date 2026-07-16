@@ -6,7 +6,7 @@ description: |
   PR review comments or feedback.
 license: CC-BY-NC-SA-4.0
 metadata:
-  author: Caleb Cushing <caleb.cushing@gmail.com>
+  copyright: Caleb Cushing
 ---
 
 <!--
@@ -211,9 +211,3 @@ Certificate of Origin.
 
 Place the Assisted-by trailer at the end of the commit message body, after the
 description.
-
----
-
-SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
-
-SPDX-License-Identifier: CC-BY-NC-SA-4.0

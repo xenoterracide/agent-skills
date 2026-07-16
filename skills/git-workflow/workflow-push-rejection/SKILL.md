@@ -6,7 +6,7 @@ description: |
   push fails citing workflow files or a missing `workflow` token scope.
 license: CC-BY-NC-SA-4.0
 metadata:
-  author: Caleb Cushing <caleb.cushing@gmail.com>
+  copyright: Caleb Cushing
 ---
 
 <!--

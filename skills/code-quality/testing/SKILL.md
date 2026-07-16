@@ -6,7 +6,7 @@ description: |
   integration testing, and testing anti-patterns.
 license: CC-BY-NC-SA-4.0
 metadata:
-  author: Caleb Cushing <caleb.cushing@gmail.com>
+  copyright: Caleb Cushing
 ---
 
 <!--
@@ -171,9 +171,3 @@ Use "Arrange, Act, Assert" (or Given/When/Then):
 - Integration Test (narrow vs broad): https://martinfowler.com/bliki/IntegrationTest.html
 - On Test Shapes: https://martinfowler.com/articles/2021-test-shapes.html
 - Practical Test Pyramid: https://martinfowler.com/articles/practical-test-pyramid.html
-
----
-
-SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
-
-SPDX-License-Identifier: CC-BY-NC-SA-4.0
