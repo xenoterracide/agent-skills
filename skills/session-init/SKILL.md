@@ -152,6 +152,13 @@ else
 fi
 ```
 
+## Before Claiming Completion
+
+Before claiming any task is complete, fixed, passing, ready, or working, invoke
+`completion-checklist` and follow its gate function. This applies to every task
+in every repository, regardless of size or whether it will be committed or
+PR'd. There are no exceptions.
+
 ## Key Principle
 
 **Never investigate issues or start coding without first knowing your branch state.**
@@ -190,7 +197,7 @@ An AI agent's token usually lacks the `workflow` scope, so it cannot push
 changes to files under `.github/workflows/`. A push rejected with
 `refusing to allow ... without workflow scope` is **usually a stale base** (a
 dependency bot updated a workflow file on the remote), not an intentional
-workflow edit — see `git-workflow.workflow-push-rejection` to recover. Treat
+workflow edit — see `workflow-push-rejection` to recover. Treat
 genuine workflow-file edits as human-required tasks, as below. Only files under
 `.github/workflows/` are restricted; YAML files elsewhere are not.
 

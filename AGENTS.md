@@ -14,9 +14,11 @@ published as the user-level skill plugin `xenoterracide-agent-skills`.
 - **License for skills/docs**: CC-BY-NC-SA-4.0
 - **License for configuration files**: CC0-1.0
 
-> **Agent Note:** This repo IS the plugin source. Do not edit installed plugin
-> files in `~/.kimi-code/`, `~/.kimi-plugin/`, or any agent installation
-> directory. Make changes here and reinstall from this repo.
+> **Agent Note:** This repo **IS** the plugin source for
+> `xenoterracide-agent-skills`. It is **NOT** the Superpowers plugin and it is
+> **NOT** an installed plugin directory. Make all skill and plugin changes in
+> this repository, then reinstall from here. Never edit files under
+> `~/.kimi-code/`, `~/.kimi-plugin/`, or any other agent installation directory.
 
 ## Source of Truth
 
@@ -54,6 +56,19 @@ yarn exec prettier --write <file> # Format a single file
 yarn test                         # All workspace tests
 yarn workspace merge run test     # Merge tool only
 ```
+
+### Git Hooks
+
+Hooks live in `.share/git/hooks`. `yarn contribute` sets `core.hooksPath` to
+that directory automatically.
+
+- **pre-commit**: Runs `lint-staged` to format and annotate licenses.
+- **commit-msg**: Validates conventional commit messages against
+  `git-conventional-commits.yaml`.
+- **post-checkout / post-merge**: Syncs Node or Python dependencies when
+  lockfiles changed.
+
+All hooks exit early when the `CI` environment variable is set.
 
 ### Merge Workflows
 
@@ -112,24 +127,25 @@ when creating new files:
 
 Load the relevant skill when the trigger applies:
 
-| Skill                                        | Activate When                                               |
-| -------------------------------------------- | ----------------------------------------------------------- |
-| `session-init`                               | Starting work in a repo session                             |
-| `git-workflow.pull-request`                  | Creating/updating PRs, committing, pushing, review comments |
-| `git-workflow.commit-message`                | Writing commit messages, PR titles, or PR descriptions      |
-| `git-workflow.workflow-push-rejection`       | Push rejected for `.github/workflows` / `workflow` scope    |
-| `code-quality.coding-standards`              | Writing or modifying code in any language                   |
-| `code-quality.testing`                       | Adding, updating, debugging, or discussing tests            |
-| `development-planning.iterative-development` | Scoping or refining designs                                 |
-| `development-planning.use-case-creator`      | Writing use cases or business behavior docs                 |
-| `github`                                     | GitHub APIs, issues, GraphQL, review threads                |
-| `java`                                       | Creating or modifying `.java` files                         |
-| `gradle`                                     | Editing Gradle build files or resolving dependencies        |
-| `shell-script`                               | Writing or editing shell scripts or shell config            |
-| `docs-creator.skill-creator`                 | Creating or editing `SKILL.md` files                        |
-| `docs-creator.agents-creator`                | Creating or editing `AGENTS.md` files                       |
-| `docs-creator.readme-creator`                | Writing or revising `README.md`                             |
-| `docs-creator.contributing-creator`          | Writing or revising `CONTRIBUTING.md`                       |
+| Skill                     | Activate When                                                                        |
+| ------------------------- | ------------------------------------------------------------------------------------ |
+| `session-init`            | Starting work in a repo session                                                      |
+| `completion-checklist`    | About to claim work is complete, fixed, or passing                                   |
+| `pull-request`            | Creating/updating PRs, committing, pushing, review comments                          |
+| `commit-message`          | Writing commit messages, PR titles, or PR descriptions                               |
+| `workflow-push-rejection` | Push rejected for `.github/workflows` / `workflow` scope                             |
+| `coding-standards`        | Writing or modifying code in any language                                            |
+| `testing`                 | Adding, updating, debugging, or discussing tests                                     |
+| `iterative-development`   | Scoping or refining designs                                                          |
+| `use-case-creator`        | Writing use cases or business behavior docs                                          |
+| `github`                  | GitHub APIs, issues, GraphQL, review threads                                         |
+| `java-creator`            | Creating, modifying, or refactoring Java source files, Maven pom.xml, or JUnit tests |
+| `gradle-creator`          | Creating, modifying, or troubleshooting Gradle builds                                |
+| `shell-script-creator`    | Creating, modifying, or debugging shell scripts and commands                         |
+| `skill-creator`           | Creating or editing `SKILL.md` files                                                 |
+| `agents-creator`          | Creating or editing `AGENTS.md` files                                                |
+| `readme-creator`          | Writing or revising `README.md`                                                      |
+| `contributing-creator`    | Writing or revising `CONTRIBUTING.md`                                                |
 
 ## Maintenance
 

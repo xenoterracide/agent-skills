@@ -19,11 +19,11 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 **This skill applies whenever files are created, modified, or deleted.**
 
-- Apply `code-quality.coding-standards` rules — review your code against them before submitting
-- Use `git-workflow.commit-message` skill for all commit messages and PR descriptions
+- Apply `coding-standards` rules — review your code against them before submitting
+- Use `commit-message` skill for all commit messages and PR descriptions
 - Keep the PR description up to date (it becomes the squash-merge commit message)
   - Write it as a plain-text conventional-commit body (see
-    `git-workflow.commit-message`): an optional grounded why, then `-` bullets.
+    `commit-message`): an optional grounded why, then `-` bullets.
     No Markdown headings (`##`), bold, fenced blocks, or checkboxes (`- [x]`) —
     they land verbatim as noise in `git log`.
 - files should be committed and pushed
@@ -102,7 +102,7 @@ Before creating or updating a PR:
 2. Review your own diff — would you approve this if someone else wrote it?
 3. Check for obvious issues (debug prints, TODOs without tickets, unjustified suppressions)
 
-See `code-quality.coding-standards` (Rule 5: Code Quality Standards) for the full checklist.
+See `coding-standards` (Rule 5: Code Quality Standards) for the full checklist.
 
 **Fix issues yourself before requesting human review.**
 
@@ -113,7 +113,7 @@ See `code-quality.coding-standards` (Rule 5: Code Quality Standards) for the ful
 If a push is rejected with `refusing to allow ... without workflow scope`, your
 base branch is usually behind `origin/develop` (a dependency bot updated a
 workflow file on the remote), not an intentional workflow edit. See
-`git-workflow.workflow-push-rejection` for the recovery steps.
+`workflow-push-rejection` for the recovery steps.
 
 ### Squash Merge Strategy
 
@@ -146,7 +146,7 @@ Follow conventional commit format for PR titles (they become the squash merge co
 
 ### Commit Message and PR Body Format
 
-Follow the `git-workflow.commit-message` skill for commit message format, PR
+Follow the `commit-message` skill for commit message format, PR
 body structure, and the grounded "why" (sourced from the issue, the user's
 request, or review feedback — never fabricated). PR descriptions become
 permanent commit history via squash merge.

@@ -34,11 +34,8 @@ Copy the `skills/` directory into your agent's skill discovery path:
 
 ## Skills
 
-Skills are organized into bundles — `code-quality`, `git-workflow`,
-`development-planning`, and `docs-creator` — plus standalone skills for `java`,
-`gradle`, `github`, `shell-script`, and `session-init`.
-
-See [`AGENTS.md`](AGENTS.md#skill-routing) for the full skill routing table.
+Skills are organized as a flat collection. See
+[`AGENTS.md`](AGENTS.md#skill-routing) for the full skill routing table.
 
 ## Development
 
@@ -46,14 +43,14 @@ See [`AGENTS.md`](AGENTS.md#skill-routing) for the full skill routing table.
   agent-specific guidance.
 - See [`CONTRIBUTING.md`](CONTRIBUTING.md) for human contributor setup, linting,
   testing, and pull request workflow.
-- Use the [`docs-creator.skill-creator`](skills/docs-creator/skill-creator/SKILL.md)
-  skill when adding or updating skills.
-- Use the [`docs-creator.agents-creator`](skills/docs-creator/agents-creator/SKILL.md)
-  skill when writing or revising `AGENTS.md` files.
-- Use the [`docs-creator.readme-creator`](skills/docs-creator/readme-creator/SKILL.md)
-  skill when writing or revising `README.md` files.
-- Use the [`docs-creator.contributing-creator`](skills/docs-creator/contributing-creator/SKILL.md)
-  skill when writing or revising `CONTRIBUTING.md` files.
+- Use the [`skill-creator`](skills/skill-creator/SKILL.md) skill when adding or
+  updating skills.
+- Use the [`agents-creator`](skills/agents-creator/SKILL.md) skill when writing
+  or revising `AGENTS.md` files.
+- Use the [`readme-creator`](skills/readme-creator/SKILL.md) skill when writing
+  or revising `README.md` files.
+- Use the [`contributing-creator`](skills/contributing-creator/SKILL.md) skill
+  when writing or revising `CONTRIBUTING.md` files.
 
 ## License
 

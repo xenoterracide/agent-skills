@@ -31,7 +31,7 @@ yarn lint
 
 ## Gradle / Kotlin or Java
 
-See the `gradle` skill for lifecycle task details. Common commands:
+See the `gradle-creator` skill for lifecycle task details. Common commands:
 
 ````markdown
 ## Setup
