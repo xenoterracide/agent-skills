@@ -21,6 +21,14 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 Guidance for working with Gradle build system.
 
+## Required Companion Skills
+
+Load these skills whenever this skill applies:
+
+- **`coding-standards`** — before writing or modifying code
+- **`completion-checklist`** — before claiming the change is done, complete,
+  fixed, or working
+
 ## Dependency Management
 
 ### Checking for Lockfiles

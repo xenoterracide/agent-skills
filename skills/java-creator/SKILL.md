@@ -19,6 +19,14 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 Use for writing Java code in `.java` files.
 
+## Required Companion Skills
+
+Load these skills whenever this skill applies:
+
+- **`coding-standards`** — before writing or modifying code
+- **`completion-checklist`** — before claiming the change is done, complete,
+  fixed, passing, or working
+
 ## Design Principles
 
 Let your domain language define the responsibilities in your system. Build each unit—object, function, or module—around a single responsibility derived from that language. Encapsulate behavior so it's polymorphic, letting the unit decide how to act rather than orchestrating externally. If you follow these principles, your code will naturally be composable, clear, and aligned with the domain.

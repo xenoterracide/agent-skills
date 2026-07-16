@@ -1,9 +1,11 @@
 ---
 name: completion-checklist
 description: |
-  Use when about to claim any task, implementation, fix, or test result is
-  complete, done, fixed, passing, ready, or working. Invoke before saying
-  "done", "complete", "fixed", "passing", "ready", or "works".
+  Use when finishing any task, wrapping up work, reporting results, giving a
+  status update, or about to claim a task, implementation, fix, or test result
+  is complete, done, fixed, passing, ready, or working. Invoke before saying
+  "done", "complete", "fixed", "passing", "ready", "works", or reporting that
+  something is finished.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing
