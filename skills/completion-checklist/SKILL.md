@@ -1,9 +1,9 @@
 ---
 name: completion-checklist
 description: |
-  Use when about to claim work is complete, fixed, or passing, before
-  committing or creating PRs. Requires running verification commands,
-  reviewing the diff, and dispatching a code reviewer subagent.
+  Use when about to claim any task, implementation, fix, or test result is
+  complete, done, fixed, passing, ready, or working. Invoke before saying
+  "done", "complete", "fixed", "passing", "ready", or "works".
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing
@@ -15,53 +15,62 @@ SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
 SPDX-License-Identifier: CC-BY-NC-SA-4.0
 -->
 
-# Verification Before Completion
+# Completion Checklist
+
+**Invoke this skill BEFORE every completion claim.** No exceptions. Not for
+small changes. Not for "obvious" fixes. Not when the task is already verified.
+Not when tired. Not when the user asked for a quick report.
 
 Claiming work is complete without verification and review is dishonesty, not
 efficiency.
 
-**Core principle:** Evidence before claims, always.
+## The Gate
 
-## The Gate Function
+Before saying "done", "complete", "fixed", "passing", "ready", or "works":
 
-BEFORE claiming any status or expressing satisfaction:
-
-1. **IDENTIFY:** What command proves this claim?
-2. **RUN:** Execute the FULL command (fresh, complete).
-3. **READ:** Full output, check exit code, count failures.
-4. **REVIEW:** Inspect the diff for obvious issues such as duplicate license
-   headers, stale comments, formatting problems, or unrelated changes.
-5. **REQUEST REVIEW:** Invoke `requesting-code-review` and dispatch a reviewer
-   subagent. Fix Critical issues immediately and Important issues before
+1. **Identify** the command that proves the claim.
+2. **Run** that command fresh, completely.
+3. **Read** the output, check exit codes, count failures.
+4. **Review** the diff for duplicate license headers, stale comments,
+   formatting problems, unrelated changes, or obvious bugs.
+5. **Request review** — invoke `requesting-code-review` and dispatch a reviewer
+   subagent. Fix Critical issues immediately. Fix Important issues before
    claiming completion.
-6. **VERIFY:** Does the output and review feedback confirm the claim?
-   - If NO: State actual status with evidence.
-   - If YES: State claim WITH evidence.
-7. **ONLY THEN:** Make the claim.
+6. **Verify** the output and review feedback confirm the claim.
+7. **Only then** make the claim — with evidence.
 
 Skip any step = lying, not verifying.
 
+## Red Flags — STOP
+
+- "Should work now"
+- "Looks correct"
+- "I'm confident"
+- "Just this once"
+- "It's a small change"
+- "It's already verified"
+- "The user just wants a quick report"
+- About to say "done" without running verification
+- About to say "done" without reviewing the diff
+- About to say "done" without requesting review
+
+## Rationalizations That Fail
+
+| Excuse                              | Reality                                    |
+| ----------------------------------- | ------------------------------------------ |
+| "It's already verified"             | Verification without review is incomplete. |
+| "It's a simple change"              | Simple changes ship obvious bugs.          |
+| "The user asked for a quick report" | Accuracy matters more than speed.          |
+| "I ran it earlier"                  | Earlier runs don't prove current state.    |
+| "No code changed"                   | Metadata, docs, and configs break too.     |
+
 ## Common Failures
 
-| Claim                   | Requires                        | Not Sufficient                 |
-| ----------------------- | ------------------------------- | ------------------------------ |
-| Tests pass              | Test command output: 0 failures | Previous run, "should pass"    |
-| Linter clean            | Linter output: 0 errors         | Partial check, extrapolation   |
-| Build succeeds          | Build command: exit 0           | Linter passing, logs look good |
-| Bug fixed               | Test original symptom: passes   | Code changed, assumed fixed    |
-| License headers correct | `reuse lint` passes             | Headers look right             |
-
-## Red Flags - STOP
-
-- Using "should", "probably", "seems to".
-- Expressing satisfaction before verification ("Great!", "Perfect!", "Done!").
-- About to commit/push/PR without verification or review.
-- Trusting agent success reports without inspecting the diff.
-- Relying on partial verification.
-
-## The Bottom Line
-
-No shortcuts for verification or review. Run the command, read the output,
-review the diff, dispatch a reviewer, THEN claim the result.
+| Claim                   | Requires                     | Not sufficient              |
+| ----------------------- | ---------------------------- | --------------------------- |
+| Tests pass              | Test output shows 0 failures | Previous run, "should pass" |
+| Linter clean            | Linter output shows 0 errors | Partial check               |
+| Bug fixed               | Original symptom passes      | Code changed                |
+| License headers correct | `reuse lint` passes          | Looks right                 |
 
 This is non-negotiable.

@@ -152,6 +152,13 @@ else
 fi
 ```
 
+## Before Claiming Completion
+
+Before claiming any task is complete, fixed, passing, ready, or working, invoke
+`completion-checklist` and follow its gate function. This applies to every task
+in every repository, regardless of size or whether it will be committed or
+PR'd. There are no exceptions.
+
 ## Key Principle
 
 **Never investigate issues or start coding without first knowing your branch state.**

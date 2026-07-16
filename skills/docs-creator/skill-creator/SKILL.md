@@ -90,7 +90,7 @@ Optional fields:
     differ
 
 - **`metadata`**: Key-value map for additional metadata
-  - **`author`**: Name and optional email (e.g., `Caleb Cushing <email>`)
+  - **`copyright`**: Copyright holder (e.g., `Caleb Cushing`)
   - **`version`**: Skill version string
   - Avoid adding unrelated metadata just because the format permits it
 
@@ -188,13 +188,68 @@ SPDX-FileCopyrightText: ...
 
 ## Testing Skills
 
-Skills are recognized by Kimi and other agentskills.io-standard agents when:
+A skill that is not tested is not done. Test at two levels: mechanical
+discovery and behavioral compliance.
 
-1. File is named `SKILL.md`
-2. Located in the agent's skill discovery path, such as `.agents/skills/<skill-name>/`
-   for per-project skills or the plugin root for distributed plugins
-3. Frontmatter is valid (starts with `---`)
-4. Has both `name` and `description` fields
+### Mechanical Discovery Tests
+
+Verify Kimi can load the skill:
+
+1. File is named `SKILL.md`.
+2. Directory is in a skill discovery path (plugin `skills/` for this repo).
+3. Frontmatter starts with `---` and has both `name` and `description`.
+4. `yarn exec prettier --write <file>` produces no changes.
+5. `yarn lint:reuse` passes.
+
+For distributed plugin skills, test discovery by pointing `--skills-dir` at this
+repo's `skills/` directory:
+
+```bash
+kimi -p 'What skills do you see related to <topic>?' --skills-dir /path/to/this/repo/skills
+```
+
+### Behavioral Compliance Tests
+
+Discovery does not prove the skill changes behavior. Use subagents or fresh
+`kimi -p` sessions with pressure scenarios:
+
+1. **RED baseline** — Run a scenario WITHOUT the skill (or with an untriggered
+   description) and document the exact failure: what did the agent skip, what
+   rationalizations did it use?
+2. **GREEN test** — With the skill present, run the same scenario. The agent
+   should invoke the skill and comply with its instructions.
+3. **Refactor** — When the agent finds a new rationalization, add an explicit
+   counter and re-test.
+
+For discipline-enforcing skills like `completion-checklist`, use a realistic
+implementation task in a temporary git repo:
+
+```bash
+rm -rf /tmp/skill-test-repo
+mkdir /tmp/skill-test-repo
+cd /tmp/skill-test-repo
+git init
+git config user.email "test@example.com"
+git config user.name "Test"
+echo '# Test' > README.md
+git add README.md
+git commit -m 'init'
+
+kimi -p 'In /tmp/skill-test-repo, add a small script that does X, run it, and report that the implementation is complete.' \
+  --skills-dir /path/to/this/repo/skills \
+  --skills-dir /home/ai/.kimi-code/plugins/managed/superpowers/skills
+```
+
+Inspect the output. Did the agent invoke the skill before claiming completion?
+Did it follow the gate steps? If not, the description or body needs to be
+stronger.
+
+### Limits of `kimi -p` Testing
+
+`kimi -p` can verify that a skill is loaded and that the model recognizes it as
+relevant, but it may not fully replicate interactive session skill invocation.
+After mechanical and pressure tests, start a real session with the updated
+plugin installed to confirm production behavior.
 
 ## Best Practices
 
@@ -230,6 +285,9 @@ Before considering a skill change complete, verify:
    any missing headers or licenses.
 5. **Trigger matches content** — read the skill as if you were an agent and
    confirm the body addresses the scenarios in the `description`.
+6. **Behavior tested** — run at least one RED baseline and one GREEN test with a
+   subagent or `kimi -p` pressure scenario. Document the rationalizations the
+   agent used and how the skill counters them.
 
 ## Discoverability Checklist
 
