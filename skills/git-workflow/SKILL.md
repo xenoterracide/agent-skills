@@ -3,7 +3,6 @@ name: git-workflow
 description: |
   Use when creating or updating pull requests, writing commit messages, or
   managing other git lifecycle tasks after session initialization.
-has-sub-skill: true
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing
@@ -17,13 +16,14 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 # Git Workflow
 
-## Sub-skills
+Cross-cutting guidance for git lifecycle tasks.
 
-- **`git-workflow.pull-request`** — Use whenever files are created, modified,
-  or deleted; handles committing, pushing, and PR lifecycle.
-- **`git-workflow.commit-message`** — Use when writing a commit message, PR
-  title, or PR description.
-- **`git-workflow.workflow-push-rejection`** — Use when a push is rejected for
+Load one of the focused git skills when the trigger applies:
+
+- **`pull-request`** — Creating, updating, or submitting PRs; also whenever files
+  are created, modified, or deleted.
+- **`commit-message`** — Writing a commit message, PR title, or PR description.
+- **`workflow-push-rejection`** — Recovering when a push is rejected for
   `workflow` scope (`.github/workflows`), usually caused by a stale base.
 
 ## Git Hooks

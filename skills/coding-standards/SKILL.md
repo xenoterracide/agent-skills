@@ -246,7 +246,7 @@ public static User create(String email) {
 
 ### Self-Review Before Submitting
 
-See `git-workflow.pull-request` skill for the full self-review checklist before creating or
+See `pull-request` skill for the full self-review checklist before creating or
 updating a PR.
 
 **Don't waste reviewer time on issues you could have caught yourself.**
