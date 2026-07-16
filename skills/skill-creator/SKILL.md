@@ -55,6 +55,17 @@ for skills rather than action-phrase names.
 - ❌ `writing-skills`
 - ❌ `creating-commits`
 
+**Use an active `-creator` suffix for language or technology skills.** Skill
+names significantly affect automatic detection. Names like `java-creator`,
+`gradle-creator`, and `shell-script-creator` trigger more reliably than bare
+names such as `java`, `gradle`, or `shell-script`.
+
+- ✅ `java-creator`
+- ✅ `gradle-creator`
+- ✅ `shell-script-creator`
+- ❌ `java`
+- ❌ `gradle`
+
 This convention produces shorter identifiers and clearer activation triggers.
 It intentionally overrides the `writing-skills` naming preference when creating
 skills in this repository.
@@ -72,7 +83,7 @@ Required fields:
   - Max 64 characters
   - Lowercase letters, numbers, and hyphens only
   - Must not start or end with a hyphen
-  - Examples: `java`, `pull-request`, `gradle-shadow`
+  - Examples: `java-creator`, `pull-request`, `gradle-shadow`
 
 - **`description`**: When to use this skill (this triggers the skill)
   - Max 1024 characters, non-empty
@@ -220,6 +231,14 @@ Discovery does not prove the skill changes behavior. Use subagents or fresh
    should invoke the skill and comply with its instructions.
 3. **Refactor** — When the agent finds a new rationalization, add an explicit
    counter and re-test.
+
+**Test with natural language prompts.** Do not name the technology in the
+prompt; phrase the request the way a user naturally would. For example, test
+`java-creator` with "modify the App class so the greeting is uppercase", test
+`gradle-creator` with "add JUnit to the project" or "configure the build to use
+Java 21", and test `shell-script-creator` with "modify the script so the
+greeting is uppercase". If the skill does not trigger, strengthen the
+`description` with the verbs and concepts that appear in natural requests.
 
 For discipline-enforcing skills like `completion-checklist`, use a realistic
 implementation task in a temporary git repo:

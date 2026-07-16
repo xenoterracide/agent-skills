@@ -1,7 +1,11 @@
 ---
-name: java
+name: java-creator
 description: |
-  Use when creating or modifying `.java` source files.
+  Use when creating, modifying, or refactoring source files in a Java project,
+  including `.java` files, Maven `pom.xml`, or JUnit tests. Invoke for any task
+  involving classes, methods, packages, streams, records, annotations, or source
+  code in a JVM codebase. For Gradle-specific build configuration, use
+  `gradle-creator`.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing

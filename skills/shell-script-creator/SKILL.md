@@ -1,10 +1,10 @@
 ---
-name: shell-script
+name: shell-script-creator
 description: |
-  Write or modify shell scripts and command-line automation. Use when creating
-  or editing `.sh` files, shell functions, portable shell snippets, Zsh
-  configuration, or Bash pipelines, especially when quoting, error handling,
-  and safe command composition matter.
+  Use when creating, modifying, or debugging shell scripts, Bash commands,
+  command-line automation, `.sh` files, shell functions, Zsh configuration, or
+  pipelines. Invoke whenever a task involves shell syntax, quoting, error
+  handling, or safe command composition.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing
@@ -145,4 +145,4 @@ trap 'rm -rf "$tmpdir"' EXIT
 - `coding-standards` - broader design, testing, and quality guidance
 - `github` - GitHub and GraphQL operations
 - `pull-request` - committing, pushing, and PR updates for script changes
-- `gradle` - Gradle build logic rather than shell automation
+- `gradle-creator` - Gradle build logic rather than shell automation

@@ -1,9 +1,11 @@
 ---
-name: gradle
+name: gradle-creator
 description: |
-  Work with the Gradle build system and Kotlin DSL. Use when editing
-  `build.gradle.kts`, `settings.gradle.kts`, `gradle.properties`, lockfiles,
-  dependency versions, or troubleshooting Gradle build behavior.
+  Use when creating, modifying, or troubleshooting Gradle builds, build scripts,
+  or Gradle project configuration. Invoke for tasks involving
+  `build.gradle.kts`, `settings.gradle.kts`, `gradle.properties`, dependency
+  versions, lockfiles, plugins, wrapper, build tasks, dependency resolution,
+  publishing, shadow JARs, or build failures in a Gradle project.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing
