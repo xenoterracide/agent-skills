@@ -250,9 +250,3 @@ See `git-workflow.pull-request` skill for the full self-review checklist before 
 updating a PR.
 
 **Don't waste reviewer time on issues you could have caught yourself.**
-
----
-
-SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
-
-SPDX-License-Identifier: CC-BY-NC-SA-4.0

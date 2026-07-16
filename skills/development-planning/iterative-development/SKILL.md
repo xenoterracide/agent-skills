@@ -308,9 +308,3 @@ As you write code together, watch for signals that the model needs refinement:
 - **code-quality.testing** - Tests capture and protect domain understanding
 - **domain-driven-design** (if available) - Deep model refinement
 - **code-quality.coding-standards** - Refactoring skills support iteration
-
----
-
-SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
-
-SPDX-License-Identifier: CC-BY-NC-SA-4.0

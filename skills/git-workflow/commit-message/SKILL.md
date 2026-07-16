@@ -95,9 +95,3 @@ Assisted-by: Claude:claude-3-opus coccinelle sparse
 
 **Do not add `Signed-off-by` trailers.** Only humans can certify the Developer
 Certificate of Origin.
-
----
-
-SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
-
-SPDX-License-Identifier: CC-BY-NC-SA-4.0
