@@ -10,6 +10,10 @@ A user-level skill plugin for AI coding agents. It ships reusable skills for
 Java, Gradle, GitHub, shell scripting, development planning, and documentation
 workflows.
 
+> **Requires:** This plugin is designed to be used alongside the Superpowers
+> plugin. Several skills reference Superpowers process-discipline skills such as
+> `verification-before-completion` and `requesting-code-review`.
+
 - **Primary target**: [Kimi Code CLI](https://kimi.com/code)
 - **Compatible with**: any [agentskills.io](https://agentskills.io)-standard
   agent such as Claude Code, Copilot CLI, or Gemini CLI
