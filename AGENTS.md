@@ -131,6 +131,17 @@ Load the relevant skill when the trigger applies:
 | `docs-creator.readme-creator`                | Writing or revising `README.md`                             |
 | `docs-creator.contributing-creator`          | Writing or revising `CONTRIBUTING.md`                       |
 
+## Before Marking Work Complete
+
+Before claiming any implementation is complete, fixed, or passing:
+
+1. Run the relevant verification commands from [Build and Test](#build-and-test).
+2. Review the diff for obvious issues such as duplicate license headers, stale
+   comments, or formatting problems.
+3. Invoke `requesting-code-review` and dispatch a reviewer subagent.
+4. Fix Critical issues immediately and Important issues before claiming
+   completion.
+
 ## Maintenance
 
 - Update this file when you change workflows it describes.
