@@ -21,8 +21,14 @@
   ],
   packageRules: [
     {
-      matchManagers: ["asdf", "maven", "npm", "pyenv", "pep621", "github-actions"],
+      matchManagers: ["asdf", "maven", "npm", "pyenv", "pep621"],
       branchTopic: "{{{depNameSanitized}}}-{{{newVersion}}}",
+      automerge: true,
+    },
+    {
+      matchManagers: ["github-actions"],
+      excludeDepNames: ["xenoterracide/**"],
+      branchTopic: "{{{depNameSanitized}}}-{{{newValue}}}",
       automerge: true,
     },
     {
