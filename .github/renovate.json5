@@ -21,7 +21,7 @@
   ],
   packageRules: [
     {
-      matchManagers: ["asdf", "npm", "pyenv", "pep621", "github-actions"],
+      matchManagers: ["asdf", "maven", "npm", "pyenv", "pep621", "github-actions"],
       branchTopic: "{{{depNameSanitized}}}-{{{newVersion}}}",
       automerge: true,
     },
