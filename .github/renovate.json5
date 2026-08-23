@@ -21,14 +21,7 @@
   ],
   packageRules: [
     {
-      matchManagers: ["asdf", "maven", "npm", "pyenv", "pep621"],
-      branchTopic: "{{{depNameSanitized}}}-{{{newVersion}}}",
-      automerge: true,
-    },
-    {
-      matchManagers: ["github-actions"],
-      excludeDepNames: ["xenoterracide/**"],
-      // Regular GitHub actions are pinned by version tag, not digest
+      matchManagers: ["asdf", "maven", "npm", "pyenv", "pep621", "github-actions"],
       branchTopic: "{{{depNameSanitized}}}-{{{newValue}}}",
       automerge: true,
     },
@@ -38,7 +31,7 @@
       matchManagers: ["github-actions"],
       matchDepNames: ["xenoterracide/**"],
       extends: ["helpers:pinGitHubActionDigests"],
-      branchTopic: "{{{depNameSanitized}}}-{{{newValue}}}-{{{newDigest}}}",
+      branchTopic: "{{{depNameSanitized}}}-{{{newDigestShort}}}",
       automerge: true,
     },
   ],
