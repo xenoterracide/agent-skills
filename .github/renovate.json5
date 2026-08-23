@@ -22,7 +22,7 @@
   packageRules: [
     {
       matchManagers: ["asdf", "maven", "npm", "pyenv", "pep621", "github-actions"],
-      branchTopic: "{{{depNameSanitized}}}-{{{newValue}}}",
+      branchTopic: "{{{depNameSanitized}}}-{{{newVersion}}}",
       automerge: true,
     },
     {
@@ -31,7 +31,7 @@
       matchManagers: ["github-actions"],
       matchDepNames: ["xenoterracide/**"],
       extends: ["helpers:pinGitHubActionDigests"],
-      branchTopic: "{{{depNameSanitized}}}-{{{newDigestShort}}}",
+      branchTopic: "{{{depNameSanitized}}}-{{{newDigest}}}",
       automerge: true,
     },
   ],
