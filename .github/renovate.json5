@@ -27,7 +27,9 @@
     },
     {
       matchManagers: ["github-actions"],
-      branchTopic: "{{{depNameSanitized}}}-{{{newValue}}}-{{{newDigestShort}}}",
+      excludeDepNames: ["xenoterracide/**"],
+      // Regular GitHub actions are pinned by version tag, not digest
+      branchTopic: "{{{depNameSanitized}}}-{{{newValue}}}",
       automerge: true,
     },
     {
