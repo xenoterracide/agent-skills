@@ -70,14 +70,6 @@ that directory automatically.
 
 All hooks exit early when the `CI` environment variable is set.
 
-### Merge Workflows
-
-```bash
-yarn merge:kimi                   # Generate/update PR with Kimi engine
-yarn merge:junie                  # Generate/update PR with Junie engine
-yarn merge:copilot                # Generate/update PR with Copilot engine
-```
-
 ### Dependency Sync
 
 ```bash
