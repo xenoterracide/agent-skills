@@ -27,8 +27,7 @@
     },
     {
       matchManagers: ["github-actions"],
-      excludeDepNames: ["xenoterracide/**"],
-      branchTopic: "{{{depNameSanitized}}}-{{{newValue}}}",
+      branchTopic: "{{{depNameSanitized}}}-{{{newValue}}}-{{{newDigestShort}}}",
       automerge: true,
     },
     {
@@ -37,7 +36,7 @@
       matchManagers: ["github-actions"],
       matchDepNames: ["xenoterracide/**"],
       extends: ["helpers:pinGitHubActionDigests"],
-      branchTopic: "{{{depNameSanitized}}}-{{{newDigestShort}}}",
+      branchTopic: "{{{depNameSanitized}}}-{{{newValue}}}-{{{newDigestShort}}}",
       automerge: true,
     },
   ],
