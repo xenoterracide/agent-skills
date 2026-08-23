@@ -38,7 +38,7 @@
       matchManagers: ["github-actions"],
       matchDepNames: ["xenoterracide/**"],
       extends: ["helpers:pinGitHubActionDigests"],
-      branchTopic: "{{{depNameSanitized}}}-{{{newValue}}}-{{{newDigestShort}}}",
+      branchTopic: "{{{depNameSanitized}}}-{{{newValue}}}-{{{newDigest}}}",
       automerge: true,
     },
   ],
