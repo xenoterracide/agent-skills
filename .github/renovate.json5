@@ -6,6 +6,10 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   extends: ["config:recommended"],
   dependencyDashboard: true,
+  lockFileMaintenance: {
+    enabled: true,
+    automerge: true,
+  },
   timezone: "UTC",
   platformAutomerge: true,
   automergeStrategy: "rebase",
