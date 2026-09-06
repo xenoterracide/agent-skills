@@ -15,13 +15,15 @@
   },
   "scripts": {
     "contribute": "uv sync --frozen && git config core.hooksPath .share/git/hooks",
-    "lint": "yarn lint:prettier && yarn lint:reuse",
+    "lint": "yarn lint:prettier && yarn lint:reuse && yarn skills:check",
     "lint:prettier": "prettier --ignore-unknown --cache --check '**'",
     "lint:reuse": "yarn reuse lint",
     "precontribute": "yarn setup:corepack && yarn setup:yarn",
     "reuse": "uv run --frozen --group dev reuse",
     "setup:corepack": "npm install -g corepack && corepack enable",
     "setup:yarn": "yarn install --immutable",
+    "skills:catalog": "yarn node scripts/generate-skill-catalog.mjs",
+    "skills:check": "yarn node scripts/generate-skill-catalog.mjs --check",
     "test": "yarn workspaces foreach --all run test"
   }
 }

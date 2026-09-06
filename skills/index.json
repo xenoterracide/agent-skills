@@ -1,0 +1,89 @@
+{
+  "skills": [
+    {
+      "name": "agents-creator",
+      "version": "0.3.0",
+      "files": ["SKILL.md"]
+    },
+    {
+      "name": "coding-standards",
+      "version": "0.3.0",
+      "files": ["SKILL.md"]
+    },
+    {
+      "name": "commit-message",
+      "version": "0.3.0",
+      "files": ["SKILL.md"]
+    },
+    {
+      "name": "completion-checklist",
+      "version": "0.3.0",
+      "files": ["SKILL.md"]
+    },
+    {
+      "name": "contributing-creator",
+      "version": "0.3.0",
+      "files": ["SKILL.md", "references/examples.md"]
+    },
+    {
+      "name": "github",
+      "version": "0.3.0",
+      "files": ["SKILL.md"]
+    },
+    {
+      "name": "gradle-creator",
+      "version": "0.3.0",
+      "files": ["SKILL.md"]
+    },
+    {
+      "name": "iterative-development",
+      "version": "0.3.0",
+      "files": ["SKILL.md"]
+    },
+    {
+      "name": "java-creator",
+      "version": "0.3.0",
+      "files": ["SKILL.md"]
+    },
+    {
+      "name": "pull-request",
+      "version": "0.3.0",
+      "files": ["SKILL.md"]
+    },
+    {
+      "name": "readme-creator",
+      "version": "0.3.0",
+      "files": ["SKILL.md"]
+    },
+    {
+      "name": "session-init",
+      "version": "0.3.0",
+      "files": ["SKILL.md"]
+    },
+    {
+      "name": "shell-script-creator",
+      "version": "0.3.0",
+      "files": ["SKILL.md"]
+    },
+    {
+      "name": "skill-creator",
+      "version": "0.3.0",
+      "files": ["SKILL.md"]
+    },
+    {
+      "name": "testing",
+      "version": "0.3.0",
+      "files": ["SKILL.md"]
+    },
+    {
+      "name": "use-case-creator",
+      "version": "0.3.0",
+      "files": ["SKILL.md", "assets/uc-registration-example.adoc"]
+    },
+    {
+      "name": "workflow-push-rejection",
+      "version": "0.3.0",
+      "files": ["SKILL.md"]
+    }
+  ]
+}
