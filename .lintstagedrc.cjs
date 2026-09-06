@@ -39,7 +39,7 @@ module.exports = {
   "*.{xml,yaml,properties,toml,json5}": run([`${reuse} ${copyright} ${licenseConfiguration} ${symbol}`, prettier]),
   // yml is different from yaml extension as the only known yaml required file is for git-conventional-commits, but yml
   // contains files like GitHub workflows which can have significant logic
-  "*.{js,cjs,yml}": run([`${reuse} ${copyright} ${symbol} ${licenseScripts}`, prettier]),
+  "*.{js,cjs,mjs,yml}": run([`${reuse} ${copyright} ${symbol} ${licenseScripts}`, prettier]),
   ".{*ignore,editorconfig,gitattributes,mailmap}": run([
     `${reuse} ${copyright} ${symbol} ${licenseConfiguration}`,
     prettier,

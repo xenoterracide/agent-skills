@@ -7,8 +7,9 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 # Subtree AI - AI Agent Skills Repository
 
 Reusable AI coding agent skills for Java, Gradle, GitHub, shell scripting,
-development planning, and documentation workflows. This repository is also
-published as the user-level skill plugin `xenoterracide-agent-skills`.
+development planning, and documentation workflows. This repository is published
+as the user-level skill plugin `xenoterracide-agent-skills`, and its `skills/`
+directory doubles as an OpenCode-compatible HTTP skill catalog.
 
 - **Repository**: https://github.com/xenoterracide/agent-skills
 - **License for skills/docs**: CC-BY-NC-SA-4.0
@@ -18,7 +19,8 @@ published as the user-level skill plugin `xenoterracide-agent-skills`.
 > `xenoterracide-agent-skills`. It is **NOT** the Superpowers plugin and it is
 > **NOT** an installed plugin directory. Make all skill and plugin changes in
 > this repository, then reinstall from here. Never edit files under
-> `~/.kimi-code/`, `~/.kimi-plugin/`, or any other agent installation directory.
+> `~/.kimi-code/`, `~/.kimi-plugin/`, `~/.config/opencode/`, or any other agent
+> installation directory.
 
 ## Source of Truth
 
@@ -26,6 +28,8 @@ published as the user-level skill plugin `xenoterracide-agent-skills`.
 | -------------------------------------- | ------------------------------- |
 | Install, update, usage, contribution   | `README.md` (read this first)   |
 | Plugin manifest, skill layout, version | `.kimi-plugin/plugin.json`      |
+| OpenCode skill catalog                 | `skills/index.json`             |
+| Skills directory                       | `skills/`                       |
 | Node version                           | `.tool-versions`                |
 | Scripts and Node dependencies          | `package.json`                  |
 | Python dependencies                    | `pyproject.toml`, `uv.lock`     |
@@ -146,6 +150,11 @@ Load the relevant skill when the trigger applies:
   commands.
 - When modifying skills, ask the user whether to bump the plugin version in
   `.kimi-plugin/plugin.json` before creating or updating the PR.
+- After adding, removing, or moving skills, regenerate the OpenCode catalog with
+  `yarn skills:catalog` so `skills/index.json` stays in sync (kept in check by
+  `yarn skills:check` as part of `yarn lint`). The catalog version is read from
+  `.kimi-plugin/plugin.json`; bump it when skill contents change so OpenCode
+  refreshes cached copies.
 
 ## Security Considerations
 

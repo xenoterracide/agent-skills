@@ -18,6 +18,7 @@ workflows.
 - **Primary target**: [Kimi Code CLI](https://kimi.com/code)
 - **Compatible with**: any [agentskills.io](https://agentskills.io)-standard
   agent such as Claude Code, Copilot CLI, or Gemini CLI
+- **OpenCode**: installable via its [skill catalog](https://opencode.ai/docs/skills/)
 
 ## Installation
 
@@ -29,6 +30,31 @@ workflows.
 
 Then start a new session (`/new`) for skills to activate.
 
+### OpenCode
+
+The repo-root `skills/` directory doubles as an
+[HTTP skill catalog](https://opencode.ai/v2/docs/skills/). It ships with a
+generated `index.json` (regenerate with `yarn skills:catalog`) and is served
+directly from GitHub raw.
+
+Add the catalog URL and the `javadocs` MCP server to `opencode.json` (project or
+`~/.config/opencode/opencode.json`):
+
+```jsonc
+{
+  "$schema": "https://opencode.ai/config.json",
+  "skills": {
+    "urls": ["https://raw.githubusercontent.com/xenoterracide/agent-skills/develop/skills/"],
+  },
+  "mcp": {
+    "javadocs": {
+      "type": "remote",
+      "url": "https://www.javadocs.dev/mcp",
+    },
+  },
+}
+```
+
 ### Manual (any agent)
 
 Copy the `skills/` directory into your agent's skill discovery path:
@@ -36,6 +62,7 @@ Copy the `skills/` directory into your agent's skill discovery path:
 - **Kimi**: `~/.kimi-code/skills/` or `.kimi-code/skills/`
 - **Claude Code**: `~/.claude/skills/` or `.claude/skills/`
 - **Copilot CLI**: `~/.copilot/skills/` or `.github/skills/`
+- **OpenCode**: `~/.config/opencode/skills/` or `.agents/skills/`
 
 ## Skills
 
@@ -56,6 +83,8 @@ Skills are organized as a flat collection. See
   or revising `README.md` files.
 - Use the [`contributing-creator`](skills/contributing-creator/SKILL.md) skill
   when writing or revising `CONTRIBUTING.md` files.
+- When adding or moving skills, run `yarn skills:catalog` to regenerate the
+  OpenCode catalog at `skills/index.json`.
 
 ## License
 
