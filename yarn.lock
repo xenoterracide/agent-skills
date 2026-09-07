@@ -125,9 +125,9 @@ __metadata:
   linkType: hard
 
 "dot-properties@npm:^1.1.0":
-  version: 1.1.1
-  resolution: "dot-properties@npm:1.1.1"
-  checksum: 10c0/2007ef4a8b5afdc21bf457e01c6e1bef58d63359d273294d059ec7a2af1fb44c49be09492dc4ab843540d8c013893ac63a039aed79d0cda47b3ebd5b0f538f99
+  version: 1.1.2
+  resolution: "dot-properties@npm:1.1.2"
+  checksum: 10c0/b76309979b97232418a1e62ec02e06261c306337e8d588df5806b770919d43d6b152c6699139ebe20f7c56f6e1247019a6b46b2c63a41e3b0a1a3840e2398cbd
   languageName: node
   linkType: hard
 
