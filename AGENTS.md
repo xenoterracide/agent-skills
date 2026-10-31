@@ -128,7 +128,7 @@ Load the relevant skill when the trigger applies:
 | `session-init`            | Starting work in a repo session                                                      |
 | `completion-checklist`    | About to claim work is complete, fixed, or passing                                   |
 | `pull-request`            | Creating/updating PRs, committing, pushing, review comments                          |
-| `commit-message`          | Writing commit messages, PR titles, or PR descriptions                               |
+| `commit-creator`          | Writing commit messages, PR titles, or PR descriptions                               |
 | `workflow-push-rejection` | Push rejected for `.github/workflows` / `workflow` scope                             |
 | `coding-standards`        | Writing or modifying code in any language                                            |
 | `testing`                 | Adding, updating, debugging, or discussing tests                                     |

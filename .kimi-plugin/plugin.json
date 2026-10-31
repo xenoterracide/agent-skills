@@ -18,7 +18,7 @@
     "session-init",
     "conventional-commits",
     "pull-request",
-    "commit-message",
+    "commit-creator",
     "workflow-push-rejection",
     "iterative-development",
     "use-case-creator",
