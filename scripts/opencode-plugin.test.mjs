@@ -124,3 +124,29 @@ test("skips a malformed skill and registers the rest", async () => {
 test("setup resolves when V2 domains are missing", async () => {
   await assert.doesNotReject(() => plugin.setup({}));
 });
+
+test("registers javadocs when absent", async () => {
+  const { ctx, mcp } = createContext();
+  await plugin.setup(ctx);
+
+  assert.deepEqual(mcp.get("javadocs"), {
+    type: "remote",
+    url: "https://www.javadocs.dev/mcp",
+  });
+});
+
+test("does not overwrite an existing javadocs entry", async () => {
+  const existing = { type: "remote", url: "https://custom.example/mcp", disabled: true };
+  const { ctx, mcp } = createContext({ existingMcp: { javadocs: existing } });
+  await plugin.setup(ctx);
+
+  assert.equal(mcp.get("javadocs"), existing);
+});
+
+test("skips MCP registration when javadocs is false", async () => {
+  const { ctx, mcp, getMcpTransformCalls } = createContext({ options: { javadocs: false } });
+  await plugin.setup(ctx);
+
+  assert.equal(mcp.has("javadocs"), false);
+  assert.equal(getMcpTransformCalls(), 0);
+});

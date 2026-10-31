@@ -10,6 +10,8 @@ const PLUGIN_ID = "xenoterracide-agent-skills";
 
 export const DEFAULT_SKILLS_DIRECTORY = fileURLToPath(new URL("./skills/", import.meta.url));
 
+export const JAVADOCS_MCP_URL = "https://www.javadocs.dev/mcp";
+
 function warn(message, error) {
   if (error === undefined) console.warn(`[${PLUGIN_ID}] ${message}`);
   else console.warn(`[${PLUGIN_ID}] ${message}`, error);
@@ -88,9 +90,18 @@ export async function registerSkills(ctx, skillsDirectory = DEFAULT_SKILLS_DIREC
   });
 }
 
+export async function registerJavadocs(ctx) {
+  await ctx.mcp.transform((editor) => {
+    if (editor.get("javadocs")) return;
+    editor.set("javadocs", { type: "remote", url: JAVADOCS_MCP_URL });
+  });
+}
+
 export default {
   id: PLUGIN_ID,
   async setup(ctx) {
+    const options = ctx?.options ?? {};
+
     if (typeof ctx?.skill?.transform === "function") {
       try {
         await registerSkills(ctx);
@@ -99,6 +110,14 @@ export default {
       }
     } else {
       warn("OpenCode V2 skill API unavailable; skills not registered");
+    }
+
+    if (options.javadocs !== false && typeof ctx?.mcp?.transform === "function") {
+      try {
+        await registerJavadocs(ctx);
+      } catch (error) {
+        warn("javadocs MCP registration failed", error);
+      }
     }
   },
 };
