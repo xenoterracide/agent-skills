@@ -102,6 +102,8 @@ test("does not overwrite an existing skill ID", async () => {
 
 test("skips a malformed skill and registers the rest", async () => {
   const directory = mkdtempSync(join(tmpdir(), "agent-skills-test-"));
+  const originalWarn = console.warn;
+  console.warn = () => {};
   try {
     mkdirSync(join(directory, "good"));
     writeFileSync(join(directory, "good", "SKILL.md"), "---\nname: good\ndescription: Good skill\n---\nBody\n");
@@ -117,12 +119,19 @@ test("skips a malformed skill and registers the rest", async () => {
       ["good"],
     );
   } finally {
+    console.warn = originalWarn;
     rmSync(directory, { recursive: true, force: true });
   }
 });
 
 test("setup resolves when V2 domains are missing", async () => {
-  await assert.doesNotReject(() => plugin.setup({}));
+  const originalWarn = console.warn;
+  console.warn = () => {};
+  try {
+    await assert.doesNotReject(() => plugin.setup({}));
+  } finally {
+    console.warn = originalWarn;
+  }
 });
 
 test("registers javadocs when absent", async () => {
@@ -149,4 +158,53 @@ test("skips MCP registration when javadocs is false", async () => {
 
   assert.equal(mcp.has("javadocs"), false);
   assert.equal(getMcpTransformCalls(), 0);
+});
+
+test("injects the session-init bootstrap once", async () => {
+  const { ctx, getContextHook } = createContext();
+  await plugin.setup(ctx);
+
+  const event = {
+    sessionID: "ses_1",
+    messages: [{ role: "user", content: [{ type: "text", text: "hello" }] }],
+  };
+  await getContextHook()(event);
+  await getContextHook()(event);
+
+  const text = event.messages[0].content[0].text;
+  assert.equal(text.includes("xenoterracide-agent-skills/session-init"), true);
+  assert.equal(text.includes("`session-init`"), true);
+  assert.equal(
+    event.messages[0].content.filter((part) => part.text.includes("xenoterracide-agent-skills/session-init")).length,
+    1,
+  );
+});
+
+test("skips the bootstrap for child sessions", async () => {
+  const { ctx, getContextHook } = createContext({ parentID: "ses_parent" });
+  await plugin.setup(ctx);
+
+  const event = { sessionID: "ses_child", messages: [{ role: "user", content: [{ type: "text", text: "hello" }] }] };
+  await getContextHook()(event);
+
+  assert.equal(event.messages[0].content[0].text, "hello");
+});
+
+test("skips the bootstrap when the marker already exists", async () => {
+  const { ctx, getContextHook } = createContext();
+  await plugin.setup(ctx);
+
+  const text = "prefix xenoterracide-agent-skills/session-init suffix";
+  const event = { sessionID: "ses_1", messages: [{ role: "user", content: [{ type: "text", text }] }] };
+  await getContextHook()(event);
+
+  assert.equal(event.messages[0].content.length, 1);
+  assert.equal(event.messages[0].content[0].text, text);
+});
+
+test("does not register the session hook when sessionInit is false", async () => {
+  const { ctx, getContextHook } = createContext({ options: { sessionInit: false } });
+  await plugin.setup(ctx);
+
+  assert.equal(getContextHook(), undefined);
 });

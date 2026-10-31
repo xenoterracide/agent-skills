@@ -12,6 +12,8 @@ export const DEFAULT_SKILLS_DIRECTORY = fileURLToPath(new URL("./skills/", impor
 
 export const JAVADOCS_MCP_URL = "https://www.javadocs.dev/mcp";
 
+export const BOOTSTRAP_MARKER = "xenoterracide-agent-skills/session-init";
+
 function warn(message, error) {
   if (error === undefined) console.warn(`[${PLUGIN_ID}] ${message}`);
   else console.warn(`[${PLUGIN_ID}] ${message}`, error);
@@ -97,6 +99,51 @@ export async function registerJavadocs(ctx) {
   });
 }
 
+export function buildSessionBootstrap() {
+  return [
+    "<EXTREMELY_IMPORTANT>",
+    BOOTSTRAP_MARKER,
+    "At the start of this session, before taking any other action, invoke the `session-init` skill and follow its instructions.",
+    "</EXTREMELY_IMPORTANT>",
+  ].join("\n");
+}
+
+async function isChildSession(ctx, sessionID) {
+  if (typeof ctx.session?.get !== "function") return false;
+
+  const session = await ctx.session.get({ sessionID });
+  return Boolean(session?.parentID);
+}
+
+export async function registerSessionInit(ctx) {
+  await ctx.session.hook("context", async (event) => {
+    try {
+      if (!Array.isArray(event?.messages)) return;
+      if (await isChildSession(ctx, event.sessionID)) return;
+
+      const hasMarker = event.messages.some(
+        (message) =>
+          Array.isArray(message?.content) &&
+          message.content.some(
+            (part) => part?.type === "text" && typeof part.text === "string" && part.text.includes(BOOTSTRAP_MARKER),
+          ),
+      );
+      if (hasMarker) return;
+
+      const firstUserMessage = event.messages.find((message) => message?.role === "user");
+      if (!firstUserMessage) {
+        event.messages.push({ role: "user", content: [{ type: "text", text: buildSessionBootstrap() }] });
+        return;
+      }
+
+      if (!Array.isArray(firstUserMessage.content)) firstUserMessage.content = [];
+      firstUserMessage.content.unshift({ type: "text", text: buildSessionBootstrap() });
+    } catch (error) {
+      warn("session bootstrap failed", error);
+    }
+  });
+}
+
 export default {
   id: PLUGIN_ID,
   async setup(ctx) {
@@ -117,6 +164,14 @@ export default {
         await registerJavadocs(ctx);
       } catch (error) {
         warn("javadocs MCP registration failed", error);
+      }
+    }
+
+    if (options.sessionInit !== false && typeof ctx?.session?.hook === "function") {
+      try {
+        await registerSessionInit(ctx);
+      } catch (error) {
+        warn("session bootstrap registration failed", error);
       }
     }
   },
