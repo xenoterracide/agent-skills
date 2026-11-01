@@ -2,17 +2,17 @@
   "skills": [
     {
       "name": "coding-standards",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "files": ["SKILL.md"]
     },
     {
       "name": "completion-checklist",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "files": ["SKILL.md"]
     },
     {
       "name": "docs-creator",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "files": [
         "SKILL.md",
         "references/agents-creator.md",
@@ -27,7 +27,7 @@
     },
     {
       "name": "git-workflow",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "files": [
         "SKILL.md",
         "references/commit-creator.md",
@@ -37,52 +37,52 @@
     },
     {
       "name": "github",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "files": ["SKILL.md"]
     },
     {
       "name": "gradle-creator",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "files": ["SKILL.md"]
     },
     {
       "name": "hemingway",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "files": ["SKILL.md", "references/code.md", "references/prose.md"]
     },
     {
       "name": "iterative-development",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "files": ["SKILL.md"]
     },
     {
       "name": "java-creator",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "files": ["SKILL.md"]
     },
     {
       "name": "shell-script-creator",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "files": ["SKILL.md"]
     },
     {
       "name": "testing",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "files": ["SKILL.md"]
     },
     {
       "name": "use-case-creator",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "files": ["SKILL.md", "assets/uc-registration-example.adoc"]
     },
     {
       "name": "using-xenoterracide-agent-skills",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "files": ["SKILL.md"]
     },
     {
       "name": "version-managers",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "files": ["SKILL.md", "references/corepack-troubleshooting.md"]
     }
   ]

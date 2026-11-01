@@ -8,9 +8,16 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
-import plugin, { DEFAULT_SKILLS_DIRECTORY } from "../index.js";
+import plugin, { DEFAULT_SKILLS_DIRECTORY, isJavaProject } from "../index.js";
 
-function createContext({ options = {}, existingSkills = [], existingMcp = {}, parentID, rejectSkillIDs = [] } = {}) {
+function createContext({
+  options = {},
+  existingSkills = [],
+  existingMcp = {},
+  parentID,
+  rejectSkillIDs = [],
+  location,
+} = {}) {
   const skills = [...existingSkills];
   const mcp = new Map(Object.entries(existingMcp));
   let contextHook;
@@ -19,6 +26,7 @@ function createContext({ options = {}, existingSkills = [], existingMcp = {}, pa
 
   const ctx = {
     options,
+    location,
     skill: {
       async transform(callback) {
         skillTransformCalls += 1;
@@ -68,6 +76,12 @@ function createContext({ options = {}, existingSkills = [], existingMcp = {}, pa
     getSkillTransformCalls: () => skillTransformCalls,
     getMcpTransformCalls: () => mcpTransformCalls,
   };
+}
+
+function createProjectDirectory(files = []) {
+  const directory = mkdtempSync(join(tmpdir(), "agent-skills-project-"));
+  for (const file of files) writeFileSync(join(directory, file), "");
+  return directory;
 }
 
 test("registers every bundled skill", async () => {
@@ -181,7 +195,7 @@ test("setup resolves when V2 domains are missing", async () => {
   }
 });
 
-test("registers javadocs when absent", async () => {
+test("registers javadocs when the location is unavailable", async () => {
   const { ctx, mcp } = createContext();
   await plugin.setup(ctx);
 
@@ -205,6 +219,67 @@ test("skips MCP registration when javadocs is false", async () => {
 
   assert.equal(mcp.has("javadocs"), false);
   assert.equal(getMcpTransformCalls(), 0);
+});
+
+test("registers javadocs in an auto-detected Java project", async () => {
+  const directory = createProjectDirectory(["pom.xml"]);
+  try {
+    const { ctx, mcp } = createContext({ location: { directory } });
+    await plugin.setup(ctx);
+
+    assert.deepEqual(mcp.get("javadocs"), {
+      type: "remote",
+      url: "https://www.javadocs.dev/mcp",
+    });
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test("does not register javadocs outside a Java project", async () => {
+  const directory = createProjectDirectory();
+  try {
+    const { ctx, mcp } = createContext({ location: { directory } });
+    await plugin.setup(ctx);
+
+    assert.equal(mcp.has("javadocs"), false);
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test("registers javadocs everywhere when javadocs is true", async () => {
+  const directory = createProjectDirectory();
+  try {
+    const { ctx, mcp } = createContext({
+      options: { javadocs: true },
+      location: { directory },
+    });
+    await plugin.setup(ctx);
+
+    assert.deepEqual(mcp.get("javadocs"), {
+      type: "remote",
+      url: "https://www.javadocs.dev/mcp",
+    });
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test("isJavaProject recognizes build files and wrappers", () => {
+  const gradle = createProjectDirectory(["build.gradle.kts"]);
+  const wrapper = createProjectDirectory(["gradlew"]);
+  const plain = createProjectDirectory();
+  try {
+    assert.equal(isJavaProject(gradle), true);
+    assert.equal(isJavaProject(wrapper), true);
+    assert.equal(isJavaProject(plain), false);
+    assert.equal(isJavaProject(undefined), false);
+  } finally {
+    rmSync(gradle, { recursive: true, force: true });
+    rmSync(wrapper, { recursive: true, force: true });
+    rmSync(plain, { recursive: true, force: true });
+  }
 });
 
 test("injects the using-xenoterracide-agent-skills bootstrap once", async () => {
