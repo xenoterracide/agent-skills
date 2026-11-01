@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
+#
+# SPDX-License-Identifier: CC0-1.0
+
+- name: hemingway triggers when writing a skill
+  prompt: write a skill that helps format commit messages
+  expect:
+    type: skill
+    name: hemingway
+- name: hemingway triggers when writing javadoc
+  prompt: write javadoc for this class
+  expect:
+    type: skill
+    name: hemingway
+- name: hemingway prose rule applies
+  prompt: |
+    rewrite this to be terse:
+    It is important to note that you should run the tests.
+  expect:
+    type: contains
+    text: Run the tests

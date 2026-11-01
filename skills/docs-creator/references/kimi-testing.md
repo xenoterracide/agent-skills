@@ -6,7 +6,9 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 # Kimi Testing
 
-Kimi cannot test a skill in-session, so fork a separate `kimi -p` process.
+"Kimi" here means the Kimi Code CLI, not the Kimi model.
+
+The CLI cannot test a skill in-session, so fork a separate `kimi -p` process.
 
 ## Discovery
 

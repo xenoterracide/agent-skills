@@ -3,36 +3,77 @@
 // SPDX-License-Identifier: MIT
 
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { cpSync, existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { parse } from "yaml";
 
 const root = join(import.meta.dirname, "..");
 const evalsFile = join(root, "evals.yaml");
+const skillsDir = join(root, "skills");
 
 export function parseEvals(text) {
   return parse(text);
 }
 
-export function validateEvals(evals) {
-  if (!Array.isArray(evals.models) || evals.models.length === 0) {
+export function validateConfig(config) {
+  if (config.harness !== undefined && config.harness !== "opencode" && config.harness !== "kimi") {
+    throw new Error("evals.yaml: 'harness' must be 'opencode' or 'kimi'");
+  }
+  if (!Array.isArray(config.models) || config.models.length === 0) {
     throw new Error("evals.yaml: 'models' must be a non-empty list");
   }
-  if (!Number.isInteger(evals.iterations) || evals.iterations < 1) {
+  if (!Number.isInteger(config.iterations) || config.iterations < 1) {
     throw new Error("evals.yaml: 'iterations' must be a positive integer");
   }
-  if (!Array.isArray(evals.tests) || evals.tests.length === 0) {
-    throw new Error("evals.yaml: 'tests' must be a non-empty list");
-  }
-  for (const test of evals.tests) {
-    if (!test.name || !test.prompt || !test.expect) {
-      throw new Error(`evals.yaml: a test is missing name, prompt, or expect`);
+}
+
+export function detectHarness() {
+  for (const harness of ["opencode", "kimi"]) {
+    try {
+      execFileSync(harness, ["--version"], { stdio: "ignore" });
+      return harness;
+    } catch {
+      // try the next harness
     }
-    if (test.expect.type !== "skill" && test.expect.type !== "contains") {
-      throw new Error(`evals.yaml: test '${test.name}' has unknown expect.type '${test.expect.type}'`);
+  }
+  throw new Error("no supported harness found (opencode or kimi)");
+}
+
+export function buildHarnessCommand(harness, model, prompt) {
+  if (harness === "opencode") {
+    return { cmd: "opencode", args: ["run", "--standalone", "-m", model, prompt] };
+  }
+  if (harness === "kimi") {
+    return { cmd: "kimi", args: ["-p", prompt, "--skills-dir", skillsDir] };
+  }
+  throw new Error(`unknown harness: ${harness}`);
+}
+
+export function validateTest(test) {
+  if (!test.name || !test.prompt || !test.expect) {
+    throw new Error("a test is missing name, prompt, or expect");
+  }
+  if (test.expect.type !== "skill" && test.expect.type !== "contains") {
+    throw new Error(`test '${test.name}' has unknown expect.type '${test.expect.type}'`);
+  }
+}
+
+export function discoverTests(skillsDir) {
+  const tests = [];
+  for (const name of readdirSync(skillsDir).sort()) {
+    const dir = join(skillsDir, name);
+    if (!statSync(dir).isDirectory()) continue;
+    const file = join(dir, "tests", "evals.yaml");
+    if (!existsSync(file)) continue;
+    const cases = parseEvals(readFileSync(file, "utf8"));
+    for (const test of cases) {
+      validateTest(test);
+      tests.push({ skill: name, test });
     }
   }
+  return tests;
 }
 
 export function judgeContains(output, text) {
@@ -59,37 +100,45 @@ export function formatMatrix(results) {
     .join("\n");
 }
 
-function runSession(model, prompt) {
-  return execFileSync("opencode", ["run", "--standalone", "-m", model, prompt], {
-    encoding: "utf8",
-    cwd: root,
-  });
+function runSession(harness, model, prompt) {
+  const dir = mkdtempSync(join(tmpdir(), "skill-evals-"));
+  try {
+    cpSync(join(root, "skills"), join(dir, "skills"), { recursive: true });
+    cpSync(join(root, ".opencode"), join(dir, ".opencode"), { recursive: true });
+    const { cmd, args } = buildHarnessCommand(harness, model, prompt);
+    return execFileSync(cmd, args, { encoding: "utf8", cwd: dir });
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 }
 
-function judgeSkill(model, prompt, output, skill) {
+function judgeSkill(harness, model, prompt, output, skill) {
   const judgePrompt = buildJudgePrompt(prompt, output, skill);
-  const judgeOutput = runSession(model, judgePrompt).trim().toLowerCase();
+  const judgeOutput = runSession(harness, model, judgePrompt).trim().toLowerCase();
   return /^\s*yes\b/.test(judgeOutput);
 }
 
 function main() {
-  const evals = parseEvals(readFileSync(evalsFile, "utf8"));
-  validateEvals(evals);
+  const config = parseEvals(readFileSync(evalsFile, "utf8"));
+  validateConfig(config);
+  const harness = config.harness ?? detectHarness();
+  const tests = discoverTests(skillsDir);
+  const models = harness === "opencode" ? config.models : [null];
   const results = [];
   let failed = false;
-  for (const model of evals.models) {
-    for (const test of evals.tests) {
+  for (const model of models) {
+    for (const { skill, test } of tests) {
       let passed = 0;
-      for (let i = 0; i < evals.iterations; i++) {
-        const output = runSession(model, test.prompt);
+      for (let i = 0; i < config.iterations; i++) {
+        const output = runSession(harness, model, test.prompt);
         const ok =
           test.expect.type === "contains"
             ? judgeContains(output, test.expect.text)
-            : judgeSkill(model, test.prompt, output, test.expect.name);
+            : judgeSkill(harness, model, test.prompt, output, test.expect.name);
         if (ok) passed++;
       }
-      if (passed < evals.iterations) failed = true;
-      results.push({ test: test.name, model, passed, total: evals.iterations });
+      if (passed < config.iterations) failed = true;
+      results.push({ test: `${skill}: ${test.name}`, model: model ?? harness, passed, total: config.iterations });
     }
   }
   console.log(formatMatrix(results));
