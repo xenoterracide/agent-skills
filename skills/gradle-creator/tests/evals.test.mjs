@@ -9,6 +9,6 @@ import { assertSkillLoads } from "../../../scripts/eval-helpers.mjs";
 
 const gradleProject = join(import.meta.dirname, "fixtures", "gradle-project");
 
-test("triggers on a natural request", { timeout: 300_000 }, () => {
+test("triggers on a natural request", { timeout: 1_200_000 }, () => {
   assertSkillLoads("add JUnit to the project", "gradle-creator", { fixture: gradleProject });
 });

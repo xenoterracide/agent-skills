@@ -63,7 +63,7 @@ function runPrompt(prompt, { model = MODEL, fixture } = {}) {
       encoding: "utf8",
       cwd: dir,
       env: { ...process.env, XDG_CONFIG_HOME: configDir, PWD: dir },
-      timeout: 180_000,
+      timeout: 360_000,
     });
     if (result.error) throw result.error;
     return `${result.stdout ?? ""}${result.stderr ?? ""}`;

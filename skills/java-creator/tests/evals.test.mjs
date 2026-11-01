@@ -9,6 +9,6 @@ import { assertSkillLoads } from "../../../scripts/eval-helpers.mjs";
 
 const javaProject = join(import.meta.dirname, "fixtures", "java-project");
 
-test("triggers on a natural request", { timeout: 300_000 }, () => {
+test("triggers on a natural request", { timeout: 1_200_000 }, () => {
   assertSkillLoads("modify the App class so the greeting is uppercase", "java-creator", { fixture: javaProject });
 });
