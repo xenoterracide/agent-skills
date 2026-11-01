@@ -1,0 +1,44 @@
+<!--
+SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
+
+SPDX-License-Identifier: CC-BY-NC-SA-4.0
+-->
+
+# Hemingway Rule
+
+Write skills the way Hemingway wrote prose. Short. Concrete. Every word earns
+its place.
+
+## The rules
+
+1. **Short sentences.** One idea per sentence. Split anything joined by "and",
+   "but", or a semicolon.
+2. **Concrete words.** Prefer short, plain words. "Use", not "utilize". "Run",
+   not "execute".
+3. **Active voice.** Tell the agent what to do. "Run the test." Not "The test
+   should be run."
+4. **Cut qualifiers.** No "very", "really", "just", "simply", "basically". No
+   hedging: "might", "perhaps", "generally".
+5. **Cut filler.** No "please", "note that", "it is important to", "in order
+   to", "you should".
+6. **Cut what doesn't earn its place.** If the sentence works without a word,
+   cut the word. If the skill works without a sentence, cut the sentence.
+7. **Concrete over abstract.** Show the specific command, file, or example.
+   Don't describe it in general terms.
+
+## Why
+
+Skills share the context window with everything else. Terse skills cost less,
+trigger more reliably, and leave less room for the agent to rationalize around
+vague instructions.
+
+## Before / after
+
+Before:
+
+> It is important to note that you should generally run the test suite in order
+> to verify that your changes have not introduced any regressions.
+
+After:
+
+> Run the tests. Verify no regressions.
