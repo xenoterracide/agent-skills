@@ -91,8 +91,8 @@ skill (`references/corepack-troubleshooting.md`) before anything else.
 
 `index.js` is the OpenCode V2 plugin entrypoint, referenced by `main` in
 `package.json`. It registers every `skills/*/SKILL.md`, registers the `javadocs`
-MCP server when absent, and injects a one-time
-`using-xenoterracide-agent-skills` bootstrap. It has
+MCP server in locations with Java build markers when absent, and injects a
+one-time `using-xenoterracide-agent-skills` bootstrap. It has
 no runtime dependencies and must never throw into OpenCode. Behavior is covered
 by `scripts/opencode-plugin.test.mjs`.
 

@@ -68,12 +68,14 @@ project `opencode.json`:
 `sessionInit` defaults to `true`. Set `sessionInit: false` to skip the
 bootstrap.
 
-`javadocs` defaults to `auto`: it registers only when the project root contains
-`pom.xml`, `build.gradle(.kts)`, `settings.gradle(.kts)`, `mvnw`, or `gradlew`.
-Set `javadocs: true` to register everywhere, or `javadocs: false` to disable it.
-An existing `javadocs` entry is never overwritten. For a local checkout, use an
-absolute directory path instead of the Git specifier. Restart OpenCode or let it
-reload its configuration after installing.
+`javadocs` defaults to `auto`: it registers only when the directory OpenCode is
+opened in contains `pom.xml`, `build.gradle(.kts)`, `settings.gradle(.kts)`,
+`mvnw`, or `gradlew`. Set `javadocs: true` to register everywhere, or
+`javadocs: false` to disable it. In a monorepo whose build files live above the
+opened directory, set `javadocs: true` or open the repository root. An existing
+`javadocs` entry is never overwritten. For a local checkout, use an absolute
+directory path instead of the Git specifier. Restart OpenCode or let it reload
+its configuration after installing.
 
 You only need one OpenCode install path. If the HTTP catalog below is also
 configured, the plugin skips skill IDs that already exist.
