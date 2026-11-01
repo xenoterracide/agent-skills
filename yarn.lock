@@ -44,6 +44,7 @@ __metadata:
     prettier-plugin-properties: "npm:^0.3.0"
     prettier-plugin-toml: "npm:^2.0.6"
     rimraf: "npm:^6.1.2"
+    yaml: "npm:^2.9.1"
   languageName: unknown
   linkType: soft
 
