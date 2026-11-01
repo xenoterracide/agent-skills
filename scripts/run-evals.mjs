@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT
 
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { cpSync, existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -110,11 +110,14 @@ function runSession(harness, model, prompt, fixtureDir) {
       }
     }
     const { cmd, args } = buildHarnessCommand(harness, model, prompt);
-    return execFileSync(cmd, args, {
+    const result = spawnSync(cmd, args, {
       encoding: "utf8",
       cwd: dir,
-      env: { ...process.env, XDG_CONFIG_HOME: configDir },
+      env: { ...process.env, XDG_CONFIG_HOME: configDir, PWD: dir },
+      timeout: 180_000,
     });
+    if (result.error) throw result.error;
+    return `${result.stdout ?? ""}${result.stderr ?? ""}`;
   } finally {
     rmSync(dir, { recursive: true, force: true });
     rmSync(configDir, { recursive: true, force: true });
@@ -129,16 +132,26 @@ function main() {
   const models = harness === "opencode" ? config.models : [null];
   const results = [];
   let failed = false;
+  const total = models.length * tests.length * config.iterations;
+  let done = 0;
   for (const model of models) {
     for (const { skill, test, fixtureDir } of tests) {
       let passed = 0;
       for (let i = 0; i < config.iterations; i++) {
-        const output = runSession(harness, model, test.prompt, fixtureDir);
-        const ok =
-          test.expect.type === "contains"
-            ? judgeContains(output, test.expect.text)
-            : detectSkill(output, test.expect.name);
+        done++;
+        process.stderr.write(`[${done}/${total}] ${skill}: ${test.name} (run ${i + 1}/${config.iterations}) ... `);
+        let ok = false;
+        try {
+          const output = runSession(harness, model, test.prompt, fixtureDir);
+          ok =
+            test.expect.type === "contains"
+              ? judgeContains(output, test.expect.text)
+              : detectSkill(output, test.expect.name);
+        } catch (err) {
+          process.stderr.write(`error: ${err.message}\n`);
+        }
         if (ok) passed++;
+        process.stderr.write(ok ? "ok\n" : "miss\n");
       }
       if (passed < config.iterations) failed = true;
       results.push({ test: `${skill}: ${test.name}`, model: model ?? harness, passed, total: config.iterations });
