@@ -84,6 +84,9 @@ yarn install --immutable
 uv sync --frozen
 ```
 
+If `yarn` vanishes after a Node version change, use the `corepack-recovery`
+skill before anything else.
+
 ### OpenCode Plugin
 
 `index.js` is the OpenCode V2 plugin entrypoint, referenced by `main` in
@@ -141,6 +144,7 @@ Load the relevant skill when the trigger applies:
 | Skill                   | Activate When                                                                        |
 | ----------------------- | ------------------------------------------------------------------------------------ |
 | `session-init`          | Starting work in a repo session                                                      |
+| `corepack-recovery`     | `yarn`/`pnpm` broken after a Node version change or missing on Node ≥ 25             |
 | `completion-checklist`  | About to claim work is complete, fixed, or passing                                   |
 | `git-workflow`          | Creating/updating PRs, committing, pushing, commit/PR messages, push rejection       |
 | `coding-standards`      | Writing or modifying code in any language                                            |
