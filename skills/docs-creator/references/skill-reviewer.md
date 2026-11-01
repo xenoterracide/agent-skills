@@ -120,9 +120,11 @@ Dispatch a reviewer subagent before a skill ships. Use
 `skill-reviewer-template.md` and fill its placeholders.
 
 1. Fill `[SKILL_PATH]`, `[DESCRIPTION]`, and `[CHANGES]`.
-2. Dispatch a `general-purpose` subagent with the template.
-3. Act on feedback by severity:
+2. Fill `[STANDARDS]` by reading the `hemingway` prose facet and the
+   `skill-creator` and `skill-reviewer` checklists, and pasting them in.
+3. Dispatch a `general-purpose` subagent with the template.
+4. Act on feedback by severity:
    - Fix Critical issues immediately.
    - Fix Important issues before proceeding.
    - Note Minor issues for later.
-4. Push back with reasoning when the reviewer is wrong.
+5. Push back with reasoning when the reviewer is wrong.

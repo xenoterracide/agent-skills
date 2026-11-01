@@ -26,16 +26,15 @@ Subagent (general-purpose):
 
     [CHANGES]
 
-    ## Read the standards
+    ## Standards
 
-    Load these skills before reviewing:
-    - `hemingway` (prose facet)
-    - `docs-creator` (skill-creator and skill-reviewer references)
+    [STANDARDS — paste the hemingway prose facet and the skill-creator and
+    skill-reviewer checklists here]
 
     ## What to check
 
     **Hemingway rule:**
-    - Check the prose against the `hemingway` skill's prose facet.
+    - Check the prose against the hemingway rules in the Standards section.
 
     **Validation:**
     - Frontmatter valid? `---` is the first line, `name` and `description`
@@ -92,6 +91,8 @@ Subagent (general-purpose):
 - `[SKILL_PATH]` — path to the skill under review
 - `[DESCRIPTION]` — what the skill is meant to do
 - `[CHANGES]` — what changed and why
+- `[STANDARDS]` — the hemingway prose facet and the skill-creator and
+  skill-reviewer checklists, read by the dispatcher and pasted here
 
 **Reviewer returns:** Strengths, Issues (Critical / Important / Minor),
 Assessment.
