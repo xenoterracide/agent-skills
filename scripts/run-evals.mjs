@@ -15,6 +15,26 @@ export function parseEvals(text) {
   return parse(text);
 }
 
+export function validateEvals(evals) {
+  if (!Array.isArray(evals.models) || evals.models.length === 0) {
+    throw new Error("evals.yaml: 'models' must be a non-empty list");
+  }
+  if (!Number.isInteger(evals.iterations) || evals.iterations < 1) {
+    throw new Error("evals.yaml: 'iterations' must be a positive integer");
+  }
+  if (!Array.isArray(evals.tests) || evals.tests.length === 0) {
+    throw new Error("evals.yaml: 'tests' must be a non-empty list");
+  }
+  for (const test of evals.tests) {
+    if (!test.name || !test.prompt || !test.expect) {
+      throw new Error(`evals.yaml: a test is missing name, prompt, or expect`);
+    }
+    if (test.expect.type !== "skill" && test.expect.type !== "contains") {
+      throw new Error(`evals.yaml: test '${test.name}' has unknown expect.type '${test.expect.type}'`);
+    }
+  }
+}
+
 export function judgeContains(output, text) {
   return output.includes(text);
 }
@@ -49,12 +69,14 @@ function runSession(model, prompt) {
 function judgeSkill(model, prompt, output, skill) {
   const judgePrompt = buildJudgePrompt(prompt, output, skill);
   const judgeOutput = runSession(model, judgePrompt).trim().toLowerCase();
-  return judgeOutput.startsWith("yes");
+  return /^\s*yes\b/.test(judgeOutput);
 }
 
 function main() {
   const evals = parseEvals(readFileSync(evalsFile, "utf8"));
+  validateEvals(evals);
   const results = [];
+  let failed = false;
   for (const model of evals.models) {
     for (const test of evals.tests) {
       let passed = 0;
@@ -66,10 +88,12 @@ function main() {
             : judgeSkill(model, test.prompt, output, test.expect.name);
         if (ok) passed++;
       }
+      if (passed < evals.iterations) failed = true;
       results.push({ test: test.name, model, passed, total: evals.iterations });
     }
   }
   console.log(formatMatrix(results));
+  if (failed) process.exitCode = 1;
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
