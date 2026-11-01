@@ -28,6 +28,11 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
   install Superpowers alongside this plugin for those to resolve.
 - User instructions always take precedence over skill guidance.
 
+## Writing Style
+
+Write tersely and concretely. Every word and line earns its place. See the
+`hemingway` skill for the rules.
+
 ## Session Initialization
 
 **CRITICAL: Run these checks IMMEDIATELY at session start, BEFORE any other actions.**
