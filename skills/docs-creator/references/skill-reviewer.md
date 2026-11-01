@@ -19,25 +19,19 @@ discovery and behavioral compliance.
 
 ### Mechanical Discovery Tests
 
-Verify Kimi can load the skill:
+Verify the skill loads:
 
 1. File is named `SKILL.md`.
 2. Directory is in a skill discovery path (plugin `skills/` for this repo).
 3. Frontmatter starts with `---` and has both `name` and `description`.
 4. `yarn exec prettier --write <file>` produces no changes.
 5. `yarn lint:reuse` passes.
-
-For distributed plugin skills, test discovery by pointing `--skills-dir` at this
-repo's `skills/` directory:
-
-```bash
-kimi -p 'What skills do you see related to <topic>?' --skills-dir /path/to/this/repo/skills
-```
+6. `yarn skills:check` passes.
 
 ### Behavioral Compliance Tests
 
-Discovery does not prove the skill changes behavior. Use subagents or fresh
-`kimi -p` sessions with pressure scenarios:
+Discovery does not prove the skill changes behavior. Dispatch a subagent with a
+pressure scenario:
 
 1. **RED baseline** — Run a scenario WITHOUT the skill (or with an untriggered
    description) and document the exact failure: what did the agent skip, what
@@ -56,34 +50,9 @@ greeting is uppercase". If the skill does not trigger, strengthen the
 `description` with the verbs and concepts that appear in natural requests.
 
 For discipline-enforcing skills like `completion-checklist`, use a realistic
-implementation task in a temporary git repo:
+implementation task in a temporary git repo and dispatch a subagent to run it.
 
-```bash
-rm -rf /tmp/skill-test-repo
-mkdir /tmp/skill-test-repo
-cd /tmp/skill-test-repo
-git init
-git config user.email "test@example.com"
-git config user.name "Test"
-echo '# Test' > README.md
-git add README.md
-git commit -m 'init'
-
-kimi -p 'In /tmp/skill-test-repo, add a small script that does X, run it, and report that the implementation is complete.' \
-  --skills-dir /path/to/this/repo/skills \
-  --skills-dir /home/ai/.kimi-code/plugins/managed/superpowers/skills
-```
-
-Inspect the output. Did the agent invoke the skill before claiming completion?
-Did it follow the gate steps? If not, the description or body needs to be
-stronger.
-
-### Limits of `kimi -p` Testing
-
-`kimi -p` can verify that a skill is loaded and that the model recognizes it as
-relevant, but it may not fully replicate interactive session skill invocation.
-After mechanical and pressure tests, start a real session with the updated
-plugin installed to confirm production behavior.
+For Kimi, see `kimi-testing.md` for the `kimi -p` equivalents.
 
 ## Validation Checklist
 
