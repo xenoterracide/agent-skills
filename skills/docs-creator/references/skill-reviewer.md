@@ -69,8 +69,8 @@ Before considering a skill change complete, verify:
 5. **Trigger matches content** — read the skill as if you were an agent and
    confirm the body addresses the scenarios in the `description`.
 6. **Behavior tested** — run at least one RED baseline and one GREEN test with a
-   subagent or `kimi -p` pressure scenario. Document the rationalizations the
-   agent used and how the skill counters them.
+   subagent pressure scenario. Document the rationalizations the agent used and
+   how the skill counters them.
 
 ## Discoverability Checklist
 
