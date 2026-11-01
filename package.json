@@ -8,6 +8,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@prettier/plugin-xml": "^3.4.2",
+    "@types/node": "^26.6.6",
     "git-conventional-commits": "^2.8.0",
     "lint-staged": "^17.0.0",
     "prettier": "^3.6.2",
@@ -15,11 +16,15 @@
     "prettier-plugin-properties": "^0.3.0",
     "prettier-plugin-toml": "^2.0.6",
     "rimraf": "^6.1.2",
+    "typescript": "5",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5",
     "yaml": "^2.9.1"
   },
   "scripts": {
     "contribute": "uv sync --frozen && git config core.hooksPath .share/git/hooks",
-    "evals": "node --test --test-concurrency=1 --test-reporter=spec 'skills/*/tests/evals.test.mjs'",
+    "evals": "vitest run",
+    "typecheck": "tsc --noEmit",
     "lint": "yarn lint:prettier && yarn lint:reuse && yarn skills:check",
     "lint:prettier": "prettier --ignore-unknown --cache --check '**'",
     "lint:reuse": "yarn reuse lint",

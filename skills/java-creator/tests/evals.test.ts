@@ -1,14 +1,14 @@
 // SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
 //
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 import { join } from "node:path";
-import test from "node:test";
+import { it } from "vitest";
 
-import { assertSkillLoads } from "../../../scripts/eval-helpers.mjs";
+import { assertSkillLoads } from "../../../scripts/eval-helpers";
 
 const javaProject = join(import.meta.dirname, "fixtures", "java-project");
 
-test("triggers on a natural request", { timeout: 1_200_000 }, () => {
+it("triggers on a natural request", () => {
   assertSkillLoads("modify the App class so the greeting is uppercase", "java-creator", { fixture: javaProject });
 });

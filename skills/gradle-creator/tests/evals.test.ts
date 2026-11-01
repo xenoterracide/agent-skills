@@ -1,14 +1,14 @@
 // SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
 //
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 import { join } from "node:path";
-import test from "node:test";
+import { it } from "vitest";
 
-import { assertSkillLoads } from "../../../scripts/eval-helpers.mjs";
+import { assertSkillLoads } from "../../../scripts/eval-helpers";
 
 const gradleProject = join(import.meta.dirname, "fixtures", "gradle-project");
 
-test("triggers on a natural request", { timeout: 1_200_000 }, () => {
+it("triggers on a natural request", () => {
   assertSkillLoads("add JUnit to the project", "gradle-creator", { fixture: gradleProject });
 });
