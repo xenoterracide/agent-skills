@@ -99,13 +99,19 @@ export function formatMatrix(results) {
 
 function runSession(harness, model, prompt) {
   const dir = mkdtempSync(join(tmpdir(), "skill-evals-"));
+  const configDir = mkdtempSync(join(tmpdir(), "skill-evals-config-"));
   try {
     cpSync(join(root, "skills"), join(dir, "skills"), { recursive: true });
     cpSync(join(root, ".opencode"), join(dir, ".opencode"), { recursive: true });
     const { cmd, args } = buildHarnessCommand(harness, model, prompt);
-    return execFileSync(cmd, args, { encoding: "utf8", cwd: dir });
+    return execFileSync(cmd, args, {
+      encoding: "utf8",
+      cwd: dir,
+      env: { ...process.env, XDG_CONFIG_HOME: configDir },
+    });
   } finally {
     rmSync(dir, { recursive: true, force: true });
+    rmSync(configDir, { recursive: true, force: true });
   }
 }
 
