@@ -17,6 +17,12 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 These standards apply to all programming tasks regardless of language or framework.
 
+## Required Companion Skills
+
+Load these skills whenever this skill applies:
+
+- **`hemingway`** — for terse, concrete code style
+
 ## Rule 1: SOLID Design and Polymorphic Behavior
 
 Design code that follows SOLID principles with a focus on polymorphic behavior:

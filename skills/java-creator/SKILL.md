@@ -24,6 +24,7 @@ Use for writing Java code in `.java` files.
 Load these skills whenever this skill applies:
 
 - **`coding-standards`** — before writing or modifying code
+- **`hemingway`** — for terse, concrete code and Javadoc style
 - **`completion-checklist`** — before claiming the change is done, complete,
   fixed, passing, or working
 
