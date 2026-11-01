@@ -14,25 +14,28 @@ const skillsDir = join(root, "skills");
 const MODEL = process.env.EVAL_MODEL ?? "opencode/deepseek-v4.1-flash";
 const ITERATIONS = Number(process.env.EVAL_ITERATIONS ?? "3");
 
+const HARNESSES = {
+  opencode: (model, prompt) => ["opencode", ["run", "--standalone", "-m", model, prompt]],
+  kimi: (model, prompt) => ["kimi", ["-p", prompt, "--skills-dir", skillsDir]],
+};
+
+let cachedHarness;
+
 function detectHarness() {
-  for (const harness of ["opencode", "kimi"]) {
+  for (const harness of Object.keys(HARNESSES)) {
     try {
       execFileSync(harness, ["--version"], { stdio: "ignore" });
       return harness;
-    } catch {
-      // try the next harness
+    } catch (error) {
+      process.stderr.write(`harness "${harness}" unavailable: ${error.message}\n`);
     }
   }
-  throw new Error("no supported harness found (opencode or kimi)");
+  throw new Error(`no supported harness found (${Object.keys(HARNESSES).join(", ")})`);
 }
 
-const HARNESS = detectHarness();
-
-function buildCommand(model, prompt) {
-  if (HARNESS === "opencode") {
-    return ["opencode", ["run", "--standalone", "-m", model, prompt]];
-  }
-  return ["kimi", ["-p", prompt, "--skills-dir", skillsDir]];
+function harness() {
+  cachedHarness ??= detectHarness();
+  return cachedHarness;
 }
 
 export function stripAnsi(text) {
@@ -44,6 +47,7 @@ export function detectSkill(output, name) {
 }
 
 function runPrompt(prompt, { model = MODEL, fixture } = {}) {
+  const current = harness();
   const dir = mkdtempSync(join(tmpdir(), "skill-evals-"));
   const configDir = mkdtempSync(join(tmpdir(), "skill-evals-config-"));
   try {
@@ -54,7 +58,7 @@ function runPrompt(prompt, { model = MODEL, fixture } = {}) {
         cpSync(join(fixture, entry), join(dir, entry), { recursive: true });
       }
     }
-    const [cmd, args] = buildCommand(model, prompt);
+    const [cmd, args] = HARNESSES[current](model, prompt);
     const result = spawnSync(cmd, args, {
       encoding: "utf8",
       cwd: dir,
