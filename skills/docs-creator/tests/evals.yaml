@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
+#
+# SPDX-License-Identifier: CC0-1.0
+
+- name: docs-creator triggers when editing a skill reference
+  prompt: add a bullet to the git-workflow pull-request reference
+  expect:
+    type: skill
+    name: docs-creator
+- name: docs-creator triggers when editing a SKILL.md
+  prompt: update the hemingway skill instructions
+  expect:
+    type: skill
+    name: docs-creator
+- name: docs-creator triggers when updating README
+  prompt: add a troubleshooting section to the README
+  expect:
+    type: skill
+    name: docs-creator

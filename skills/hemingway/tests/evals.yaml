@@ -20,3 +20,8 @@
   expect:
     type: contains
     text: Run the tests
+- name: hemingway triggers when editing a skill reference
+  prompt: tighten the wording in the pull-request reference
+  expect:
+    type: skill
+    name: hemingway
