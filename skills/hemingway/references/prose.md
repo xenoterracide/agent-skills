@@ -28,9 +28,8 @@ place.
 
 ## Why
 
-Prose shares the context window with everything else. Terse prose costs less,
-triggers more reliably, and leaves less room to rationalize around vague
-instructions.
+Prose shares the context window with everything else. Terse prose costs less
+to read and leaves less room for ambiguity.
 
 ## Before / after
 
