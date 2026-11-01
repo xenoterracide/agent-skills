@@ -30,6 +30,8 @@ Read the reference that matches the file being written or revised:
 | `AGENTS.md`                 | `references/agents-creator.md`       |
 | `CONTRIBUTING.md`           | `references/contributing-creator.md` |
 | A reusable skill `SKILL.md` | `references/skill-creator.md`        |
+| Reviewing a skill           | `references/skill-reviewer.md`       |
+| Skill style standard        | `references/hemingway-rule.md`       |
 
 `references/contributing-examples.md` holds tool-specific command examples for
 the `CONTRIBUTING.md` guidance.
