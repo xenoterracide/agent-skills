@@ -199,9 +199,9 @@ try {
 
 ## Rule 4: Use Existing Libraries and Frameworks
 
-Before implementing new functionality, check whether a standard library, an existing dependency, or a well-established framework already solves it. **Prefer existing code over writing your own**, even for seemingly "trivial" functions.
+Check for an existing library, dependency, or framework before writing new code. Prefer existing code over your own, even for trivial functions.
 
-This applies to tools and infrastructure as much as to code. Do not roll your own test runner, CLI parser, config loader, or formatter when a maintained one exists. Reach for a library or framework before you reach for a blank file.
+This covers tools and infrastructure, not just code. Do not write your own test runner, CLI parser, config loader, or formatter when a maintained one exists. Use the library.
 
 ## Rule 5: Code Quality Standards
 
