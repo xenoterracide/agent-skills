@@ -157,6 +157,7 @@ Load the relevant skill when the trigger applies:
 | `gradle-creator`                   | Creating, modifying, or troubleshooting Gradle builds                                |
 | `shell-script-creator`             | Creating, modifying, or debugging shell scripts and commands                         |
 | `docs-creator`                     | Writing or revising `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, or `SKILL.md` files |
+| `hemingway`                        | Writing prose or code that should be terse and clear                                 |
 
 ## Maintenance
 
