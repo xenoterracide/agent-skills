@@ -31,6 +31,10 @@ Read the reference that matches the task before starting:
 | Write a commit message, PR title, or PR description      | `references/commit-creator.md`          |
 | Push rejected for `workflow` scope (`.github/workflows`) | `references/workflow-push-rejection.md` |
 
+## Required Companion Skills
+
+Load `hemingway` when writing or editing prose in these references.
+
 ## Shared rules
 
 These apply to every git workflow activity in this repository:
