@@ -29,7 +29,7 @@ Subagent (general-purpose):
     ## Read the standards
 
     Read these files before reviewing:
-    - skills/docs-creator/references/hemingway-rule.md
+    - skills/hemingway/references/prose.md
     - skills/docs-creator/references/skill-creator.md
     - skills/docs-creator/references/skill-reviewer.md
 

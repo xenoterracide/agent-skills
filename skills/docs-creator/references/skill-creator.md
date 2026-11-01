@@ -8,7 +8,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 Guidance for creating and maintaining AI skills.
 
-Write the skill's prose against `hemingway-rule.md`. Review a finished skill
+Write the skill's prose against the `hemingway` skill. Review a finished skill
 against `skill-reviewer.md`.
 
 **REQUIRED SUB-SKILL:** Use `writing-skills` for the skill authoring workflow
@@ -202,7 +202,7 @@ SPDX-FileCopyrightText: ...
    create and refine them using the RED-GREEN-REFACTOR process in
    `writing-skills`.
 2. **Keep it concise** - Skills share context window with everything else;
-   follow `hemingway-rule.md` and move heavy reference to separate files
+   follow the `hemingway` skill and move heavy reference to separate files
 3. **Clear description** - The description determines when skill triggers
 4. **Specific triggers** - Describe exact scenarios for skill usage
 5. **Progressive disclosure** - Put detailed info in references/, keep

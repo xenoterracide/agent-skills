@@ -9,8 +9,8 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 Review a skill before it ships. Check style, validation, discoverability, and
 behavior.
 
-Check style against `hemingway-rule.md`. Check the rest against the checklists
-below.
+Check style against the `hemingway` skill. Check the rest against the
+checklists below.
 
 ## Testing Skills
 
