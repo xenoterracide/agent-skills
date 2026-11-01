@@ -1,15 +1,3 @@
----
-name: agents-creator
-description: |
-  Use when initializing, creating, updating, reviewing, or generating
-  `AGENTS.md` files that provide project-level guidance to AI coding agents.
-  Use when analyzing a codebase to decide whether guidance belongs in
-  `AGENTS.md`, a reusable skill, or another document.
-license: CC-BY-NC-SA-4.0
-metadata:
-  copyright: Caleb Cushing
----
-
 <!--
 SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
 

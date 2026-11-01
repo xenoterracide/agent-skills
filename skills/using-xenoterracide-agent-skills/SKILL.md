@@ -1,8 +1,10 @@
 ---
-name: session-init
+name: using-xenoterracide-agent-skills
 description: |
-  Use when beginning work in a repository, verifying branch or PR state,
-  refreshing the default branch, or confirming you are on current code.
+  Use at the start of any session with the xenoterracide-agent-skills plugin,
+  and whenever unsure which skill to use. Covers how to find and invoke the
+  plugin's skills, plus the startup checks — repository and PR state,
+  `README.md`/`AGENTS.md`, current branch — to run before any other action.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing
@@ -14,7 +16,19 @@ SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
 SPDX-License-Identifier: CC-BY-NC-SA-4.0
 -->
 
-# Session Initialization
+# Using Xenoterracide's Agent Skills
+
+## Using the skills
+
+- The authoritative list of skills and their triggers is the **Skill Routing**
+  table in `AGENTS.md`. Invoke the skill whose trigger matches the task —
+  process skills before implementation skills.
+- Skills reference the Superpowers plugin's process-discipline skills (for
+  example `verification-before-completion` and `requesting-code-review`);
+  install Superpowers alongside this plugin for those to resolve.
+- User instructions always take precedence over skill guidance.
+
+## Session Initialization
 
 **CRITICAL: Run these checks IMMEDIATELY at session start, BEFORE any other actions.**
 
@@ -197,7 +211,8 @@ An AI agent's token usually lacks the `workflow` scope, so it cannot push
 changes to files under `.github/workflows/`. A push rejected with
 `refusing to allow ... without workflow scope` is **usually a stale base** (a
 dependency bot updated a workflow file on the remote), not an intentional
-workflow edit — see `workflow-push-rejection` to recover. Treat
+workflow edit — see the `git-workflow` skill
+(`references/workflow-push-rejection.md`) to recover. Treat
 genuine workflow-file edits as human-required tasks, as below. Only files under
 `.github/workflows/` are restricted; YAML files elsewhere are not.
 

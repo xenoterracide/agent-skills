@@ -1,13 +1,3 @@
----
-name: skill-creator
-description: |
-  Use when adding new skills, updating existing `SKILL.md` files, fixing
-  frontmatter, or improving skill trigger wording and discoverability.
-license: CC-BY-NC-SA-4.0
-metadata:
-  copyright: Caleb Cushing
----
-
 <!--
 SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
 
@@ -45,13 +35,20 @@ skill-name/
 └── (optional resources)
 ```
 
+Closely related skills may be consolidated into a single parent skill that
+routes to `references/*.md` files (for example, `git-workflow` and
+`docs-creator` in this repository). A reference is a plain Markdown file, not a
+skill: it carries an SPDX header and a title, with no YAML frontmatter or
+`description`. Fold each child's trigger vocabulary into the parent
+`description`, and make the parent body route each task to its reference.
+
 ## Naming Conventions
 
 **Prefer nouns over gerunds.** This repository uses concise noun-based names
 for skills rather than action-phrase names.
 
 - ✅ `skill-creator`
-- ✅ `commit-creator`
+- ✅ `use-case-creator`
 - ❌ `writing-skills`
 - ❌ `creating-commits`
 
@@ -83,7 +80,7 @@ Required fields:
   - Max 64 characters
   - Lowercase letters, numbers, and hyphens only
   - Must not start or end with a hyphen
-  - Examples: `java-creator`, `pull-request`, `gradle-shadow`
+  - Examples: `java-creator`, `github`, `use-case-creator`
 
 - **`description`**: When to use this skill (this triggers the skill)
   - Max 1024 characters, non-empty
@@ -114,9 +111,8 @@ Optional fields:
     about running trusted shell scripts
   - Do **not** use this as a substitute for clear instructions in the body
 
-- **`has-sub-skill`**: Set to `true` for parent bundles that contain sub-skills
-  - Example: `has-sub-skill: true`
-  - Required when the skill directory contains child skill directories
+- **`has-sub-skill`**: Not used in this repository. Group related skills into a
+  single skill with `references/*.md` files instead of nesting child skills.
 
 Keep frontmatter small and focused on activation plus carefully chosen
 pre-approval.

@@ -84,11 +84,15 @@ yarn install --immutable
 uv sync --frozen
 ```
 
+If `yarn` vanishes after a Node version change, use the `version-managers`
+skill (`references/corepack-troubleshooting.md`) before anything else.
+
 ### OpenCode Plugin
 
 `index.js` is the OpenCode V2 plugin entrypoint, referenced by `main` in
 `package.json`. It registers every `skills/*/SKILL.md`, registers the `javadocs`
-MCP server when absent, and injects a one-time `session-init` bootstrap. It has
+MCP server when absent, and injects a one-time
+`using-xenoterracide-agent-skills` bootstrap. It has
 no runtime dependencies and must never throw into OpenCode. Behavior is covered
 by `scripts/opencode-plugin.test.mjs`.
 
@@ -138,25 +142,21 @@ when creating new files:
 
 Load the relevant skill when the trigger applies:
 
-| Skill                     | Activate When                                                                        |
-| ------------------------- | ------------------------------------------------------------------------------------ |
-| `session-init`            | Starting work in a repo session                                                      |
-| `completion-checklist`    | About to claim work is complete, fixed, or passing                                   |
-| `pull-request`            | Creating/updating PRs, committing, pushing, review comments                          |
-| `commit-creator`          | Writing commit messages, PR titles, or PR descriptions                               |
-| `workflow-push-rejection` | Push rejected for `.github/workflows` / `workflow` scope                             |
-| `coding-standards`        | Writing or modifying code in any language                                            |
-| `testing`                 | Adding, updating, debugging, or discussing tests                                     |
-| `iterative-development`   | Scoping or refining designs                                                          |
-| `use-case-creator`        | Writing use cases or business behavior docs                                          |
-| `github`                  | GitHub APIs, issues, GraphQL, review threads                                         |
-| `java-creator`            | Creating, modifying, or refactoring Java source files, Maven pom.xml, or JUnit tests |
-| `gradle-creator`          | Creating, modifying, or troubleshooting Gradle builds                                |
-| `shell-script-creator`    | Creating, modifying, or debugging shell scripts and commands                         |
-| `skill-creator`           | Creating or editing `SKILL.md` files                                                 |
-| `agents-creator`          | Creating or editing `AGENTS.md` files                                                |
-| `readme-creator`          | Writing or revising `README.md`                                                      |
-| `contributing-creator`    | Writing or revising `CONTRIBUTING.md`                                                |
+| Skill                              | Activate When                                                                        |
+| ---------------------------------- | ------------------------------------------------------------------------------------ |
+| `using-xenoterracide-agent-skills` | Starting work in a repo session, or unsure which skill to use                        |
+| `version-managers`                 | Version/launcher tooling — asdf, corepack, direnv — or recovery when one breaks      |
+| `completion-checklist`             | About to claim work is complete, fixed, or passing                                   |
+| `git-workflow`                     | Creating/updating PRs, committing, pushing, commit/PR messages, push rejection       |
+| `coding-standards`                 | Writing or modifying code in any language                                            |
+| `testing`                          | Adding, updating, debugging, or discussing tests                                     |
+| `iterative-development`            | Scoping or refining designs                                                          |
+| `use-case-creator`                 | Writing use cases or business behavior docs                                          |
+| `github`                           | GitHub APIs, issues, GraphQL, review threads                                         |
+| `java-creator`                     | Creating, modifying, or refactoring Java source files, Maven pom.xml, or JUnit tests |
+| `gradle-creator`                   | Creating, modifying, or troubleshooting Gradle builds                                |
+| `shell-script-creator`             | Creating, modifying, or debugging shell scripts and commands                         |
+| `docs-creator`                     | Writing or revising `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, or `SKILL.md` files |
 
 ## Maintenance
 

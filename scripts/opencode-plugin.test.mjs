@@ -90,7 +90,7 @@ test("registers every bundled skill", async () => {
 
 test("does not overwrite an existing skill ID", async () => {
   const existing = {
-    id: "session-init",
+    id: "using-xenoterracide-agent-skills",
     name: "Custom",
     description: "Custom description",
     path: "/custom/SKILL.md",
@@ -99,7 +99,7 @@ test("does not overwrite an existing skill ID", async () => {
   const { ctx, skills } = createContext({ existingSkills: [existing] });
   await plugin.setup(ctx);
 
-  const sessionInit = skills.find((skill) => skill.id === "session-init");
+  const sessionInit = skills.find((skill) => skill.id === "using-xenoterracide-agent-skills");
   assert.equal(sessionInit, existing);
 });
 
@@ -131,11 +131,11 @@ test("skips a skill rejected by OpenCode and registers the rest", async () => {
   const originalWarn = console.warn;
   console.warn = () => {};
   try {
-    const { ctx, skills } = createContext({ rejectSkillIDs: ["session-init"] });
+    const { ctx, skills } = createContext({ rejectSkillIDs: ["using-xenoterracide-agent-skills"] });
     await plugin.setup(ctx);
 
     assert.equal(
-      skills.some((skill) => skill.id === "session-init"),
+      skills.some((skill) => skill.id === "using-xenoterracide-agent-skills"),
       false,
     );
     assert.equal(
@@ -207,7 +207,7 @@ test("skips MCP registration when javadocs is false", async () => {
   assert.equal(getMcpTransformCalls(), 0);
 });
 
-test("injects the session-init bootstrap once", async () => {
+test("injects the using-xenoterracide-agent-skills bootstrap once", async () => {
   const { ctx, getContextHook } = createContext();
   await plugin.setup(ctx);
 
@@ -219,10 +219,12 @@ test("injects the session-init bootstrap once", async () => {
   await getContextHook()(event);
 
   const text = event.messages[0].content[0].text;
-  assert.equal(text.includes("xenoterracide-agent-skills/session-init"), true);
-  assert.equal(text.includes("`session-init`"), true);
+  assert.equal(text.includes("xenoterracide-agent-skills/using-xenoterracide-agent-skills"), true);
+  assert.equal(text.includes("`using-xenoterracide-agent-skills`"), true);
   assert.equal(
-    event.messages[0].content.filter((part) => part.text.includes("xenoterracide-agent-skills/session-init")).length,
+    event.messages[0].content.filter((part) =>
+      part.text.includes("xenoterracide-agent-skills/using-xenoterracide-agent-skills"),
+    ).length,
     1,
   );
 });
@@ -241,7 +243,7 @@ test("skips the bootstrap when the marker already exists", async () => {
   const { ctx, getContextHook } = createContext();
   await plugin.setup(ctx);
 
-  const text = "prefix xenoterracide-agent-skills/session-init suffix";
+  const text = "prefix xenoterracide-agent-skills/using-xenoterracide-agent-skills suffix";
   const event = { sessionID: "ses_1", messages: [{ role: "user", content: [{ type: "text", text }] }] };
   await getContextHook()(event);
 
@@ -258,7 +260,7 @@ test("does not look up the session when the marker already exists", async () => 
   };
   await plugin.setup(ctx);
 
-  const text = "prefix xenoterracide-agent-skills/session-init suffix";
+  const text = "prefix xenoterracide-agent-skills/using-xenoterracide-agent-skills suffix";
   const event = { sessionID: "ses_1", messages: [{ role: "user", content: [{ type: "text", text }] }] };
   await getContextHook()(event);
 
@@ -273,7 +275,10 @@ test("preserves string user content when injecting the bootstrap", async () => {
   await getContextHook()(event);
 
   assert.equal(event.messages[0].content.length, 2);
-  assert.equal(event.messages[0].content[0].text.includes("xenoterracide-agent-skills/session-init"), true);
+  assert.equal(
+    event.messages[0].content[0].text.includes("xenoterracide-agent-skills/using-xenoterracide-agent-skills"),
+    true,
+  );
   assert.equal(event.messages[0].content[1].text, "hello");
 });
 

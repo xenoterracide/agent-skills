@@ -1,89 +1,81 @@
 {
   "skills": [
     {
-      "name": "agents-creator",
-      "version": "0.4.0",
-      "files": ["SKILL.md"]
-    },
-    {
       "name": "coding-standards",
-      "version": "0.4.0",
-      "files": ["SKILL.md"]
-    },
-    {
-      "name": "commit-creator",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "files": ["SKILL.md"]
     },
     {
       "name": "completion-checklist",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "files": ["SKILL.md"]
     },
     {
-      "name": "contributing-creator",
-      "version": "0.4.0",
-      "files": ["SKILL.md", "references/examples.md"]
+      "name": "docs-creator",
+      "version": "0.5.0",
+      "files": [
+        "SKILL.md",
+        "references/agents-creator.md",
+        "references/contributing-creator.md",
+        "references/contributing-examples.md",
+        "references/readme-creator.md",
+        "references/skill-creator.md"
+      ]
+    },
+    {
+      "name": "git-workflow",
+      "version": "0.5.0",
+      "files": [
+        "SKILL.md",
+        "references/commit-creator.md",
+        "references/pull-request.md",
+        "references/workflow-push-rejection.md"
+      ]
     },
     {
       "name": "github",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "files": ["SKILL.md"]
     },
     {
       "name": "gradle-creator",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "files": ["SKILL.md"]
     },
     {
       "name": "iterative-development",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "files": ["SKILL.md"]
     },
     {
       "name": "java-creator",
-      "version": "0.4.0",
-      "files": ["SKILL.md"]
-    },
-    {
-      "name": "pull-request",
-      "version": "0.4.0",
-      "files": ["SKILL.md"]
-    },
-    {
-      "name": "readme-creator",
-      "version": "0.4.0",
-      "files": ["SKILL.md"]
-    },
-    {
-      "name": "session-init",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "files": ["SKILL.md"]
     },
     {
       "name": "shell-script-creator",
-      "version": "0.4.0",
-      "files": ["SKILL.md"]
-    },
-    {
-      "name": "skill-creator",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "files": ["SKILL.md"]
     },
     {
       "name": "testing",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "files": ["SKILL.md"]
     },
     {
       "name": "use-case-creator",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "files": ["SKILL.md", "assets/uc-registration-example.adoc"]
     },
     {
-      "name": "workflow-push-rejection",
-      "version": "0.4.0",
+      "name": "using-xenoterracide-agent-skills",
+      "version": "0.5.0",
       "files": ["SKILL.md"]
+    },
+    {
+      "name": "version-managers",
+      "version": "0.5.0",
+      "files": ["SKILL.md", "references/corepack-troubleshooting.md"]
     }
   ]
 }

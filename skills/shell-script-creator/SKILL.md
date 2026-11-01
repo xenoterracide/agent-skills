@@ -152,5 +152,5 @@ trap 'rm -rf "$tmpdir"' EXIT
 
 - `coding-standards` - broader design, testing, and quality guidance
 - `github` - GitHub and GraphQL operations
-- `pull-request` - committing, pushing, and PR updates for script changes
+- `git-workflow` - committing, pushing, and PR updates for script changes
 - `gradle-creator` - Gradle build logic rather than shell automation
