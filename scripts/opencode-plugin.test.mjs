@@ -10,7 +10,7 @@ import test from "node:test";
 
 import plugin, { DEFAULT_SKILLS_DIRECTORY } from "../index.js";
 
-function createContext({ options = {}, existingSkills = [], existingMcp = {}, parentID } = {}) {
+function createContext({ options = {}, existingSkills = [], existingMcp = {}, parentID, rejectSkillIDs = [] } = {}) {
   const skills = [...existingSkills];
   const mcp = new Map(Object.entries(existingMcp));
   let contextHook;
@@ -25,7 +25,10 @@ function createContext({ options = {}, existingSkills = [], existingMcp = {}, pa
         callback({
           list: () => skills,
           get: (id) => skills.find((skill) => skill.id === id),
-          add: (skill) => skills.push(skill),
+          add: (skill) => {
+            if (rejectSkillIDs.includes(skill.id)) throw new Error(`rejected ${skill.id}`);
+            skills.push(skill);
+          },
           update: () => {},
           remove: () => {},
         });
@@ -124,6 +127,50 @@ test("skips a malformed skill and registers the rest", async () => {
   }
 });
 
+test("skips a skill rejected by OpenCode and registers the rest", async () => {
+  const originalWarn = console.warn;
+  console.warn = () => {};
+  try {
+    const { ctx, skills } = createContext({ rejectSkillIDs: ["session-init"] });
+    await plugin.setup(ctx);
+
+    assert.equal(
+      skills.some((skill) => skill.id === "session-init"),
+      false,
+    );
+    assert.equal(
+      skills.some((skill) => skill.id === "testing"),
+      true,
+    );
+  } finally {
+    console.warn = originalWarn;
+  }
+});
+
+test("skips a skill without a name", async () => {
+  const directory = mkdtempSync(join(tmpdir(), "agent-skills-test-"));
+  const originalWarn = console.warn;
+  console.warn = () => {};
+  try {
+    mkdirSync(join(directory, "good"));
+    writeFileSync(join(directory, "good", "SKILL.md"), "---\nname: good\ndescription: Good skill\n---\nBody\n");
+    mkdirSync(join(directory, "nameless"));
+    writeFileSync(join(directory, "nameless", "SKILL.md"), "---\ndescription: No name\n---\nBody\n");
+
+    const { ctx, skills } = createContext();
+    const { registerSkills } = await import("../index.js");
+    await registerSkills(ctx, directory);
+
+    assert.deepEqual(
+      skills.map((skill) => skill.id),
+      ["good"],
+    );
+  } finally {
+    console.warn = originalWarn;
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
+
 test("setup resolves when V2 domains are missing", async () => {
   const originalWarn = console.warn;
   console.warn = () => {};
@@ -200,6 +247,34 @@ test("skips the bootstrap when the marker already exists", async () => {
 
   assert.equal(event.messages[0].content.length, 1);
   assert.equal(event.messages[0].content[0].text, text);
+});
+
+test("does not look up the session when the marker already exists", async () => {
+  const { ctx, getContextHook } = createContext();
+  let lookups = 0;
+  ctx.session.get = async () => {
+    lookups += 1;
+    return { id: "ses_1" };
+  };
+  await plugin.setup(ctx);
+
+  const text = "prefix xenoterracide-agent-skills/session-init suffix";
+  const event = { sessionID: "ses_1", messages: [{ role: "user", content: [{ type: "text", text }] }] };
+  await getContextHook()(event);
+
+  assert.equal(lookups, 0);
+});
+
+test("preserves string user content when injecting the bootstrap", async () => {
+  const { ctx, getContextHook } = createContext();
+  await plugin.setup(ctx);
+
+  const event = { sessionID: "ses_1", messages: [{ role: "user", content: "hello" }] };
+  await getContextHook()(event);
+
+  assert.equal(event.messages[0].content.length, 2);
+  assert.equal(event.messages[0].content[0].text.includes("xenoterracide-agent-skills/session-init"), true);
+  assert.equal(event.messages[0].content[1].text, "hello");
 });
 
 test("does not register the session hook when sessionInit is false", async () => {

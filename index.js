@@ -119,7 +119,6 @@ export async function registerSessionInit(ctx) {
   await ctx.session.hook("context", async (event) => {
     try {
       if (!Array.isArray(event?.messages)) return;
-      if (await isChildSession(ctx, event.sessionID)) return;
 
       const hasMarker = event.messages.some(
         (message) =>
@@ -129,6 +128,7 @@ export async function registerSessionInit(ctx) {
           ),
       );
       if (hasMarker) return;
+      if (await isChildSession(ctx, event.sessionID)) return;
 
       const firstUserMessage = event.messages.find((message) => message?.role === "user");
       if (!firstUserMessage) {
@@ -136,7 +136,11 @@ export async function registerSessionInit(ctx) {
         return;
       }
 
-      if (!Array.isArray(firstUserMessage.content)) firstUserMessage.content = [];
+      if (typeof firstUserMessage.content === "string") {
+        firstUserMessage.content = [{ type: "text", text: firstUserMessage.content }];
+      } else if (!Array.isArray(firstUserMessage.content)) {
+        firstUserMessage.content = [];
+      }
       firstUserMessage.content.unshift({ type: "text", text: buildSessionBootstrap() });
     } catch (error) {
       warn("session bootstrap failed", error);
