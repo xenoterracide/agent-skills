@@ -9,8 +9,11 @@ import { assertContains, assertSkillLoads } from "../../../scripts/eval-helpers"
 
 const javaClass = join(import.meta.dirname, "fixtures", "java-class");
 
-it("triggers when writing a skill", () => {
-  assertSkillLoads("write a skill that helps format commit messages", "hemingway");
+it("triggers when tightening a checklist bullet", () => {
+  assertSkillLoads(
+    "tighten this checklist bullet: It is important to note that you should always run the tests before claiming done.",
+    "hemingway",
+  );
 });
 
 it("triggers when writing javadoc", () => {
