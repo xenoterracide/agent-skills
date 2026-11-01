@@ -1,7 +1,8 @@
 ---
 name: coding-standards
 description: |
-  Use when writing or modifying code in any language.
+  Use when writing or modifying code in any language, including scripts,
+  tests, and build files.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing
@@ -196,9 +197,11 @@ try {
    - Yes → Log at appropriate level and continue
    - No → Log and terminate/rethrow
 
-## Rule 4: Use Libraries When Available
+## Rule 4: Use Libraries and Tools When Available
 
 Before implementing new functionality, check if it's already provided by standard libraries or existing dependencies. **Prefer existing code over writing your own**, even for seemingly "trivial" functions.
+
+This applies to **tools and frameworks too, not just libraries**. Do not build a custom test runner, CLI parser, config loader, formatter, or other infrastructure when a standard one exists. Not-invented-here is a smell. Prefer `node:test` over a bespoke runner, `prettier` over a custom formatter, an existing dependency over a hand-rolled one.
 
 ## Rule 5: Code Quality Standards
 

@@ -73,16 +73,24 @@ function runPrompt(prompt, { model = MODEL, fixture } = {}) {
   }
 }
 
-export function assertSkillLoads(prompt, skill, { fixture, model = MODEL, iterations = ITERATIONS } = {}) {
+export function assertSkillLoads(
+  prompt,
+  skill,
+  { fixture, model = MODEL, iterations = ITERATIONS, run = runPrompt } = {},
+) {
   for (let i = 0; i < iterations; i++) {
-    const output = runPrompt(prompt, { model, fixture });
+    const output = run(prompt, { model, fixture });
     assert.ok(detectSkill(output, skill), `run ${i + 1}/${iterations}: skill "${skill}" did not load`);
   }
 }
 
-export function assertContains(prompt, text, { fixture, model = MODEL, iterations = ITERATIONS } = {}) {
+export function assertContains(
+  prompt,
+  text,
+  { fixture, model = MODEL, iterations = ITERATIONS, run = runPrompt } = {},
+) {
   for (let i = 0; i < iterations; i++) {
-    const output = runPrompt(prompt, { model, fixture });
+    const output = run(prompt, { model, fixture });
     assert.ok(output.includes(text), `run ${i + 1}/${iterations}: output did not contain "${text}"`);
   }
 }
