@@ -19,7 +19,7 @@
   },
   "scripts": {
     "contribute": "uv sync --frozen && git config core.hooksPath .share/git/hooks",
-    "evals": "node scripts/run-evals.mjs",
+    "evals": "node --test --test-concurrency=1 --test-reporter=spec 'skills/*/tests/evals.test.mjs'",
     "lint": "yarn lint:prettier && yarn lint:reuse && yarn skills:check",
     "lint:prettier": "prettier --ignore-unknown --cache --check '**'",
     "lint:reuse": "yarn reuse lint",
