@@ -76,8 +76,7 @@ When committing and creating/updating a PR, follow this workflow:
 
 5. **Before finalizing:**
    - Review if documentation needs updates (README.md, AGENTS.md)
-   - Remove the completed plan from `docs/superpowers/plans/`; keep the
-     design spec as history
+   - Remove completed plans from `docs/superpowers/plans/`.
    - Ensure PR description accurately reflects all changes including doc updates
 
 6. **After pushing, before returning to the user:**
