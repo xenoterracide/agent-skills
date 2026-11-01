@@ -1,24 +1,14 @@
----
-name: corepack-recovery
-description: |
-  Use when `yarn` or `pnpm` stops working after a Node.js version change —
-  "command not found", asdf reports "No version is set for command yarn", or a
-  corepack shim dangles — and when setting up a machine so corepack-managed
-  package managers survive Node upgrades.
-license: CC-BY-NC-SA-4.0
-metadata:
-  copyright: Caleb Cushing
----
-
 <!--
 SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
 
 SPDX-License-Identifier: CC-BY-NC-SA-4.0
 -->
 
-# Corepack Recovery
+# Package Manager Launcher Troubleshooting
 
-Restore `yarn`/`pnpm` when corepack-managed package managers stop resolving.
+Step-by-step recovery for version-manager toolchain breakage. The parent skill
+holds the conventions; apply the steps here in order when `yarn` or `pnpm`
+stops resolving after a runtime or Node version change.
 
 ## Why it breaks
 

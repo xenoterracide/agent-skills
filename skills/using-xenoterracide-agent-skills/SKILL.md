@@ -1,8 +1,10 @@
 ---
-name: session-init
+name: using-xenoterracide-agent-skills
 description: |
-  Use when beginning work in a repository, verifying branch or PR state,
-  refreshing the default branch, or confirming you are on current code.
+  Use at the start of any session with the xenoterracide-agent-skills plugin,
+  and whenever unsure which skill to use. Covers how to find and invoke the
+  plugin's skills, plus the startup checks — repository and PR state,
+  `README.md`/`AGENTS.md`, current branch — to run before any other action.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing
@@ -14,7 +16,19 @@ SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
 SPDX-License-Identifier: CC-BY-NC-SA-4.0
 -->
 
-# Session Initialization
+# Using Xenoterracide's Agent Skills
+
+## Using the skills
+
+- The authoritative list of skills and their triggers is the **Skill Routing**
+  table in `AGENTS.md`. Invoke the skill whose trigger matches the task —
+  process skills before implementation skills.
+- Skills reference the Superpowers plugin's process-discipline skills (for
+  example `verification-before-completion` and `requesting-code-review`);
+  install Superpowers alongside this plugin for those to resolve.
+- User instructions always take precedence over skill guidance.
+
+## Session Initialization
 
 **CRITICAL: Run these checks IMMEDIATELY at session start, BEFORE any other actions.**
 

@@ -56,7 +56,8 @@ When committing and creating/updating a PR, follow this workflow:
    - Or run `git status` and `gh pr view --json number,url,headRefName,state`
    - Determine: current branch, existing PR status (OPEN/CLOSED/MERGED)
 
-2. **Ensure branch is current** — see `session-init` for full startup checks:
+2. **Ensure branch is current** — see the `using-xenoterracide-agent-skills`
+   skill for full startup checks:
    - Fetch and prune: `git fetch --all --prune`
    - If the current branch has a CLOSED or MERGED PR, switch to the default branch and create a new one
    - Pull latest changes before starting work

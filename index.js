@@ -12,7 +12,7 @@ export const DEFAULT_SKILLS_DIRECTORY = fileURLToPath(new URL("./skills/", impor
 
 export const JAVADOCS_MCP_URL = "https://www.javadocs.dev/mcp";
 
-export const BOOTSTRAP_MARKER = "xenoterracide-agent-skills/session-init";
+export const BOOTSTRAP_MARKER = "xenoterracide-agent-skills/using-xenoterracide-agent-skills";
 
 function warn(message, error) {
   if (error === undefined) console.warn(`[${PLUGIN_ID}] ${message}`);
@@ -103,7 +103,7 @@ export function buildSessionBootstrap() {
   return [
     "<EXTREMELY_IMPORTANT>",
     BOOTSTRAP_MARKER,
-    "At the start of this session, before taking any other action, invoke the `session-init` skill and follow its instructions.",
+    "At the start of this session, before taking any other action, invoke the `using-xenoterracide-agent-skills` skill and follow its instructions.",
     "</EXTREMELY_IMPORTANT>",
   ].join("\n");
 }

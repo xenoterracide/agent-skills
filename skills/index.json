@@ -11,11 +11,6 @@
       "files": ["SKILL.md"]
     },
     {
-      "name": "corepack-recovery",
-      "version": "0.5.0",
-      "files": ["SKILL.md"]
-    },
-    {
       "name": "docs-creator",
       "version": "0.5.0",
       "files": [
@@ -58,11 +53,6 @@
       "files": ["SKILL.md"]
     },
     {
-      "name": "session-init",
-      "version": "0.5.0",
-      "files": ["SKILL.md"]
-    },
-    {
       "name": "shell-script-creator",
       "version": "0.5.0",
       "files": ["SKILL.md"]
@@ -76,6 +66,16 @@
       "name": "use-case-creator",
       "version": "0.5.0",
       "files": ["SKILL.md", "assets/uc-registration-example.adoc"]
+    },
+    {
+      "name": "using-xenoterracide-agent-skills",
+      "version": "0.5.0",
+      "files": ["SKILL.md"]
+    },
+    {
+      "name": "version-managers",
+      "version": "0.5.0",
+      "files": ["SKILL.md", "references/corepack-troubleshooting.md"]
     }
   ]
 }

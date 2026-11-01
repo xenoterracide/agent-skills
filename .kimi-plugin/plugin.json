@@ -15,7 +15,7 @@
     "coding-standards",
     "shell-script-creator",
     "skills",
-    "session-init",
+    "using-xenoterracide-agent-skills",
     "conventional-commits",
     "git-workflow",
     "docs-creator",
@@ -27,7 +27,7 @@
   ],
   "skills": "./skills/",
   "sessionStart": {
-    "skill": "session-init"
+    "skill": "using-xenoterracide-agent-skills"
   },
   "mcpServers": {
     "javadocs": {

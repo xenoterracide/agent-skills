@@ -37,7 +37,8 @@ OpenCode V2 can load this repository as a plugin. The plugin:
 
 - registers every skill in `skills/`;
 - registers the `javadocs` MCP server when no `javadocs` entry exists;
-- injects a one-time `session-init` bootstrap into the first user message.
+- injects a one-time `using-xenoterracide-agent-skills` bootstrap into the first
+  user message.
 
 Install it globally:
 
@@ -86,8 +87,8 @@ directly from GitHub raw.
 }
 ```
 
-The catalog does not provide the `session-init` bootstrap or automatic MCP
-registration. Add the server yourself if you need it:
+The catalog does not provide the `using-xenoterracide-agent-skills` bootstrap or
+automatic MCP registration. Add the server yourself if you need it:
 
 ```jsonc
 {
