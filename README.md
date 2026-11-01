@@ -36,7 +36,8 @@ Then start a new session (`/new`) for skills to activate.
 OpenCode V2 can load this repository as a plugin. The plugin:
 
 - registers every skill in `skills/`;
-- registers the `javadocs` MCP server when no `javadocs` entry exists;
+- registers the `javadocs` MCP server in Java projects when no `javadocs` entry
+  exists;
 - injects a one-time `using-xenoterracide-agent-skills` bootstrap into the first
   user message.
 
@@ -57,18 +58,24 @@ project `opencode.json`:
       "package": "github:xenoterracide/agent-skills",
       "options": {
         "sessionInit": true,
-        "javadocs": true,
+        "javadocs": "auto",
       },
     },
   ],
 }
 ```
 
-Both options default to `true`. Set `sessionInit: false` to skip the bootstrap,
-or `javadocs: false` to skip MCP registration. An existing `javadocs` entry is
-never overwritten. For a local checkout, use an absolute directory path instead
-of the Git specifier. Restart OpenCode or let it reload its configuration after
-installing.
+`sessionInit` defaults to `true`. Set `sessionInit: false` to skip the
+bootstrap.
+
+`javadocs` defaults to `auto`: it registers only when the directory OpenCode is
+opened in contains `pom.xml`, `build.gradle(.kts)`, `settings.gradle(.kts)`,
+`mvnw`, or `gradlew`. Set `javadocs: true` to register everywhere, or
+`javadocs: false` to disable it. In a monorepo whose build files live above the
+opened directory, set `javadocs: true` or open the repository root. An existing
+`javadocs` entry is never overwritten. For a local checkout, use an absolute
+directory path instead of the Git specifier. Restart OpenCode or let it reload
+its configuration after installing.
 
 You only need one OpenCode install path. If the HTTP catalog below is also
 configured, the plugin skips skill IDs that already exist.

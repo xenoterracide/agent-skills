@@ -2,11 +2,12 @@
 name: docs-creator
 description: |
   Use when creating, updating, or reviewing repository documentation — a
-  `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, or a reusable skill's `SKILL.md`.
-  Use when deciding whether content belongs in `README.md`, `AGENTS.md`,
-  `CONTRIBUTING.md`, or a skill. Use when adding skills, fixing frontmatter, or
-  improving skill trigger wording and discoverability. Read the matching file
-  in `references/` for the authoring guidance.
+  `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, or any Markdown in a skill,
+  including its `SKILL.md` and `references/`. Use when deciding whether content
+  belongs in `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, or a skill. Use when
+  adding skills, fixing frontmatter, or improving skill trigger wording and
+  discoverability. Read the matching file in `references/` for the authoring
+  guidance.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing

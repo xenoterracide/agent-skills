@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: MIT
 
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -92,7 +92,29 @@ export async function registerSkills(ctx, skillsDirectory = DEFAULT_SKILLS_DIREC
   });
 }
 
-export async function registerJavadocs(ctx) {
+export const JAVA_PROJECT_MARKERS = [
+  "pom.xml",
+  "build.gradle",
+  "build.gradle.kts",
+  "settings.gradle",
+  "settings.gradle.kts",
+  "mvnw",
+  "mvnw.cmd",
+  "gradlew",
+  "gradlew.bat",
+];
+
+export function isJavaProject(directory) {
+  if (!directory) return false;
+  return JAVA_PROJECT_MARKERS.some((marker) => existsSync(join(directory, marker)));
+}
+
+export async function registerJavadocs(ctx, mode = "auto") {
+  if (mode === "auto") {
+    const directory = ctx.location?.directory;
+    if (directory && !isJavaProject(directory)) return;
+  }
+
   await ctx.mcp.transform((editor) => {
     if (editor.get("javadocs")) return;
     editor.set("javadocs", { type: "remote", url: JAVADOCS_MCP_URL });
@@ -165,7 +187,7 @@ export default {
 
     if (options.javadocs !== false && typeof ctx?.mcp?.transform === "function") {
       try {
-        await registerJavadocs(ctx);
+        await registerJavadocs(ctx, options.javadocs === true ? "always" : "auto");
       } catch (error) {
         warn("javadocs MCP registration failed", error);
       }
