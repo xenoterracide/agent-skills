@@ -51,7 +51,7 @@ skill-name/
 for skills rather than action-phrase names.
 
 - ✅ `skill-creator`
-- ✅ `commit-message`
+- ✅ `commit-creator`
 - ❌ `writing-skills`
 - ❌ `creating-commits`
 

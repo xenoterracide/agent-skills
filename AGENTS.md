@@ -24,18 +24,20 @@ directory doubles as an OpenCode-compatible HTTP skill catalog.
 
 ## Source of Truth
 
-| For                                    | See                             |
-| -------------------------------------- | ------------------------------- |
-| Install, update, usage, contribution   | `README.md` (read this first)   |
-| Plugin manifest, skill layout, version | `.kimi-plugin/plugin.json`      |
-| OpenCode skill catalog                 | `skills/index.json`             |
-| Skills directory                       | `skills/`                       |
-| Node version                           | `.tool-versions`                |
-| Scripts and Node dependencies          | `package.json`                  |
-| Python dependencies                    | `pyproject.toml`, `uv.lock`     |
-| Conventional commit types              | `git-conventional-commits.yaml` |
-| Pre-commit rules (license + format)    | `.lintstagedrc.cjs`             |
-| Renovate config                        | `.github/renovate.json5`        |
+| For                                  | See                             |
+| ------------------------------------ | ------------------------------- |
+| Install, update, usage, contribution | `README.md` (read this first)   |
+| Kimi plugin manifest, skill layout   | `.kimi-plugin/plugin.json`      |
+| OpenCode plugin entrypoint           | `index.js`                      |
+| OpenCode project config              | `.opencode/opencode.json`       |
+| OpenCode skill catalog               | `skills/index.json`             |
+| Skills directory                     | `skills/`                       |
+| Node version                         | `.tool-versions`                |
+| Scripts and Node dependencies        | `package.json`                  |
+| Python dependencies                  | `pyproject.toml`, `uv.lock`     |
+| Conventional commit types            | `git-conventional-commits.yaml` |
+| Pre-commit rules (license + format)  | `.lintstagedrc.cjs`             |
+| Renovate config                      | `.github/renovate.json5`        |
 
 ## Build and Test
 
@@ -57,8 +59,9 @@ yarn exec prettier --write <file> # Format a single file
 ### Test
 
 ```bash
-yarn test                         # All workspace tests
-yarn workspace merge run test     # Merge tool only
+yarn test                         # Plugin tests
+yarn test:opencode                # Plugin tests only
+node --test scripts/*.test.mjs    # Same tests without Yarn
 ```
 
 ### Git Hooks
@@ -80,6 +83,18 @@ All hooks exit early when the `CI` environment variable is set.
 yarn install --immutable
 uv sync --frozen
 ```
+
+### OpenCode Plugin
+
+`index.js` is the OpenCode V2 plugin entrypoint, referenced by `main` in
+`package.json`. It registers every `skills/*/SKILL.md`, registers the `javadocs`
+MCP server when absent, and injects a one-time `session-init` bootstrap. It has
+no runtime dependencies and must never throw into OpenCode. Behavior is covered
+by `scripts/opencode-plugin.test.mjs`.
+
+`.opencode/opencode.json` exposes `./skills` for contributors and deliberately
+does not load the plugin. The maintainer's global configuration loads the
+plugin; adding it to the repo config too would register the same plugin twice.
 
 ## Code Style
 
@@ -107,7 +122,7 @@ when creating new files:
 | File type                              | License           | Formatter        |
 | -------------------------------------- | ----------------- | ---------------- |
 | `*.ts`, `*.java`                       | GPL-3.0-or-later  | Prettier         |
-| `*.js`, `*.cjs`, `*.yml`               | MIT               | Prettier         |
+| `*.js`, `*.cjs`, `*.mjs`, `*.yml`      | MIT               | Prettier         |
 | `package.json`                         | MIT               | Prettier         |
 | `*.json` (non-package)                 | CC0-1.0           | Prettier         |
 | `*.md`, `*.adoc`                       | CC-BY-NC-SA-4.0   | Prettier         |
@@ -128,7 +143,7 @@ Load the relevant skill when the trigger applies:
 | `session-init`            | Starting work in a repo session                                                      |
 | `completion-checklist`    | About to claim work is complete, fixed, or passing                                   |
 | `pull-request`            | Creating/updating PRs, committing, pushing, review comments                          |
-| `commit-message`          | Writing commit messages, PR titles, or PR descriptions                               |
+| `commit-creator`          | Writing commit messages, PR titles, or PR descriptions                               |
 | `workflow-push-rejection` | Push rejected for `.github/workflows` / `workflow` scope                             |
 | `coding-standards`        | Writing or modifying code in any language                                            |
 | `testing`                 | Adding, updating, debugging, or discussing tests                                     |
@@ -148,13 +163,18 @@ Load the relevant skill when the trigger applies:
 - Update this file when you change workflows it describes.
 - Update `CONTRIBUTING.md` when you change contributor-facing workflows or
   commands.
-- When modifying skills, ask the user whether to bump the plugin version in
-  `.kimi-plugin/plugin.json` before creating or updating the PR.
+- When modifying skills or plugin behavior, ask the user whether to bump the
+  version in `.kimi-plugin/plugin.json` and `package.json` before creating or
+  updating the PR.
 - After adding, removing, or moving skills, regenerate the OpenCode catalog with
   `yarn skills:catalog` so `skills/index.json` stays in sync (kept in check by
   `yarn skills:check` as part of `yarn lint`). The catalog version is read from
   `.kimi-plugin/plugin.json`; bump it when skill contents change so OpenCode
   refreshes cached copies.
+- Run `yarn test:opencode` when changing the plugin. The entrypoint is
+  intentionally dependency-free so Git and local-directory installs work.
+- Keep `.opencode/opencode.json` limited to `./skills`; the plugin is loaded from
+  the user's global configuration, not from the repository config.
 
 ## Security Considerations
 

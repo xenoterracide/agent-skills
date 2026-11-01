@@ -18,7 +18,8 @@ workflows.
 - **Primary target**: [Kimi Code CLI](https://kimi.com/code)
 - **Compatible with**: any [agentskills.io](https://agentskills.io)-standard
   agent such as Claude Code, Copilot CLI, or Gemini CLI
-- **OpenCode**: installable via its [skill catalog](https://opencode.ai/docs/skills/)
+- **OpenCode**: installable as a native V2 plugin or via its
+  [HTTP skill catalog](https://opencode.ai/v2/docs/skills/)
 
 ## Installation
 
@@ -32,24 +33,71 @@ Then start a new session (`/new`) for skills to activate.
 
 ### OpenCode
 
-The repo-root `skills/` directory doubles as an
-[HTTP skill catalog](https://opencode.ai/v2/docs/skills/). It ships with a
-generated `index.json` (regenerate with `yarn skills:catalog`) and is served
-directly from GitHub raw.
+OpenCode V2 can load this repository as a plugin. The plugin:
 
-Add the catalog URL and the `javadocs` MCP server to `opencode.json` (project or
-`~/.config/opencode/opencode.json`):
+- registers every skill in `skills/`;
+- registers the `javadocs` MCP server when no `javadocs` entry exists;
+- injects a one-time `session-init` bootstrap into the first user message.
+
+Install it globally:
+
+```bash
+opencode plugin add github:xenoterracide/agent-skills
+```
+
+Or add the equivalent entry to `~/.config/opencode/opencode.jsonc`, or to a
+project `opencode.json`:
 
 ```jsonc
 {
   "$schema": "https://opencode.ai/config.json",
-  "skills": {
-    "urls": ["https://raw.githubusercontent.com/xenoterracide/agent-skills/develop/skills/"],
-  },
+  "plugins": [
+    {
+      "package": "github:xenoterracide/agent-skills",
+      "options": {
+        "sessionInit": true,
+        "javadocs": true,
+      },
+    },
+  ],
+}
+```
+
+Both options default to `true`. Set `sessionInit: false` to skip the bootstrap,
+or `javadocs: false` to skip MCP registration. An existing `javadocs` entry is
+never overwritten. For a local checkout, use an absolute directory path instead
+of the Git specifier. Restart OpenCode or let it reload its configuration after
+installing.
+
+You only need one OpenCode install path. If the HTTP catalog below is also
+configured, the plugin skips skill IDs that already exist.
+
+#### HTTP skill catalog (alternative)
+
+The `skills/` directory doubles as an
+[HTTP skill catalog](https://opencode.ai/v2/docs/skills/). It ships with a
+generated `index.json` (regenerate with `yarn skills:catalog`) and is served
+directly from GitHub raw.
+
+```jsonc
+{
+  "$schema": "https://opencode.ai/config.json",
+  "skills": ["https://raw.githubusercontent.com/xenoterracide/agent-skills/develop/skills/"],
+}
+```
+
+The catalog does not provide the `session-init` bootstrap or automatic MCP
+registration. Add the server yourself if you need it:
+
+```jsonc
+{
+  "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "javadocs": {
-      "type": "remote",
-      "url": "https://www.javadocs.dev/mcp",
+    "servers": {
+      "javadocs": {
+        "type": "remote",
+        "url": "https://www.javadocs.dev/mcp",
+      },
     },
   },
 }

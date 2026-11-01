@@ -1,5 +1,5 @@
 ---
-name: commit-message
+name: commit-creator
 description: |
   Use when writing a commit message, PR title, or PR description.
 license: CC-BY-NC-SA-4.0
@@ -13,7 +13,7 @@ SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
 SPDX-License-Identifier: CC-BY-NC-SA-4.0
 -->
 
-# Commit Message
+# Commit Creator
 
 ## Instructions
 

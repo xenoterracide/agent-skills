@@ -7,10 +7,10 @@ import { join, relative } from "node:path";
 import { format } from "prettier";
 
 /**
- * Generates the OpenCode skill catalog (`index.json`) consumed via
- * `skills.urls` in opencode.json.
+ * Generates the OpenCode skill catalog (`index.json`) consumed by the
+ * OpenCode V2 `skills` array, either as a local directory or an HTTP base URL.
  *
- * Catalog format (opencode 1.18.x): base URL serves `index.json`:
+ * Catalog format: the base URL serves `index.json`:
  *   { "skills": [{ "name", "version", "files": [...] }] }
  * Each entry's files are downloaded from `<base>/<name>/<file>`.
  */
