@@ -1,9 +1,9 @@
 ---
 name: hemingway
 description: |
-  Use when writing prose or code that should be terse and clear — skills,
-  documentation, comments, Javadoc, or code structure. Read the prose facet for
-  writing, the code facet for code.
+  Use when writing or editing prose that should be terse and clear — docs, skill
+  references, checklist bullets, comments, Javadoc, or code structure. Read the
+  prose facet for writing, the code facet for code.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing
