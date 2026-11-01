@@ -8,7 +8,8 @@
     type: skill
     name: hemingway
 - name: hemingway triggers when writing javadoc
-  prompt: write javadoc for this class
+  prompt: write javadoc for Greeter.java
+  fixture: java-class
   expect:
     type: skill
     name: hemingway

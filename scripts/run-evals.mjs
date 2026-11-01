@@ -70,7 +70,8 @@ export function discoverTests(skillsDir) {
     const cases = parseEvals(readFileSync(file, "utf8"));
     for (const test of cases) {
       validateTest(test);
-      tests.push({ skill: name, test });
+      const fixtureDir = test.fixture ? join(dir, "tests", "fixtures", test.fixture) : null;
+      tests.push({ skill: name, test, fixtureDir });
     }
   }
   return tests;
@@ -97,12 +98,17 @@ export function formatMatrix(results) {
     .join("\n");
 }
 
-function runSession(harness, model, prompt) {
+function runSession(harness, model, prompt, fixtureDir) {
   const dir = mkdtempSync(join(tmpdir(), "skill-evals-"));
   const configDir = mkdtempSync(join(tmpdir(), "skill-evals-config-"));
   try {
     cpSync(join(root, "skills"), join(dir, "skills"), { recursive: true });
     cpSync(join(root, ".opencode"), join(dir, ".opencode"), { recursive: true });
+    if (fixtureDir && existsSync(fixtureDir)) {
+      for (const entry of readdirSync(fixtureDir)) {
+        cpSync(join(fixtureDir, entry), join(dir, entry), { recursive: true });
+      }
+    }
     const { cmd, args } = buildHarnessCommand(harness, model, prompt);
     return execFileSync(cmd, args, {
       encoding: "utf8",
@@ -124,10 +130,10 @@ function main() {
   const results = [];
   let failed = false;
   for (const model of models) {
-    for (const { skill, test } of tests) {
+    for (const { skill, test, fixtureDir } of tests) {
       let passed = 0;
       for (let i = 0; i < config.iterations; i++) {
-        const output = runSession(harness, model, test.prompt);
+        const output = runSession(harness, model, test.prompt, fixtureDir);
         const ok =
           test.expect.type === "contains"
             ? judgeContains(output, test.expect.text)

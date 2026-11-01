@@ -4,6 +4,7 @@
 
 - name: java-creator triggers on a natural request
   prompt: modify the App class so the greeting is uppercase
+  fixture: java-project
   expect:
     type: skill
     name: java-creator

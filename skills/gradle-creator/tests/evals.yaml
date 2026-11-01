@@ -4,6 +4,7 @@
 
 - name: gradle-creator triggers on a natural request
   prompt: add JUnit to the project
+  fixture: gradle-project
   expect:
     type: skill
     name: gradle-creator
