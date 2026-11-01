@@ -10,11 +10,12 @@ import test from "node:test";
 
 import {
   buildHarnessCommand,
-  buildJudgePrompt,
+  detectSkill,
   discoverTests,
   formatMatrix,
   judgeContains,
   parseEvals,
+  stripAnsi,
   validateConfig,
   validateTest,
 } from "./run-evals.mjs";
@@ -36,10 +37,13 @@ test("judgeContains matches a substring", () => {
   assert.equal(judgeContains('var foo = "foo"', "String foo"), false);
 });
 
-test("buildJudgePrompt asks a yes/no question", () => {
-  const prompt = buildJudgePrompt("p", "o", "java-creator");
-  assert.match(prompt, /java-creator/);
-  assert.match(prompt, /yes.*no/s);
+test("stripAnsi removes escape codes", () => {
+  assert.equal(stripAnsi('\x1b[0m→ \x1b[0mSkill "hemingway"'), '→ Skill "hemingway"');
+});
+
+test("detectSkill finds a skill load event", () => {
+  assert.equal(detectSkill('\x1b[0m→ \x1b[0mSkill "hemingway"', "hemingway"), true);
+  assert.equal(detectSkill('\x1b[0m→ \x1b[0mSkill "hemingway"', "java-creator"), false);
 });
 
 test("buildHarnessCommand builds the opencode command", () => {

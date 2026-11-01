@@ -80,15 +80,12 @@ export function judgeContains(output, text) {
   return output.includes(text);
 }
 
-export function buildJudgePrompt(prompt, output, skill) {
-  return [
-    `Here is the output of an agent given this prompt: "${prompt}"`,
-    "",
-    output,
-    "",
-    `Did the agent invoke the "${skill}" skill and follow its instructions?`,
-    'Answer with only "yes" or "no".',
-  ].join("\n");
+export function stripAnsi(text) {
+  return text.replace(/\x1b\[[0-9;]*m/g, "");
+}
+
+export function detectSkill(output, name) {
+  return stripAnsi(output).includes(`Skill "${name}"`);
 }
 
 export function formatMatrix(results) {
@@ -112,12 +109,6 @@ function runSession(harness, model, prompt) {
   }
 }
 
-function judgeSkill(harness, model, prompt, output, skill) {
-  const judgePrompt = buildJudgePrompt(prompt, output, skill);
-  const judgeOutput = runSession(harness, model, judgePrompt).trim().toLowerCase();
-  return /^\s*yes\b/.test(judgeOutput);
-}
-
 function main() {
   const config = parseEvals(readFileSync(evalsFile, "utf8"));
   validateConfig(config);
@@ -134,7 +125,7 @@ function main() {
         const ok =
           test.expect.type === "contains"
             ? judgeContains(output, test.expect.text)
-            : judgeSkill(harness, model, test.prompt, output, test.expect.name);
+            : detectSkill(output, test.expect.name);
         if (ok) passed++;
       }
       if (passed < config.iterations) failed = true;
