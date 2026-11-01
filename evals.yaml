@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
+#
+# SPDX-License-Identifier: CC0-1.0
+
+models:
+  - opencode/deepseek-v4-pro
+
+iterations: 3
+
+tests:
+  - name: java-creator triggers on a natural request
+    prompt: modify the App class so the greeting is uppercase
+    expect:
+      type: skill
+      name: java-creator
+  - name: gradle-creator triggers on a natural request
+    prompt: add JUnit to the project
+    expect:
+      type: skill
+      name: gradle-creator
+  - name: hemingway prose rule applies
+    prompt: |
+      rewrite this to be terse:
+      It is important to note that you should run the tests.
+    expect:
+      type: contains
+      text: Run the tests
