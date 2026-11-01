@@ -34,7 +34,8 @@ Read the reference that matches the file being written or revised:
 | Skill style standard        | `references/hemingway-rule.md`       |
 
 `references/contributing-examples.md` holds tool-specific command examples for
-the `CONTRIBUTING.md` guidance.
+the `CONTRIBUTING.md` guidance. `references/skill-reviewer-template.md` holds
+the reviewer subagent prompt used by `skill-reviewer.md`.
 
 ## Shared rules
 

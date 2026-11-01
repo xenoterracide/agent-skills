@@ -90,7 +90,7 @@ Subagent (general-purpose):
 
     ### Assessment
 
-    **Ready to ship?** [Yes | No | With fixes]
+    **Ready to merge?** [Yes | No | With fixes]
 
     **Reasoning:** [1-2 sentences]
 ```
