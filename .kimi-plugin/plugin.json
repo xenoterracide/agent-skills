@@ -1,6 +1,6 @@
 {
   "name": "xenoterracide-agent-skills",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "AI coding agent skills for Java, Gradle, GitHub, shell scripting, iterative development, documentation authoring, and Git workflows.",
   "author": {
     "name": "Caleb Cushing"
@@ -17,15 +17,10 @@
     "skills",
     "session-init",
     "conventional-commits",
-    "pull-request",
-    "commit-creator",
-    "workflow-push-rejection",
+    "git-workflow",
+    "docs-creator",
     "iterative-development",
     "use-case-creator",
-    "agents-creator",
-    "readme-creator",
-    "contributing-creator",
-    "skill-creator",
     "completion-checklist",
     "documentation",
     "contributing"

@@ -138,25 +138,20 @@ when creating new files:
 
 Load the relevant skill when the trigger applies:
 
-| Skill                     | Activate When                                                                        |
-| ------------------------- | ------------------------------------------------------------------------------------ |
-| `session-init`            | Starting work in a repo session                                                      |
-| `completion-checklist`    | About to claim work is complete, fixed, or passing                                   |
-| `pull-request`            | Creating/updating PRs, committing, pushing, review comments                          |
-| `commit-creator`          | Writing commit messages, PR titles, or PR descriptions                               |
-| `workflow-push-rejection` | Push rejected for `.github/workflows` / `workflow` scope                             |
-| `coding-standards`        | Writing or modifying code in any language                                            |
-| `testing`                 | Adding, updating, debugging, or discussing tests                                     |
-| `iterative-development`   | Scoping or refining designs                                                          |
-| `use-case-creator`        | Writing use cases or business behavior docs                                          |
-| `github`                  | GitHub APIs, issues, GraphQL, review threads                                         |
-| `java-creator`            | Creating, modifying, or refactoring Java source files, Maven pom.xml, or JUnit tests |
-| `gradle-creator`          | Creating, modifying, or troubleshooting Gradle builds                                |
-| `shell-script-creator`    | Creating, modifying, or debugging shell scripts and commands                         |
-| `skill-creator`           | Creating or editing `SKILL.md` files                                                 |
-| `agents-creator`          | Creating or editing `AGENTS.md` files                                                |
-| `readme-creator`          | Writing or revising `README.md`                                                      |
-| `contributing-creator`    | Writing or revising `CONTRIBUTING.md`                                                |
+| Skill                   | Activate When                                                                        |
+| ----------------------- | ------------------------------------------------------------------------------------ |
+| `session-init`          | Starting work in a repo session                                                      |
+| `completion-checklist`  | About to claim work is complete, fixed, or passing                                   |
+| `git-workflow`          | Creating/updating PRs, committing, pushing, commit/PR messages, push rejection       |
+| `coding-standards`      | Writing or modifying code in any language                                            |
+| `testing`               | Adding, updating, debugging, or discussing tests                                     |
+| `iterative-development` | Scoping or refining designs                                                          |
+| `use-case-creator`      | Writing use cases or business behavior docs                                          |
+| `github`                | GitHub APIs, issues, GraphQL, review threads                                         |
+| `java-creator`          | Creating, modifying, or refactoring Java source files, Maven pom.xml, or JUnit tests |
+| `gradle-creator`        | Creating, modifying, or troubleshooting Gradle builds                                |
+| `shell-script-creator`  | Creating, modifying, or debugging shell scripts and commands                         |
+| `docs-creator`          | Writing or revising `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, or `SKILL.md` files |
 
 ## Maintenance
 

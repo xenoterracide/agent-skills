@@ -1,14 +1,3 @@
----
-name: workflow-push-rejection
-description: |
-  Use when a git push is rejected with "refusing to allow ... to create or
-  update workflow `.github/workflows/...` without `workflow` scope", or when a
-  push fails citing workflow files or a missing `workflow` token scope.
-license: CC-BY-NC-SA-4.0
-metadata:
-  copyright: Caleb Cushing
----
-
 <!--
 SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
 

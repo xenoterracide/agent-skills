@@ -114,8 +114,9 @@ Copy the `skills/` directory into your agent's skill discovery path:
 
 ## Skills
 
-Skills are organized as a flat collection. See
-[`AGENTS.md`](AGENTS.md#skill-routing) for the full skill routing table.
+Skills live one level deep under `skills/`. Closely-related skills ship as a
+single skill that routes to `references/` files (`git-workflow`, `docs-creator`).
+See [`AGENTS.md`](AGENTS.md#skill-routing) for the full skill routing table.
 
 ## Development
 
@@ -123,14 +124,12 @@ Skills are organized as a flat collection. See
   agent-specific guidance.
 - See [`CONTRIBUTING.md`](CONTRIBUTING.md) for human contributor setup, linting,
   testing, and pull request workflow.
-- Use the [`skill-creator`](skills/skill-creator/SKILL.md) skill when adding or
-  updating skills.
-- Use the [`agents-creator`](skills/agents-creator/SKILL.md) skill when writing
-  or revising `AGENTS.md` files.
-- Use the [`readme-creator`](skills/readme-creator/SKILL.md) skill when writing
-  or revising `README.md` files.
-- Use the [`contributing-creator`](skills/contributing-creator/SKILL.md) skill
-  when writing or revising `CONTRIBUTING.md` files.
+- Use the [`docs-creator`](skills/docs-creator/SKILL.md) skill when writing or
+  revising `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, or a `SKILL.md` file.
+  The authoring guidance lives in `skills/docs-creator/references/`.
+- Use the [`git-workflow`](skills/git-workflow/SKILL.md) skill when creating or
+  updating PRs, writing commits, or recovering from a workflow-scope push
+  rejection.
 - When adding or moving skills, run `yarn skills:catalog` to regenerate the
   OpenCode catalog at `skills/index.json`.
 

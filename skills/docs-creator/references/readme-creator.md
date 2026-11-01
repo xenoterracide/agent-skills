@@ -1,14 +1,3 @@
----
-name: readme-creator
-description: |
-  Use when creating, updating, or reviewing `README.md` files. Use when deciding
-  whether content belongs in `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, or
-  another document.
-license: CC-BY-NC-SA-4.0
-metadata:
-  copyright: Caleb Cushing
----
-
 <!--
 SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
 

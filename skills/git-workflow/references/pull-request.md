@@ -1,14 +1,3 @@
----
-name: pull-request
-description: |
-  Use when creating, opening, updating, or submitting a PR (pull request),
-  or when files are modified, created, or deleted. Also use when addressing
-  PR review comments or feedback.
-license: CC-BY-NC-SA-4.0
-metadata:
-  copyright: Caleb Cushing
----
-
 <!--
 SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
 
@@ -20,10 +9,10 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 **This skill applies whenever files are created, modified, or deleted.**
 
 - Apply `coding-standards` rules — review your code against them before submitting
-- Use `commit-creator` skill for all commit messages and PR descriptions
+- Use the `references/commit-creator.md` guidance for all commit messages and PR descriptions
 - Keep the PR description up to date (it becomes the squash-merge commit message)
   - Write it as a plain-text conventional-commit body (see
-    `commit-creator`): an optional grounded why, then `-` bullets.
+    `references/commit-creator.md`): an optional grounded why, then `-` bullets.
     No Markdown headings (`##`), bold, fenced blocks, or checkboxes (`- [x]`) —
     they land verbatim as noise in `git log`.
 - files should be committed and pushed
@@ -113,7 +102,7 @@ See `coding-standards` (Rule 5: Code Quality Standards) for the full checklist.
 If a push is rejected with `refusing to allow ... without workflow scope`, your
 base branch is usually behind `origin/develop` (a dependency bot updated a
 workflow file on the remote), not an intentional workflow edit. See
-`workflow-push-rejection` for the recovery steps.
+`references/workflow-push-rejection.md` for the recovery steps.
 
 ### Squash Merge Strategy
 
@@ -146,7 +135,7 @@ Follow conventional commit format for PR titles (they become the squash merge co
 
 ### Commit Message and PR Body Format
 
-Follow the `commit-creator` skill for commit message format, PR
+Follow `references/commit-creator.md` for commit message format, PR
 body structure, and the grounded "why" (sourced from the issue, the user's
 request, or review feedback — never fabricated). PR descriptions become
 permanent commit history via squash merge.

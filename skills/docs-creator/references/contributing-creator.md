@@ -1,14 +1,3 @@
----
-name: contributing-creator
-description: |
-  Use when creating, updating, or reviewing `CONTRIBUTING.md` files. Use when
-  documenting setup, build, test, lint, and pull request workflows for human
-  contributors.
-license: CC-BY-NC-SA-4.0
-metadata:
-  copyright: Caleb Cushing
----
-
 <!--
 SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
 
@@ -79,8 +68,8 @@ Replace placeholders with commands from the project's actual tooling.
 
 ## Tool-Specific Examples
 
-See `references/examples.md` for concrete command examples for Yarn, Gradle,
-Maven, and Python projects.
+See `references/contributing-examples.md` for concrete command examples for
+Yarn, Gradle, Maven, and Python projects.
 
 ## Format
 
