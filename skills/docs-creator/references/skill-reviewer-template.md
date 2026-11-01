@@ -28,22 +28,14 @@ Subagent (general-purpose):
 
     ## Read the standards
 
-    Read these files before reviewing:
-    - skills/hemingway/references/prose.md
-    - skills/docs-creator/references/skill-creator.md
-    - skills/docs-creator/references/skill-reviewer.md
+    Load these skills before reviewing:
+    - `hemingway` (prose facet)
+    - `docs-creator` (skill-creator and skill-reviewer references)
 
     ## What to check
 
     **Hemingway rule:**
-    - Short sentences, one idea each?
-    - Concrete words, no jargon?
-    - Active voice?
-    - No qualifiers ("very", "just", "simply") or hedging ("might",
-      "perhaps")?
-    - No filler ("please", "note that", "it is important to")?
-    - Every word earns its place?
-    - Concrete examples over abstract description?
+    - Check the prose against the `hemingway` skill's prose facet.
 
     **Validation:**
     - Frontmatter valid? `---` is the first line, `name` and `description`
