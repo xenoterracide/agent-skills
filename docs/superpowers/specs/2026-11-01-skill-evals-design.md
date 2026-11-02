@@ -98,8 +98,8 @@ the suite is on demand only.
 ### Tooling
 
 The suite is TypeScript and runs under Vitest, which bails at the first
-failure. `tsc` 7 is a native binary and cannot read Yarn's PnP store, so the
-repository uses the `node-modules` linker.
+failure. The repository uses pnpm; its isolated `node_modules` keeps strict
+resolution while `tsc` 7, a native binary, reads the tree.
 
 ## Risks and Mitigations
 

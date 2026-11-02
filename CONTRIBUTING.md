@@ -14,10 +14,11 @@ document covers the workflow for human contributors.
 Install dependencies and configure git hooks:
 
 ```bash
-yarn contribute
+pnpm contribute
 ```
 
-This runs `uv sync --frozen` and sets `core.hooksPath` to `.share/git/hooks`.
+This installs corepack, installs Node dependencies, runs `uv sync --frozen`,
+and sets `core.hooksPath` to `.share/git/hooks`.
 
 ## Making Changes
 
@@ -36,21 +37,21 @@ This runs `uv sync --frozen` and sets `core.hooksPath` to `.share/git/hooks`.
 Run all checks before pushing:
 
 ```bash
-yarn lint
+pnpm lint
 ```
 
 Format a single file with Prettier:
 
 ```bash
-yarn exec prettier --write <file>
+pnpm exec prettier --write <file>
 ```
 
 ## Testing
 
 ```bash
-yarn test        # plugin and catalog tests
-yarn typecheck   # tsc --noEmit
-yarn evals       # helper unit tests and skill evals
+pnpm test        # plugin and catalog tests
+pnpm typecheck   # tsc --noEmit
+pnpm evals       # helper unit tests and skill evals
 ```
 
 Skill trigger evals live in `skills/<skill>/tests/evals.test.ts`. Each case

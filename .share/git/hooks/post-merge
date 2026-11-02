@@ -8,20 +8,20 @@
 [ -n "$CI" ] && exit 0
 
 # Check if lockfiles changed in this merge (HEAD@{1} is the state before the merge)
-YARN_LOCK_CHANGED=0
+PNPM_LOCK_CHANGED=0
 UV_LOCK_CHANGED=0
 
-if ! git diff --quiet HEAD@{1} HEAD -- yarn.lock 2>/dev/null; then
-  YARN_LOCK_CHANGED=1
+if ! git diff --quiet HEAD@{1} HEAD -- pnpm-lock.yaml 2>/dev/null; then
+  PNPM_LOCK_CHANGED=1
 fi
 
 if ! git diff --quiet HEAD@{1} HEAD -- uv.lock 2>/dev/null; then
   UV_LOCK_CHANGED=1
 fi
 
-if [ "$YARN_LOCK_CHANGED" -eq 1 ]; then
-  echo "yarn.lock changed, running yarn install --immutable..."
-  yarn install --immutable
+if [ "$PNPM_LOCK_CHANGED" -eq 1 ]; then
+  echo "pnpm-lock.yaml changed, running pnpm install --frozen-lockfile..."
+  pnpm install --frozen-lockfile
 fi
 
 if [ "$UV_LOCK_CHANGED" -eq 1 ]; then

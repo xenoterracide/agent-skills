@@ -5,6 +5,7 @@
 .agents/
 .share/
 .pnp.cjs
+pnpm-lock.yaml
 uv.lock
 .venv/
 .yarn/

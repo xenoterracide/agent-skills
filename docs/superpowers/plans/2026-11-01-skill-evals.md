@@ -95,6 +95,7 @@ isolated `XDG_CONFIG_HOME`. Detection is the `Skill "name"` line on stderr.
 - [x] Migrate helpers and cases to TypeScript.
 - [x] Typecheck with `tsc`.
 - [x] Switch to the `node-modules` linker so `tsc` 7 can resolve types.
+- [x] Migrate to pnpm; its isolated `node_modules` keeps strict resolution.
 
 ### Task 8: Skill content fixes found by the evals
 
