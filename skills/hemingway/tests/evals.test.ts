@@ -28,8 +28,10 @@ it("triggers directly on pasted prose", () => {
   );
 });
 
+// Same prompt as docs-creator's own case on purpose: this asserts the
+// companion rule — docs-creator pulls hemingway in — not hemingway's trigger.
 it("loads as a docs-creator companion on a skill reference", () => {
-  assertSkillLoads("rewrite the git-workflow pull-request reference so it is easier to follow", "hemingway");
+  assertSkillLoads("add a bullet to the git-workflow pull-request reference", "hemingway");
 });
 
 it("prose rule applies", () => {
