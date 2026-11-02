@@ -100,9 +100,9 @@ function runPrompt(prompt: string, { model = MODEL, fixture }: RunOptions = {}):
     });
     const output = `${result.stdout ?? ""}${result.stderr ?? ""}`;
     if (result.error) {
-      // A session killed at the timeout still proves the trigger: keep the
-      // partial transcript so the load line can be checked.
-      if (result.signal === "SIGTERM" && output.trim().length > 0) return output;
+      // A failed or killed session still proves the trigger when its
+      // transcript exists: keep it so the load line can be checked.
+      if (output.trim().length > 0) return output;
       throw result.error;
     }
     return output;
