@@ -62,7 +62,23 @@ yarn exec prettier --write <file> # Format a single file
 yarn test                         # Plugin tests
 yarn test:opencode                # Plugin tests only
 node --test scripts/*.test.mjs    # Same tests without Yarn
+yarn typecheck                    # tsc --noEmit
 ```
+
+### Skill Evals
+
+`skills/*/tests/evals.test.ts` asserts that realistic prompts auto-load the
+skill. Each case forks `opencode run` in a temp copy of `skills/` and
+`.opencode/` with an isolated `XDG_CONFIG_HOME`; the skill must load in all
+three runs.
+
+```bash
+yarn evals                        # helper unit tests + every skill case
+yarn evals skills/java-creator    # one skill
+```
+
+Evals are on demand and never run in CI. `EVAL_MODEL` and `EVAL_ITERATIONS`
+override the defaults. The suite bails at the first failure.
 
 ### Git Hooks
 
@@ -83,6 +99,9 @@ All hooks exit early when the `CI` environment variable is set.
 yarn install --immutable
 uv sync --frozen
 ```
+
+The repository uses the `node-modules` linker (`.yarnrc.yml`) because `tsc` 7,
+a native binary, cannot read Yarn's PnP store.
 
 If `yarn` vanishes after a Node version change, use the `version-managers`
 skill (`references/corepack-troubleshooting.md`) before anything else.
