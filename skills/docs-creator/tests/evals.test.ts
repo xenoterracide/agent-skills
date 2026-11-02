@@ -10,8 +10,8 @@ it("triggers when editing a skill reference", () => {
   assertSkillLoads("add a bullet to the git-workflow pull-request reference", "docs-creator");
 });
 
-it("triggers when editing a SKILL.md", () => {
-  assertSkillLoads("update the hemingway skill instructions", "docs-creator");
+it("triggers when fixing skill frontmatter", () => {
+  assertSkillLoads("add a description to this SKILL.md frontmatter: name: greeting-creator", "docs-creator");
 });
 
 it("triggers when updating README", () => {
