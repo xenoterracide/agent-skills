@@ -4,7 +4,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { assertContains, assertSkillLoads, detectSkill, stripAnsi } from "./eval-helpers";
+import { assertContains, assertSkillLoads, detectSkill, detectSkills, stripAnsi } from "./eval-helpers";
 
 describe("stripAnsi", () => {
   it("removes escape codes", () => {
@@ -12,10 +12,20 @@ describe("stripAnsi", () => {
   });
 });
 
+describe("detectSkills", () => {
+  it("returns skills in load order", () => {
+    expect(detectSkills('→ Skill "docs-creator"\n→ Skill "hemingway"')).toEqual(["docs-creator", "hemingway"]);
+  });
+});
+
 describe("detectSkill", () => {
   it("finds a skill load event", () => {
     expect(detectSkill('\x1b[0m→ \x1b[0mSkill "hemingway"', "hemingway")).toBe(true);
     expect(detectSkill('\x1b[0m→ \x1b[0mSkill "hemingway"', "java-creator")).toBe(false);
+  });
+
+  it("ignores a bare mention in the answer", () => {
+    expect(detectSkill('I used Skill "hemingway" for this.', "hemingway")).toBe(false);
   });
 });
 
@@ -34,9 +44,19 @@ describe("assertSkillLoads", () => {
     expect(() => assertSkillLoads("p", "hemingway", { run, iterations: 3 })).toThrow(/did not load/);
     expect(calls).toBe(1);
   });
+
+  it("fails when another skill loads first", () => {
+    const run = () => '→ Skill "docs-creator"\n→ Skill "hemingway"';
+    expect(() => assertSkillLoads("p", "hemingway", { run, iterations: 1, first: true })).toThrow(/to load first/);
+  });
 });
 
 describe("assertContains", () => {
+  it("matches through escape codes", () => {
+    const run = () => "\x1b[1mRun the tests\x1b[0m";
+    expect(() => assertContains("p", "Run the tests", { run, iterations: 1 })).not.toThrow();
+  });
+
   it("fails fast when the text is missing", () => {
     let calls = 0;
     const run = () => {
