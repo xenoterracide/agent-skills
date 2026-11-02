@@ -42,6 +42,8 @@ skill's `description` or body drifts.
 - Each run has a six-minute session timeout, and the suite's test timeout scales
   with the run count. A prompt that routes into a skill-authoring workflow can
   exceed it; prefer bounded requests with the same trigger.
+- A run killed at the timeout still counts when the load line landed first. The
+  cases assert the trigger, not task completion.
 
 ## Design
 

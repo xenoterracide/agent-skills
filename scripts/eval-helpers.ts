@@ -98,8 +98,14 @@ function runPrompt(prompt: string, { model = MODEL, fixture }: RunOptions = {}):
       timeout: 360_000,
       maxBuffer: 64 * 1024 * 1024,
     });
-    if (result.error) throw result.error;
-    return `${result.stdout ?? ""}${result.stderr ?? ""}`;
+    const output = `${result.stdout ?? ""}${result.stderr ?? ""}`;
+    if (result.error) {
+      // A session killed at the timeout still proves the trigger: keep the
+      // partial transcript so the load line can be checked.
+      if (result.signal === "SIGTERM" && output.trim().length > 0) return output;
+      throw result.error;
+    }
+    return output;
   } finally {
     rmSync(dir, { recursive: true, force: true });
     if (configDir) rmSync(configDir, { recursive: true, force: true });
