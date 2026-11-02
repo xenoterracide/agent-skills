@@ -20,7 +20,15 @@ it("triggers when writing javadoc", () => {
   assertSkillLoads("write javadoc for Greeter.java", "hemingway", { fixture: javaClass });
 });
 
-it("triggers when editing a skill reference", () => {
+it("triggers directly on pasted prose", () => {
+  assertSkillLoads(
+    "tighten this sentence: It is important to note that the tests should be run before you claim the work is done.",
+    "hemingway",
+    { first: true },
+  );
+});
+
+it("loads as a docs-creator companion on a skill reference", () => {
   assertSkillLoads("tighten the wording in the pull-request reference", "hemingway");
 });
 
