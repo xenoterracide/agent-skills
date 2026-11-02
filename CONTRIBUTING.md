@@ -48,14 +48,18 @@ yarn exec prettier --write <file>
 ## Testing
 
 ```bash
-yarn test
+yarn test        # plugin and catalog tests
+yarn typecheck   # tsc --noEmit
+yarn evals       # helper unit tests and skill evals
 ```
 
-Skill files are documentation and have no automated tests. Verify them by:
+Skill trigger evals live in `skills/<skill>/tests/evals.test.ts`. Each case
+forks a real agent session in a sandbox and passes only when the skill loads in
+all three runs. Evals are on demand and never run in CI; `EVAL_MODEL` and
+`EVAL_ITERATIONS` override the defaults. The suite bails at the first failure.
 
-- Validating YAML frontmatter
-- Confirming Prettier formatting passes
-- Running commands or examples manually
+Before opening a PR, also validate YAML frontmatter, confirm Prettier passes,
+and run any changed examples manually.
 
 ## Pull Requests
 

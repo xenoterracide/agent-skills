@@ -96,7 +96,17 @@ isolated `XDG_CONFIG_HOME`. Detection is the `Skill "name"` line on stderr.
 - [x] Typecheck with `tsc`.
 - [x] Switch to the `node-modules` linker so `tsc` 7 can resolve types.
 
-### Task 7: Verify
+### Task 8: Skill content fixes found by the evals
+
+**Files:** `skills/coding-standards/SKILL.md`, `skills/docs-creator/references/`
+
+- [x] Widen the `coding-standards` description to scripts, tests, and build
+      files.
+- [x] Rewrite Rule 4 to cover tools, not just code.
+- [x] Drop the stale `kimi -p` testing path and require a full session for
+      trigger tests.
+
+### Task 9: Verify
 
 - [x] `yarn typecheck`, `yarn test`, `yarn lint` pass.
 - [ ] A full `yarn evals` run passes 3/3 on every case.

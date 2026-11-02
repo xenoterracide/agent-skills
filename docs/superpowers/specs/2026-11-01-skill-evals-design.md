@@ -39,9 +39,9 @@ skill's `description` or body drifts.
   it.
 - Cases never touch the developer's configuration. Each session gets a
   throwaway `XDG_CONFIG_HOME` and a temp copy of `skills/` and `.opencode/`.
-- A case must finish inside one session timeout of six minutes. Heavy prompts
-  that route into a skill-authoring workflow do not belong here; prefer
-  bounded requests with the same trigger.
+- Each run has a six-minute session timeout, and the suite's test timeout scales
+  with the run count. A prompt that routes into a skill-authoring workflow can
+  exceed it; prefer bounded requests with the same trigger.
 
 ## Design
 

@@ -70,7 +70,9 @@ Before considering a skill change complete, verify:
    confirm the body addresses the scenarios in the `description`.
 6. **Behavior tested** — run at least one RED baseline and one GREEN test with a
    subagent pressure scenario. Document the rationalizations the agent used and
-   how the skill counters them.
+   how the skill counters them. Trigger testing needs a full session: a subagent
+   cannot observe skill auto-loading. Use the eval suite or a full harness
+   session.
 
 ## Discoverability Checklist
 
