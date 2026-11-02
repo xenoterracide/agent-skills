@@ -4,7 +4,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { assertContains, assertSkillLoads, detectSkill, detectSkills, stripAnsi } from "./eval-helpers";
+import { assertContains, assertSkillLoads, detectSkill, detectSkills, harnessError, stripAnsi } from "./eval-helpers";
 
 describe("stripAnsi", () => {
   it("removes escape codes", () => {
@@ -26,6 +26,14 @@ describe("detectSkill", () => {
 
   it("ignores a bare mention in the answer", () => {
     expect(detectSkill('I used Skill "hemingway" for this.', "hemingway")).toBe(false);
+  });
+});
+
+describe("harnessError", () => {
+  it("detects a provider rejection", () => {
+    expect(harnessError("…\nError: Policy budget exceeded\n")).toBe("Policy budget exceeded");
+    expect(harnessError("rate limit exceeded")).toBe("rate limit exceeded");
+    expect(harnessError("clean transcript")).toBeUndefined();
   });
 });
 

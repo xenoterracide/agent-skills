@@ -111,4 +111,6 @@ resolution while `tsc` 7, a native binary, reads the tree.
 - **Session timeouts.** A heavy prompt can exceed the session limit. Mitigation:
   bounded requests, and the suite bails at the first timeout instead of burning
   the remaining cases.
+- **Harness rejections.** A provider budget or rate limit fails the case as a
+  harness error, not a trigger miss.
 - **Cost.** Mitigation: on demand only, a cheap default model, and N=3.

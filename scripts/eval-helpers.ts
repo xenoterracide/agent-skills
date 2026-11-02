@@ -68,6 +68,12 @@ function transcript(output: string): string {
   return clean.length > 2000 ? `…${clean.slice(-2000)}` : clean;
 }
 
+export function harnessError(output: string): string | undefined {
+  return stripAnsi(output).match(
+    /Policy budget exceeded|rate limit(?: exceeded)?|insufficient (?:credits|quota)/i,
+  )?.[0];
+}
+
 export interface RunOptions {
   model?: string;
   fixture?: string;
@@ -99,6 +105,8 @@ function runPrompt(prompt: string, { model = MODEL, fixture }: RunOptions = {}):
       maxBuffer: 64 * 1024 * 1024,
     });
     const output = `${result.stdout ?? ""}${result.stderr ?? ""}`;
+    const rejection = harnessError(output);
+    if (rejection) throw new Error(`harness rejected the session: ${rejection}`);
     if (result.error) {
       // A failed or killed session still proves the trigger when its
       // transcript exists: keep it so the load line can be checked.
