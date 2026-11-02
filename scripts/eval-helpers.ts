@@ -11,7 +11,7 @@ import { join, relative, sep } from "node:path";
 const root = join(import.meta.dirname, "..");
 const skillsDir = join(root, "skills");
 
-const MODEL = process.env.EVAL_MODEL ?? "opencode/deepseek-v4.1-flash";
+const MODEL = process.env.EVAL_MODEL ?? "opencode/glm-5.3";
 
 function readIterations(): number {
   const raw = process.env.EVAL_ITERATIONS;

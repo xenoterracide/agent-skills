@@ -93,9 +93,10 @@ without spawning a session.
 
 ### Model and cost
 
-`EVAL_MODEL` selects the model and defaults to a cheap one.
-`EVAL_ITERATIONS` overrides the run count. A full 3/3 pass costs tokens, but
-the suite is on demand only.
+`EVAL_MODEL` selects the model and defaults to `opencode/glm-5.3`.
+Flash-class models proved too inconsistent at auto-loading skills, so the
+default trades cost for reliable triggers. `EVAL_ITERATIONS` overrides the run
+count. A full 3/3 pass costs tokens, but the suite is on demand only.
 
 ### Tooling
 
