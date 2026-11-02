@@ -6,161 +6,97 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 # Skill Evals Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Status:** Implemented on `feat/skill-evals`. An earlier YAML runner and
+> judge-model design was replaced before merge; this plan records what shipped.
 
-**Goal:** Add a persistent prompt regression suite — `evals.yaml` plus a runner — that verifies skills auto-load and their rules apply across models.
+**Goal:** Add a per-skill prompt regression suite that fails when a skill stops
+auto-loading.
 
-**Architecture:** `evals.yaml` holds a `models` list and `tests` (each `{name, prompt, expect}`). `scripts/run-evals.mjs` reads it, forks a fresh `opencode run` session per `(test, model)` × `iterations`, judges each output (LLM judge for `type: skill`, string match for `type: contains`), and reports a `(test, model) → passed M/N` matrix. Wired as `yarn evals`, on-demand (not CI).
+**Architecture:** Vitest runs `skills/<skill>/tests/evals.test.ts`. Each case
+calls `assertSkillLoads` from `scripts/eval-helpers.ts`, which forks
+`opencode run` inside a temp copy of `skills/` and `.opencode/` with an
+isolated `XDG_CONFIG_HOME`. Detection is the `Skill "name"` line on stderr.
+`bail: 1` stops the suite at the first failure.
 
-**Tech Stack:** Node (`.mjs`), the `yaml` package for parsing, `opencode run` for forking sessions.
+**Tech stack:** TypeScript, Vitest, `node:child_process`. No judge model.
 
 **Spec:** `docs/superpowers/specs/2026-11-01-skill-evals-design.md`.
 
 ## Global Constraints
 
-- The runner forks a full session (`opencode run`), never a subagent — subagents lack the skill tool.
-- Skill invocation passes only at 3/3 runs; a flaky trigger is a failure.
-- Results are printed, not committed; `evals.yaml` and the runner are committed.
-- `scripts/*.mjs` files are MIT-licensed; `*.yaml` is CC0-1.0 (per `AGENTS.md` licensing table).
-- The runner is a dev tool, not the plugin entrypoint, so it may use devDependencies.
-- `yarn lint` and `yarn test` must still pass.
+- Fork a full session, never a subagent — subagents lack the skill tool.
+- Skill invocation passes only at 3/3 runs.
+- `yarn lint`, `yarn typecheck`, and `yarn test` must pass.
+- `yarn evals` is on demand and is never wired into CI.
+- `skills/*/tests/` is excluded from the catalog generator.
 
 ## Review Focus
 
-- **The runner must fork, not subagent** — a subagent cannot observe skill auto-loading.
-- **The 3/3 threshold must be enforced** — a single failure must fail the case, not average out.
-- **`type: contains` must not require a model** — it is a plain string match, cheap and deterministic.
-- **The judge must be asked a yes/no question** — to reduce its own non-determinism.
-- **`evals.yaml` must not be wired into CI** — it forks sessions and costs tokens.
+- **The runner must fork, not subagent.**
+- **One failed run fails the case** — no averaging across iterations.
+- **Detection must read stderr** — `execFileSync` returned only stdout, which
+  hid the `Skill "..."` line.
+- **Isolation must cover `XDG_CONFIG_HOME` and `PWD`** — either one missing lets
+  the session mutate the real repository.
+- **Prompts must be bounded** — a prompt that opens an authoring workflow
+  exceeds the session timeout.
 
 ---
 
-### Task 1: Add the `yaml` devDependency
+### Task 1: Sandbox runner
 
-**Files:**
+**Files:** `scripts/eval-helpers.ts`
 
-- Modify: `package.json`
-- Modify: `yarn.lock` (via install)
+- [x] Detect a supported harness (`opencode`, then `kimi`).
+- [x] Copy `skills/` and `.opencode/` into a temp directory.
+- [x] Copy fixtures into the same directory.
+- [x] Set `XDG_CONFIG_HOME` and `PWD` to temp directories.
+- [x] Capture `stdout` and `stderr`; strip ANSI; match `Skill "name"`.
+- [x] Fail the case when any iteration misses.
 
-- [ ] **Step 1: Add the dependency**
+### Task 2: Helper unit tests
 
-Run: `yarn add -D yaml`
-Expected: `yaml` is added to `devDependencies` and `yarn.lock` updates.
+**Files:** `scripts/eval-helpers.test.ts`
 
-- [ ] **Step 2: Commit**
+- [x] Test `stripAnsi` and `detectSkill`.
+- [x] Test that `assertSkillLoads` fails on a miss and passes on a hit, using
+      an injected `run`.
 
-```bash
-git add package.json yarn.lock
-git commit -m "build: add yaml devDependency for the evals runner"
-```
+### Task 3: Per-skill cases and fixtures
 
----
+**Files:** `skills/*/tests/evals.test.ts`, `skills/*/tests/fixtures/`
 
-### Task 2: Create `evals.yaml`
+- [x] `java-creator` — natural request against a Java fixture.
+- [x] `gradle-creator` — natural request against a Gradle fixture.
+- [x] `hemingway` — prose trigger, Javadoc trigger, reference edit, and a
+      `assertContains` rule check.
+- [x] `docs-creator` — reference edit, frontmatter fix, README update.
 
-**Files:**
+### Task 4: Vitest configuration
 
-- Create: `evals.yaml`
+**Files:** `vitest.config.ts`, `package.json`
 
-- [ ] **Step 1: Write the schema and initial cases**
+- [x] Include `scripts/eval-helpers.test.ts` and `skills/*/tests/evals.test.ts`.
+- [x] Set `bail: 1` and `fileParallelism: false`; keep sessions sequential.
+- [x] Set a 20-minute test timeout above the six-minute session timeout.
+- [x] Wire `yarn evals`.
 
-Create `evals.yaml` with a `models` list, `iterations: 3`, and a small `tests`
-list. Include at least one `type: skill` case and one `type: contains` case.
-Use real, non-toy prompts (the `var foo` example is a placeholder, not a real
-case).
+### Task 5: Catalog exclusion
 
-- [ ] **Step 2: Format and verify**
+**Files:** `scripts/generate-skill-catalog.mjs`
 
-Run: `yarn exec prettier --write evals.yaml`
-Expected: no diff after a second run.
+- [x] Skip `tests/` directories when listing skill files.
+- [x] Cover the exclusion with a unit test.
 
-- [ ] **Step 3: Commit**
+### Task 6: TypeScript and linker
 
-```bash
-git add evals.yaml
-git commit -m "test: add skill evals cases"
-```
+**Files:** `tsconfig.json`, `.yarnrc.yml`, `package.json`
 
----
+- [x] Migrate helpers and cases to TypeScript.
+- [x] Typecheck with `tsc`.
+- [x] Switch to the `node-modules` linker so `tsc` 7 can resolve types.
 
-### Task 3: Create the runner
+### Task 7: Verify
 
-**Files:**
-
-- Create: `scripts/run-evals.mjs`
-
-- [ ] **Step 1: Write the pure helpers**
-
-In `scripts/run-evals.mjs`, write and export the pure functions:
-
-- `parseEvals(text)` — parse YAML into `{ models, iterations, tests }`.
-- `judgeContains(output, text)` — return whether `output` includes `text`.
-- `buildJudgePrompt(prompt, output, skill)` — build the yes/no judge prompt.
-- `formatMatrix(results)` — render the `(test, model) → passed M/N` matrix.
-
-- [ ] **Step 2: Write the forking logic**
-
-Add the main flow: for each model, for each test, run `iterations` times by
-forking `opencode run -m <model> "<prompt>"` (via `child_process`), capture
-stdout, and judge. For `type: skill`, fork a second `opencode run` with the
-judge prompt and parse yes/no. For `type: contains`, use `judgeContains`.
-
-- [ ] **Step 3: Format and verify**
-
-Run: `yarn exec prettier --write scripts/run-evals.mjs`
-Expected: no diff after a second run.
-
-- [ ] **Step 4: Commit**
-
-```bash
-git add scripts/run-evals.mjs
-git commit -m "feat: add skill evals runner"
-```
-
----
-
-### Task 4: Wire the `yarn evals` command
-
-**Files:**
-
-- Modify: `package.json`
-
-- [ ] **Step 1: Add the script**
-
-Add `"evals": "node scripts/run-evals.mjs"` to the `scripts` block.
-
-- [ ] **Step 2: Commit**
-
-```bash
-git add package.json
-git commit -m "build: add yarn evals command"
-```
-
----
-
-### Task 5: Run the evals and verify
-
-**Files:**
-
-- None (verification only).
-
-- [ ] **Step 1: Run the evals**
-
-Run: `yarn evals`
-Expected: a matrix prints; each `(test, model)` shows `passed M/N`.
-
-- [ ] **Step 2: Confirm the 3/3 threshold**
-
-Verify a `type: skill` case reports failure when any of its 3 runs fails.
-
-- [ ] **Step 3: Run the repo checks**
-
-Run: `yarn lint && yarn test`
-Expected: all pass.
-
-- [ ] **Step 4: Commit any remaining changes**
-
-```bash
-git add -A
-git commit -m "test: verify skill evals runner"
-```
+- [x] `yarn typecheck`, `yarn test`, `yarn lint` pass.
+- [ ] A full `yarn evals` run passes 3/3 on every case.

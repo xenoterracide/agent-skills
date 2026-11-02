@@ -9,102 +9,103 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 ## Intent
 
 A persistent prompt regression suite that verifies skills auto-load and their
-rules apply, runnable across models to catch regressions when a skill's
-`description` or body drifts.
+rules apply. It runs on demand, not in CI, and catches regressions when a
+skill's `description` or body drifts.
 
 ## Goals
 
-1. Record RED-GREEN test cases (prompt → expected behavior) in a versioned file.
-2. Run each case against multiple models, N times each, because LLMs are
-   non-deterministic.
-3. Verify skill invocation as the priority, rule application as a supplement.
-4. Report a pass/fail matrix per run.
+1. Assert skill invocation for realistic prompts, N times per case.
+2. Assert a concrete consequence where a skill's rule is checkable.
+3. Keep each case next to the skill it tests, so a description edit and its
+   cases travel together.
+4. Fail fast: the first failing case stops the suite.
 
 ## Non-goals
 
-- Not a CI gate. The runner forks sessions and calls a judge model, so it is
-  slow and costs tokens; it runs on demand, not on every commit.
+- Not a CI gate. Each case forks a real session, which is slow and costs
+  tokens.
 - Not a skill-content checker. A subagent can review skill contents inline;
   this suite tests auto-loading, which needs a full session with the skill
   tool.
+- Not a judge-model harness. Detection is deterministic, so there is no second
+  model call to trust.
 
 ## Constraints
 
-- The runner must fork a full session (`opencode run` / `kimi -p`), not a
-  subagent — subagents lack the skill tool and cannot observe auto-loading.
-- Skill invocation must pass 3/3 runs. A flaky trigger is a failure: the worst
-  outcome is having to manually invoke a skill and tell the agent to redo it.
-- Results are ephemeral and are not committed; the test cases and model list
-  are.
-
-## Approaches Considered
-
-### Pass/fail signal
-
-- **LLM judge** (chosen, primary) — a second model call reads the session
-  output and answers "did the expected skill get invoked and followed?".
-  Flexible, handles the fuzzy "did it actually load" question; costs a model
-  call and is itself non-deterministic.
-- **Structured output** — each prompt ends with "report which skill you used as
-  JSON". Reliable and cheap, but artificial: it modifies the prompt to make it
-  testable.
-- **Behavioral check** (chosen, supplement) — assert on a concrete consequence
-  of the skill loading (e.g. `var foo = "foo"`). Concrete and automatable, but
-  tests "rule applied" rather than "skill loaded".
-
-### Format
-
-- **YAML** (chosen) — block scalars handle multi-line prompts and expectations;
-  comments explain each case; the repo already uses YAML.
+- Each case forks a full session (`opencode run`), never a subagent — subagents
+  lack the skill tool and cannot observe auto-loading.
+- Skill invocation passes only at 3/3 runs. A flaky trigger is a failure: the
+  worst outcome is having to manually invoke a skill and tell the agent to redo
+  it.
+- Cases never touch the developer's configuration. Each session gets a
+  throwaway `XDG_CONFIG_HOME` and a temp copy of `skills/` and `.opencode/`.
+- A case must finish inside one session timeout of six minutes. Heavy prompts
+  that route into a skill-authoring workflow do not belong here; prefer
+  bounded requests with the same trigger.
 
 ## Design
 
-### `evals.yaml`
+### Layout
 
-```yaml
-models:
-  - opencode/deepseek-v4-pro
-  - anthropic/claude-sonnet-4-5
+- `skills/<skill>/tests/evals.test.ts` — cases for that skill.
+- `skills/<skill>/tests/fixtures/` — small projects a case needs, copied into
+  the session directory.
+- `scripts/eval-helpers.ts` — sandbox runner and assertions.
+- `scripts/eval-helpers.test.ts` — unit tests for the helpers; no model calls.
+- `vitest.config.ts` — `bail: 1`, `fileParallelism: false`, 20-minute test
+  timeout.
 
-iterations: 3
+The skill catalog generator skips `tests/` directories, so cases and fixtures
+never reach the published catalog.
 
-tests:
-  - name: java-creator triggers on a natural request
-    prompt: modify the App class so the greeting is uppercase
-    expect:
-      type: skill
-      name: java-creator
-  - name: java-creator var rule
-    prompt: |
-      refactor this java code to conform with style:
-      String foo = "foo"
-    expect:
-      type: contains
-      text: 'var foo = "foo"'
-```
+### Detection
 
-- `expect.type: skill` — the LLM judge checks that the named skill was invoked
-  and followed.
-- `expect.type: contains` — the output must contain the text.
+`opencode` writes a `Skill "name"` line to stderr when it loads a skill. The
+helper strips ANSI escapes and matches that line. This is deterministic: no
+judge model, no extra call, no prompt mutation.
 
-### Runner
+### Sandbox
 
-`scripts/run-evals.mjs`, invoked as `yarn evals`. For each `(test, model)`, it
-forks a fresh session N times, judges each output, and reports a matrix of
-`(test, model) → passed M/N`.
+For each run the helper:
+
+1. Creates a temp directory and copies `skills/` and `.opencode/` into it.
+2. Copies the case's fixtures into the same directory when given.
+3. Sets `XDG_CONFIG_HOME` to an empty temp directory and `PWD` to the session
+   directory. `opencode` resolves its working directory from `PWD`, not the
+   process cwd.
+4. Deletes both temp directories afterwards.
+
+Without the `XDG_CONFIG_HOME` isolation the installed plugin binds to the real
+repository, and the agent edits it.
+
+### Assertions
+
+- `assertSkillLoads(prompt, skill, { fixture?, iterations? })` — runs the
+  prompt `iterations` times (default 3) and fails if any run does not load the
+  skill.
+- `assertContains(prompt, text, …)` — fails if any run's transcript lacks
+  `text`.
+
+Both accept an injectable `run` function, so their failures are unit-tested
+without spawning a session.
+
+### Model and cost
+
+`EVAL_MODEL` selects the model and defaults to a cheap one.
+`EVAL_ITERATIONS` overrides the run count. A full 3/3 pass costs tokens, but
+the suite is on demand only.
+
+### Tooling
+
+The suite is TypeScript and runs under Vitest, which bails at the first
+failure. `tsc` 7 is a native binary and cannot read Yarn's PnP store, so the
+repository uses the `node-modules` linker.
 
 ## Risks and Mitigations
 
-- **`opencode run` flags are unverified.** Mitigation: confirm the exact
-  invocation (skills directory, model selection) before writing the runner.
-- **Judge non-determinism.** Mitigation: the 3/3 threshold on the _judged_
-  result, and the judge is asked a yes/no question to reduce variance.
-- **Cost.** Mitigation: on-demand invocation, not CI; a small default model
-  list.
-
-## Left to the Builder
-
-- The exact `opencode run` invocation and how the judge model is called.
-- The judge prompt wording.
-- Whether `iterations` and the threshold are per-suite or per-test.
-- The results output format (table, JSON, or both).
+- **Prompt drift.** Cases live next to the skill; a description change that
+  breaks a case fails the suite.
+- **Session timeouts.** A heavy prompt can exceed the session limit. Mitigation:
+  bounded requests, and the suite bails at the first timeout instead of burning
+  the remaining cases.
+- **Cost.** Mitigation: on demand only, a cheap default model, and N=3.
