@@ -29,7 +29,7 @@ it("triggers directly on pasted prose", () => {
 });
 
 it("loads as a docs-creator companion on a skill reference", () => {
-  assertSkillLoads("tighten the wording in the pull-request reference", "hemingway");
+  assertSkillLoads("rewrite the git-workflow pull-request reference so it is easier to follow", "hemingway");
 });
 
 it("prose rule applies", () => {
