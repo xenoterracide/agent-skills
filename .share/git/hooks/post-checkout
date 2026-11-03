@@ -15,20 +15,20 @@ CHECKOUT_TYPE="$3"
 [ "$CHECKOUT_TYPE" = "1" ] || exit 0
 
 # Check if lockfiles changed between previous and current HEAD
-YARN_LOCK_CHANGED=0
+PNPM_LOCK_CHANGED=0
 UV_LOCK_CHANGED=0
 
-if ! git diff --quiet "$PREV_HEAD" HEAD -- yarn.lock 2>/dev/null; then
-  YARN_LOCK_CHANGED=1
+if ! git diff --quiet "$PREV_HEAD" HEAD -- pnpm-lock.yaml 2>/dev/null; then
+  PNPM_LOCK_CHANGED=1
 fi
 
 if ! git diff --quiet "$PREV_HEAD" HEAD -- uv.lock 2>/dev/null; then
   UV_LOCK_CHANGED=1
 fi
 
-if [ "$YARN_LOCK_CHANGED" -eq 1 ]; then
-  echo "yarn.lock changed, running yarn install --immutable..."
-  yarn install --immutable
+if [ "$PNPM_LOCK_CHANGED" -eq 1 ]; then
+  echo "pnpm-lock.yaml changed, running pnpm install --frozen-lockfile..."
+  pnpm install --frozen-lockfile
 fi
 
 if [ "$UV_LOCK_CHANGED" -eq 1 ]; then

@@ -1,0 +1,98 @@
+// SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
+//
+// SPDX-License-Identifier: MIT
+
+import eslint from "@eslint/js";
+import jsonPluginImport from "@eslint/json";
+import markdown from "@eslint/markdown";
+import { defineConfig, globalIgnores } from "eslint/config";
+import globals from "globals";
+import tseslint from "typescript-eslint";
+
+const jsonPlugin = (jsonPluginImport as { default?: typeof jsonPluginImport }).default ?? jsonPluginImport;
+
+export default defineConfig([
+  globalIgnores([
+    "node_modules/",
+    ".venv/",
+    "coverage/",
+    "**/dist/",
+    "**/build/",
+    ".agents/",
+    ".superpowers/",
+    ".worktrees/",
+    "skills/*/tests/fixtures/",
+  ]),
+  {
+    files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
+    languageOptions: { globals: globals.node },
+    ...eslint.configs.recommended,
+  },
+  {
+    files: ["**/*.{ts,mts,cts}"],
+    extends: [tseslint.configs.strictTypeChecked, tseslint.configs.stylisticTypeChecked],
+    languageOptions: {
+      globals: globals.node,
+      parserOptions: {
+        project: "./tsconfig.eslint.json",
+      },
+    },
+    rules: {
+      "max-params": "off",
+      "@typescript-eslint/max-params": "error",
+      "default-param-last": "off",
+      "@typescript-eslint/default-param-last": "error",
+      "no-use-before-define": "off",
+      "@typescript-eslint/no-use-before-define": "error",
+      "init-declarations": "off",
+      "@typescript-eslint/init-declarations": "error",
+      "prefer-destructuring": "off",
+      "@typescript-eslint/prefer-destructuring": "error",
+
+      "@typescript-eslint/consistent-type-exports": "error",
+      "@typescript-eslint/consistent-type-imports": "error",
+      "@typescript-eslint/explicit-member-accessibility": "error",
+      "@typescript-eslint/explicit-function-return-type": "error",
+      "@typescript-eslint/explicit-module-boundary-types": "error",
+      "@typescript-eslint/member-ordering": "error",
+      "@typescript-eslint/method-signature-style": "error",
+      "@typescript-eslint/no-dupe-class-members": "error",
+      "@typescript-eslint/no-import-type-side-effects": "error",
+      "@typescript-eslint/no-invalid-this": "error",
+      "@typescript-eslint/no-loop-func": "error",
+      "@typescript-eslint/no-redeclare": "error",
+      "@typescript-eslint/no-shadow": "error",
+      "@typescript-eslint/no-unnecessary-parameter-property-assignment": "error",
+      "@typescript-eslint/no-unnecessary-qualifier": "error",
+      "@typescript-eslint/no-unnecessary-type-arguments": "error",
+      "@typescript-eslint/no-useless-empty-export": "error",
+      "@typescript-eslint/prefer-readonly": "error",
+      "@typescript-eslint/promise-function-async": "error",
+      "@typescript-eslint/strict-boolean-expressions": ["error", { allowNumber: false }],
+      "@typescript-eslint/switch-exhaustiveness-check": "error",
+    },
+  },
+  {
+    ...jsonPlugin.configs.recommended,
+    files: ["**/*.json"],
+    ignores: ["**/tsconfig.json", "**/tsconfig.*.json"],
+    language: "json/json",
+  },
+  {
+    ...jsonPlugin.configs.recommended,
+    files: ["**/*.json5"],
+    language: "json/json5",
+  },
+  {
+    ...jsonPlugin.configs.recommended,
+    files: ["**/*.jsonc", "**/tsconfig.json", "**/tsconfig.*.json"],
+    language: "json/jsonc",
+    languageOptions: { allowTrailingCommas: true },
+  },
+  {
+    files: ["**/*.md"],
+    plugins: { markdown },
+    language: "markdown/gfm",
+    extends: [markdown.configs.recommended],
+  },
+]);

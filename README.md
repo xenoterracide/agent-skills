@@ -84,7 +84,7 @@ configured, the plugin skips skill IDs that already exist.
 
 The `skills/` directory doubles as an
 [HTTP skill catalog](https://opencode.ai/v2/docs/skills/). It ships with a
-generated `index.json` (regenerate with `yarn skills:catalog`) and is served
+generated `index.json` (regenerate with `pnpm skills:catalog`) and is served
 directly from GitHub raw.
 
 ```jsonc
@@ -138,7 +138,7 @@ See [`AGENTS.md`](AGENTS.md#skill-routing) for the full skill routing table.
 - Use the [`git-workflow`](skills/git-workflow/SKILL.md) skill when creating or
   updating PRs, writing commits, or recovering from a workflow-scope push
   rejection.
-- When adding or moving skills, run `yarn skills:catalog` to regenerate the
+- When adding or moving skills, run `pnpm skills:catalog` to regenerate the
   OpenCode catalog at `skills/index.json`.
 
 ## License

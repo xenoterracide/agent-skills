@@ -68,7 +68,7 @@ commas," not "you noticed the parser dropped commas."
 Add an Assisted-by trailer at the end of the commit message body (after the
 description, before any footer markers like `BREAKING CHANGE:`):
 
-```
+```text
 Assisted-by: <AI_NAME>:<MODEL_VERSION> [TOOL1] [TOOL2]
 ```
 
@@ -79,7 +79,7 @@ tools like `git`, `gcc`, or editors.
 
 Examples:
 
-```
+```text
 Assisted-by: Kimi:kimi-code-cli
 Assisted-by: Claude:claude-3-opus coccinelle sparse
 ```

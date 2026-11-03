@@ -24,49 +24,78 @@ directory doubles as an OpenCode-compatible HTTP skill catalog.
 
 ## Source of Truth
 
-| For                                  | See                             |
-| ------------------------------------ | ------------------------------- |
-| Install, update, usage, contribution | `README.md` (read this first)   |
-| Kimi plugin manifest, skill layout   | `.kimi-plugin/plugin.json`      |
-| OpenCode plugin entrypoint           | `index.js`                      |
-| OpenCode project config              | `.opencode/opencode.json`       |
-| OpenCode skill catalog               | `skills/index.json`             |
-| Skills directory                     | `skills/`                       |
-| Node version                         | `.tool-versions`                |
-| Scripts and Node dependencies        | `package.json`                  |
-| Python dependencies                  | `pyproject.toml`, `uv.lock`     |
-| Conventional commit types            | `git-conventional-commits.yaml` |
-| Pre-commit rules (license + format)  | `.lintstagedrc.cjs`             |
-| Renovate config                      | `.github/renovate.json5`        |
+| For                                  | See                              |
+| ------------------------------------ | -------------------------------- |
+| Install, update, usage, contribution | `README.md` (read this first)    |
+| Kimi plugin manifest, skill layout   | `.kimi-plugin/plugin.json`       |
+| OpenCode plugin entrypoint           | `index.js`                       |
+| OpenCode project config              | `.opencode/opencode.json`        |
+| OpenCode skill catalog               | `skills/index.json`              |
+| Skills directory                     | `skills/`                        |
+| Node version                         | `.tool-versions`                 |
+| Scripts and Node dependencies        | `package.json`, `pnpm-lock.yaml` |
+| Python dependencies                  | `pyproject.toml`, `uv.lock`      |
+| Conventional commit types            | `git-conventional-commits.yaml`  |
+| Pre-commit rules (license + format)  | `.lintstagedrc.cjs`              |
+| Renovate config                      | `.github/renovate.json5`         |
 
 ## Build and Test
 
 Run setup once with:
 
 ```bash
-yarn contribute
+pnpm contribute
 ```
 
 ### Lint and Format
 
 ```bash
-yarn lint                         # prettier + REUSE checks
-yarn lint:prettier                # Prettier check with cache
-yarn lint:reuse                   # REUSE license compliance check
-yarn exec prettier --write <file> # Format a single file
+pnpm lint                         # prettier + REUSE checks
+pnpm lint:prettier                # Prettier check with cache
+pnpm lint:reuse                   # REUSE license compliance check
+pnpm exec prettier --write <file> # Format a single file
 ```
 
 ### Test
 
 ```bash
-yarn test                         # Plugin tests
-yarn test:opencode                # Plugin tests only
-node --test scripts/*.test.mjs    # Same tests without Yarn
+pnpm check                        # typecheck + eslint + catalog + tests
+pnpm test                         # Plugin tests
+pnpm test:opencode                # Plugin tests only
+node --test scripts/*.test.mjs    # Same tests without pnpm
+pnpm typecheck                    # tsc --noEmit
+pnpm lint:eslint                  # ESLint only
 ```
+
+### Skill Evals
+
+`skills/*/tests/evals.test.ts` asserts that realistic prompts auto-load the
+skill. Each case forks `opencode run` in a temp copy of `skills/` and
+`.opencode/` with an isolated `XDG_CONFIG_HOME`; the skill must load in all
+three runs.
+
+```bash
+pnpm evals                        # helper unit tests + every skill case
+pnpm evals skills/java-creator    # one skill
+```
+
+Evals are on demand and never run in CI. `EVAL_MODEL` and `EVAL_ITERATIONS`
+override the defaults. The suite bails at the first failure.
+
+The default reporter prints nothing until the suite ends, so a long run looks
+stuck and a killed run leaves no trace. Stream per-test progress instead:
+
+```bash
+pnpm exec vitest run --reporter=verbose 2>&1 | tee /tmp/opencode/evals.log
+```
+
+A full run takes an hour or more; use a background shell and read the log. A
+failure quoting `Policy budget exceeded` means the provider quota ran dry —
+point `EVAL_MODEL` at another provider or wait for the reset.
 
 ### Git Hooks
 
-Hooks live in `.share/git/hooks`. `yarn contribute` sets `core.hooksPath` to
+Hooks live in `.share/git/hooks`. `pnpm contribute` sets `core.hooksPath` to
 that directory automatically.
 
 - **pre-commit**: Runs `lint-staged` to format and annotate licenses.
@@ -80,11 +109,14 @@ All hooks exit early when the `CI` environment variable is set.
 ### Dependency Sync
 
 ```bash
-yarn install --immutable
+pnpm install --frozen-lockfile
 uv sync --frozen
 ```
 
-If `yarn` vanishes after a Node version change, use the `version-managers`
+The repository uses pnpm. Its isolated `node_modules` keeps undeclared
+dependencies unresolvable while `tsc` 7, a native binary, reads the tree.
+
+If `pnpm` vanishes after a Node version change, use the `version-managers`
 skill (`references/corepack-troubleshooting.md`) before anything else.
 
 ### OpenCode Plugin
@@ -168,11 +200,11 @@ Load the relevant skill when the trigger applies:
   version in `.kimi-plugin/plugin.json` and `package.json` before creating or
   updating the PR.
 - After adding, removing, or moving skills, regenerate the OpenCode catalog with
-  `yarn skills:catalog` so `skills/index.json` stays in sync (kept in check by
-  `yarn skills:check` as part of `yarn lint`). The catalog version is read from
+  `pnpm skills:catalog` so `skills/index.json` stays in sync (kept in check by
+  `pnpm skills:check` as part of `pnpm lint`). The catalog version is read from
   `.kimi-plugin/plugin.json`; bump it when skill contents change so OpenCode
   refreshes cached copies.
-- Run `yarn test:opencode` when changing the plugin. The entrypoint is
+- Run `pnpm test:opencode` when changing the plugin. The entrypoint is
   intentionally dependency-free so Git and local-directory installs work.
 - Keep `.opencode/opencode.json` limited to `./skills`; the plugin is loaded from
   the user's global configuration, not from the repository config.
@@ -180,7 +212,7 @@ Load the relevant skill when the trigger applies:
 ## Security Considerations
 
 - **CI detection**: Git hooks exit early when `CI` is set.
-- **Lockfile integrity**: Use `yarn install --immutable` and `uv sync --frozen`.
+- **Lockfile integrity**: Use `pnpm install --frozen-lockfile` and `uv sync --frozen`.
 - **No force push**: Repository rules block force pushes.
 - **Command injection**: The merge tool prefers `execFileSync` with argv arrays
   for safe command execution.

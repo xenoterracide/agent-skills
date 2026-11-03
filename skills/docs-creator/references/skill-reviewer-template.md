@@ -11,7 +11,7 @@ Use this template when dispatching a skill reviewer subagent.
 **Purpose:** Review a skill against the Hemingway rule, validation,
 discoverability, and behavior before it ships.
 
-```
+```text
 Subagent (general-purpose):
   description: "Review skill changes"
   prompt: |

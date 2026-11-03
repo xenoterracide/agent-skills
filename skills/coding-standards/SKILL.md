@@ -1,7 +1,10 @@
 ---
 name: coding-standards
 description: |
-  Use when writing or modifying code in any language.
+  Use when writing or modifying code in any language, including scripts,
+  tests, and build files. When a domain skill applies, such as `java-creator`
+  or `gradle-creator`, load that skill first; this skill still applies
+  alongside it.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing
@@ -196,9 +199,11 @@ try {
    - Yes → Log at appropriate level and continue
    - No → Log and terminate/rethrow
 
-## Rule 4: Use Libraries When Available
+## Rule 4: Use Existing Libraries and Frameworks
 
-Before implementing new functionality, check if it's already provided by standard libraries or existing dependencies. **Prefer existing code over writing your own**, even for seemingly "trivial" functions.
+Check for an existing library, dependency, or framework before writing new code. Prefer existing code over your own, even for trivial functions.
+
+This covers tools and infrastructure, not just code. Do not write your own test runner, CLI parser, config loader, or formatter when a maintained one exists. Use the library.
 
 ## Rule 5: Code Quality Standards
 

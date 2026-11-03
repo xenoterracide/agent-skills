@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
+#
+# SPDX-License-Identifier: MIT
+
+name: check
+on: push
+permissions:
+  contents: read
+jobs:
+  check:
+    uses: xenoterracide/github/.github/workflows/pnpm.yml@32faaa187d093e99579de530726442b2fd167362 # develop
