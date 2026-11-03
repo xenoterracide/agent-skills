@@ -11,7 +11,7 @@
     "@eslint/json": "^2.1.1",
     "@eslint/markdown": "^8.0.3",
     "@prettier/plugin-xml": "^3.4.2",
-    "@types/node": "v24",
+    "@types/node": "26",
     "eslint": "^10.14.0",
     "git-conventional-commits": "^2.8.0",
     "globals": "^17.14.0",
