@@ -8,10 +8,10 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 ## Instructions
 
-- Use for PR's or commit message's
-- this is a git conventional commit format
-  - review `git-conventional-commits.yaml` values in `convention.commitTypes` for `<type>`'s available
-- the git subject line becomes the PR title
+- Use for PR titles and commit messages
+- Follow the conventional commit format
+  - review `git-conventional-commits.yaml` values in `convention.commitTypes` for the available `<type>`s
+- The git subject line becomes the PR title
 - You MUST follow the exact template
 
 ## Rules
@@ -35,7 +35,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
   - Use bullet points explaining the main changes
   - Each bullet must describe one complete logical change
   - Do not split a single idea across multiple bullets
-  - Wrap lines to <= 75 chars
+  - Wrap lines to ≤ 75 chars
 
 ## Grounding the Why
 
@@ -72,10 +72,9 @@ description, before any footer markers like `BREAKING CHANGE:`):
 Assisted-by: <AI_NAME>:<MODEL_VERSION> [TOOL1] [TOOL2]
 ```
 
-This follows the Linux kernel convention for AI attribution. `MODEL_VERSION`
-is the specific model or agent version used. Optional `[TOOL1] [TOOL2]` list
-specialized analysis tools (e.g., `coccinelle`, `sparse`). Do not list basic
-tools like `git`, `gcc`, or editors.
+`MODEL_VERSION` is the specific model or agent version used. Optional
+`[TOOL1] [TOOL2]` list specialized analysis tools (e.g., `coccinelle`,
+`sparse`). Do not list basic tools like `git`, `gcc`, or editors.
 
 Examples:
 

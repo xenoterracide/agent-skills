@@ -15,35 +15,30 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
     `references/commit-creator.md`): an optional grounded why, then `-` bullets.
     No Markdown headings (`##`), bold, fenced blocks, or checkboxes (`- [x]`) —
     they land verbatim as noise in `git log`.
-- files should be committed and pushed
-  - ensure code compiles and tests pass before committing
-    - run relevant, specific tests first for quick feedback
-    - prefer compile-only checks for quick validation
-    - run quick test or lint checks before larger suites
-    - run the project's full check/test suite before finalizing or when
-      changes affect multiple modules
-  - ensure documentation is up to date
-    - review changes to understand what documentation may need updates
-    - update `README.md` if user-facing behavior changes
-    - update `AGENTS.md` if build processes, tools, or agent workflows change
-    - when renaming workflows or changing their interface, update both README and AGENTS.md
-  - verify GitHub PR checks pass after pushing
-    - ALWAYS check the status of required checks before returning to the user
-    - use `gh pr checks --watch` or available tools to check workflow status
-    - remediate any failures found — do not return with failing checks
-    - fix any failures before requesting review
-    - if GitHub checks fail after pushing, fix before requesting review
+- Commit and push your changes.
+  - Compile and test before committing.
+    - Run relevant, specific tests first for quick feedback.
+    - Prefer compile-only checks for quick validation.
+    - Run the project's full check/test suite before finalizing, or when
+      changes affect multiple modules.
+  - Keep documentation current.
+    - Update `README.md` when user-facing behavior changes.
+    - Update `AGENTS.md` when build processes, tools, or agent workflows change.
+    - Rename a workflow or change its interface only with matching updates to
+      both documents.
+  - Verify required GitHub checks before returning to the user.
+    - Use `gh pr checks --watch --required` or the MCP equivalent.
+    - Fix failures before requesting review. Never return with failing checks.
 - **NEVER force push.** Force pushes (`--force` and `--force-with-lease`) are **blocked by repository rules** and will always fail. If a push is rejected, do not attempt force push — create a new commit instead.
-- must be synchronized with HEAD branch using a merge strategy
-  - it is easier to delete and regenerate lockfiles than merge them
-- respond to ALL pr comments.
-  - ALWAYS leave a reply on each review comment to indicate status
-  - If fixed: comment "Fixed" or "Done" with brief explanation
-  - If not an issue: comment explaining why (e.g., "Not applicable because...", "Already resolved...")
-  - If uncertain: ask for clarification
-  - This helps humans know whether to resolve the comment
-  - only address UNRESOLVED comments - check review thread resolution status using GraphQL
-  - use GraphQL to get review threads with `isResolved` field
+- Keep the branch synchronized with the base branch using a merge strategy.
+  - Delete and regenerate lockfiles instead of merging them.
+- Reply to every unresolved PR comment.
+  - Leave a reply on each review comment to indicate its status.
+  - If fixed: comment "Fixed" or "Done" with a brief explanation.
+  - If not an issue: comment explaining why (e.g., "Not applicable because...", "Already resolved...").
+  - If uncertain: ask for clarification.
+  - Check thread resolution status with GraphQL `isResolved` and address only
+    unresolved comments.
 
 ## Workflow
 
@@ -179,26 +174,5 @@ When addressing review comments on a PR:
 
 ## AI Attribution
 
-When creating commits for a PR, include AI attribution in commit messages using an Assisted-by trailer:
-
-```text
-Assisted-by: <AI_NAME>:<MODEL_VERSION> [TOOL1] [TOOL2]
-```
-
-This follows the Linux kernel convention for AI attribution. `MODEL_VERSION`
-is the specific model or agent version used. Optional `[TOOL1] [TOOL2]` list
-specialized analysis tools (e.g., `coccinelle`, `sparse`). Do not list basic
-tools like `git`, `gcc`, or editors.
-
-Examples:
-
-```text
-Assisted-by: Kimi:kimi-code-cli
-Assisted-by: Claude:claude-3-opus coccinelle sparse
-```
-
-**Do not add `Signed-off-by` trailers.** Only humans can certify the Developer
-Certificate of Origin.
-
-Place the Assisted-by trailer at the end of the commit message body, after the
-description.
+Add an `Assisted-by` trailer to commit messages and PR descriptions. See
+`references/commit-creator.md` for the format, placement, and rules.

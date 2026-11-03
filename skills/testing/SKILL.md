@@ -19,6 +19,14 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 Guidelines for writing effective automated tests.
 
+## Required Companion Skills
+
+Load these skills whenever this skill applies:
+
+- **`coding-standards`** — before writing or modifying code
+- **`completion-checklist`** — before claiming the change is done, complete,
+  fixed, passing, or working
+
 ## Philosophy: Prefer Sociable and Integration Tests
 
 Follow the **testing trophy** approach - value sociable and integration tests over solitary unit tests with mocks.
@@ -28,7 +36,7 @@ Follow the **testing trophy** approach - value sociable and integration tests ov
 - Use real collaborating objects, not mocks
 - Test the unit under test with its real dependencies
 - Assume collaborators work correctly (they have their own tests)
-- Tests behavior as the system actually runs
+- Test behavior as the system actually runs
 
 **Integration Tests**
 

@@ -20,7 +20,7 @@ Creates business-readable use cases that serve both human stakeholders and AI im
 
 ## Output Format
 
-Always create AsciiDoc (`.adoc`) files in `/docs/use-cases/`.
+Always create AsciiDoc (`.adoc`) files in `docs/use-cases/`.
 
 ## Core Principles
 
@@ -68,7 +68,7 @@ Link domain terms to definitions:
 - `<<Account>>` - resource/billing container
 - `<<IdentityProviderUser>>` - external identity link
 
-First create or reference the ubiquitous language in `/docs/ubiquitous-language/`.
+First create or reference the ubiquitous language in `docs/ubiquitous-language/`.
 
 ## Template Structure
 
@@ -76,9 +76,13 @@ First create or reference the ubiquitous language in `/docs/ubiquitous-language/
 = UC-XXX: {Name}
 
 == Metadata
+
+[cols="1,3"]
+|===
 | Primary Actor | <<Person>> with {credentials}
 | Scope | {Bounded Context}
 | Level | User Goal
+|===
 
 == Stakeholders and Interests
 *{Stakeholder}*:: {What they want}
