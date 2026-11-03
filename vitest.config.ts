@@ -4,16 +4,16 @@
 
 import { defineConfig } from "vitest/config";
 
+import { ITERATIONS } from "./scripts/eval-helpers";
+
 const SESSION_TIMEOUT = 360_000;
-const configuredIterations = Number(process.env.EVAL_ITERATIONS ?? 3);
-const iterations = Number.isNaN(configuredIterations) ? 3 : Math.max(1, configuredIterations);
 
 export default defineConfig({
   test: {
     include: ["scripts/eval-helpers.test.ts", "skills/*/tests/evals.test.ts"],
     bail: 1,
     fileParallelism: false,
-    testTimeout: iterations * SESSION_TIMEOUT + 600_000,
-    hookTimeout: iterations * SESSION_TIMEOUT + 600_000,
+    testTimeout: ITERATIONS * SESSION_TIMEOUT + 600_000,
+    hookTimeout: ITERATIONS * SESSION_TIMEOUT + 600_000,
   },
 });

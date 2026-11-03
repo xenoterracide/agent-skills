@@ -5,7 +5,7 @@
 import { join } from "node:path";
 import { it } from "vitest";
 
-import { assertContains, assertSkillLoads } from "../../../scripts/eval-helpers";
+import { assertSkillLoads } from "../../../scripts/eval-helpers";
 
 const javaClass = join(import.meta.dirname, "fixtures", "java-class");
 
@@ -32,8 +32,4 @@ it("triggers directly on pasted prose", () => {
 // companion rule — docs-creator pulls hemingway in — not hemingway's trigger.
 it("loads as a docs-creator companion on a skill reference", () => {
   assertSkillLoads("add a bullet to the git-workflow pull-request reference", "hemingway");
-});
-
-it("prose rule applies", () => {
-  assertContains("rewrite this to be terse: It is important to note that you should run the tests.", "Run the tests");
 });

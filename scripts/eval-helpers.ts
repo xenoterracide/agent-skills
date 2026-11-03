@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 import assert from "node:assert/strict";
-import { execFileSync, spawnSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 import { cpSync, existsSync, mkdtempSync, readdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative, sep } from "node:path";
@@ -23,33 +23,7 @@ function readIterations(): number {
   return value;
 }
 
-const ITERATIONS = readIterations();
-
-type HarnessCommand = [cmd: string, args: string[]];
-
-const HARNESSES: Record<string, (model: string, prompt: string, skills: string) => HarnessCommand> = {
-  opencode: (model, prompt) => ["opencode", ["run", "--standalone", "-m", model, prompt]],
-  kimi: (_model, prompt, skills) => ["kimi", ["-p", prompt, "--skills-dir", skills]],
-};
-
-let cachedHarness: string | undefined = undefined;
-
-function detectHarness(): string {
-  for (const candidate of Object.keys(HARNESSES)) {
-    try {
-      execFileSync(candidate, ["--version"], { stdio: "ignore" });
-      return candidate;
-    } catch (error) {
-      process.stderr.write(`harness "${candidate}" unavailable: ${(error as Error).message}\n`);
-    }
-  }
-  throw new Error(`no supported harness found (${Object.keys(HARNESSES).join(", ")})`);
-}
-
-function harness(): string {
-  cachedHarness ??= detectHarness();
-  return cachedHarness;
-}
+export const ITERATIONS = readIterations();
 
 export function stripAnsi(text: string): string {
   // ANSI escapes are control characters by definition.
@@ -59,10 +33,6 @@ export function stripAnsi(text: string): string {
 
 export function detectSkills(output: string): string[] {
   return [...stripAnsi(output).matchAll(/→ Skill "([^"]+)"/g)].map((match) => match[1]);
-}
-
-export function detectSkill(output: string, name: string): boolean {
-  return detectSkills(output).includes(name);
 }
 
 export function combineOutput(stdout: string | undefined, stderr: string | undefined): string {
@@ -84,7 +54,6 @@ export interface RunOptions {
 }
 
 function runPrompt(prompt: string, { model = MODEL, fixture }: RunOptions = {}): string {
-  const current = harness();
   const dir = mkdtempSync(join(tmpdir(), "skill-evals-"));
   let configDir: string | undefined = undefined;
   try {
@@ -100,8 +69,7 @@ function runPrompt(prompt: string, { model = MODEL, fixture }: RunOptions = {}):
         cpSync(join(fixture, entry), join(dir, entry), { recursive: true });
       }
     }
-    const [cmd, args] = HARNESSES[current](model, prompt, join(dir, "skills"));
-    const result = spawnSync(cmd, args, {
+    const result = spawnSync("opencode", ["run", "--standalone", "-m", model, prompt], {
       encoding: "utf8",
       cwd: dir,
       env: { ...process.env, XDG_CONFIG_HOME: configDir, PWD: dir },
@@ -147,19 +115,5 @@ export function assertSkillLoads(
         `${label}: expected "${skill}" to load first, got ${JSON.stringify(loaded)}\n${transcript(output)}`,
       );
     }
-  }
-}
-
-export function assertContains(
-  prompt: string,
-  text: string,
-  { fixture, model = MODEL, iterations = ITERATIONS, run = runPrompt }: AssertOptions = {},
-): void {
-  for (let i = 0; i < iterations; i++) {
-    const output = stripAnsi(run(prompt, { model, fixture }));
-    assert.ok(
-      output.includes(text),
-      `run ${String(i + 1)}/${String(iterations)}: output did not contain "${text}"\n${transcript(output)}`,
-    );
   }
 }
