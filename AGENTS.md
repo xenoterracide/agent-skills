@@ -223,7 +223,7 @@ Load the relevant skill when the trigger applies:
 - **No force push**: Repository rules block force pushes.
 - **Confirmed merges only**: Agents never merge on their own initiative and
   merge only after a fresh, explicit human confirmation at merge time, with
-  the PR number, head SHA, and green checks shown first.
+  the PR URL, head SHA, and green checks shown first.
 - **Command injection**: The merge tool prefers `execFileSync` with argv arrays
   for safe command execution.
 - **No secrets**: This repository contains no credentials or private
