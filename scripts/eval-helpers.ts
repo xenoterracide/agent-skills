@@ -65,6 +65,10 @@ export function detectSkill(output: string, name: string): boolean {
   return detectSkills(output).includes(name);
 }
 
+export function combineOutput(stdout: string | undefined, stderr: string | undefined): string {
+  return `${stdout ?? ""}${stderr ?? ""}`;
+}
+
 function transcript(output: string): string {
   const clean = stripAnsi(output);
   return clean.length > 2000 ? `…${clean.slice(-2000)}` : clean;
@@ -104,10 +108,10 @@ function runPrompt(prompt: string, { model = MODEL, fixture }: RunOptions = {}):
       timeout: 360_000,
       maxBuffer: 64 * 1024 * 1024,
     });
-    const output = `${result.stdout}${result.stderr}`;
+    const output = combineOutput(result.stdout, result.stderr);
     const rejection = harnessError(output);
     if (rejection !== undefined) throw new Error(`harness rejected the session: ${rejection}`);
-    if (result.error) {
+    if (result.error !== undefined) {
       // A failed or killed session still proves the trigger when its
       // transcript exists: keep it so the load line can be checked.
       if (output.trim().length > 0) return output;

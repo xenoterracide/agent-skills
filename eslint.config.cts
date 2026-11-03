@@ -19,6 +19,8 @@ export default defineConfig([
     "**/dist/",
     "**/build/",
     ".agents/",
+    ".superpowers/",
+    ".worktrees/",
     "skills/*/tests/fixtures/",
   ]),
   {

@@ -4,11 +4,26 @@
 
 import { describe, expect, it } from "vitest";
 
-import { assertContains, assertSkillLoads, detectSkill, detectSkills, harnessError, stripAnsi } from "./eval-helpers";
+import {
+  assertContains,
+  assertSkillLoads,
+  combineOutput,
+  detectSkill,
+  detectSkills,
+  harnessError,
+  stripAnsi,
+} from "./eval-helpers";
 
 describe("stripAnsi", () => {
   it("removes escape codes", () => {
     expect(stripAnsi('\x1b[0m→ \x1b[0mSkill "hemingway"')).toBe('→ Skill "hemingway"');
+  });
+});
+
+describe("combineOutput", () => {
+  it("treats missing streams as empty", () => {
+    expect(combineOutput(undefined, undefined)).toBe("");
+    expect(combineOutput("out", undefined)).toBe("out");
   });
 });
 
