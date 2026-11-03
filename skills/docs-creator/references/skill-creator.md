@@ -31,7 +31,7 @@ Never edit installed plugin files unless the user explicitly asks you to.
 
 ## File Structure
 
-```
+```text
 skill-name/
 ├── SKILL.md (required)
 │   └── Markdown instructions

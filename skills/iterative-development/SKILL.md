@@ -47,7 +47,7 @@ Each iteration should reduce overall project risk.
 Follow Eric Evans' whirlpool model - start with a simple model and refine it
 through iterations:
 
-```
+```text
         Deeper
         Insight
            ↑
@@ -249,7 +249,7 @@ Before any code, establish:
 - "What will we have working by the end?"
 - "What are we explicitly NOT doing yet?"
 
-**Document this.** Create a simple statement: _"This iteration will [goal], demonstrating [scenario], while deferring [out-of-scope items]."_
+**Document this.** Create a simple statement: _"This iteration will `[goal]`, demonstrating `[scenario]`, while deferring `[out-of-scope items]`."_
 
 #### Phase 5: Ubiquitous Language Check
 
@@ -272,7 +272,7 @@ Before coding, clarify language:
 
 **Transition phrase:**
 
-> "Okay, let's build the walking skeleton for [goal]. I'll start with [first test/scenario]."
+> "Okay, let's build the walking skeleton for `[goal]`. I'll start with `[first test/scenario]`."
 
 ### During Development - Stay Alert for Whirlpool Moments
 

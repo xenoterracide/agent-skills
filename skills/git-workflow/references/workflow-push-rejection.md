@@ -9,7 +9,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 An AI agent's token usually lacks the `workflow` scope, so a push whose commits
 **create or modify** a file under `.github/workflows/` is rejected:
 
-```
+```text
 ! [remote rejected] <branch> -> <branch> (refusing to allow an OAuth App to create or update workflow `.github/workflows/...` without `workflow` scope)
 ```
 

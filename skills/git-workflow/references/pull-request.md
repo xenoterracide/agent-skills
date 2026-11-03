@@ -127,7 +127,7 @@ This repository uses **squash merge** for PRs. This means:
 
 Follow conventional commit format for PR titles (they become the squash merge commit message):
 
-```
+```text
 <type>(<scope>): <summary>
 ```
 
@@ -171,8 +171,8 @@ When addressing review comments on a PR:
    - Get thread IDs for replying
 3. **Reply to each comment** - Use MCP tools or GraphQL mutation `addPullRequestReviewThreadReply` (see `github` skill):
    - Fixed: "Fixed in commit SHA"
-   - Not an issue: "Not applicable: [reason]"
-   - Question: "Question: [clarification needed]"
+   - Not an issue: `"Not applicable: [reason]"`
+   - Question: `"Question: [clarification needed]"`
 4. **Verify fixes** - Confirm changes address the current code state
 
 **Note:** REST API doesn't expose resolved state - use GraphQL (`reviewThreads.isResolved`) or MCP tools to check unresolved comments.
@@ -181,7 +181,7 @@ When addressing review comments on a PR:
 
 When creating commits for a PR, include AI attribution in commit messages using an Assisted-by trailer:
 
-```
+```text
 Assisted-by: <AI_NAME>:<MODEL_VERSION> [TOOL1] [TOOL2]
 ```
 
@@ -192,7 +192,7 @@ tools like `git`, `gcc`, or editors.
 
 Examples:
 
-```
+```text
 Assisted-by: Kimi:kimi-code-cli
 Assisted-by: Claude:claude-3-opus coccinelle sparse
 ```
