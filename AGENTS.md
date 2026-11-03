@@ -181,22 +181,22 @@ when creating new files:
 
 Load the relevant skill when the trigger applies:
 
-| Skill                              | Activate When                                                                        |
-| ---------------------------------- | ------------------------------------------------------------------------------------ |
-| `using-xenoterracide-agent-skills` | Starting work in a repo session, or unsure which skill to use                        |
-| `version-managers`                 | Version/launcher tooling — asdf, corepack, direnv — or recovery when one breaks      |
-| `completion-checklist`             | About to claim work is complete, fixed, or passing                                   |
-| `git-workflow`                     | Creating/updating PRs, committing, pushing, commit/PR messages, push rejection       |
-| `coding-standards`                 | Writing or modifying code in any language                                            |
-| `testing`                          | Adding, updating, debugging, or discussing tests                                     |
-| `iterative-development`            | Scoping or refining designs                                                          |
-| `use-case-creator`                 | Writing use cases or business behavior docs                                          |
-| `github`                           | GitHub APIs, issues, GraphQL, review threads                                         |
-| `java-creator`                     | Creating, modifying, or refactoring Java source files, Maven pom.xml, or JUnit tests |
-| `gradle-creator`                   | Creating, modifying, or troubleshooting Gradle builds                                |
-| `shell-script-creator`             | Creating, modifying, or debugging shell scripts and commands                         |
-| `docs-creator`                     | Writing or revising `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, or `SKILL.md` files |
-| `hemingway`                        | Writing prose or code that should be terse and clear                                 |
+| Skill                              | Activate When                                                                                  |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `using-xenoterracide-agent-skills` | Starting work in a repo session, or unsure which skill to use                                  |
+| `version-managers`                 | Version/launcher tooling — asdf, corepack, direnv — or recovery when one breaks                |
+| `completion-checklist`             | About to claim work is complete, fixed, or passing                                             |
+| `git-workflow`                     | Creating/updating PRs, merge requests, committing, pushing, commit/PR messages, push rejection |
+| `coding-standards`                 | Writing or modifying code in any language                                                      |
+| `testing`                          | Adding, updating, debugging, or discussing tests                                               |
+| `iterative-development`            | Scoping or refining designs                                                                    |
+| `use-case-creator`                 | Writing use cases or business behavior docs                                                    |
+| `github`                           | GitHub APIs, issues, GraphQL, review threads                                                   |
+| `java-creator`                     | Creating, modifying, or refactoring Java source files, Maven pom.xml, or JUnit tests           |
+| `gradle-creator`                   | Creating, modifying, or troubleshooting Gradle builds                                          |
+| `shell-script-creator`             | Creating, modifying, or debugging shell scripts and commands                                   |
+| `docs-creator`                     | Writing or revising `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, or `SKILL.md` files           |
+| `hemingway`                        | Writing prose or code that should be terse and clear                                           |
 
 ## Maintenance
 
@@ -222,9 +222,8 @@ Load the relevant skill when the trigger applies:
 - **Lockfile integrity**: Use `pnpm install --frozen-lockfile` and `uv sync --frozen`.
 - **No force push**: Repository rules block force pushes.
 - **Confirmed merges only**: Agents never merge on their own initiative.
-  Show the PR URL, head SHA, and green checks first. Merge only after the
-  human confirms. Syncing a topic branch with `git merge origin/develop`
-  is safe and needs no confirmation.
+  The PR merge waits for the human's explicit yes. Syncing a topic branch
+  with `git merge origin/develop` is safe routine sync.
 - **Command injection**: The merge tool prefers `execFileSync` with argv arrays
   for safe command execution.
 - **No secrets**: This repository contains no credentials or private

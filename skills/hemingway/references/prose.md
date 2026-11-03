@@ -25,6 +25,8 @@ place.
    cut the word. If the document works without a sentence, cut the sentence.
 7. **Concrete over abstract.** Show the specific command, file, or example.
    Don't describe it in general terms.
+8. **Say it once.** State a rule in one home. Other files point to it. A
+   copied rule drifts, and drift becomes two truths.
 
 ## Why
 

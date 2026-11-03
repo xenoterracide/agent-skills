@@ -2,10 +2,9 @@
 name: git-workflow
 description: |
   Use when creating, opening, updating, or submitting a pull request; when
-  asked to merge one — agents verify the PR and wait for fresh, explicit human
-  confirmation before merging; when files are created, modified, or deleted;
-  when addressing PR review comments or feedback; when writing a commit
-  message, PR title, or PR description; and when a git push is rejected citing
+  asked to merge one; when files are created, modified, or deleted; when
+  addressing PR review comments or feedback; when writing a commit message,
+  PR title, or PR description; and when a git push is rejected citing
   `.github/workflows` or a missing `workflow` token scope. Read the matching
   file in `references/` for the detailed procedure before doing the work.
 license: CC-BY-NC-SA-4.0
@@ -41,15 +40,12 @@ Load `hemingway` when writing or editing prose in these references.
 These apply to every git workflow activity in this repository:
 
 - **Merge only on explicit confirmation.** Never merge on your own
-  initiative. An instruction given before the human read the PR is not
-  confirmation. Before merging, show the PR — URL, head SHA, and green
-  required checks — and ask the human to confirm. Only then run
-  `gh pr merge`.
-- **Merge direction matters.** Merging the base branch into the topic
-  branch — `git merge origin/develop` — is safe, routine sync. Merging the
-  PR into the base branch is the gated merge above. When the human says
-  "merge develop", "pull", or "merge origin", they mean the sync. When
-  unclear, ask.
+  initiative. Show the PR — URL, head SHA, and green checks — and wait for
+  the human's yes. An instruction from before the human read the PR is not
+  confirmation. Only then run `gh pr merge`.
+- **Merge direction matters.** `git merge origin/develop` into the topic
+  branch is safe, routine sync. "merge develop", "pull", and "merge origin"
+  mean the sync. When unclear, ask.
 - **Never force push.** `--force` and `--force-with-lease` are blocked by
   repository rules and are unnecessary with squash merge. If a push is
   rejected, create a new commit instead.
