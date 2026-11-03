@@ -220,7 +220,8 @@ Avoid `internal` packages. Package-private visibility should be preferred to hid
 ### Builders
 
 Prefer builders over complex constructors. Generate them with Immutables —
-read `references/immutables.md` for the factory pattern and dependencies.
+read `references/immutables.md` for the builder patterns, dependencies, and
+the `@Data` test constants.
 
 ## Idiomatic AssertJ
 
@@ -260,8 +261,9 @@ assertThat(user).satisfies((u) -> {
 assertThat(user).returns("Alice", User::getName).returns(30, User::getAge);
 ```
 
-For JPA entities, prefer metamodel constants over property names — read
-`references/hibernate.md`.
+For field-name constants, read the metamodel reference for the type: JPA
+entities read `references/hibernate.md`; `@Data` types read
+`references/immutables.md`.
 
 ### Collection Assertions
 

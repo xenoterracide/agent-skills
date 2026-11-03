@@ -30,6 +30,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
     - Use `gh pr checks --watch --required` or the MCP equivalent.
     - Fix failures before requesting review. Never return with failing checks.
 - **NEVER force push.** Force pushes (`--force` and `--force-with-lease`) are **blocked by repository rules** and will always fail. If a push is rejected, do not attempt force push — create a new commit instead.
+- **NEVER merge.** Merging is a human decision. Never run `gh pr merge` or merge by any other means. Agents stop at green required checks, print the PR URL, and leave the merge to the human.
 - Keep the branch synchronized with the base branch using a merge strategy.
   - Delete and regenerate lockfiles instead of merging them.
 - Reply to every unresolved PR comment.
@@ -79,6 +80,7 @@ When committing and creating/updating a PR, follow this workflow:
    - If any check fails, diagnose and remediate the issue before returning
    - Do not consider the task complete while required checks are failing
    - Always print the PR URL when returning so the user can easily review
+   - Stop there. Do not merge — the human merges.
 
 ### Self-Review Before Submitting
 

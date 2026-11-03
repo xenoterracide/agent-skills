@@ -2,8 +2,9 @@
 name: git-workflow
 description: |
   Use when creating, opening, updating, or submitting a pull request; when
-  files are created, modified, or deleted; when addressing PR review comments
-  or feedback; when writing a commit message, PR title, or PR description; and
+  asked to merge one — merging is human-only, agents never merge; when files
+  are created, modified, or deleted; when addressing PR review comments or
+  feedback; when writing a commit message, PR title, or PR description; and
   when a git push is rejected citing `.github/workflows` or a missing `workflow`
   token scope. Read the matching file in `references/` for the detailed
   procedure before doing the work.
@@ -39,6 +40,9 @@ Load `hemingway` when writing or editing prose in these references.
 
 These apply to every git workflow activity in this repository:
 
+- **Never merge.** Merging is human-only. Never run `gh pr merge` or merge a
+  PR by any other means. Agents stop at green required checks and hand the
+  PR URL to the human.
 - **Never force push.** `--force` and `--force-with-lease` are blocked by
   repository rules and are unnecessary with squash merge. If a push is
   rejected, create a new commit instead.
