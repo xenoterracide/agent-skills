@@ -12,3 +12,9 @@ const javaProject = join(import.meta.dirname, "fixtures", "java-project");
 it("triggers on a natural request", () => {
   assertSkillLoads("modify the App class so the greeting is uppercase", "java-creator", { fixture: javaProject });
 });
+
+// Same prompt on purpose: this asserts the companion rule — java-creator
+// pulls coding-standards in — not coding-standards' own trigger.
+it("applies coding-standards as a companion", () => {
+  assertSkillLoads("modify the App class so the greeting is uppercase", "coding-standards", { fixture: javaProject });
+});

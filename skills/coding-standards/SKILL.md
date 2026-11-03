@@ -3,7 +3,8 @@ name: coding-standards
 description: |
   Use when writing or modifying code in any language, including scripts,
   tests, and build files. When a domain skill applies, such as `java-creator`
-  or `gradle-creator`, load that skill first.
+  or `gradle-creator`, load that skill first; this skill still applies
+  alongside it.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing
