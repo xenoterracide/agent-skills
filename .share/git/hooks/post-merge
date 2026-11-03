@@ -11,11 +11,11 @@
 PNPM_LOCK_CHANGED=0
 UV_LOCK_CHANGED=0
 
-if ! git diff --quiet HEAD@{1} HEAD -- pnpm-lock.yaml 2>/dev/null; then
+if ! git diff --quiet "HEAD@{1}" HEAD -- pnpm-lock.yaml 2>/dev/null; then
   PNPM_LOCK_CHANGED=1
 fi
 
-if ! git diff --quiet HEAD@{1} HEAD -- uv.lock 2>/dev/null; then
+if ! git diff --quiet "HEAD@{1}" HEAD -- uv.lock 2>/dev/null; then
   UV_LOCK_CHANGED=1
 fi
 
