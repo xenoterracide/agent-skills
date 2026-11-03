@@ -59,10 +59,12 @@ pnpm exec prettier --write <file> # Format a single file
 ### Test
 
 ```bash
+pnpm check                        # typecheck + eslint + catalog + tests
 pnpm test                         # Plugin tests
 pnpm test:opencode                # Plugin tests only
 node --test scripts/*.test.mjs    # Same tests without pnpm
 pnpm typecheck                    # tsc --noEmit
+pnpm lint:eslint                  # ESLint only
 ```
 
 ### Skill Evals

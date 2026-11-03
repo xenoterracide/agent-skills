@@ -49,9 +49,11 @@ pnpm exec prettier --write <file>
 ## Testing
 
 ```bash
-pnpm test        # plugin and catalog tests
-pnpm typecheck   # tsc --noEmit
-pnpm evals       # helper unit tests and skill evals
+pnpm check        # typecheck + eslint + catalog + tests
+pnpm test         # plugin and catalog tests
+pnpm typecheck    # tsc --noEmit
+pnpm lint:eslint  # ESLint only
+pnpm evals        # helper unit tests and skill evals
 ```
 
 Skill trigger evals live in `skills/<skill>/tests/evals.test.ts`. Each case
