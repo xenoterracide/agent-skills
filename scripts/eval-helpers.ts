@@ -35,6 +35,10 @@ export function detectSkills(output: string): string[] {
   return [...stripAnsi(output).matchAll(/→ Skill "([^"]+)"/g)].map((match) => match[1]);
 }
 
+export function detectReads(output: string): string[] {
+  return [...stripAnsi(output).matchAll(/→ Read (.+)/g)].map((match) => match[1].trim());
+}
+
 export function combineOutput(stdout: string | undefined, stderr: string | undefined): string {
   return `${stdout ?? ""}${stderr ?? ""}`;
 }
@@ -45,7 +49,9 @@ function transcript(output: string): string {
 }
 
 export function harnessError(output: string): string | undefined {
-  return /Policy budget exceeded|rate limit(?: exceeded)?|insufficient (?:credits|quota)/i.exec(stripAnsi(output))?.[0];
+  return /Policy budget exceeded|rate limit(?: exceeded)?|free usage limit reached|insufficient (?:credits|quota)/i.exec(
+    stripAnsi(output),
+  )?.[0];
 }
 
 export interface RunOptions {
@@ -53,7 +59,7 @@ export interface RunOptions {
   fixture?: string;
 }
 
-function runPrompt(prompt: string, { model = MODEL, fixture }: RunOptions = {}): string {
+export function runPrompt(prompt: string, { model = MODEL, fixture }: RunOptions = {}): string {
   const dir = mkdtempSync(join(tmpdir(), "skill-evals-"));
   let configDir: string | undefined = undefined;
   try {
@@ -98,10 +104,18 @@ export interface AssertOptions extends RunOptions {
   first?: boolean;
 }
 
-export function assertSkillLoads(
+function pathMatches(reads: string[], pattern: string | RegExp): boolean {
+  return reads.some((read) => (typeof pattern === "string" ? read.includes(pattern) : pattern.test(read)));
+}
+
+export interface BehaviorOptions extends AssertOptions {
+  reads?: (string | RegExp)[];
+}
+
+export function assertSkillBehavior(
   prompt: string,
   skill: string,
-  { fixture, model = MODEL, iterations = ITERATIONS, run = runPrompt, first = false }: AssertOptions = {},
+  { fixture, model = MODEL, iterations = ITERATIONS, run = runPrompt, first = false, reads = [] }: BehaviorOptions = {},
 ): void {
   for (let i = 0; i < iterations; i++) {
     const output = run(prompt, { model, fixture });
@@ -115,5 +129,16 @@ export function assertSkillLoads(
         `${label}: expected "${skill}" to load first, got ${JSON.stringify(loaded)}\n${transcript(output)}`,
       );
     }
+    const readPaths = detectReads(output);
+    for (const pattern of reads) {
+      assert.ok(
+        pathMatches(readPaths, pattern),
+        `${label}: expected a Read matching ${String(pattern)}, got ${JSON.stringify(readPaths)}\n${transcript(output)}`,
+      );
+    }
   }
+}
+
+export function assertSkillLoads(prompt: string, skill: string, options: AssertOptions = {}): void {
+  assertSkillBehavior(prompt, skill, options);
 }

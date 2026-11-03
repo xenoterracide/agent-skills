@@ -58,7 +58,7 @@
     {
       "name": "java-creator",
       "version": "0.10.2",
-      "files": ["SKILL.md"]
+      "files": ["SKILL.md", "references/hibernate.md", "references/immutables.md"]
     },
     {
       "name": "shell-script-creator",

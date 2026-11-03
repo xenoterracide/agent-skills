@@ -1,8 +1,9 @@
 ---
 name: iterative-development
 description: |
-  Use when starting new features, refining existing code, or when the domain
-  model needs to evolve.
+  Use when starting new features, scoping or refining designs, or when the
+  domain model needs to evolve — the model feels wrong or too complex, a
+  concept seems missing, or the language no longer fits the code.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing

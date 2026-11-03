@@ -220,9 +220,3 @@ If using dependency locking with the shadow plugin, note that it may create addi
 2. **Use include over minimize** - If minimize() causes issues, use explicit include filters
 3. **Check lockfile diffs** - After dependency updates, review lockfile changes for shadow-related configurations
 4. **Test the shadow JAR** - Verify the fat JAR works in integration tests
-
----
-
-SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
-
-SPDX-License-Identifier: CC-BY-NC-SA-4.0

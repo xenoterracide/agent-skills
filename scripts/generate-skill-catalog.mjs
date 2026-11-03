@@ -5,7 +5,7 @@
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import { pathToFileURL } from "node:url";
-import { format } from "prettier";
+import { format, resolveConfig } from "prettier";
 
 /**
  * Generates the OpenCode skill catalog (`index.json`) consumed by the
@@ -35,6 +35,13 @@ export function listSkillFiles(dir) {
   return files;
 }
 
+export async function formatIndex(index) {
+  // resolveConfig loads .prettierrc.cjs; a bare format() call would use
+  // default printWidth 80 and diverge from the CLI-formatted file.
+  const config = await resolveConfig(indexFile);
+  return format(`${JSON.stringify(index, null, 2)}\n`, { ...config, filepath: indexFile });
+}
+
 async function main() {
   const skills = [];
   for (const name of readdirSync(skillsDir).sort()) {
@@ -43,17 +50,16 @@ async function main() {
     if (!existsSync(join(dir, "SKILL.md"))) continue;
     const files = listSkillFiles(dir)
       .map((file) => relative(dir, file))
-      .filter((file) => file !== "index.json")
       .sort();
     skills.push({ name, version, files });
   }
 
   const index = { skills };
-  const output = await format(`${JSON.stringify(index, null, 2)}\n`, { filepath: indexFile });
+  const output = await formatIndex(index);
 
   if (process.argv.includes("--check")) {
     if (readFileSync(indexFile, "utf8") !== output) {
-      console.error(`skill catalog ${relative(root, indexFile)} is out of date — run \`yarn skills:catalog\``);
+      console.error(`skill catalog ${relative(root, indexFile)} is out of date — run \`pnpm skills:catalog\``);
       process.exit(1);
     }
     console.log(`skill catalog is up to date (${skills.length} skills, version ${version})`);

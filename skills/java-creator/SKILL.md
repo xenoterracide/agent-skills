@@ -18,6 +18,8 @@ SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
 SPDX-License-Identifier: CC-BY-NC-SA-4.0
 -->
 
+# Java Creator
+
 Use for writing Java code in `.java` files.
 
 ## Required Companion Skills
@@ -31,7 +33,7 @@ Load these skills whenever this skill applies:
 
 ## Design Principles
 
-Let your domain language define the responsibilities in your system. Build each unit—object, function, or module—around a single responsibility derived from that language. Encapsulate behavior so it's polymorphic, letting the unit decide how to act rather than orchestrating externally. If you follow these principles, your code will naturally be composable, clear, and aligned with the domain.
+Let your domain language define the responsibilities in your system. Build each unit — object, function, or module — around a single responsibility derived from that language. `coding-standards` carries the SOLID and polymorphism rules; the rules below are the Java-specific ones.
 
 - prefer immutability over mutability
   - prefer `final` for fields unless they need to be mutable.
@@ -70,13 +72,13 @@ Mark a type `@Nullable` when:
 
 ### Prefer Optional for Chain Operations
 
-Use `Optional` when you need to map/filter over potentially absent values:
+Use `Optional` when you need to map/filter over potentially absent values. Have the finder return `Optional<User>` — chaining on a `@Nullable` return dereferences null:
 
 ```java
 // GOOD - Optional for chaining
-return findById(id).map(User::getEmail).filter(Email::isValid).orElse(defaultEmail);
+return findUser(id).map(User::getEmail).filter(Email::isValid).orElse(defaultEmail);
 
-// BAD - null check with intermediate variables
+// BAD - nullable finder with null checks
 var user = findById(id);
 
 if (user == null) return defaultEmail;
@@ -141,9 +143,11 @@ private final String generatedId;
 
 ### var keyword
 
-prefer `var` keyword to explicit local variable type declaration. using var reduces quantity of code but more importantly coupling as sometimes it means classes no longer have to be imported and thus class name changes do not impact client code in some cases.
+Prefer `var` over an explicit local variable type. `var` shortens code and
+loosens coupling: no import is needed, so a class rename cannot break client
+code.
 
-note: Error Prone's `@Var` annotation (unrelated to `var` keyword) marks intentionally mutable local variables. Use it instead of `@SuppressWarnings("Var")` when you need mutability.
+Note: Error Prone's `@Var` annotation (unrelated to the `var` keyword) marks intentionally mutable local variables. Use it instead of `@SuppressWarnings("Var")` when you need mutability.
 
 **Warning: Using `@Var` is an extreme code smell.** Mutable local variables should be avoided. Most algorithms can be expressed without mutation using streams, recursion, or restructuring:
 
@@ -197,7 +201,7 @@ static Supplier<Foo> fooSupplier() {
 ### Imports
 
 - use `import` statements unless it would result in conflicts.
-- use `static import` for test helpers that maintain clarity such as `assertThat` for AssertJ and `given` or `mock` from Mockito. Avoid static imports if it makes code comprehension.
+- use `static import` for test helpers that maintain clarity such as `assertThat` for AssertJ and `given` or `mock` from Mockito. Avoid static imports that hurt clarity.
 
 ### Visibility
 
@@ -215,27 +219,8 @@ Avoid `internal` packages. Package-private visibility should be preferred to hid
 
 ### Builders
 
-Prefer builder pattern over complex constructors with immutables library `@Builder` and a static factory. Also use `@Data` for generating type-safe field constants for testing.
-
-Required dependencies:
-
-- `org.immutables:value-annotations` (compile-only)
-- `org.immutables:datatype` (compile-only, for `@Data`)
-
-```java
-import org.immutables.datatype.Data;
-import org.immutables.value.Value;
-
-@Value.Builder
-@Data
-record Bar(String foo) {
-  public static BarBuilder builder() {
-    return new BarBuilder();
-  }
-}
-```
-
-The `@Data` annotation generates `Bar_.FOO_` constants for type-safe field references in tests (see AssertJ section below).
+Prefer builders over complex constructors. Generate them with Immutables —
+read `references/immutables.md` for the factory pattern and dependencies.
 
 ## Idiomatic AssertJ
 
@@ -273,20 +258,10 @@ assertThat(user).satisfies((u) -> {
 
 // EVEN BETTER - returns for single property checks
 assertThat(user).returns("Alice", User::getName).returns(30, User::getAge);
-
-// BEST - hasFieldOrPropertyWithValue with Immutables datatype for fields
-// The @Data annotation generates a class named Datatypes_<Type> containing
-// type-safe field name constants. For a User record, this generates Datatypes_User
-// with constants like User_.NAME_ and User_.AGE_.
-//
-// Import the constants for clean usage:
-//   import static com.example.Datatypes_User.User_;
-//
-// This method is preferred because when assertions fail, the error message
-// includes the field name (e.g., "expected field/property 'name' value"),
-// unlike approaches that result in unhelpful messages like "expected:<true> but was:<false>"
-assertThat(user).hasFieldOrPropertyWithValue(User_.NAME_, "Alice").hasFieldOrPropertyWithValue(User_.AGE_, 30);
 ```
+
+For JPA entities, prefer metamodel constants over property names — read
+`references/hibernate.md`.
 
 ### Collection Assertions
 

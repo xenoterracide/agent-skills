@@ -83,7 +83,9 @@ pnpm evals skills/java-creator    # one skill
 ```
 
 Evals are on demand and never run in CI. `EVAL_MODEL` and `EVAL_ITERATIONS`
-override the defaults. The suite bails at the first failure.
+override the defaults. The suite bails at the first failure. Evaluate on a
+full-size coding model — flash-tier variants flake on companion and routing
+compliance, loading the primary skill while skipping its companions.
 
 The default reporter prints nothing until the suite ends, so a long run looks
 stuck and a killed run leaves no trace. Stream per-test progress instead:
@@ -93,8 +95,9 @@ pnpm exec vitest run --reporter=verbose 2>&1 | tee /tmp/opencode/evals.log
 ```
 
 A full run takes an hour or more; use a background shell and read the log. A
-failure quoting `Policy budget exceeded` means the provider quota ran dry —
-point `EVAL_MODEL` at another provider or wait for the reset.
+failure quoting `Policy budget exceeded` or `Free usage limit reached` means
+the provider quota ran dry — point `EVAL_MODEL` at another provider or wait
+for the reset.
 
 ### Git Hooks
 
