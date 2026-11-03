@@ -5,7 +5,8 @@
 import { defineConfig } from "vitest/config";
 
 const SESSION_TIMEOUT = 360_000;
-const iterations = Math.max(1, Number(process.env.EVAL_ITERATIONS ?? 3) || 3);
+const configuredIterations = Number(process.env.EVAL_ITERATIONS ?? 3);
+const iterations = Number.isNaN(configuredIterations) ? 3 : Math.max(1, configuredIterations);
 
 export default defineConfig({
   test: {

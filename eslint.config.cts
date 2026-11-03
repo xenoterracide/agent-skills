@@ -66,7 +66,7 @@ export default defineConfig([
       "@typescript-eslint/no-useless-empty-export": "error",
       "@typescript-eslint/prefer-readonly": "error",
       "@typescript-eslint/promise-function-async": "error",
-      "@typescript-eslint/strict-boolean-expressions": "error",
+      "@typescript-eslint/strict-boolean-expressions": ["error", { allowNumber: false }],
       "@typescript-eslint/switch-exhaustiveness-check": "error",
     },
   },

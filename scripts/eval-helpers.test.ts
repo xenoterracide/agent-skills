@@ -39,39 +39,49 @@ describe("harnessError", () => {
 
 describe("assertSkillLoads", () => {
   it("passes when the skill loads every run", () => {
-    const run = () => '→ Skill "hemingway"';
-    expect(() => assertSkillLoads("p", "hemingway", { run, iterations: 3 })).not.toThrow();
+    const run = (): string => '→ Skill "hemingway"';
+    expect((): void => {
+      assertSkillLoads("p", "hemingway", { run, iterations: 3 });
+    }).not.toThrow();
   });
 
   it("fails fast on a miss", () => {
     let calls = 0;
-    const run = () => {
+    const run = (): string => {
       calls += 1;
       return "";
     };
-    expect(() => assertSkillLoads("p", "hemingway", { run, iterations: 3 })).toThrow(/did not load/);
+    expect((): void => {
+      assertSkillLoads("p", "hemingway", { run, iterations: 3 });
+    }).toThrow(/did not load/);
     expect(calls).toBe(1);
   });
 
   it("fails when another skill loads first", () => {
-    const run = () => '→ Skill "docs-creator"\n→ Skill "hemingway"';
-    expect(() => assertSkillLoads("p", "hemingway", { run, iterations: 1, first: true })).toThrow(/to load first/);
+    const run = (): string => '→ Skill "docs-creator"\n→ Skill "hemingway"';
+    expect((): void => {
+      assertSkillLoads("p", "hemingway", { run, iterations: 1, first: true });
+    }).toThrow(/to load first/);
   });
 });
 
 describe("assertContains", () => {
   it("matches through escape codes", () => {
-    const run = () => "\x1b[1mRun the tests\x1b[0m";
-    expect(() => assertContains("p", "Run the tests", { run, iterations: 1 })).not.toThrow();
+    const run = (): string => "\x1b[1mRun the tests\x1b[0m";
+    expect((): void => {
+      assertContains("p", "Run the tests", { run, iterations: 1 });
+    }).not.toThrow();
   });
 
   it("fails fast when the text is missing", () => {
     let calls = 0;
-    const run = () => {
+    const run = (): string => {
       calls += 1;
       return "nope";
     };
-    expect(() => assertContains("p", "Run the tests", { run, iterations: 3 })).toThrow(/did not contain/);
+    expect((): void => {
+      assertContains("p", "Run the tests", { run, iterations: 3 });
+    }).toThrow(/did not contain/);
     expect(calls).toBe(1);
   });
 });

@@ -32,15 +32,15 @@ const HARNESSES: Record<string, (model: string, prompt: string, skills: string) 
   kimi: (_model, prompt, skills) => ["kimi", ["-p", prompt, "--skills-dir", skills]],
 };
 
-let cachedHarness: string | undefined;
+let cachedHarness: string | undefined = undefined;
 
 function detectHarness(): string {
-  for (const harness of Object.keys(HARNESSES)) {
+  for (const candidate of Object.keys(HARNESSES)) {
     try {
-      execFileSync(harness, ["--version"], { stdio: "ignore" });
-      return harness;
+      execFileSync(candidate, ["--version"], { stdio: "ignore" });
+      return candidate;
     } catch (error) {
-      process.stderr.write(`harness "${harness}" unavailable: ${(error as Error).message}\n`);
+      process.stderr.write(`harness "${candidate}" unavailable: ${(error as Error).message}\n`);
     }
   }
   throw new Error(`no supported harness found (${Object.keys(HARNESSES).join(", ")})`);
@@ -52,6 +52,8 @@ function harness(): string {
 }
 
 export function stripAnsi(text: string): string {
+  // ANSI escapes are control characters by definition.
+  // eslint-disable-next-line no-control-regex
   return text.replace(/\x1b\[[0-9;]*m/g, "");
 }
 
@@ -69,9 +71,7 @@ function transcript(output: string): string {
 }
 
 export function harnessError(output: string): string | undefined {
-  return stripAnsi(output).match(
-    /Policy budget exceeded|rate limit(?: exceeded)?|insufficient (?:credits|quota)/i,
-  )?.[0];
+  return /Policy budget exceeded|rate limit(?: exceeded)?|insufficient (?:credits|quota)/i.exec(stripAnsi(output))?.[0];
 }
 
 export interface RunOptions {
@@ -82,7 +82,7 @@ export interface RunOptions {
 function runPrompt(prompt: string, { model = MODEL, fixture }: RunOptions = {}): string {
   const current = harness();
   const dir = mkdtempSync(join(tmpdir(), "skill-evals-"));
-  let configDir: string | undefined;
+  let configDir: string | undefined = undefined;
   try {
     configDir = mkdtempSync(join(tmpdir(), "skill-evals-config-"));
     cpSync(skillsDir, join(dir, "skills"), {
@@ -90,7 +90,7 @@ function runPrompt(prompt: string, { model = MODEL, fixture }: RunOptions = {}):
       filter: (source) => !relative(skillsDir, source).split(sep).includes("tests"),
     });
     cpSync(join(root, ".opencode"), join(dir, ".opencode"), { recursive: true });
-    if (fixture) {
+    if (fixture !== undefined) {
       if (!existsSync(fixture)) throw new Error(`fixture not found: ${fixture}`);
       for (const entry of readdirSync(fixture)) {
         cpSync(join(fixture, entry), join(dir, entry), { recursive: true });
@@ -104,9 +104,9 @@ function runPrompt(prompt: string, { model = MODEL, fixture }: RunOptions = {}):
       timeout: 360_000,
       maxBuffer: 64 * 1024 * 1024,
     });
-    const output = `${result.stdout ?? ""}${result.stderr ?? ""}`;
+    const output = `${result.stdout}${result.stderr}`;
     const rejection = harnessError(output);
-    if (rejection) throw new Error(`harness rejected the session: ${rejection}`);
+    if (rejection !== undefined) throw new Error(`harness rejected the session: ${rejection}`);
     if (result.error) {
       // A failed or killed session still proves the trigger when its
       // transcript exists: keep it so the load line can be checked.
@@ -116,7 +116,7 @@ function runPrompt(prompt: string, { model = MODEL, fixture }: RunOptions = {}):
     return output;
   } finally {
     rmSync(dir, { recursive: true, force: true });
-    if (configDir) rmSync(configDir, { recursive: true, force: true });
+    if (configDir !== undefined) rmSync(configDir, { recursive: true, force: true });
   }
 }
 
@@ -134,7 +134,7 @@ export function assertSkillLoads(
   for (let i = 0; i < iterations; i++) {
     const output = run(prompt, { model, fixture });
     const loaded = detectSkills(output);
-    const label = `run ${i + 1}/${iterations}`;
+    const label = `run ${String(i + 1)}/${String(iterations)}`;
     assert.ok(loaded.includes(skill), `${label}: skill "${skill}" did not load\n${transcript(output)}`);
     if (first) {
       assert.equal(
@@ -155,7 +155,7 @@ export function assertContains(
     const output = stripAnsi(run(prompt, { model, fixture }));
     assert.ok(
       output.includes(text),
-      `run ${i + 1}/${iterations}: output did not contain "${text}"\n${transcript(output)}`,
+      `run ${String(i + 1)}/${String(iterations)}: output did not contain "${text}"\n${transcript(output)}`,
     );
   }
 }
