@@ -41,10 +41,10 @@ Load `hemingway` when writing or editing prose in these references.
 These apply to every git workflow activity in this repository:
 
 - **Merge only on explicit confirmation.** Never merge on your own
-  initiative. Before merging, show the PR — URL, head SHA, and green
-  required checks — and ask the human to confirm. The confirmation must be
-  fresh: an instruction given before the human finished reading the PR does
-  not count. Only then run `gh pr merge`.
+  initiative. An instruction given before the human read the PR is not
+  confirmation. Before merging, show the PR — URL, head SHA, and green
+  required checks — and ask the human to confirm. Only then run
+  `gh pr merge`.
 - **Never force push.** `--force` and `--force-with-lease` are blocked by
   repository rules and are unnecessary with squash merge. If a push is
   rejected, create a new commit instead.

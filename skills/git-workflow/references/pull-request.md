@@ -30,7 +30,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
     - Use `gh pr checks --watch --required` or the MCP equivalent.
     - Fix failures before requesting review. Never return with failing checks.
 - **NEVER force push.** Force pushes (`--force` and `--force-with-lease`) are **blocked by repository rules** and will always fail. If a push is rejected, do not attempt force push — create a new commit instead.
-- **Merge only on fresh, explicit confirmation.** Never merge on your own initiative. Before merging, show the PR — URL, head SHA, and green required checks — and wait for the human's yes. An earlier instruction is not confirmation: the human may not have finished reading. Agents stop at green required checks and hand over the PR URL first.
+- **Merge only on fresh, explicit confirmation.** Never merge on your own initiative. An instruction given before the human read the PR is not confirmation. Before merging, show the PR — URL, head SHA, and green required checks — and wait for the human's yes.
 - Keep the branch synchronized with the base branch using a merge strategy.
   - Delete and regenerate lockfiles instead of merging them.
 - Reply to every unresolved PR comment.
