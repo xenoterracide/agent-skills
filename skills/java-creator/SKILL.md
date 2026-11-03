@@ -4,7 +4,8 @@ description: |
   Use when creating, modifying, or refactoring source files in a Java project,
   including `.java` files, Maven `pom.xml`, or JUnit tests. Invoke for any task
   involving classes, methods, packages, streams, records, annotations, or source
-  code in a JVM codebase. For Gradle-specific build configuration, use
+  code in a JVM codebase. Java edits belong to this skill before any
+  language-agnostic coding skill. For Gradle-specific build configuration, use
   `gradle-creator`.
 license: CC-BY-NC-SA-4.0
 metadata:
