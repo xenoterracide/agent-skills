@@ -68,7 +68,10 @@ Each new Node version needs corepack again. Run after every node install, or
 put the equivalent in `.envrc` so direnv re-applies it:
 
 ```bash
-command -v corepack >/dev/null 2>&1 || npm install --global corepack
+corepack --version >/dev/null 2>&1 || {
+  npm install --global corepack
+  asdf reshim nodejs
+}
 corepack enable --install-directory ~/.local/bin
 ```
 

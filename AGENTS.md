@@ -47,6 +47,9 @@ Run setup once with:
 pnpm contribute
 ```
 
+With direnv, entering the repository runs `.envrc`, which installs pinned
+tools, dependencies, and the git hooks automatically.
+
 ### Lint and Format
 
 ```bash
@@ -101,7 +104,8 @@ for the reset.
 Hooks live in `.share/git/hooks`. `pnpm contribute` sets `core.hooksPath` to
 that directory automatically.
 
-- **pre-commit**: Runs `lint-staged` to format and annotate licenses.
+- **pre-commit**: Runs `lint-staged` — prettier, shfmt, license annotation,
+  and shellcheck on changed files.
 - **commit-msg**: Validates conventional commit messages against
   `git-conventional-commits.yaml`.
 - **post-checkout / post-merge**: Syncs Node or Python dependencies when
@@ -144,7 +148,7 @@ plugin; adding it to the repo config too would register the same plugin twice.
 - Indent: 2 spaces
 - Final newline: required
 
-The `.editorconfig` file lives in `.share/`.
+The `.editorconfig` file lives at the repository root.
 
 ### Prettier
 

@@ -20,6 +20,9 @@ pnpm contribute
 This installs corepack, installs Node dependencies, runs `uv sync --frozen`,
 and sets `core.hooksPath` to `.share/git/hooks`.
 
+With direnv, entering the repository runs `.envrc`, which does all of this
+plus `asdf install`.
+
 ## Making Changes
 
 1. Read `README.md` and `AGENTS.md` first.

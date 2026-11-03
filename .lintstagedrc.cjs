@@ -33,7 +33,11 @@ module.exports = {
   "!(package).json": run([`${reuse} ${copyright} ${symbol} ${licenseConfiguration}`, prettier]),
   // package.json can contain logic via the scripts segment
   "package.json": run([`${reuse} ${copyright} ${symbol} ${licenseScripts}`, prettier]),
-  "{.config/git/hooks/**,**/*.*sh}": run([`${reuse} ${copyright} ${symbol} ${licenseScripts} --style python`, shfmt]),
+  "{.share/git/hooks/**,**/*.*sh,.envrc}": run([
+    `${reuse} ${copyright} ${symbol} ${licenseScripts} --style python`,
+    shfmt,
+    "shellcheck",
+  ]),
   "*.adoc": run([`${reuse} ${copyright} ${symbol} ${licenseDocumentation}`, prettier]),
   // don't run reuse for markdown in this repo because it doesn't deal with frontmatter properly
   "*.md": run([prettier]),
