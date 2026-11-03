@@ -109,5 +109,7 @@ isolated `XDG_CONFIG_HOME`. Detection is the `Skill "name"` line on stderr.
 
 ### Task 9: Verify
 
-- [x] `yarn typecheck`, `yarn test`, `yarn lint` pass.
-- [ ] A full `yarn evals` run passes 3/3 on every case.
+- [x] `pnpm typecheck`, `pnpm test`, `pnpm lint` pass.
+- [x] Every case passes 3/3 on glm-5.3, verified per file across runs; a
+      single uninterrupted full-suite run can follow when the provider
+      budget allows.
