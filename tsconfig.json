@@ -13,5 +13,5 @@
     "esModuleInterop": true,
     "types": ["node"]
   },
-  "include": ["scripts/**/*.ts", "skills/**/tests/**/*.ts", "vitest.config.ts"]
+  "include": ["eslint.config.cts", "scripts/**/*.ts", "skills/**/tests/**/*.ts", "vitest.config.ts"]
 }
