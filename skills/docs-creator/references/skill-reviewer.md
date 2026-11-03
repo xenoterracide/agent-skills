@@ -24,9 +24,9 @@ Verify the skill loads:
 1. File is named `SKILL.md`.
 2. Directory is in a skill discovery path (plugin `skills/` for this repo).
 3. Frontmatter starts with `---` and has both `name` and `description`.
-4. `yarn exec prettier --write <file>` produces no changes.
-5. `yarn lint:reuse` passes.
-6. `yarn skills:check` passes.
+4. `pnpm exec prettier --write <file>` produces no changes.
+5. `pnpm lint:reuse` passes.
+6. `pnpm skills:check` passes.
 
 ### Behavioral Compliance Tests
 
@@ -62,9 +62,9 @@ Before considering a skill change complete, verify:
    `description` are present.
 2. **Copyright is correct** — SPDX block is in an HTML comment immediately after
    the frontmatter, with the current year.
-3. **Formatting passes** — `yarn exec prettier --write <file>` produces no
+3. **Formatting passes** — `pnpm exec prettier --write <file>` produces no
    changes.
-4. **Non-Markdown assets are REUSE-compliant** — run `yarn lint:reuse` and fix
+4. **Non-Markdown assets are REUSE-compliant** — run `pnpm lint:reuse` and fix
    any missing headers or licenses.
 5. **Trigger matches content** — read the skill as if you were an agent and
    confirm the body addresses the scenarios in the `description`.
