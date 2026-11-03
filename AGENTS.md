@@ -221,8 +221,9 @@ Load the relevant skill when the trigger applies:
 - **CI detection**: Git hooks exit early when `CI` is set.
 - **Lockfile integrity**: Use `pnpm install --frozen-lockfile` and `uv sync --frozen`.
 - **No force push**: Repository rules block force pushes.
-- **No agent merges**: Merging is human-only. Agents stop at green required
-  checks and hand over the PR URL.
+- **Confirmed merges only**: Agents never merge on their own initiative and
+  merge only after a fresh, explicit human confirmation at merge time, with
+  the PR number, head SHA, and green checks shown first.
 - **Command injection**: The merge tool prefers `execFileSync` with argv arrays
   for safe command execution.
 - **No secrets**: This repository contains no credentials or private

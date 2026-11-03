@@ -2,12 +2,12 @@
 name: git-workflow
 description: |
   Use when creating, opening, updating, or submitting a pull request; when
-  asked to merge one — merging is human-only, agents never merge; when files
-  are created, modified, or deleted; when addressing PR review comments or
-  feedback; when writing a commit message, PR title, or PR description; and
-  when a git push is rejected citing `.github/workflows` or a missing `workflow`
-  token scope. Read the matching file in `references/` for the detailed
-  procedure before doing the work.
+  asked to merge one — agents verify the PR and wait for fresh, explicit human
+  confirmation before merging; when files are created, modified, or deleted;
+  when addressing PR review comments or feedback; when writing a commit
+  message, PR title, or PR description; and when a git push is rejected citing
+  `.github/workflows` or a missing `workflow` token scope. Read the matching
+  file in `references/` for the detailed procedure before doing the work.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing
@@ -40,9 +40,11 @@ Load `hemingway` when writing or editing prose in these references.
 
 These apply to every git workflow activity in this repository:
 
-- **Never merge.** Merging is human-only. Never run `gh pr merge` or merge a
-  PR by any other means. Agents stop at green required checks and hand the
-  PR URL to the human.
+- **Merge only on explicit confirmation.** Never merge on your own
+  initiative. Before merging, show the PR — number, head SHA, and green
+  required checks — and ask the human to confirm. The confirmation must be
+  fresh: an instruction given before the human finished reading the PR does
+  not count. Only then run `gh pr merge`.
 - **Never force push.** `--force` and `--force-with-lease` are blocked by
   repository rules and are unnecessary with squash merge. If a push is
   rejected, create a new commit instead.
