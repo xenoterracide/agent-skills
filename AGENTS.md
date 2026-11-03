@@ -223,7 +223,8 @@ Load the relevant skill when the trigger applies:
 - **No force push**: Repository rules block force pushes.
 - **Confirmed merges only**: Agents never merge on their own initiative.
   Show the PR URL, head SHA, and green checks first. Merge only after the
-  human confirms.
+  human confirms. Syncing a topic branch with `git merge origin/develop`
+  is safe and needs no confirmation.
 - **Command injection**: The merge tool prefers `execFileSync` with argv arrays
   for safe command execution.
 - **No secrets**: This repository contains no credentials or private

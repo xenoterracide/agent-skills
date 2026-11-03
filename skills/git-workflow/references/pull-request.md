@@ -32,6 +32,8 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 - **NEVER force push.** Force pushes (`--force` and `--force-with-lease`) are **blocked by repository rules** and will always fail. If a push is rejected, do not attempt force push — create a new commit instead.
 - **Merge only on fresh, explicit confirmation.** Never merge on your own initiative. An instruction given before the human read the PR is not confirmation. Before merging, show the PR — URL, head SHA, and green required checks — and wait for the human's yes.
 - Keep the branch synchronized with the base branch using a merge strategy.
+  Merging the base branch into the topic branch is safe and needs no
+  confirmation. Only the PR merge is gated.
   - Delete and regenerate lockfiles instead of merging them.
 - Reply to every unresolved PR comment.
   - Leave a reply on each review comment to indicate its status.

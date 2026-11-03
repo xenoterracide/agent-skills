@@ -45,6 +45,11 @@ These apply to every git workflow activity in this repository:
   confirmation. Before merging, show the PR — URL, head SHA, and green
   required checks — and ask the human to confirm. Only then run
   `gh pr merge`.
+- **Merge direction matters.** Merging the base branch into the topic
+  branch — `git merge origin/develop` — is safe, routine sync. Merging the
+  PR into the base branch is the gated merge above. When the human says
+  "merge develop", "pull", or "merge origin", they mean the sync. When
+  unclear, ask.
 - **Never force push.** `--force` and `--force-with-lease` are blocked by
   repository rules and are unnecessary with squash merge. If a push is
   rejected, create a new commit instead.
