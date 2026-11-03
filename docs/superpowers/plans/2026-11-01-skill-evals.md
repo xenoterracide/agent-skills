@@ -47,7 +47,8 @@ isolated `XDG_CONFIG_HOME`. Detection is the `Skill "name"` line on stderr.
 
 **Files:** `scripts/eval-helpers.ts`
 
-- [x] Detect a supported harness (`opencode`, then `kimi`).
+- [x] Fork `opencode run` directly; drop the speculative `kimi` fallback,
+      which could never pass detection.
 - [x] Copy `skills/` and `.opencode/` into a temp directory.
 - [x] Copy fixtures into the same directory.
 - [x] Set `XDG_CONFIG_HOME` and `PWD` to temp directories.
@@ -78,7 +79,8 @@ isolated `XDG_CONFIG_HOME`. Detection is the `Skill "name"` line on stderr.
 
 - [x] Include `scripts/eval-helpers.test.ts` and `skills/*/tests/evals.test.ts`.
 - [x] Set `bail: 1` and `fileParallelism: false`; keep sessions sequential.
-- [x] Set a 20-minute test timeout above the six-minute session timeout.
+- [x] Scale the test timeout with the run count: six minutes per run plus
+      ten minutes of buffer.
 - [x] Wire `yarn evals`.
 
 ### Task 5: Catalog exclusion

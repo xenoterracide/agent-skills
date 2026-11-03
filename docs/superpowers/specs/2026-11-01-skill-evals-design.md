@@ -54,8 +54,9 @@ skill's `description` or body drifts.
   the session directory.
 - `scripts/eval-helpers.ts` — sandbox runner and assertions.
 - `scripts/eval-helpers.test.ts` — unit tests for the helpers; no model calls.
-- `vitest.config.ts` — `bail: 1`, `fileParallelism: false`, 20-minute test
-  timeout.
+- `vitest.config.ts` — `bail: 1`, `fileParallelism: false`, and a test
+  timeout that scales with the run count: six minutes per run plus ten
+  minutes of buffer.
 
 The skill catalog generator skips `tests/` directories, so cases and fixtures
 never reach the published catalog.
