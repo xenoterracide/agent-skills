@@ -15,7 +15,8 @@ place.
    "but", or a semicolon.
 2. **Concrete words.** Use short, plain words. "Use", not "utilize". "Run",
    not "execute".
-3. **Facts over explanations.** A fact explains itself. Cut the connectives.
+3. **Facts over explanations.** A fact explains itself. Show the specific
+   command, file, or example. Cut the connectives.
    Good: `Keep this key. Downstream systems still send it.`
    Bad: `Keep this key because downstream systems continue to send it and depend on it.`
 4. **Active voice.** Tell the reader what to do. "Run the test." Not "The test
@@ -26,13 +27,11 @@ place.
    to", "you should".
 7. **Cut what doesn't earn its place.** If the sentence works without a word,
    cut the word. If the document works without a sentence, cut the sentence.
-8. **Concrete over abstract.** Show the specific command, file, or example.
-   Don't describe it in general terms.
-9. **Comments explain decisions, not code.** Say why the code exists, not
+8. **Comments explain decisions, not code.** Say why the code exists, not
    what it does.
-10. **Say it once.** State a rule in one home. Other files point to it. A
-    copied rule drifts, and drift becomes two truths.
-11. **Structure is data.** Frontmatter, skill names, routing tables, trigger
+9. **Say it once.** State a rule in one home. Other files point to it or
+   summarize it. Copies drift, and drift becomes two truths.
+10. **Structure is data.** Frontmatter, skill names, routing tables, trigger
     words, and required sections are data. Do not delete data to save words.
     Remove prose before removing structure.
 

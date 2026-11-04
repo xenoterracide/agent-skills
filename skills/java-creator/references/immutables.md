@@ -65,25 +65,13 @@ public record GitContext(@Nullable String nearestTag, long distanceFromTag) {
 
 ## Datatypes metamodel
 
-Put `@Data` on the record and the processor also generates
+Add `@Data` to the record from the previous section, plus the
+`org.immutables.datatype` dependency. The processor generates
 `Datatypes_<Type>`: a nested `<Type>_` metamodel with a `String` constant per
 component, named for the component with a trailing underscore. Use the
 constants with AssertJ `hasFieldOrPropertyWithValue` so failure messages name
 the field. For JPA entities use the Hibernate metamodel instead — see
 `references/hibernate.md`.
-
-```java
-import org.immutables.datatype.Data;
-import org.immutables.value.Value;
-
-@Value.Builder
-@Data
-public record GitContext(@Nullable String nearestTag, long distanceFromTag) {
-  public static GitContextBuilder builder() {
-    return new GitContextBuilder();
-  }
-}
-```
 
 ```java
 import com.example.semver.Datatypes_GitContext.GitContext_;

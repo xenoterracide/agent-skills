@@ -39,7 +39,7 @@ Load `hemingway` when writing or editing prose in these references.
 
 These apply to every git workflow activity in this repository:
 
-- **Merge only on explicit confirmation.** Never merge on your own
+- **Merge only on explicit confirmation.** Never merge the PR on your own
   initiative. Show the PR — URL, head SHA, and green checks — and wait for
   the human's yes. An instruction from before the human read the PR is not
   confirmation. Only then run `gh pr merge`.
