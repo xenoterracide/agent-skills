@@ -7,9 +7,14 @@
 # Skip in CI environments
 [ -n "$CI" ] && exit 0
 
-# Check if lockfiles changed in this merge (HEAD@{1} is the state before the merge)
+# Check if toolchain or lockfiles changed in this merge (HEAD@{1} is the state before the merge)
+TOOL_VERSIONS_CHANGED=0
 PNPM_LOCK_CHANGED=0
 UV_LOCK_CHANGED=0
+
+if ! git diff --quiet "HEAD@{1}" HEAD -- .tool-versions 2>/dev/null; then
+  TOOL_VERSIONS_CHANGED=1
+fi
 
 if ! git diff --quiet "HEAD@{1}" HEAD -- pnpm-lock.yaml 2>/dev/null; then
   PNPM_LOCK_CHANGED=1
@@ -19,12 +24,17 @@ if ! git diff --quiet "HEAD@{1}" HEAD -- uv.lock 2>/dev/null; then
   UV_LOCK_CHANGED=1
 fi
 
+if [ "$TOOL_VERSIONS_CHANGED" -eq 1 ]; then
+  echo ".tool-versions changed, healing toolchain..."
+  "$(dirname "$0")/heal.sh"
+fi
+
 if [ "$PNPM_LOCK_CHANGED" -eq 1 ]; then
-  echo "pnpm-lock.yaml changed, running pnpm install --frozen-lockfile..."
-  pnpm install --frozen-lockfile
+  echo "pnpm-lock.yaml changed, healing toolchain..."
+  "$(dirname "$0")/heal.sh"
 fi
 
 if [ "$UV_LOCK_CHANGED" -eq 1 ]; then
-  echo "uv.lock changed, running uv sync --frozen..."
-  uv sync --frozen
+  echo "uv.lock changed, healing toolchain..."
+  "$(dirname "$0")/heal.sh"
 fi
