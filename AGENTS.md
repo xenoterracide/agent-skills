@@ -64,7 +64,7 @@ pnpm exec prettier --write <file> # Format a single file
 
 ```bash
 pnpm check                        # typecheck + eslint + catalog + tests
-pnpm test                         # Plugin tests
+pnpm test                         # Plugin tests (node) + unit tests (vitest)
 pnpm test:opencode                # Plugin tests only
 node --test scripts/*.test.mjs    # Same tests without pnpm
 pnpm typecheck                    # tsc --noEmit
@@ -80,7 +80,7 @@ three runs. Cases may also assert reference reads or forbid commands via
 `assertSkillBehavior`.
 
 ```bash
-pnpm evals                        # helper unit tests + every skill case
+pnpm evals                        # unit tests + every skill case
 pnpm evals skills/java-creator    # one skill
 ```
 

@@ -62,7 +62,7 @@ pnpm exec prettier --write <file>
 
 ```bash
 pnpm check        # typecheck + eslint + catalog + tests
-pnpm test         # plugin and catalog tests
+pnpm test         # plugin (node) and unit (vitest) tests
 pnpm typecheck    # tsc --noEmit
 pnpm lint:eslint  # ESLint only
 pnpm evals        # helper unit tests and skill evals
