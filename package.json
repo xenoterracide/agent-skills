@@ -28,7 +28,7 @@
     "vitest": "^5.0.5"
   },
   "scripts": {
-    "contribute": "pnpm setup:corepack && pnpm setup:pnpm && uv sync --frozen && git config core.hooksPath .share/git/hooks",
+    "contribute": "pnpm setup:corepack && pnpm setup:pnpm && uv sync --frozen && git config core.hooksPath .config/git/hooks",
     "evals": "vitest run",
     "typecheck": "tsc --noEmit",
     "check": "pnpm typecheck && pnpm lint:eslint && pnpm skills:check && pnpm test",

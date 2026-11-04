@@ -101,7 +101,7 @@ for the reset.
 
 ### Git Hooks
 
-Hooks live in `.share/git/hooks`. `pnpm contribute` sets `core.hooksPath` to
+Hooks live in `.config/git/hooks`. `pnpm contribute` sets `core.hooksPath` to
 that directory automatically.
 
 - **pre-commit**: Runs `lint-staged` — prettier, shfmt, license annotation,
