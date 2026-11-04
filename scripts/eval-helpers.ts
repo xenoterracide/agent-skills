@@ -4,7 +4,7 @@
 
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { cpSync, existsSync, mkdtempSync, readdirSync, rmSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative, sep } from "node:path";
 
@@ -67,9 +67,61 @@ export function harnessError(output: string): string | undefined {
 export interface RunOptions {
   model?: string;
   fixture?: string;
+  repo?: boolean;
 }
 
-export function runPrompt(prompt: string, { model = MODEL, fixture }: RunOptions = {}): string {
+// Evals that need a repository opt in with repo: true. Git cannot track a
+// nested .git directory, so the repo is built here instead of shipped as a
+// fixture. The origin is a bare repo inside the sandbox: pushes succeed,
+// but the remote is a local path, so nothing outside the sandbox is
+// reachable.
+export function initSandboxRepo(dir: string): void {
+  const git = (...args: string[]): void => {
+    const result = spawnSync("git", ["-C", dir, ...args], { encoding: "utf8" });
+    if (result.status !== 0) {
+      throw new Error(`git ${args.join(" ")} failed: ${result.stderr}`);
+    }
+  };
+  const origin = join(dir, "origin.git");
+  writeFileSync(join(dir, ".gitignore"), "origin.git/\n");
+  git("init", "-q", "--bare", origin);
+  git("init", "-q", "-b", "main");
+  git("add", "-A");
+  git("-c", "user.name=skill evals", "-c", "user.email=skill-evals@example.invalid", "commit", "-qm", "fixture");
+  git("remote", "add", "origin", origin);
+}
+
+// The stub shadows gh on the sandbox PATH. It answers the preflight an
+// agent runs before creating a PR and accepts the create, so the flow
+// completes without touching the network; argv is logged to gh.log.
+export function writeGhStub(dir: string): void {
+  const bin = join(dir, "bin");
+  mkdirSync(bin);
+  writeFileSync(
+    join(bin, "gh"),
+    [
+      "#!/bin/sh",
+      'log="$(dirname "$0")/../gh.log"',
+      'printf \'%s\\n\' "$*" >>"$log"',
+      'case "$1 $2" in',
+      '  "auth status") echo "Logged in to github.com account fixture"; exit 0;;',
+      '  "repo view")',
+      '    case "$*" in',
+      '      *--json*) echo \'{"defaultBranchRef":{"name":"main"},"nameWithOwner":"xenoterracide/fixture"}\';;',
+      '      *) echo "xenoterracide/fixture";;',
+      "    esac",
+      "    exit 0;;",
+      '  "pr view") echo "no pull requests found" >&2; exit 1;;',
+      '  "pr create") echo "https://github.com/xenoterracide/fixture/pull/1"; exit 0;;',
+      "esac",
+      "exit 0",
+      "",
+    ].join("\n"),
+    { mode: 0o755 },
+  );
+}
+
+export function runPrompt(prompt: string, { model = MODEL, fixture, repo }: RunOptions = {}): string {
   const dir = mkdtempSync(join(tmpdir(), "skill-evals-"));
   let configDir: string | undefined = undefined;
   try {
@@ -85,10 +137,19 @@ export function runPrompt(prompt: string, { model = MODEL, fixture }: RunOptions
         cpSync(join(fixture, entry), join(dir, entry), { recursive: true });
       }
     }
+    if (repo === true) {
+      initSandboxRepo(dir);
+      writeGhStub(dir);
+    }
     const result = spawnSync("opencode", ["run", "--standalone", "-m", model, prompt], {
       encoding: "utf8",
       cwd: dir,
-      env: { ...process.env, XDG_CONFIG_HOME: configDir, PWD: dir },
+      env: {
+        ...process.env,
+        XDG_CONFIG_HOME: configDir,
+        PWD: dir,
+        ...(repo === true ? { PATH: [join(dir, "bin"), process.env.PATH ?? ""].join(":") } : {}),
+      },
       timeout: 480_000,
       maxBuffer: 64 * 1024 * 1024,
     });
@@ -134,10 +195,11 @@ export function assertSkillBehavior(
     first = false,
     reads = [],
     forbids = [],
+    repo,
   }: BehaviorOptions = {},
 ): void {
   for (let i = 0; i < iterations; i++) {
-    const output = run(prompt, { model, fixture });
+    const output = run(prompt, { model, fixture, repo });
     const loaded = detectSkills(output);
     const label = `run ${String(i + 1)}/${String(iterations)}`;
     assert.ok(loaded.includes(skill), `${label}: skill "${skill}" did not load\n${transcript(output)}`);

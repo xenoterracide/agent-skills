@@ -2,6 +2,10 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+import { spawnSync } from "node:child_process";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -10,7 +14,10 @@ import {
   detectReads,
   detectSkills,
   harnessError,
+  initSandboxRepo,
   stripAnsi,
+  writeGhStub,
+  type RunOptions,
 } from "./eval-helpers";
 
 describe("stripAnsi", () => {
@@ -66,6 +73,16 @@ describe("assertSkillBehavior", () => {
     }).not.toThrow();
   });
 
+  it("forwards repo to run", () => {
+    let received: RunOptions | undefined;
+    const capture = (_prompt: string, options?: RunOptions): string => {
+      received = options;
+      return '→ Skill "git-workflow"';
+    };
+    assertSkillBehavior("p", "git-workflow", { run: capture, iterations: 1, repo: true });
+    expect(received?.repo).toBe(true);
+  });
+
   it("passes with a RegExp read pattern", () => {
     expect(() => {
       assertSkillBehavior("p", "java-creator", { run, iterations: 1, reads: [/hibernate\.md$/] });
@@ -115,6 +132,46 @@ describe("assertSkillBehavior forbids", () => {
     expect(() => {
       assertSkillBehavior("p", "git-workflow", { run, iterations: 1, forbids: [/merge_pull_request/] });
     }).toThrow(/forbidden/);
+  });
+});
+
+describe("initSandboxRepo", () => {
+  it("builds a committed repo whose origin is a reachable bare repo", () => {
+    const dir = mkdtempSync(join(tmpdir(), "sandbox-repo-"));
+    try {
+      writeFileSync(join(dir, "a.txt"), "a");
+      initSandboxRepo(dir);
+      const head = spawnSync("git", ["-C", dir, "rev-parse", "--verify", "HEAD"], { encoding: "utf8" });
+      expect(head.status).toBe(0);
+      const status = spawnSync("git", ["-C", dir, "status", "--porcelain"], { encoding: "utf8" });
+      expect(status.stdout).toBe("");
+      const push = spawnSync("git", ["-C", dir, "push", "-q", "origin", "main"], { encoding: "utf8" });
+      expect(push.status).toBe(0);
+      const remoteHead = spawnSync("git", ["-C", join(dir, "origin.git"), "rev-parse", "--verify", "refs/heads/main"], {
+        encoding: "utf8",
+      });
+      expect(remoteHead.status).toBe(0);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+});
+
+describe("writeGhStub", () => {
+  it("answers preflight and records argv", () => {
+    const dir = mkdtempSync(join(tmpdir(), "sandbox-gh-"));
+    try {
+      writeGhStub(dir);
+      const gh = (...args: string[]): ReturnType<typeof spawnSync> =>
+        spawnSync(join(dir, "bin", "gh"), args, { encoding: "utf8" });
+      expect(gh("auth", "status").stdout).toContain("Logged in");
+      expect(gh("repo", "view", "--json", "defaultBranchRef").stdout).toContain("defaultBranchRef");
+      expect(gh("pr", "view").status).toBe(1);
+      expect(gh("pr", "create", "--title", "x", "--body-file", "-").stdout).toContain("pull/1");
+      expect(readFileSync(join(dir, "gh.log"), "utf8")).toContain("--body-file");
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 });
 
