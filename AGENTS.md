@@ -143,19 +143,11 @@ loading it twice would register every skill twice.
 
 ### EditorConfig
 
-- Charset: UTF-8
-- Line endings: LF
-- Indent: 2 spaces
-- Final newline: required
-
 The `.editorconfig` file lives at the repository root.
 
 ### Prettier
 
-See `.prettierrc.cjs` for the full config. Key settings:
-
-- `printWidth: 120`
-- `xmlWhitespaceSensitivity: "ignore"`
+See `.prettierrc.cjs` for the full config.
 
 ### Licensing by File Type
 
