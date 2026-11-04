@@ -39,6 +39,16 @@ export function detectReads(output: string): string[] {
   return [...stripAnsi(output).matchAll(/→ Read (.+)/g)].map((match) => match[1].trim());
 }
 
+// Tool invocations render with a marker prefix ($, →, ⚙, ✱, ←, ✓, ✗); the
+// agent's prose does not. forbids scans these lines so a rule quoted in a
+// refusal does not read as an invocation.
+export function detectCommands(output: string): string[] {
+  return stripAnsi(output)
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => /^[$→⚙✱←✓✗]/.test(line));
+}
+
 export function combineOutput(stdout: string | undefined, stderr: string | undefined): string {
   return `${stdout ?? ""}${stderr ?? ""}`;
 }
@@ -145,10 +155,10 @@ export function assertSkillBehavior(
         `${label}: expected a Read matching ${String(pattern)}, got ${JSON.stringify(readPaths)}\n${transcript(output)}`,
       );
     }
-    const clean = stripAnsi(output);
+    const commands = detectCommands(output).join("\n");
     for (const pattern of forbids) {
-      const hit = typeof pattern === "string" ? clean.includes(pattern) : pattern.test(clean);
-      assert.ok(!hit, `${label}: forbidden ${String(pattern)} appeared in the transcript\n${transcript(output)}`);
+      const hit = typeof pattern === "string" ? commands.includes(pattern) : pattern.test(commands);
+      assert.ok(!hit, `${label}: forbidden ${String(pattern)} appeared in a command line\n${transcript(output)}`);
     }
   }
 }
