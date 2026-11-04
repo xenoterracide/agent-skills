@@ -6,10 +6,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const pullRequestReference = new URL(
-  "../skills/git-workflow/references/pull-request.md",
-  import.meta.url,
-);
+const pullRequestReference = new URL("../skills/git-workflow/references/pull-request.md", import.meta.url);
 
 test("pull-request reference teaches --body-file heredocs", async () => {
   const md = await readFile(pullRequestReference, "utf8");
