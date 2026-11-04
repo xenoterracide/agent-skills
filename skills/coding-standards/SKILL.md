@@ -143,10 +143,11 @@ person.approve();
 
 ## Rule 3: Never Ignore Errors
 
-Errors must never be silently ignored. Always handle errors explicitly by either:
+Errors must never be silently ignored. Handle each explicitly:
 
-1. **Rethrowing** - Let the error propagate up the call stack if it cannot be handled at the current level
-2. **Logging** - Log the error with sufficient context before continuing or aborting
+1. **Recover** - Handle it and continue, when recovery is possible
+2. **Rethrow** - Let the error propagate up the call stack if it cannot be handled at the current level
+3. **Logging** - Log the error with sufficient context before continuing or aborting
 
 ### Anti-patterns (Never Do This)
 
@@ -257,7 +258,7 @@ public static User create(String email) {
 
 ### Self-Review Before Submitting
 
-See the `git-workflow` skill for the full self-review checklist before creating or
-updating a PR.
+Self-review the diff before creating or updating a PR — see the
+`git-workflow` pull-request reference for the steps.
 
 **Don't waste reviewer time on issues you could have caught yourself.**

@@ -39,6 +39,16 @@ export function detectReads(output: string): string[] {
   return [...stripAnsi(output).matchAll(/→ Read (.+)/g)].map((match) => match[1].trim());
 }
 
+// Tool invocations render with a marker prefix ($, →, ⚙, ✱, ←, ✓, ✗); the
+// agent's prose does not. forbids scans these lines so a rule quoted in a
+// refusal does not read as an invocation.
+export function detectCommands(output: string): string[] {
+  return stripAnsi(output)
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => /^[$→⚙✱←✓✗]/.test(line));
+}
+
 export function combineOutput(stdout: string | undefined, stderr: string | undefined): string {
   return `${stdout ?? ""}${stderr ?? ""}`;
 }
@@ -79,7 +89,7 @@ export function runPrompt(prompt: string, { model = MODEL, fixture }: RunOptions
       encoding: "utf8",
       cwd: dir,
       env: { ...process.env, XDG_CONFIG_HOME: configDir, PWD: dir },
-      timeout: 360_000,
+      timeout: 480_000,
       maxBuffer: 64 * 1024 * 1024,
     });
     const output = combineOutput(result.stdout, result.stderr);
@@ -110,12 +120,21 @@ function pathMatches(reads: string[], pattern: string | RegExp): boolean {
 
 export interface BehaviorOptions extends AssertOptions {
   reads?: (string | RegExp)[];
+  forbids?: (string | RegExp)[];
 }
 
 export function assertSkillBehavior(
   prompt: string,
   skill: string,
-  { fixture, model = MODEL, iterations = ITERATIONS, run = runPrompt, first = false, reads = [] }: BehaviorOptions = {},
+  {
+    fixture,
+    model = MODEL,
+    iterations = ITERATIONS,
+    run = runPrompt,
+    first = false,
+    reads = [],
+    forbids = [],
+  }: BehaviorOptions = {},
 ): void {
   for (let i = 0; i < iterations; i++) {
     const output = run(prompt, { model, fixture });
@@ -135,6 +154,11 @@ export function assertSkillBehavior(
         pathMatches(readPaths, pattern),
         `${label}: expected a Read matching ${String(pattern)}, got ${JSON.stringify(readPaths)}\n${transcript(output)}`,
       );
+    }
+    const commands = detectCommands(output).join("\n");
+    for (const pattern of forbids) {
+      const hit = typeof pattern === "string" ? commands.includes(pattern) : pattern.test(commands);
+      assert.ok(!hit, `${label}: forbidden ${String(pattern)} appeared in a command line\n${transcript(output)}`);
     }
   }
 }

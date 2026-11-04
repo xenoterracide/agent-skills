@@ -61,7 +61,8 @@ Extensions reference by anchor:
 
 ### 3. Ubiquitous Language
 
-Link domain terms to definitions:
+Link domain terms to definitions — these come from the registration use
+case:
 
 - `<<User>>` - authentication entity
 - `<<Person>>` - human being
@@ -82,6 +83,7 @@ First create or reference the ubiquitous language in `docs/ubiquitous-language/`
 | Primary Actor | <<Person>> with {credentials}
 | Scope | {Bounded Context}
 | Level | User Goal
+| Trigger | {what starts this use case}
 |===
 
 == Stakeholders and Interests
@@ -111,7 +113,7 @@ First create or reference the ubiquitous language in `docs/ubiquitous-language/`
 *Condition:* {When this happens}
 *Steps:*
 . {Alternative action}
-. *Resume:* Continue at <<step-create>>
+. *Resume at* <<step-create>>
 
 === During <<step-validate>>: {Failure}
 *Condition:* {Failure condition}

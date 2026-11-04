@@ -15,12 +15,11 @@ directory doubles as an OpenCode-compatible HTTP skill catalog.
 - **License for skills/docs**: CC-BY-NC-SA-4.0
 - **License for configuration files**: CC0-1.0
 
-> **Agent Note:** This repo **IS** the plugin source for
-> `xenoterracide-agent-skills`. It is **NOT** the Superpowers plugin and it is
-> **NOT** an installed plugin directory. Make all skill and plugin changes in
-> this repository, then reinstall from here. Never edit files under
-> `~/.kimi-code/`, `~/.kimi-plugin/`, `~/.config/opencode/`, or any other agent
-> installation directory.
+> **Agent Note:** This repo is the plugin source for
+> `xenoterracide-agent-skills` — not the Superpowers plugin, not an installed
+> plugin directory. Make all skill and plugin changes in this repository, then
+> reinstall. Never edit files under `~/.kimi-code/`, `~/.kimi-plugin/`,
+> `~/.config/opencode/`, or any other agent installation directory.
 
 ## Source of Truth
 
@@ -48,7 +47,7 @@ pnpm contribute
 ```
 
 With direnv, entering the repository runs `.envrc`, which installs pinned
-tools, dependencies, and the git hooks automatically.
+tools, dependencies, and the git hooks.
 
 ### Lint and Format
 
@@ -75,7 +74,8 @@ pnpm lint:eslint                  # ESLint only
 `skills/*/tests/evals.test.ts` asserts that realistic prompts auto-load the
 skill. Each case forks `opencode run` in a temp copy of `skills/` and
 `.opencode/` with an isolated `XDG_CONFIG_HOME`; the skill must load in all
-three runs.
+three runs. Cases may also assert reference reads or forbid commands via
+`assertSkillBehavior`.
 
 ```bash
 pnpm evals                        # helper unit tests + every skill case
@@ -121,7 +121,7 @@ uv sync --frozen
 ```
 
 The repository uses pnpm. Its isolated `node_modules` keeps undeclared
-dependencies unresolvable while `tsc` 7, a native binary, reads the tree.
+dependencies unresolvable while the typechecker reads the tree.
 
 If `pnpm` vanishes after a Node version change, use the `version-managers`
 skill (`references/corepack-troubleshooting.md`) before anything else.
@@ -136,26 +136,18 @@ no runtime dependencies and must never throw into OpenCode. Behavior is covered
 by `scripts/opencode-plugin.test.mjs`.
 
 `.opencode/opencode.json` exposes `./skills` for contributors and deliberately
-does not load the plugin. The maintainer's global configuration loads the
-plugin; adding it to the repo config too would register the same plugin twice.
+does not load the plugin — the maintainer's global configuration already does;
+loading it twice would register every skill twice.
 
 ## Code Style
 
 ### EditorConfig
 
-- Charset: UTF-8
-- Line endings: LF
-- Indent: 2 spaces
-- Final newline: required
-
 The `.editorconfig` file lives at the repository root.
 
 ### Prettier
 
-See `.prettierrc.cjs` for the full config. Key settings:
-
-- `printWidth: 120`
-- `xmlWhitespaceSensitivity: "ignore"`
+See `.prettierrc.cjs` for the full config.
 
 ### Licensing by File Type
 
@@ -177,35 +169,16 @@ when creating new files:
 > Markdown skill files do **not** receive REUSE headers. Place the SPDX block
 > inside an HTML comment immediately after the YAML frontmatter.
 
-## Skill Routing
-
-Load the relevant skill when the trigger applies:
-
-| Skill                              | Activate When                                                                        |
-| ---------------------------------- | ------------------------------------------------------------------------------------ |
-| `using-xenoterracide-agent-skills` | Starting work in a repo session, or unsure which skill to use                        |
-| `version-managers`                 | Version/launcher tooling — asdf, corepack, direnv — or recovery when one breaks      |
-| `completion-checklist`             | About to claim work is complete, fixed, or passing                                   |
-| `git-workflow`                     | Creating/updating PRs, committing, pushing, commit/PR messages, push rejection       |
-| `coding-standards`                 | Writing or modifying code in any language                                            |
-| `testing`                          | Adding, updating, debugging, or discussing tests                                     |
-| `iterative-development`            | Scoping or refining designs                                                          |
-| `use-case-creator`                 | Writing use cases or business behavior docs                                          |
-| `github`                           | GitHub APIs, issues, GraphQL, review threads                                         |
-| `java-creator`                     | Creating, modifying, or refactoring Java source files, Maven pom.xml, or JUnit tests |
-| `gradle-creator`                   | Creating, modifying, or troubleshooting Gradle builds                                |
-| `shell-script-creator`             | Creating, modifying, or debugging shell scripts and commands                         |
-| `docs-creator`                     | Writing or revising `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, or `SKILL.md` files |
-| `hemingway`                        | Writing prose or code that should be terse and clear                                 |
-
 ## Maintenance
 
 - Update this file when you change workflows it describes.
 - Update `CONTRIBUTING.md` when you change contributor-facing workflows or
   commands.
-- When modifying skills or plugin behavior, ask the user whether to bump the
-  version in `.kimi-plugin/plugin.json` and `package.json` before creating or
-  updating the PR.
+- Versions follow CalVer `YY.MM.micro` — `YY.MM` is the release month,
+  `micro` increments per release within it. When modifying skills or plugin
+  behavior, ask the user whether to bump the version in
+  `.kimi-plugin/plugin.json` and `package.json` before creating or updating
+  the PR.
 - After adding, removing, or moving skills, regenerate the OpenCode catalog with
   `pnpm skills:catalog` so `skills/index.json` stays in sync (kept in check by
   `pnpm skills:check` as part of `pnpm lint`). The catalog version is read from
@@ -213,16 +186,17 @@ Load the relevant skill when the trigger applies:
   refreshes cached copies.
 - Run `pnpm test:opencode` when changing the plugin. The entrypoint is
   intentionally dependency-free so Git and local-directory installs work.
-- Keep `.opencode/opencode.json` limited to `./skills`; the plugin is loaded from
-  the user's global configuration, not from the repository config.
+- Keep `.opencode/opencode.json` limited to `./skills`.
 
 ## Security Considerations
 
 - **CI detection**: Git hooks exit early when `CI` is set.
 - **Lockfile integrity**: Use `pnpm install --frozen-lockfile` and `uv sync --frozen`.
 - **No force push**: Repository rules block force pushes.
-- **Command injection**: The merge tool prefers `execFileSync` with argv arrays
-  for safe command execution.
+- **Confirmed merges only**: Agents never merge the PR on their own
+  initiative, by any route. The merge waits for the human's explicit yes; an
+  instruction from before the human read the PR is not confirmation. Syncing
+  a topic branch with `git merge origin/develop` is safe routine sync.
 - **No secrets**: This repository contains no credentials or private
   configuration.
 

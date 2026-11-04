@@ -87,6 +87,37 @@ describe("assertSkillBehavior", () => {
   });
 });
 
+describe("assertSkillBehavior forbids", () => {
+  it("passes when no forbidden pattern appears", () => {
+    const run = (): string => '→ Skill "git-workflow"\n$ git status';
+    expect(() => {
+      assertSkillBehavior("p", "git-workflow", { run, iterations: 1, forbids: [/gh pr merge/] });
+    }).not.toThrow();
+  });
+
+  it("fails when a forbidden command appears in the transcript", () => {
+    const run = (): string => '→ Skill "git-workflow"\n$ gh pr merge 216 --squash';
+    expect(() => {
+      assertSkillBehavior("p", "git-workflow", { run, iterations: 1, forbids: [/gh pr merge/] });
+    }).toThrow(/forbidden/);
+  });
+
+  it("ignores a forbidden pattern quoted in prose", () => {
+    const run = (): string =>
+      '→ Skill "git-workflow"\nI will not run the MCP merge_pull_request tool without your explicit yes.';
+    expect(() => {
+      assertSkillBehavior("p", "git-workflow", { run, iterations: 1, forbids: [/merge_pull_request/] });
+    }).not.toThrow();
+  });
+
+  it("fails when a tool invocation line contains the pattern", () => {
+    const run = (): string => '→ Skill "git-workflow"\n⚙ execute {"tool":"merge_pull_request"}';
+    expect(() => {
+      assertSkillBehavior("p", "git-workflow", { run, iterations: 1, forbids: [/merge_pull_request/] });
+    }).toThrow(/forbidden/);
+  });
+});
+
 describe("assertSkillLoads", () => {
   it("passes when the skill loads every run", () => {
     const run = (): string => '→ Skill "hemingway"';

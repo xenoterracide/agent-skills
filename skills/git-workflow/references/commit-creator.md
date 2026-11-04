@@ -36,6 +36,8 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
   - Each bullet must describe one complete logical change
   - Do not split a single idea across multiple bullets
   - Wrap lines to ≤ 75 chars
+  - Order the body: the grounded why first (when present), then the `-`
+    bullets
 
 ## Grounding the Why
 
@@ -59,9 +61,11 @@ commas," not "you noticed the parser dropped commas."
 
 ## Template
 
+```text
 <type>(<scope>): <summary>
 
 <body>
+```
 
 ## AI Attribution
 
@@ -72,8 +76,10 @@ description, before any footer markers like `BREAKING CHANGE:`):
 Assisted-by: <AI_NAME>:<MODEL_VERSION> [TOOL1] [TOOL2]
 ```
 
-`MODEL_VERSION` is the specific model or agent version used. Optional
-`[TOOL1] [TOOL2]` list specialized analysis tools (e.g., `coccinelle`,
+`MODEL_VERSION` is the model that authored the work — read it from the
+active session, not from an eval default or a neighboring tool. If the
+session switched models mid-task, attribute each commit to its author.
+Optional `[TOOL1] [TOOL2]` list specialized analysis tools (e.g., `coccinelle`,
 `sparse`). Do not list basic tools like `git`, `gcc`, or editors.
 
 Examples:

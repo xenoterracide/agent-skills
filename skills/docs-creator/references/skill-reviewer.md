@@ -79,11 +79,9 @@ Before considering a skill change complete, verify:
 When updating a skill, verify that:
 
 1. The `description` is specific enough to trigger on real user requests
-2. The wording in `AGENTS.md` and the skill description describe the same
-   routing signals
-3. The body explains confusing boundaries with nearby skills
-4. The skill avoids claiming files, tools, or workflows that no longer exist
-5. Any `allowed-tools` entry is minimal, trusted, and justified by the skill
+2. The body explains confusing boundaries with nearby skills
+3. The skill avoids claiming files, tools, or workflows that no longer exist
+4. Any `allowed-tools` entry is minimal, trusted, and justified by the skill
 
 ## Requesting Review
 
