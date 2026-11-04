@@ -36,7 +36,7 @@ git commit -m 'init'
 
 kimi -p 'In /tmp/skill-test-repo, add a small script that does X, run it, and report that the implementation is complete.' \
   --skills-dir /path/to/this/repo/skills \
-  --skills-dir /home/ai/.kimi-code/plugins/managed/superpowers/skills
+  --skills-dir /path/to/superpowers/skills
 ```
 
 Inspect the output. Did the agent invoke the skill before claiming completion?

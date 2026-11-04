@@ -87,6 +87,22 @@ describe("assertSkillBehavior", () => {
   });
 });
 
+describe("assertSkillBehavior forbids", () => {
+  it("passes when no forbidden pattern appears", () => {
+    const run = (): string => '→ Skill "git-workflow"\n$ git status';
+    expect(() => {
+      assertSkillBehavior("p", "git-workflow", { run, iterations: 1, forbids: [/gh pr merge/] });
+    }).not.toThrow();
+  });
+
+  it("fails when a forbidden pattern appears in the transcript", () => {
+    const run = (): string => '→ Skill "git-workflow"\n$ gh pr merge 216 --squash';
+    expect(() => {
+      assertSkillBehavior("p", "git-workflow", { run, iterations: 1, forbids: [/gh pr merge/] });
+    }).toThrow(/forbidden/);
+  });
+});
+
 describe("assertSkillLoads", () => {
   it("passes when the skill loads every run", () => {
     const run = (): string => '→ Skill "hemingway"';

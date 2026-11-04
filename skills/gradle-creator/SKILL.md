@@ -120,7 +120,8 @@ Guidance for using the Gradle Shadow plugin to create fat JARs with relocated de
 - With certain dependencies that have non-standard packaging
 - When minimize-related configurations contain problematic artifacts
 
-**Fix:** Remove `minimize()` from your ShadowJar configuration:
+**Fix:** Remove `minimize()` from your ShadowJar configuration. Without
+`minimize()`, every `runtimeClasspath` dependency bundles — no filter needed:
 
 ```kotlin
 // BEFORE (may cause NPE)
@@ -128,14 +129,15 @@ tasks.withType<ShadowJar>().configureEach {
   minimize()
 }
 
-// AFTER (stable)
+// AFTER (stable) — minimize removed, the classpath bundles as-is
 tasks.withType<ShadowJar>().configureEach {
-  // Use include/exclude filters instead
-  dependencies {
-    include { it.moduleGroup == "com.example" }
-  }
+  archiveClassifier.set("")
 }
 ```
+
+An `include` filter is not a minimize replacement: it bundles only its
+matches and silently drops the rest of the classpath. Use `include` only to
+build a jar that deliberately keeps a subset.
 
 ### Configuration Patterns
 
@@ -153,7 +155,8 @@ tasks.withType<ShadowJar>().configureEach {
 
 #### Selective Dependency Inclusion
 
-Only include specific dependencies in the shadow JAR:
+Only include specific dependencies in the shadow JAR — an `include` filter
+bundles only its matches:
 
 ```kotlin
 tasks.withType<ShadowJar>().configureEach {
@@ -217,6 +220,6 @@ If using dependency locking with the shadow plugin, note that it may create addi
 ### Best Practices
 
 1. **Always relocate** - Prevent classpath conflicts by relocating shaded packages
-2. **Use include over minimize** - If minimize() causes issues, use explicit include filters
+2. **Drop minimize on NPE** - Remove `minimize()` and let the classpath bundle; use filters only to exclude specific dependencies
 3. **Check lockfile diffs** - After dependency updates, review lockfile changes for shadow-related configurations
 4. **Test the shadow JAR** - Verify the fat JAR works in integration tests

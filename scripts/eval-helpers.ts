@@ -79,7 +79,7 @@ export function runPrompt(prompt: string, { model = MODEL, fixture }: RunOptions
       encoding: "utf8",
       cwd: dir,
       env: { ...process.env, XDG_CONFIG_HOME: configDir, PWD: dir },
-      timeout: 360_000,
+      timeout: 480_000,
       maxBuffer: 64 * 1024 * 1024,
     });
     const output = combineOutput(result.stdout, result.stderr);
@@ -110,12 +110,21 @@ function pathMatches(reads: string[], pattern: string | RegExp): boolean {
 
 export interface BehaviorOptions extends AssertOptions {
   reads?: (string | RegExp)[];
+  forbids?: (string | RegExp)[];
 }
 
 export function assertSkillBehavior(
   prompt: string,
   skill: string,
-  { fixture, model = MODEL, iterations = ITERATIONS, run = runPrompt, first = false, reads = [] }: BehaviorOptions = {},
+  {
+    fixture,
+    model = MODEL,
+    iterations = ITERATIONS,
+    run = runPrompt,
+    first = false,
+    reads = [],
+    forbids = [],
+  }: BehaviorOptions = {},
 ): void {
   for (let i = 0; i < iterations; i++) {
     const output = run(prompt, { model, fixture });
@@ -135,6 +144,11 @@ export function assertSkillBehavior(
         pathMatches(readPaths, pattern),
         `${label}: expected a Read matching ${String(pattern)}, got ${JSON.stringify(readPaths)}\n${transcript(output)}`,
       );
+    }
+    const clean = stripAnsi(output);
+    for (const pattern of forbids) {
+      const hit = typeof pattern === "string" ? clean.includes(pattern) : pattern.test(clean);
+      assert.ok(!hit, `${label}: forbidden ${String(pattern)} appeared in the transcript\n${transcript(output)}`);
     }
   }
 }

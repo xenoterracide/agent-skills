@@ -75,7 +75,8 @@ pnpm lint:eslint                  # ESLint only
 `skills/*/tests/evals.test.ts` asserts that realistic prompts auto-load the
 skill. Each case forks `opencode run` in a temp copy of `skills/` and
 `.opencode/` with an isolated `XDG_CONFIG_HOME`; the skill must load in all
-three runs.
+three runs. Cases may also assert reference reads or forbid commands via
+`assertSkillBehavior`.
 
 ```bash
 pnpm evals                        # helper unit tests + every skill case
@@ -121,7 +122,7 @@ uv sync --frozen
 ```
 
 The repository uses pnpm. Its isolated `node_modules` keeps undeclared
-dependencies unresolvable while `tsc` 7, a native binary, reads the tree.
+dependencies unresolvable while the typechecker reads the tree.
 
 If `pnpm` vanishes after a Node version change, use the `version-managers`
 skill (`references/corepack-troubleshooting.md`) before anything else.
@@ -189,7 +190,7 @@ Load the relevant skill when the trigger applies:
 | `git-workflow`                     | Creating/updating PRs, merge requests, committing, pushing, commit/PR messages, push rejection |
 | `coding-standards`                 | Writing or modifying code in any language                                                      |
 | `testing`                          | Adding, updating, debugging, or discussing tests                                               |
-| `iterative-development`            | Scoping or refining designs                                                                    |
+| `iterative-development`            | Scoping or refining designs; the model feels wrong or too complex                              |
 | `use-case-creator`                 | Writing use cases or business behavior docs                                                    |
 | `github`                           | GitHub APIs, issues, GraphQL, review threads                                                   |
 | `java-creator`                     | Creating, modifying, or refactoring Java source files, Maven pom.xml, or JUnit tests           |
@@ -222,10 +223,9 @@ Load the relevant skill when the trigger applies:
 - **Lockfile integrity**: Use `pnpm install --frozen-lockfile` and `uv sync --frozen`.
 - **No force push**: Repository rules block force pushes.
 - **Confirmed merges only**: Agents never merge the PR on their own
-  initiative. The merge waits for the human's explicit yes; syncing a
-  topic branch with `git merge origin/develop` is safe routine sync.
-- **Command injection**: The merge tool prefers `execFileSync` with argv arrays
-  for safe command execution.
+  initiative, by any route. The merge waits for the human's explicit yes; an
+  instruction from before the human read the PR is not confirmation. Syncing
+  a topic branch with `git merge origin/develop` is safe routine sync.
 - **No secrets**: This repository contains no credentials or private
   configuration.
 

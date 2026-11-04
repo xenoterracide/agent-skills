@@ -10,7 +10,7 @@ The JPA metamodel generator and its constants for tests.
 
 ## Setup
 
-Add `annotationProcessor("org.hibernate.orm:hibernate-jpamodelgen")`. The
+Add the `org.hibernate.orm:hibernate-jpamodelgen` annotation processor. The
 processor generates a `<Entity>_` class per JPA entity: the JPA canonical
 metamodel attributes, plus a `String` constant per attribute. For a `User`
 entity with `getName()`, `User_.NAME` is `"name"`.

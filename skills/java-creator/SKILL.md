@@ -145,7 +145,7 @@ private final String generatedId;
 
 Prefer `var` over an explicit local variable type. `var` shortens code and
 loosens coupling: no import is needed, so a class rename cannot break client
-code.
+code in some cases.
 
 Note: Error Prone's `@Var` annotation (unrelated to the `var` keyword) marks intentionally mutable local variables. Use it instead of `@SuppressWarnings("Var")` when you need mutability.
 
@@ -172,7 +172,6 @@ Examples:
 
 - `var x = 1;`
 - `var foo = "foo"`
-- `var list = new ArrayList<Foo>();`
 
 #### BAD
 
@@ -250,7 +249,7 @@ assertThat(user.getAge()).isEqualTo(30);
 
 assertThat(user.isActive()).isTrue();
 
-// GOOD - satisfies with multiple checks (soft assertions)
+// GOOD - satisfies groups related checks
 assertThat(user).satisfies((u) -> {
   assertThat(u.getName()).isEqualTo("Alice");
   assertThat(u.getAge()).isEqualTo(30);

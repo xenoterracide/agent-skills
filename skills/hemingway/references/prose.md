@@ -29,11 +29,13 @@ place.
    cut the word. If the document works without a sentence, cut the sentence.
 8. **Comments explain decisions, not code.** Say why the code exists, not
    what it does.
-9. **Say it once.** State a rule in one home. Other files point to it or
-   summarize it. Copies drift, and drift becomes two truths.
+9. **Say it once.** State a rule in one home. Other files point to it, or
+   summarize it keeping every clause that changes behavior. Copies drift,
+   and drift becomes two truths.
 10. **Structure is data.** Frontmatter, skill names, routing tables, trigger
-    words, and required sections are data. Do not delete data to save words.
-    Remove prose before removing structure.
+    words, red-flag lists, rationalization tables, and required sections are
+    data. Do not delete data to save words. Remove prose before removing
+    structure.
 
 ## Why
 

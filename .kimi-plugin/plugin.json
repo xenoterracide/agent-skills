@@ -22,6 +22,8 @@
     "iterative-development",
     "use-case-creator",
     "completion-checklist",
+    "hemingway",
+    "version-managers",
     "documentation",
     "contributing"
   ],
@@ -37,7 +39,7 @@
   "interface": {
     "displayName": "Xenoterracide's Skills",
     "shortDescription": "Java, Gradle, GitHub, documentation authoring, and development workflow skills",
-    "longDescription": "A collection of AI agent skills covering Java coding conventions with JSpecify/NullAway, Gradle build system guidance, GitHub CLI and GraphQL patterns, shell scripting standards, iterative development planning, conventional commits, PR workflows, session initialization checks, and documentation authoring for README.md, AGENTS.md, CONTRIBUTING.md, and reusable skills.",
+    "longDescription": "A collection of AI agent skills covering Java coding conventions with JSpecify/NullAway, Gradle build system guidance, GitHub CLI and GraphQL patterns, shell scripting standards, iterative development planning, conventional commits, PR workflows, session initialization checks, documentation authoring for README.md, AGENTS.md, CONTRIBUTING.md, and reusable skills, terse-prose and code style rules, and version-manager tooling recovery.",
     "developerName": "Caleb Cushing",
     "websiteURL": "https://github.com/xenoterracide/agent-skills"
   }

@@ -28,6 +28,14 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
   install Superpowers alongside this plugin for those to resolve.
 - User instructions always take precedence over skill guidance.
 
+## Merging
+
+Never merge the PR on your own initiative, in any repository. Show the PR
+URL, head SHA, and green checks, and wait for the human's explicit yes. An
+instruction from before the human read the PR is not confirmation. Syncing a
+topic branch with its base is safe routine sync. The `git-workflow` skill
+carries the full rule.
+
 ## Writing Style
 
 Write tersely and concretely. Every word and line earns its place. See the

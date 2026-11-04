@@ -160,13 +160,8 @@ name: skill-name
 ...
 ```
 
-❌ **WRONG:** Blank line before frontmatter
-
-```markdown
----
-name: skill-name
-...
-```
+❌ **WRONG:** Any text or blank line before the first `---` breaks frontmatter
+parsing — the `---` must be the very first line of the file.
 
 ✅ **CORRECT:** Frontmatter first, then HTML comment for copyright
 
@@ -176,7 +171,7 @@ name: skill-name
 description: ...
 license: CC-BY-NC-SA-4.0
 metadata:
-  author: Caleb Cushing <caleb.cushing@gmail.com>
+  copyright: Caleb Cushing
 ---
 
 <!--

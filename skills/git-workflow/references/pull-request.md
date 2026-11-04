@@ -6,7 +6,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 # Pull Request
 
-**This skill applies whenever files are created, modified, or deleted.**
+**This reference applies whenever files are created, modified, or deleted.**
 
 - Apply `coding-standards` rules — review your code against them before submitting
 - Use the `references/commit-creator.md` guidance for all commit messages and PR descriptions
@@ -88,8 +88,6 @@ Before creating or updating a PR:
 1. Run quality checks locally (tests, static analysis, formatting)
 2. Review your own diff — would you approve this if someone else wrote it?
 3. Check for obvious issues (debug prints, TODOs without tickets, unjustified suppressions)
-
-See `coding-standards` (Rule 5: Code Quality Standards) for the full checklist.
 
 **Fix issues yourself before requesting human review.**
 

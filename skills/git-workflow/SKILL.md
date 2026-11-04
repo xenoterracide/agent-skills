@@ -42,7 +42,9 @@ These apply to every git workflow activity in this repository:
 - **Merge only on explicit confirmation.** Never merge the PR on your own
   initiative. Show the PR — URL, head SHA, and green checks — and wait for
   the human's yes. An instruction from before the human read the PR is not
-  confirmation. Only then run `gh pr merge`.
+  confirmation. Only then merge, by any route: `gh pr merge` (including
+  `--auto`), the MCP `merge_pull_request` tool, the GraphQL
+  `mergePullRequest` mutation, or the REST merge endpoint.
 - **Merge direction matters.** `git merge origin/develop` into the topic
   branch is safe, routine sync. "merge develop", "pull", and "merge origin"
   mean the sync. When unclear, ask.
