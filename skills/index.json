@@ -43,7 +43,7 @@
     {
       "name": "gradle-creator",
       "version": "0.10.3",
-      "files": ["SKILL.md"]
+      "files": ["SKILL.md", "references/shadow.md"]
     },
     {
       "name": "hemingway",
