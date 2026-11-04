@@ -17,12 +17,14 @@ cd "$heal_dir/../../.." || exit 0
 
 # Two shells can heal at once (hook in one, direnv in another); asdf and npm
 # take no locks of their own, so serialize here. Skip when the lock is held:
-# the next event heals.
+# the next event heals. An unopenable lock file means no locking, not failure.
 if command -v flock >/dev/null 2>&1 && git_dir=$(git rev-parse --git-dir 2>/dev/null) && [ -n "$git_dir" ]; then
-  exec 9>>"$git_dir/heal.lock"
-  if ! flock -w "${HEAL_LOCK_WAIT:-300}" 9; then
-    echo "heal: another heal holds the lock; skipping" >&2
-    exit 0
+  if true 2>/dev/null >>"$git_dir/heal.lock"; then
+    exec 9>>"$git_dir/heal.lock"
+    if ! flock -w "${HEAL_LOCK_WAIT:-300}" 9; then
+      echo "heal: another heal holds the lock; skipping" >&2
+      exit 0
+    fi
   fi
 fi
 

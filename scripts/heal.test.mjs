@@ -4,13 +4,16 @@
 
 import assert from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";
-import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { chmodSync, copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
-const HEAL = join(import.meta.dirname, "..", ".config", "git", "hooks", "heal.sh");
+const HOOKS = join(import.meta.dirname, "..", ".config", "git", "hooks");
+const HEAL = join(HOOKS, "heal.sh");
 const HOOKS_PATH = "config core.hooksPath .config/git/hooks";
+
+const hasFlock = spawnSync("flock", ["--version"], { env: { PATH: process.env.PATH } }).status === 0;
 
 const sleep = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
 
@@ -183,7 +186,7 @@ test("a failed step does not stop the rest", () => {
   }
 });
 
-test("a held lock makes the heal skip", () => {
+test("a held lock makes the heal skip", { skip: !hasFlock }, () => {
   const fixture = makeFixture({ markers: [".tool-versions"] });
   const lock = join(fixture.gitDir, "heal.lock");
   const holder = spawn("flock", [lock, "sleep", "30"], { stdio: "ignore", env: { PATH: process.env.PATH } });
@@ -213,6 +216,65 @@ test("heals without flock on PATH", () => {
     assert.equal(readLog(fixture, "git"), HOOKS_PATH);
   } finally {
     rmSync(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("an unwritable lock dir heals without the lock", () => {
+  const fixture = makeFixture({ markers: [".tool-versions"] });
+  chmodSync(fixture.gitDir, 0o555);
+  try {
+    const result = runHeal(fixture, { withFlock: true });
+    assert.equal(result.status, 0);
+    assert.equal(readLog(fixture, "asdf"), "install");
+  } finally {
+    chmodSync(fixture.gitDir, 0o755);
+    rmSync(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("checkout changing all three markers heals exactly once", () => {
+  const root = mkdtempSync(join(tmpdir(), "heal-hook-"));
+  const bin = join(root, "bin");
+  const log = join(root, "log");
+  mkdirSync(bin);
+  mkdirSync(log);
+  for (const tool of ["asdf", "pnpm", "uv", "npm", "corepack"]) {
+    writeFileSync(join(bin, tool), toolShim(tool, 0), { mode: 0o755 });
+  }
+  const hooks = join(root, ".config", "git", "hooks");
+  mkdirSync(hooks, { recursive: true });
+  for (const file of ["heal.sh", "post-checkout", "post-merge"]) {
+    copyFileSync(join(HOOKS, file), join(hooks, file));
+  }
+  const gitEnv = {
+    PATH: `${bin}:${process.env.PATH}`,
+    HOME: root,
+    SHIM_LOG: log,
+    GIT_AUTHOR_NAME: "test",
+    GIT_AUTHOR_EMAIL: "test@example.com",
+    GIT_COMMITTER_NAME: "test",
+    GIT_COMMITTER_EMAIL: "test@example.com",
+  };
+  const git = (...args) => spawnSync("git", args, { cwd: root, env: gitEnv });
+  const markers = [".tool-versions", "pnpm-lock.yaml", "uv.lock"];
+  try {
+    assert.equal(git("init", "-q").status, 0);
+    for (const marker of markers) {
+      writeFileSync(join(root, marker), "v1\n");
+    }
+    assert.equal(git("add", "-A").status, 0);
+    assert.equal(git("commit", "-q", "-m", "base").status, 0);
+    assert.equal(git("config", "core.hooksPath", ".config/git/hooks").status, 0);
+    for (const marker of markers) {
+      writeFileSync(join(root, marker), "v2\n");
+    }
+    assert.equal(git("add", "-A").status, 0);
+    assert.equal(git("commit", "-q", "-m", "change").status, 0);
+    const checkout = git("checkout", "-q", "HEAD~1");
+    assert.equal(checkout.status, 0, checkout.stderr?.toString() ?? "");
+    assert.equal(readLog({ log }, "asdf"), "install");
+  } finally {
+    rmSync(root, { recursive: true, force: true });
   }
 });
 

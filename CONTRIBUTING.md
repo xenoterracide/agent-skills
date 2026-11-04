@@ -28,6 +28,10 @@ sh .config/git/hooks/heal.sh
 With direnv, entering the repository runs `.envrc`, which calls the same
 healer.
 
+Existing clones that last pulled before the hooks moved to
+`.config/git/hooks` have a stale `core.hooksPath`: run
+`sh .config/git/hooks/heal.sh` once to repoint it.
+
 ## Making Changes
 
 1. Read `README.md` and `AGENTS.md` first.

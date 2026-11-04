@@ -24,17 +24,22 @@ if ! git diff --quiet "HEAD@{1}" HEAD -- uv.lock 2>/dev/null; then
   UV_LOCK_CHANGED=1
 fi
 
+# Heal once, naming every marker that changed.
+CHANGED=""
+
 if [ "$TOOL_VERSIONS_CHANGED" -eq 1 ]; then
-  echo ".tool-versions changed, healing toolchain..."
-  "$(dirname "$0")/heal.sh"
+  CHANGED=".tool-versions"
 fi
 
 if [ "$PNPM_LOCK_CHANGED" -eq 1 ]; then
-  echo "pnpm-lock.yaml changed, healing toolchain..."
-  "$(dirname "$0")/heal.sh"
+  CHANGED="$CHANGED pnpm-lock.yaml"
 fi
 
 if [ "$UV_LOCK_CHANGED" -eq 1 ]; then
-  echo "uv.lock changed, healing toolchain..."
+  CHANGED="$CHANGED uv.lock"
+fi
+
+if [ -n "$CHANGED" ]; then
+  echo "$CHANGED changed, healing toolchain..."
   "$(dirname "$0")/heal.sh"
 fi
