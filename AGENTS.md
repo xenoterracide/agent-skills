@@ -15,12 +15,11 @@ directory doubles as an OpenCode-compatible HTTP skill catalog.
 - **License for skills/docs**: CC-BY-NC-SA-4.0
 - **License for configuration files**: CC0-1.0
 
-> **Agent Note:** This repo **IS** the plugin source for
-> `xenoterracide-agent-skills`. It is **NOT** the Superpowers plugin and it is
-> **NOT** an installed plugin directory. Make all skill and plugin changes in
-> this repository, then reinstall from here. Never edit files under
-> `~/.kimi-code/`, `~/.kimi-plugin/`, `~/.config/opencode/`, or any other agent
-> installation directory.
+> **Agent Note:** This repo is the plugin source for
+> `xenoterracide-agent-skills` — not the Superpowers plugin, not an installed
+> plugin directory. Make all skill and plugin changes in this repository, then
+> reinstall. Never edit files under `~/.kimi-code/`, `~/.kimi-plugin/`,
+> `~/.config/opencode/`, or any other agent installation directory.
 
 ## Source of Truth
 
@@ -48,7 +47,7 @@ pnpm contribute
 ```
 
 With direnv, entering the repository runs `.envrc`, which installs pinned
-tools, dependencies, and the git hooks automatically.
+tools, dependencies, and the git hooks.
 
 ### Lint and Format
 
@@ -137,8 +136,8 @@ no runtime dependencies and must never throw into OpenCode. Behavior is covered
 by `scripts/opencode-plugin.test.mjs`.
 
 `.opencode/opencode.json` exposes `./skills` for contributors and deliberately
-does not load the plugin. The maintainer's global configuration loads the
-plugin; adding it to the repo config too would register the same plugin twice.
+does not load the plugin — the maintainer's global configuration already does;
+loading it twice would register every skill twice.
 
 ## Code Style
 
@@ -180,24 +179,9 @@ when creating new files:
 
 ## Skill Routing
 
-Load the relevant skill when the trigger applies:
-
-| Skill                              | Activate When                                                                                  |
-| ---------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `using-xenoterracide-agent-skills` | Starting work in a repo session, or unsure which skill to use                                  |
-| `version-managers`                 | Version/launcher tooling — asdf, corepack, direnv — or recovery when one breaks                |
-| `completion-checklist`             | About to claim work is complete, fixed, or passing                                             |
-| `git-workflow`                     | Creating/updating PRs, merge requests, committing, pushing, commit/PR messages, push rejection |
-| `coding-standards`                 | Writing or modifying code in any language                                                      |
-| `testing`                          | Adding, updating, debugging, or discussing tests                                               |
-| `iterative-development`            | Scoping or refining designs; the model feels wrong or too complex                              |
-| `use-case-creator`                 | Writing use cases or business behavior docs                                                    |
-| `github`                           | GitHub APIs, issues, GraphQL, review threads                                                   |
-| `java-creator`                     | Creating, modifying, or refactoring Java source files, Maven pom.xml, or JUnit tests           |
-| `gradle-creator`                   | Creating, modifying, or troubleshooting Gradle builds                                          |
-| `shell-script-creator`             | Creating, modifying, or debugging shell scripts and commands                                   |
-| `docs-creator`                     | Writing or revising `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, or `SKILL.md` files           |
-| `hemingway`                        | Writing prose or code that should be terse and clear                                           |
+Skill triggers live in each `skills/*/SKILL.md` `description`. Invoke the
+skill whose description matches the task — process skills before
+implementation skills.
 
 ## Maintenance
 
@@ -214,8 +198,7 @@ Load the relevant skill when the trigger applies:
   refreshes cached copies.
 - Run `pnpm test:opencode` when changing the plugin. The entrypoint is
   intentionally dependency-free so Git and local-directory installs work.
-- Keep `.opencode/opencode.json` limited to `./skills`; the plugin is loaded from
-  the user's global configuration, not from the repository config.
+- Keep `.opencode/opencode.json` limited to `./skills`.
 
 ## Security Considerations
 

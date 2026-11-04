@@ -91,7 +91,7 @@ Required fields:
   - Include "when to use" guidance here, not in the body
   - Prefer a multi-line description when the trigger needs examples or
     conditions
-  - Reuse the same trigger vocabulary that appears in `AGENTS.md`
+  - Use the words users naturally type for the task
 
 Optional fields:
 

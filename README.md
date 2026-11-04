@@ -124,7 +124,6 @@ Copy the `skills/` directory into your agent's skill discovery path:
 
 Skills live one level deep under `skills/`. Closely-related skills ship as a
 single skill that routes to `references/` files (`git-workflow`, `docs-creator`).
-See [`AGENTS.md`](AGENTS.md#skill-routing) for the full skill routing table.
 
 ## Development
 

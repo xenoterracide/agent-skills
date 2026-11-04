@@ -20,9 +20,9 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 ## Using the skills
 
-- The authoritative list of skills and their triggers is the **Skill Routing**
-  table in `AGENTS.md`. Invoke the skill whose trigger matches the task —
-  process skills before implementation skills.
+- Each skill's `description` is the authoritative trigger. Invoke the skill
+  whose description matches the task — process skills before implementation
+  skills.
 - Skills reference the Superpowers plugin's process-discipline skills (for
   example `verification-before-completion` and `requesting-code-review`);
   install Superpowers alongside this plugin for those to resolve.
