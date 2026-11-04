@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
+#
+# SPDX-License-Identifier: CC0-1.0
+
+# pnpm 12 reads its settings here, not from the "pnpm" field in package.json.
+# Both overrides clear advisories no parent range can reach yet:
+# - minimatch <11.0.1 (GHSA-g3hv-75wg-m249): parents pin ^10
+# - katex <0.18.2 (GHSA-238p-pmpm-9mq7): micromark-extension-math pins ^0.16.0
+overrides:
+  katex: ^0.18.2
+  minimatch: ^11.0.4
