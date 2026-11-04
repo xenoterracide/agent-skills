@@ -61,6 +61,11 @@
       "files": ["SKILL.md", "references/hibernate.md", "references/immutables.md"]
     },
     {
+      "name": "output-hygiene",
+      "version": "26.11.0",
+      "files": ["SKILL.md"]
+    },
+    {
       "name": "shell-script-creator",
       "version": "26.11.0",
       "files": ["SKILL.md"]
