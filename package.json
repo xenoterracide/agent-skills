@@ -28,7 +28,7 @@
     "vitest": "^5.0.5"
   },
   "scripts": {
-    "contribute": "pnpm setup:corepack && pnpm setup:pnpm && uv sync --frozen && git config core.hooksPath .config/git/hooks",
+    "contribute": "sh .config/git/hooks/heal.sh",
     "evals": "vitest run",
     "typecheck": "tsc --noEmit",
     "check": "pnpm typecheck && pnpm lint:eslint && pnpm skills:check && pnpm test",
@@ -37,8 +37,6 @@
     "lint:prettier": "prettier --ignore-unknown --cache --check '**'",
     "lint:reuse": "pnpm reuse lint",
     "reuse": "uv run --frozen --group dev reuse",
-    "setup:corepack": "npm install -g corepack && corepack enable --install-directory ~/.local/bin",
-    "setup:pnpm": "pnpm install --frozen-lockfile",
     "skills:catalog": "node scripts/generate-skill-catalog.mjs",
     "skills:check": "node scripts/generate-skill-catalog.mjs --check",
     "test": "node --test scripts/*.test.mjs",
