@@ -177,12 +177,6 @@ when creating new files:
 > Markdown skill files do **not** receive REUSE headers. Place the SPDX block
 > inside an HTML comment immediately after the YAML frontmatter.
 
-## Skill Routing
-
-Skill triggers live in each `skills/*/SKILL.md` `description`. Invoke the
-skill whose description matches the task — process skills before
-implementation skills.
-
 ## Maintenance
 
 - Update this file when you change workflows it describes.
