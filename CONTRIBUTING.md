@@ -11,17 +11,22 @@ document covers the workflow for human contributors.
 
 ## Getting Started
 
-Install dependencies and configure git hooks:
+Heal the toolchain and configure git hooks:
 
 ```bash
 pnpm contribute
 ```
 
-This installs corepack, installs Node dependencies, runs `uv sync --frozen`,
-and sets `core.hooksPath` to `.config/git/hooks`.
+This runs `.config/git/hooks/heal.sh`: `asdf install`, corepack bootstrap,
+`pnpm install --frozen-lockfile`, `uv sync --frozen`, and the
+`core.hooksPath` config. Without direnv or pnpm, run the healer directly:
 
-With direnv, entering the repository runs `.envrc`, which does all of this
-plus `asdf install`.
+```bash
+sh .config/git/hooks/heal.sh
+```
+
+With direnv, entering the repository runs `.envrc`, which calls the same
+healer.
 
 ## Making Changes
 

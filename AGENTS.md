@@ -36,6 +36,7 @@ directory doubles as an OpenCode-compatible HTTP skill catalog.
 | Python dependencies                  | `pyproject.toml`, `uv.lock`      |
 | Conventional commit types            | `git-conventional-commits.yaml`  |
 | Pre-commit rules (license + format)  | `.lintstagedrc.cjs`              |
+| Toolchain healing                    | `.config/git/hooks/heal.sh`      |
 | Renovate config                      | `.github/renovate.json5`         |
 
 ## Build and Test
@@ -46,8 +47,9 @@ Run setup once with:
 pnpm contribute
 ```
 
-With direnv, entering the repository runs `.envrc`, which installs pinned
-tools, dependencies, and the git hooks.
+`pnpm contribute`, direnv's `.envrc`, and the git hooks all heal through
+`.config/git/hooks/heal.sh`. Without direnv or pnpm, run it directly with
+`sh .config/git/hooks/heal.sh`.
 
 ### Lint and Format
 
@@ -101,24 +103,28 @@ for the reset.
 
 ### Git Hooks
 
-Hooks live in `.config/git/hooks`. `pnpm contribute` sets `core.hooksPath` to
-that directory automatically.
+Hooks live in `.config/git/hooks`, beside `heal.sh`, which owns toolchain
+healing: `asdf install`, corepack bootstrap, `pnpm install --frozen-lockfile`,
+`uv sync --frozen`, and the `core.hooksPath` config — each step gated on its
+marker file and a no-op when current. It always exits 0, and concurrent heals
+serialize on a `flock` (`HEAL_LOCK_WAIT` seconds, default 300, skips while
+another heal holds the lock).
 
 - **pre-commit**: Runs `lint-staged` — prettier, shfmt, license annotation,
   and shellcheck on changed files.
 - **commit-msg**: Validates conventional commit messages against
   `git-conventional-commits.yaml`.
-- **post-checkout / post-merge**: Syncs Node or Python dependencies when
-  lockfiles changed.
+- **post-checkout / post-merge**: Runs `heal.sh` when `.tool-versions`,
+  `pnpm-lock.yaml`, or `uv.lock` changed between revisions.
 
-All hooks exit early when the `CI` environment variable is set.
+All hooks and the healer exit early when the `CI` environment variable is
+set.
 
 ### Dependency Sync
 
-```bash
-pnpm install --frozen-lockfile
-uv sync --frozen
-```
+`heal.sh` runs `pnpm install --frozen-lockfile` and `uv sync --frozen` when
+their lockfiles change — from the hooks on checkout and merge, from `.envrc`
+on direnv entry.
 
 The repository uses pnpm. Its isolated `node_modules` keeps undeclared
 dependencies unresolvable while the typechecker reads the tree.
