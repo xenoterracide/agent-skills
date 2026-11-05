@@ -27,7 +27,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
     - Rename a workflow or change its interface only with matching updates to
       both documents.
   - Verify required GitHub checks before returning to the user.
-    - Use `gh pr checks --watch --required` or the MCP equivalent.
+    - Watch the checks redirected per `output-hygiene` — unique file, then tail — or use the MCP equivalent.
     - Fix failures before requesting review. Never return with failing checks.
 - **NEVER force push.** Force pushes (`--force` and `--force-with-lease`) are **blocked by repository rules** and will always fail. If a push is rejected, do not attempt force push — create a new commit instead.
 - Keep the branch synchronized with the base branch using a merge strategy.
@@ -75,7 +75,7 @@ When committing and creating/updating a PR, follow this workflow:
    - Ensure PR description accurately reflects all changes including doc updates
 
 6. **After pushing, before returning to the user:**
-   - Run `gh pr checks --watch --required` (or MCP equivalent) to verify all required checks pass
+   - Watch the checks redirected per `output-hygiene` — unique file, then tail — (or MCP equivalent) to verify all required checks pass
    - If any check fails, diagnose and remediate the issue before returning
    - Do not consider the task complete while required checks are failing
    - Always print the PR URL when returning so the user can easily review
@@ -86,8 +86,9 @@ When committing and creating/updating a PR, follow this workflow:
 Before creating or updating a PR:
 
 1. Run quality checks locally (tests, static analysis, formatting)
-2. Review your own diff — would you approve this if someone else wrote it?
-3. Check for obvious issues (debug prints, TODOs without tickets, unjustified suppressions)
+2. Apply `hemingway`'s rules to every piece of prose in the change
+3. Review your own diff — would you approve this if someone else wrote it?
+4. Check for obvious issues (debug prints, TODOs without tickets, unjustified suppressions)
 
 **Fix issues yourself before requesting human review.**
 

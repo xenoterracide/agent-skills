@@ -39,9 +39,9 @@ the reviewer subagent prompt used by `skill-reviewer.md`.
 
 ## Required Companion Skills
 
-Load these skills whenever this skill applies:
-
-- **`hemingway`** — for terse, concrete prose style
+Every piece of prose this skill writes or revises must pass `hemingway`'s
+rules. Apply them on each change. Do not submit prose that skipped the
+pass.
 
 ## Shared rules
 

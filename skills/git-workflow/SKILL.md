@@ -33,7 +33,11 @@ Read the reference that matches the task before starting:
 
 ## Required Companion Skills
 
-Load `hemingway` when writing or editing prose in these references.
+Load `output-hygiene` when running this workflow's commands — commits
+through hooks and checks watches both produce repetitive output.
+
+Apply `hemingway`'s rules before submitting prose: commit messages, PR
+titles and bodies, and reference edits must pass.
 
 ## Shared rules
 
@@ -56,5 +60,5 @@ These apply to every git workflow activity in this repository:
   syncing, and commit to the same branch for updates rather than creating new
   branches.
 - **Verify checks before returning.** Always confirm required GitHub checks
-  pass (`gh pr checks --watch --required` or an MCP equivalent) before ending
-  the task, and print the PR URL.
+  pass before ending the task, and print the PR URL. Run the watch
+  redirected per `output-hygiene` — unique file, then tail.

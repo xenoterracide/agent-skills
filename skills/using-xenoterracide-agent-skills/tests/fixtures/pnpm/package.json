@@ -1,0 +1,6 @@
+{
+  "name": "heal-fixture",
+  "packageManager": "pnpm@12.16.1",
+  "license": "MIT",
+  "devDependencies": {}
+}

@@ -135,6 +135,30 @@ describe("assertSkillBehavior forbids", () => {
   });
 });
 
+describe("assertSkillBehavior commands", () => {
+  it("passes when a required command appears", () => {
+    const run = (): string => '→ Skill "using-xenoterracide-agent-skills"\n$ pnpm install --reporter=silent';
+    expect(() => {
+      assertSkillBehavior("p", "using-xenoterracide-agent-skills", {
+        run,
+        iterations: 1,
+        commands: [/pnpm install .*--reporter=silent/],
+      });
+    }).not.toThrow();
+  });
+
+  it("fails when the required command is absent", () => {
+    const run = (): string => '→ Skill "using-xenoterracide-agent-skills"\n$ pnpm install';
+    expect(() => {
+      assertSkillBehavior("p", "using-xenoterracide-agent-skills", {
+        run,
+        iterations: 1,
+        commands: [/--reporter=silent/],
+      });
+    }).toThrow(/expected a command matching/);
+  });
+});
+
 describe("initSandboxRepo", () => {
   it("builds a committed repo whose origin is a reachable bare repo", () => {
     const dir = mkdtempSync(join(tmpdir(), "sandbox-repo-"));

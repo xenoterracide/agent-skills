@@ -5,4 +5,4 @@
 # SPDX-License-Identifier: MIT
 [ -n "$CI" ] && exit 0
 
-pnpm exec lint-staged
+pnpm exec lint-staged --quiet

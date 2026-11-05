@@ -2,17 +2,17 @@
   "skills": [
     {
       "name": "coding-standards",
-      "version": "26.11.0",
+      "version": "26.11.1",
       "files": ["SKILL.md"]
     },
     {
       "name": "completion-checklist",
-      "version": "26.11.0",
+      "version": "26.11.1",
       "files": ["SKILL.md"]
     },
     {
       "name": "docs-creator",
-      "version": "26.11.0",
+      "version": "26.11.1",
       "files": [
         "SKILL.md",
         "references/agents-creator.md",
@@ -27,7 +27,7 @@
     },
     {
       "name": "git-workflow",
-      "version": "26.11.0",
+      "version": "26.11.1",
       "files": [
         "SKILL.md",
         "references/commit-creator.md",
@@ -37,52 +37,57 @@
     },
     {
       "name": "github",
-      "version": "26.11.0",
+      "version": "26.11.1",
       "files": ["SKILL.md"]
     },
     {
       "name": "gradle-creator",
-      "version": "26.11.0",
+      "version": "26.11.1",
       "files": ["SKILL.md", "references/shadow.md"]
     },
     {
       "name": "hemingway",
-      "version": "26.11.0",
+      "version": "26.11.1",
       "files": ["SKILL.md", "references/code.md", "references/prose.md"]
     },
     {
       "name": "iterative-development",
-      "version": "26.11.0",
+      "version": "26.11.1",
       "files": ["SKILL.md"]
     },
     {
       "name": "java-creator",
-      "version": "26.11.0",
+      "version": "26.11.1",
       "files": ["SKILL.md", "references/hibernate.md", "references/immutables.md"]
     },
     {
+      "name": "output-hygiene",
+      "version": "26.11.1",
+      "files": ["SKILL.md"]
+    },
+    {
       "name": "shell-script-creator",
-      "version": "26.11.0",
+      "version": "26.11.1",
       "files": ["SKILL.md"]
     },
     {
       "name": "testing",
-      "version": "26.11.0",
+      "version": "26.11.1",
       "files": ["SKILL.md"]
     },
     {
       "name": "use-case-creator",
-      "version": "26.11.0",
+      "version": "26.11.1",
       "files": ["SKILL.md", "assets/uc-registration-example.adoc"]
     },
     {
       "name": "using-xenoterracide-agent-skills",
-      "version": "26.11.0",
+      "version": "26.11.1",
       "files": ["SKILL.md"]
     },
     {
       "name": "version-managers",
-      "version": "26.11.0",
+      "version": "26.11.1",
       "files": ["SKILL.md", "references/corepack-troubleshooting.md"]
     }
   ]
