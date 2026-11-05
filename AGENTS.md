@@ -183,6 +183,14 @@ when creating new files:
   intentionally dependency-free so Git and local-directory installs work.
 - Keep `.opencode/opencode.json` limited to `./skills`.
 
+## Worktrees
+
+Feature work happens in a git worktree, never directly on `develop`. Prefer
+the harness's native worktree tool; it places worktrees outside the repo. A
+project-local `.worktrees/` is the fallback location and is ignored by
+`.gitignore` — an unignored worktree directory commits the whole tree.
+Worktree branches appear in normal `git branch` output, marked `+`.
+
 ## Security Considerations
 
 - **CI detection**: Git hooks exit early when `CI` is set.
