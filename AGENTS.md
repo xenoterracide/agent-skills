@@ -47,9 +47,9 @@ Run setup once with:
 pnpm contribute
 ```
 
-`pnpm contribute`, direnv's `.envrc`, and the git hooks all heal through
-`.config/git/hooks/heal.sh`. Without direnv or pnpm, run it directly with
-`sh .config/git/hooks/heal.sh`.
+Everything — `pnpm contribute`, direnv's `.envrc`, and the hooks — heals
+through `.config/git/hooks/heal.sh`. Never sync dependencies or tool
+versions by hand; if the healer has not run, `sh .config/git/hooks/heal.sh`.
 
 ### Lint and Format
 
@@ -103,12 +103,9 @@ for the reset.
 
 ### Git Hooks
 
-Hooks live in `.config/git/hooks`, beside `heal.sh`, which owns toolchain
-healing: `asdf install`, corepack bootstrap, `pnpm install --frozen-lockfile`,
-`uv sync --frozen`, and the `core.hooksPath` config — each step gated on its
-marker file and a no-op when current. It always exits 0, and concurrent heals
-serialize on a `flock` (`HEAL_LOCK_WAIT` seconds, default 300, skips while
-another heal holds the lock).
+Hooks live in `.config/git/hooks`, beside `heal.sh`, the single toolchain
+healer. Read `heal.sh` for its steps, exit semantics, and the
+`HEAL_LOCK_WAIT` lock knob.
 
 - **pre-commit**: Runs `lint-staged` — prettier, shfmt, license annotation,
   and shellcheck on changed files.
@@ -120,11 +117,7 @@ another heal holds the lock).
 All hooks and the healer exit early when the `CI` environment variable is
 set.
 
-### Dependency Sync
-
-`heal.sh` runs `pnpm install --frozen-lockfile` and `uv sync --frozen` when
-their lockfiles change — from the hooks on checkout and merge, from `.envrc`
-on direnv entry.
+### Dependencies
 
 The repository uses pnpm. Its isolated `node_modules` keeps undeclared
 dependencies unresolvable while the typechecker reads the tree.
