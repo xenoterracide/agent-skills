@@ -40,7 +40,7 @@ the reviewer subagent prompt used by `skill-reviewer.md`.
 ## Required Companion Skills
 
 Every piece of prose this skill writes or revises must pass `hemingway`'s
-rules. Apply them on each change; do not submit prose that skipped the
+rules. Apply them on each change. Do not submit prose that skipped the
 pass.
 
 ## Shared rules

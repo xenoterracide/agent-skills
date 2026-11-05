@@ -42,7 +42,7 @@ See the `hemingway` skill for prose and code rules.
 
 ## Quiet command output
 
-Keep command output small; these flags keep failures visible and cut the
+Keep command output small. These flags keep failures visible and cut the
 rest. The `output-hygiene` skill carries the redirect patterns.
 
 - git: add `--quiet` to `fetch`, `pull`, `push`, `commit`, `merge`; use
