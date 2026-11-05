@@ -38,7 +38,9 @@ carries the full rule.
 
 ## Writing Style
 
-See the `hemingway` skill for prose and code rules.
+Every message you send your partner, and every file you write, follows the
+`hemingway` skill. Short. Concrete. No filler. Prose rules live in
+`references/prose.md`; code rules in `references/code.md`.
 
 ## Quiet command output
 
