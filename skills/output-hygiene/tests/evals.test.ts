@@ -17,3 +17,9 @@ it("triggers before watching checks", () => {
 it("triggers on a noisy commit hook", () => {
   assertSkillLoads("commit this — the pre-commit hook prints a wall of lint output", "output-hygiene");
 });
+
+// Companion case: git-workflow pulls output-hygiene in on its own tasks,
+// with no verbosity vocabulary in the prompt to trigger it directly.
+it("loads as a git-workflow companion on PR work", () => {
+  assertSkillLoads("open a PR for this branch and update its description", "output-hygiene");
+});

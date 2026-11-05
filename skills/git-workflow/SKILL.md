@@ -33,6 +33,11 @@ Read the reference that matches the task before starting:
 
 ## Required Companion Skills
 
+Load `output-hygiene` when running this workflow's commands — commits
+through hooks and checks watches both produce repetitive output.
+
+## Required Companion Skills
+
 Load `hemingway` when writing or editing prose in these references.
 
 ## Shared rules
@@ -57,5 +62,5 @@ These apply to every git workflow activity in this repository:
   branches.
 - **Verify checks before returning.** Always confirm required GitHub checks
   pass before ending the task, and print the PR URL. Run the watch
-  redirected — `log=$(mktemp /tmp/opencode/checks.XXXXXXXX); gh pr checks --watch --required >"$log" 2>&1; tail -15 "$log"` (or an MCP equivalent) —
-  so the refresh table never enters the context.
+  redirected per `output-hygiene` — unique file, then tail — so the
+  refresh table never enters the context.
