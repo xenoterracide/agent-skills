@@ -138,21 +138,27 @@ permanent commit history via squash merge.
 
 ### Creating a New PR
 
-Always provide explicit title and body. Do NOT use `--fill` as it may use the branch name instead of a proper conventional commit message:
+Always provide explicit title and body. Do NOT use `--fill` as it may use the branch name instead of a proper conventional commit message.
+
+Pass the body with `--body-file -` and a quoted heredoc. Never embed newlines in a `--body "…"` argument: `\n` inside double quotes stays literal, and the garbage lands verbatim in the PR and the squash commit.
 
 ```bash
 # Get the commit message for the title
 TITLE=$(git log -1 --format="%s" HEAD)
 
 # Create PR with proper title and body
-gh pr create --title "$TITLE" --body "- Bullet point describing change 1
-- Bullet point describing change 2"
+gh pr create --title "$TITLE" --body-file - <<'EOF'
+- Bullet point describing change 1
+- Bullet point describing change 2
+EOF
 ```
 
 ### Updating an Existing PR
 
 ```bash
-gh pr edit --title "$TITLE" --body "- Updated bullet points"
+gh pr edit --title "$TITLE" --body-file - <<'EOF'
+- Updated bullet points
+EOF
 ```
 
 ## Handling Review Comments

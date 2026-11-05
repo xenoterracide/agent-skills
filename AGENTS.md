@@ -36,6 +36,7 @@ directory doubles as an OpenCode-compatible HTTP skill catalog.
 | Python dependencies                  | `pyproject.toml`, `uv.lock`      |
 | Conventional commit types            | `git-conventional-commits.yaml`  |
 | Pre-commit rules (license + format)  | `.lintstagedrc.cjs`              |
+| Toolchain healing                    | `.config/git/hooks/heal.sh`      |
 | Renovate config                      | `.github/renovate.json5`         |
 
 ## Build and Test
@@ -62,7 +63,7 @@ pnpm exec prettier --write <file> # Format a single file
 
 ```bash
 pnpm check                        # typecheck + eslint + catalog + tests
-pnpm test                         # Plugin tests
+pnpm test                         # Plugin tests (node) + unit tests (vitest)
 pnpm test:opencode                # Plugin tests only
 node --test scripts/*.test.mjs    # Same tests without pnpm
 pnpm typecheck                    # tsc --noEmit
@@ -78,7 +79,7 @@ three runs. Cases may also assert reference reads or forbid commands via
 `assertSkillBehavior`.
 
 ```bash
-pnpm evals                        # helper unit tests + every skill case
+pnpm evals                        # unit tests + every skill case
 pnpm evals skills/java-creator    # one skill
 ```
 
@@ -101,24 +102,18 @@ for the reset.
 
 ### Git Hooks
 
-Hooks live in `.share/git/hooks`. `pnpm contribute` sets `core.hooksPath` to
-that directory automatically.
+Hooks live in `.config/git/hooks`.
 
 - **pre-commit**: Runs `lint-staged` — prettier, shfmt, license annotation,
   and shellcheck on changed files.
 - **commit-msg**: Validates conventional commit messages against
   `git-conventional-commits.yaml`.
-- **post-checkout / post-merge**: Syncs Node or Python dependencies when
-  lockfiles changed.
+- **post-checkout / post-merge**: Run `heal.sh` when pins or lockfiles
+  changed between revisions.
 
 All hooks exit early when the `CI` environment variable is set.
 
-### Dependency Sync
-
-```bash
-pnpm install --frozen-lockfile
-uv sync --frozen
-```
+### Dependencies
 
 The repository uses pnpm. Its isolated `node_modules` keeps undeclared
 dependencies unresolvable while the typechecker reads the tree.
