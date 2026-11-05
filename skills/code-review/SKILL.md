@@ -16,7 +16,8 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 # Code Review
 
-Review completed work and report findings with evidence.
+Review completed work and report findings with evidence. Never spawn
+sub-reviewers; the review seat is this skill, not another reviewer.
 
 ## Required Companion Skills
 
@@ -29,14 +30,12 @@ Load these skills whenever this skill applies:
 
 Before reviewing, map the diff's domains to the skill catalog and load every
 match: `testing`, `docs-creator`, `version-managers`, `java-creator`,
-`gradle-creator`, `shell-script-creator`, `github`. A review that skips this
+`gradle-creator`, `shell-script-creator`. A review that skips this
 judges without the standards it is judging against.
 
 ## Dispatched With a Prescribed Prompt
 
-Follow the prompt. It owns the method and the output format. Never spawn
-sub-reviewers: the dispatch already provides every review seat the work
-gets, and a reviewer you spawn duplicates one at full cost.
+Follow the prompt. It owns the method and the output format.
 
 ## Direct Request
 

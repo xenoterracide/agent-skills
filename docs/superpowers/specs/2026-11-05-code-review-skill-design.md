@@ -60,11 +60,11 @@ diff's domains to `testing`, `docs-creator`, or `version-managers`
   > dispatched as a reviewer subagent or asked directly — before writing the
   > review.
 
-- Body, two paths:
+- Body, two paths, with a shared opening line — never spawn sub-reviewers:
   - **Dispatched with a prescribed prompt:** follow it. Before reviewing, map
     the diff's domains to the catalog and load matches: `testing`,
     `docs-creator`, `version-managers`, `java-creator`, `gradle-creator`,
-    `shell-script-creator`, `github`. Never spawn sub-reviewers.
+    `shell-script-creator`.
   - **Direct request:** read the binding spec or plan first. Review the full
     commit range. Verify read-only: tests in a temp worktree, CI evidence.
     Calibrate severity: Critical, Important, Minor. Every finding cites
