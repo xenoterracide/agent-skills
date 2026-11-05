@@ -86,8 +86,9 @@ When committing and creating/updating a PR, follow this workflow:
 Before creating or updating a PR:
 
 1. Run quality checks locally (tests, static analysis, formatting)
-2. Review your own diff — would you approve this if someone else wrote it?
-3. Check for obvious issues (debug prints, TODOs without tickets, unjustified suppressions)
+2. Re-load `hemingway` and tighten every piece of prose in the change
+3. Review your own diff — would you approve this if someone else wrote it?
+4. Check for obvious issues (debug prints, TODOs without tickets, unjustified suppressions)
 
 **Fix issues yourself before requesting human review.**
 

@@ -40,6 +40,19 @@ carries the full rule.
 
 See the `hemingway` skill for prose and code rules.
 
+## Quiet command output
+
+Keep command output small; these flags keep failures visible and cut the
+rest. The `output-hygiene` skill carries the redirect patterns.
+
+- git: add `--quiet` to `fetch`, `pull`, `push`, `commit`, `merge`; use
+  `status --porcelain`; set `NO_COLOR=1` for captured output
+- pnpm: `--reporter=silent` (npm and yarn: `--silent`)
+- uv: `--quiet`
+- Maven: `-q` and `--no-transfer-progress`
+- Gradle: `-q` and `--console=plain`
+- gh: no quiet mode — redirect per `output-hygiene`
+
 ## Read Project Documentation First
 
 Before any investigation or code changes, read the project's canonical

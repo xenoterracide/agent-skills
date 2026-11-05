@@ -36,7 +36,8 @@ Read the reference that matches the task before starting:
 Load `output-hygiene` when running this workflow's commands — commits
 through hooks and checks watches both produce repetitive output.
 
-Load `hemingway` when writing or editing prose in these references.
+Re-load `hemingway` and enforce it before submitting prose: commit
+messages, PR titles and bodies, and reference edits must pass its rules.
 
 ## Shared rules
 
