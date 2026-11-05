@@ -47,9 +47,8 @@ Run setup once with:
 pnpm contribute
 ```
 
-Everything — `pnpm contribute`, direnv's `.envrc`, and the hooks — heals
-through `.config/git/hooks/heal.sh`. Never sync dependencies or tool
-versions by hand; if the healer has not run, `sh .config/git/hooks/heal.sh`.
+With direnv, entering the repository runs `.envrc`, which installs pinned
+tools, dependencies, and the git hooks.
 
 ### Lint and Format
 
@@ -103,19 +102,16 @@ for the reset.
 
 ### Git Hooks
 
-Hooks live in `.config/git/hooks`, beside `heal.sh`, the single toolchain
-healer. Read `heal.sh` for its steps, exit semantics, and the
-`HEAL_LOCK_WAIT` lock knob.
+Hooks live in `.config/git/hooks`.
 
 - **pre-commit**: Runs `lint-staged` — prettier, shfmt, license annotation,
   and shellcheck on changed files.
 - **commit-msg**: Validates conventional commit messages against
   `git-conventional-commits.yaml`.
-- **post-checkout / post-merge**: Runs `heal.sh` when `.tool-versions`,
-  `pnpm-lock.yaml`, or `uv.lock` changed between revisions.
+- **post-checkout / post-merge**: Run `heal.sh` when pins or lockfiles
+  changed between revisions.
 
-All hooks and the healer exit early when the `CI` environment variable is
-set.
+All hooks exit early when the `CI` environment variable is set.
 
 ### Dependencies
 
