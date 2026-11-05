@@ -182,6 +182,7 @@ function pathMatches(reads: string[], pattern: string | RegExp): boolean {
 export interface BehaviorOptions extends AssertOptions {
   reads?: (string | RegExp)[];
   forbids?: (string | RegExp)[];
+  commands?: (string | RegExp)[];
 }
 
 export function assertSkillBehavior(
@@ -195,6 +196,7 @@ export function assertSkillBehavior(
     first = false,
     reads = [],
     forbids = [],
+    commands: commandPatterns = [],
     repo,
   }: BehaviorOptions = {},
 ): void {
@@ -221,6 +223,10 @@ export function assertSkillBehavior(
     for (const pattern of forbids) {
       const hit = typeof pattern === "string" ? commands.includes(pattern) : pattern.test(commands);
       assert.ok(!hit, `${label}: forbidden ${String(pattern)} appeared in a command line\n${transcript(output)}`);
+    }
+    for (const pattern of commandPatterns) {
+      const hit = typeof pattern === "string" ? commands.includes(pattern) : pattern.test(commands);
+      assert.ok(hit, `${label}: expected a command matching ${String(pattern)}, got:\n${commands}`);
     }
   }
 }
