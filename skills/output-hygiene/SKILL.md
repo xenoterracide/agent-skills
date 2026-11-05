@@ -46,5 +46,7 @@ re-sends it. One verbose command can cost more than the work around it.
 4. Write to the harness's temp directory — `/tmp/opencode` on OpenCode,
    `/tmp` elsewhere — one unique file per run. Fixed names collide across
    concurrent sessions; `mktemp` never does.
-5. Redirect, never silence. Quiet flags and hidden output lose the failure
-   that explains the exit code.
+5. Prefer a tool's quiet knob where it keeps error output — `--quiet`,
+   `--silent`, `--log-level silent`, `--console plain` — and strip color
+   from captured output with `NO_COLOR=1`. Never a flag that hides
+   warnings or failures; eslint's `--quiet` means "errors only."

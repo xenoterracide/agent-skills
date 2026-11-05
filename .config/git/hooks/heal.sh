@@ -41,11 +41,11 @@ if [ -f package.json ]; then
 fi
 
 if [ -f pnpm-lock.yaml ]; then
-  pnpm install --frozen-lockfile || echo "heal: pnpm install failed" >&2
+  pnpm install --frozen-lockfile --reporter=silent || echo "heal: pnpm install failed" >&2
 fi
 
 if [ -f uv.lock ]; then
-  uv sync --frozen || echo "heal: uv sync failed" >&2
+  uv sync --frozen --quiet || echo "heal: uv sync failed" >&2
 fi
 
 git config core.hooksPath .config/git/hooks || echo "heal: hooksPath config failed" >&2

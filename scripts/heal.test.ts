@@ -148,7 +148,7 @@ describe("heal.sh", () => {
       try {
         const result = runHeal(fixture);
         expect(result.status).toBe(0);
-        expect(readLog(fixture, "pnpm")).toBe("install --frozen-lockfile");
+        expect(readLog(fixture, "pnpm")).toBe("install --frozen-lockfile --reporter=silent");
         expect(readLog(fixture, "uv")).toBeUndefined();
       } finally {
         rmSync(fixture.root, { recursive: true, force: true });
@@ -160,7 +160,7 @@ describe("heal.sh", () => {
       try {
         const result = runHeal(fixture);
         expect(result.status).toBe(0);
-        expect(readLog(fixture, "uv")).toBe("sync --frozen");
+        expect(readLog(fixture, "uv")).toBe("sync --frozen --quiet");
         expect(readLog(fixture, "pnpm")).toBeUndefined();
       } finally {
         rmSync(fixture.root, { recursive: true, force: true });
@@ -178,7 +178,7 @@ describe("heal.sh", () => {
         const result = runHeal(fixture);
         expect(result.status).toBe(0);
         expect(result.stderr.toString()).toMatch(/asdf/);
-        expect(readLog(fixture, "pnpm")).toBe("install --frozen-lockfile");
+        expect(readLog(fixture, "pnpm")).toBe("install --frozen-lockfile --reporter=silent");
       } finally {
         rmSync(fixture.root, { recursive: true, force: true });
       }
@@ -190,7 +190,7 @@ describe("heal.sh", () => {
         const result = runHeal(fixture);
         expect(result.status).toBe(0);
         expect(result.stderr.toString()).toMatch(/pnpm/);
-        expect(readLog(fixture, "uv")).toBe("sync --frozen");
+        expect(readLog(fixture, "uv")).toBe("sync --frozen --quiet");
         expect(readLog(fixture, "git")).toBe(HOOKS_PATH);
       } finally {
         rmSync(fixture.root, { recursive: true, force: true });
@@ -268,7 +268,7 @@ describe("heal.sh", () => {
         const result = runHeal(fixture, { cwd: docs });
         expect(result.status).toBe(0);
         expect(readLog(fixture, "asdf")).toBe("install");
-        expect(readLog(fixture, "pnpm")).toBe("install --frozen-lockfile");
+        expect(readLog(fixture, "pnpm")).toBe("install --frozen-lockfile --reporter=silent");
       } finally {
         rmSync(fixture.root, { recursive: true, force: true });
       }
