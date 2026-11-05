@@ -14,3 +14,22 @@ it("loads and attempts no merge on a merge request", () => {
     forbids: [/gh pr merge/, /merge_pull_request/, /mergePullRequest/, /pulls\/\d+\/merge/],
   });
 });
+
+// The gate: a PR body rides a --body-file heredoc. Inside double quotes the
+// shell keeps \n literal (java-commons #649), and a raw newline splits the
+// command. The sandbox repo's origin is example.invalid, so the push inside
+// gh pr create fails and nothing real is touched; if the agent composes the
+// command at all, forbids fails the test on the construction.
+it("opens a PR with the body in a heredoc, not an inline --body", () => {
+  assertSkillBehavior(
+    "the current branch is pushed; open a pull request titled 'fix: login timeout' with this description:\n" +
+      "- fix the login timeout\n" +
+      "- add tests",
+    "git-workflow",
+    {
+      repo: true,
+      reads: [/pull-request\.md/],
+      forbids: [/--body(?:\s+|=)"[^"]*$/, /--body(?:\s+|=)"[^"\\]*\\n/],
+    },
+  );
+});
