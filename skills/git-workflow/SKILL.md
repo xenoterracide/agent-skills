@@ -61,5 +61,4 @@ These apply to every git workflow activity in this repository:
   branches.
 - **Verify checks before returning.** Always confirm required GitHub checks
   pass before ending the task, and print the PR URL. Run the watch
-  redirected per `output-hygiene` — unique file, then tail — so the
-  refresh table never enters the context.
+  redirected per `output-hygiene` — unique file, then tail.

@@ -27,7 +27,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
     - Rename a workflow or change its interface only with matching updates to
       both documents.
   - Verify required GitHub checks before returning to the user.
-    - Watch the checks redirected per `output-hygiene` — unique file, then tail — or use the MCP equivalent; the refresh table stays out of the context.
+    - Watch the checks redirected per `output-hygiene` — unique file, then tail — or use the MCP equivalent.
     - Fix failures before requesting review. Never return with failing checks.
 - **NEVER force push.** Force pushes (`--force` and `--force-with-lease`) are **blocked by repository rules** and will always fail. If a push is rejected, do not attempt force push — create a new commit instead.
 - Keep the branch synchronized with the base branch using a merge strategy.
