@@ -33,7 +33,7 @@ module.exports = {
   "!(package).json": run([`${reuse} ${copyright} ${symbol} ${licenseConfiguration}`, prettier]),
   // package.json can contain logic via the scripts segment
   "package.json": run([`${reuse} ${copyright} ${symbol} ${licenseScripts}`, prettier]),
-  "{.share/git/hooks/**,**/*.*sh,.envrc}": run([
+  "{.config/git/hooks/**,**/*.*sh,.envrc}": run([
     `${reuse} ${copyright} ${symbol} ${licenseScripts} --style python`,
     shfmt,
     "shellcheck",

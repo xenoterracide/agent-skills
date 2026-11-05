@@ -10,7 +10,7 @@ const SESSION_TIMEOUT = 360_000;
 
 export default defineConfig({
   test: {
-    include: ["scripts/eval-helpers.test.ts", "skills/*/tests/evals.test.ts"],
+    include: ["scripts/*.test.ts", "skills/*/tests/evals.test.ts"],
     bail: 1,
     fileParallelism: false,
     testTimeout: ITERATIONS * SESSION_TIMEOUT + 600_000,
