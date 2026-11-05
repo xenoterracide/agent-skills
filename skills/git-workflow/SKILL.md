@@ -36,8 +36,6 @@ Read the reference that matches the task before starting:
 Load `output-hygiene` when running this workflow's commands — commits
 through hooks and checks watches both produce repetitive output.
 
-## Required Companion Skills
-
 Load `hemingway` when writing or editing prose in these references.
 
 ## Shared rules

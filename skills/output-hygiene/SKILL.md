@@ -27,7 +27,7 @@ re-sends it. One verbose command can cost more than the work around it.
 2. Commits print hook output only on failure:
 
    ```bash
-   log=$(mktemp /tmp/opencode/commit.XXXXXXXX)
+   log=$(mktemp /tmp/opencode/commit.XXXXXXXX 2>/dev/null || mktemp)
    git commit -m "..." >"$log" 2>&1 ||
      { tail -40 "$log"; exit 1; }
    git log --oneline -1
@@ -36,9 +36,11 @@ re-sends it. One verbose command can cost more than the work around it.
 3. Watch and poll commands run to completion redirected, then tail:
 
    ```bash
-   log=$(mktemp /tmp/opencode/checks.XXXXXXXX)
+   log=$(mktemp /tmp/opencode/checks.XXXXXXXX 2>/dev/null || mktemp)
    gh pr checks --watch --required >"$log" 2>&1
+   ec=$?
    tail -15 "$log"
+   exit $ec
    ```
 
 4. Write to the harness's temp directory — `/tmp/opencode` on OpenCode,
