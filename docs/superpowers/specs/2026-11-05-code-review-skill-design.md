@@ -26,6 +26,8 @@ diff's domains to `testing`, `docs-creator`, or `version-managers`
 6. Evals assert auto-load for both trigger shapes, and the companion load.
 7. The bootstrap tells every session that messages to the partner follow
    hemingway.
+8. The bootstrap stops plan-approval and execution-method prompts: pick the
+   method, state it, proceed.
 
 ## Non-goals
 
@@ -81,6 +83,12 @@ diff's domains to `testing`, `docs-creator`, or `version-managers`
   Style section — state that every message to your partner follows hemingway.
   The rule's home stays `references/prose.md`; the bootstrap points to it.
   Hemingway's description is unchanged.
+- Bootstrap, second edit — a `Plans and Execution` section: do not ask the
+  partner to approve a plan or choose an execution method. Pick `native` for
+  small plans whose tasks share no interfaces; pick `subagent-driven` when
+  tasks are many or share interfaces. State the pick and why in one line.
+  Merges, pushes to shared branches, publishes, and destructive or
+  security-sensitive actions still stop and ask.
 - Registration: `pnpm skills:catalog` writes `skills/index.json`.
   `plugin.json` points at `./skills/`; no per-skill entry. Bump
   `.kimi-plugin/plugin.json` and `package.json` so cached catalogs refresh.

@@ -99,15 +99,24 @@ git add skills/code-review .kimi-plugin/plugin.json package.json skills/index.js
 git commit -m "feat: add code-review skill"
 ```
 
-### Task 2: bootstrap Writing Style
+### Task 2: bootstrap edits
 
 **Files:**
 
-- Modify: `skills/using-xenoterracide-agent-skills/SKILL.md` (Writing Style section)
+- Modify: `skills/using-xenoterracide-agent-skills/SKILL.md` (Writing Style section; new Plans and Execution section)
 
 **Interfaces:** none.
 
-- [ ] **Step 1: Extend the Writing Style rule to messages**
+- [ ] **Step 1: Commit the spec and plan amendments**
+
+The partner's mid-flight directive (plan-approval and execution-method prompts) is already edited into the spec and this plan. Commit them.
+
+```bash
+git add docs/superpowers/
+git commit -m "docs: amend code-review design for bootstrap prompts"
+```
+
+- [ ] **Step 2: Extend the Writing Style rule to messages**
 
 Replace:
 
@@ -123,19 +132,86 @@ Every message you send your partner, and every file you write, follows the
 `references/prose.md`; code rules in `references/code.md`.
 ```
 
-- [ ] **Step 2: Catalog sync**
-
-Run: `pnpm skills:check`
-Expected: pass. If it fails: `pnpm skills:catalog`.
-
-- [ ] **Step 3: Bootstrap evals still pass**
-
-Run: `pnpm evals skills/using-xenoterracide-agent-skills`
-Expected: PASS 3/3 — triggers unchanged.
-
-- [ ] **Step 4: Commit**
+- [ ] **Step 3: Commit**
 
 ```bash
 git add skills/using-xenoterracide-agent-skills/SKILL.md
 git commit -m "docs: apply hemingway to agent messages"
 ```
+
+- [ ] **Step 4: Add a Plans and Execution section**
+
+Insert after the `## Merging` section:
+
+```markdown
+## Plans and Execution
+
+Do not ask your partner to approve a plan or choose an execution method.
+State the plan, pick the method, proceed. Pick `native` for small plans
+whose tasks share no interfaces; pick `subagent-driven` when tasks are many
+or share interfaces. Say the pick and why in one line. Merges, pushes to
+shared branches, publishes, and destructive or security-sensitive actions
+still stop and ask.
+```
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add skills/using-xenoterracide-agent-skills/SKILL.md
+git commit -m "docs: proceed without plan-approval prompts"
+```
+
+- [ ] **Step 6: Catalog sync**
+
+Run: `pnpm skills:check`
+Expected: pass. If it fails: `pnpm skills:catalog`.
+
+- [ ] **Step 7: Bootstrap evals still pass (deferred — workspace model limit)**
+
+Run: `pnpm evals skills/using-xenoterracide-agent-skills`
+Expected: PASS 3/3 — triggers unchanged. Runs with Task 1's GREEN once the
+limit resets; see Deferred verification below.
+
+### Task 3: AGENTS.md worktree policy
+
+**Files:**
+
+- Modify: `AGENTS.md` (new Worktrees section)
+- Modify: `.gitignore` (add `.worktrees/`)
+
+**Interfaces:** none. Partner directive, outside the spec's scope; rides this branch.
+
+- [ ] **Step 1: Add the Worktrees section to `AGENTS.md`**
+
+Insert before `## Security Considerations`:
+
+```markdown
+## Worktrees
+
+Feature work happens in a git worktree, never directly on `develop`. Prefer
+the harness's native worktree tool; it places worktrees outside the repo. A
+project-local `.worktrees/` is the fallback location and is ignored by
+`.gitignore` — an unignored worktree directory commits the whole tree.
+Worktree branches appear in normal `git branch` output, marked `+`.
+```
+
+- [ ] **Step 2: Ignore `.worktrees/` in the committed `.gitignore`**
+
+Add a `.worktrees/` line. It is currently covered only by the main
+checkout's local `.git/info/exclude`, which fresh clones and worktrees do
+not share.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add AGENTS.md .gitignore
+git commit -m "docs: require git worktrees for feature work"
+```
+
+## Deferred verification
+
+The workspace-level model limit paused all eval runs (ledger, attempt 5).
+Task 1's GREEN (step 6) and Task 2's eval check (step 7) run together once
+the limit resets: `pnpm evals skills/code-review` then `pnpm evals
+skills/using-xenoterracide-agent-skills`, both 3/3. No completion line is
+written for either task until its suite passes.
