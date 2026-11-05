@@ -36,6 +36,15 @@ instruction from before the human read the PR is not confirmation. Syncing a
 topic branch with its base is safe routine sync. The `git-workflow` skill
 carries the full rule.
 
+## Plans and Execution
+
+Do not ask your partner to approve a plan or choose an execution method.
+State the plan, pick the method, proceed. Pick `native` for small plans
+whose tasks share no interfaces; pick `subagent-driven` when tasks are many
+or share interfaces. Say the pick and why in one line. Merges, pushes to
+shared branches, publishes, and destructive or security-sensitive actions
+still stop and ask.
+
 ## Writing Style
 
 Every message you send your partner, and every file you write, follows the
