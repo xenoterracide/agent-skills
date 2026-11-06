@@ -48,7 +48,7 @@ const makeStub = (queue: string[]): Stub => {
 
 const runScript = (stub: Stub, args: string[]): Run => {
   const result: SpawnSyncReturns<Buffer> = spawnSync(SCRIPT, args, {
-    env: { ...process.env, PATH: `${stub.bin}:${process.env.PATH}`, GHW_STATE: stub.state },
+    env: { ...process.env, PATH: `${stub.bin}:${process.env.PATH ?? ""}`, GHW_STATE: stub.state },
   });
   return {
     status: result.status,
@@ -113,11 +113,10 @@ describe("gh-pr-wait.sh", () => {
     withStub(["0|\t"], ["--interval", "0"], ({ status, stdout }, stub) => {
       expect(status).toBe(0);
       expect(stdout).toBe("pass\n");
-      const line = recordedArgv(stub).at(-1);
-      expect(line).toBeTypeOf("string");
-      expect(line!.startsWith("pr checks --json name,bucket")).toBe(true);
-      expect(line!.includes("--interval")).toBe(false);
-      expect(line!.includes("--timeout")).toBe(false);
+      const line = recordedArgv(stub).at(-1) ?? "";
+      expect(line.startsWith("pr checks --json name,bucket")).toBe(true);
+      expect(line.includes("--interval")).toBe(false);
+      expect(line.includes("--timeout")).toBe(false);
     });
   });
 
