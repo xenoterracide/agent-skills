@@ -60,6 +60,9 @@ pnpm exec prettier --write <file>
 
 ## Testing
 
+Tests are TypeScript — `*.test.ts` under `vitest`. Reserve `*.mjs` for
+files `node` executes directly, like `scripts/generate-skill-catalog.mjs`.
+
 ```bash
 pnpm check        # typecheck + eslint + catalog + tests
 pnpm test         # plugin (node) and unit (vitest) tests

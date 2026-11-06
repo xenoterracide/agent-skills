@@ -68,7 +68,7 @@
     {
       "name": "output-hygiene",
       "version": "26.11.4",
-      "files": ["SKILL.md"]
+      "files": ["SKILL.md", "scripts/gh-pr-wait.sh"]
     },
     {
       "name": "shell-script-creator",

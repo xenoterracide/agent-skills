@@ -33,14 +33,23 @@ re-sends it. One verbose command can cost more than the work around it.
    git log --oneline -1
    ```
 
-3. Watch and poll commands run to completion redirected, then tail:
+3. Watch and poll commands run as background shells; the completion
+   notification is the wake-up. Redirect to a file and tail inside the
+   call, so the notification carries only the tail:
 
    ```bash
    log=$(mktemp /tmp/opencode/checks.XXXXXXXX 2>/dev/null || mktemp)
-   gh pr checks --watch --required >"$log" 2>&1
-   ec=$?
-   tail -15 "$log"
-   exit $ec
+   slow-watch-command >"$log" 2>&1; ec=$?
+   tail -15 "$log"; exit $ec
+   ```
+
+   For `gh pr checks`, skip `--watch` and its table. Run this skill's
+   `scripts/gh-pr-wait.sh` (relative to its base directory) in a
+   background shell instead — one line of output, fail-fast, bounded at
+   30 minutes:
+
+   ```bash
+   "<base directory>/scripts/gh-pr-wait.sh" --required
    ```
 
 4. Use `mktemp` for every file. Fixed names collide across sessions.
