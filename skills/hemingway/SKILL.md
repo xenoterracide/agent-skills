@@ -1,10 +1,11 @@
 ---
 name: hemingway
 description: |
-  Use when writing or editing prose that should be terse and clear — docs, skill
-  references, checklist bullets, comments, Javadoc, or AsciiDoc — or when naming
-  and structuring code. Read the prose facet for writing, the code facet for
-  code.
+  Use whenever writing or editing prose of any kind: docs, README, AGENTS.md,
+  CONTRIBUTING.md, changelogs, release notes, commit messages, PR titles and
+  bodies, review replies, comments, Javadoc, skill references, checklists,
+  AsciiDoc. Also when tightening existing prose, and when naming or structuring
+  code. Read the prose facet for writing, the code facet for code.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing

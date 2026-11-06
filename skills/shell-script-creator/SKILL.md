@@ -28,6 +28,7 @@ Load these skills whenever this skill applies:
 - **`coding-standards`** — before writing or modifying code
 - **`completion-checklist`** — before claiming the change is done, complete,
   fixed, or working
+- **`hemingway`** — for terse comments and messages
 
 ## When to Use This Skill
 
