@@ -134,4 +134,18 @@ describe("gh-pr-wait.sh", () => {
       expect(stdout).toBe("fail: build, lint\n");
     });
   });
+
+  it("exits 64 with usage on a non-numeric interval", () => {
+    withStub(["0|\t"], ["--interval", "abc"], ({ status, stderr }) => {
+      expect(status).toBe(64);
+      expect(stderr).toMatch(/^usage:/);
+    });
+  });
+
+  it("exits 64 with usage on a missing timeout value", () => {
+    withStub(["0|\t"], ["--timeout"], ({ status, stderr }) => {
+      expect(status).toBe(64);
+      expect(stderr).toMatch(/^usage:/);
+    });
+  });
 });
