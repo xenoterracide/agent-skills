@@ -53,6 +53,17 @@ it("triggers on an error-message rewrite with no style vocabulary", () => {
   );
 });
 
+it("triggers on a design spec with no style vocabulary", () => {
+  assertSkillBehavior("write the design spec for retrying failed uploads", "hemingway", {
+    reads: ["references/prose.md"],
+  });
+});
+
+// Chat replies cannot be router-tested here: the sandbox runs without the
+// plugin bootstrap, and an explain-flavored prompt classifies as
+// investigation, not prose — verified 2026-11-06, one failure in one run.
+// Chat coverage comes from the bootstrap's read-once instruction instead.
+
 // Same prompt as docs-creator's own case on purpose: this asserts the
 // companion rule — docs-creator pulls hemingway in — not hemingway's trigger.
 it("loads as a docs-creator companion on a skill reference", () => {
