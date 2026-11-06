@@ -60,7 +60,7 @@ rest. The `output-hygiene` skill carries the redirect patterns.
   `status --porcelain`; set `NO_COLOR=1` for captured output
 - pnpm: `--reporter=silent` (npm and yarn: `--silent`)
 - uv: `--quiet`
-- Maven: `-q` and `--no-transfer-progress`
+- Maven: `-B -q --no-transfer-progress`
 - Gradle: `-q` and `--console=plain`
 - gh: no quiet mode — redirect per `output-hygiene`
 
