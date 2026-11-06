@@ -11,8 +11,8 @@ place.
 
 ## The rules
 
-1. **Short sentences.** One idea per sentence. Split anything joined by "and",
-   "but", or a semicolon.
+1. **Short sentences.** One idea per sentence. Split clauses joined by "and",
+   "but", or a semicolon. Keep the "and" in a list.
 2. **Concrete words.** Use short, plain words. "Use", not "utilize". "Run",
    not "execute".
 3. **Facts over explanations.** A fact explains itself. Show the specific

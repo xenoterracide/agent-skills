@@ -18,6 +18,12 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 Creates business-readable use cases that serve both human stakeholders and AI implementation.
 
+## Required Companion Skills
+
+Load these skills whenever this skill applies:
+
+- **`hemingway`** — every step and scenario is prose; apply its prose facet
+
 ## Output Format
 
 Always create AsciiDoc (`.adoc`) files in `docs/use-cases/`.
