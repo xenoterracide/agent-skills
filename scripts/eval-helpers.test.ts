@@ -102,6 +102,30 @@ describe("assertSkillBehavior", () => {
       assertSkillBehavior("p", "java-creator", { run: runNoSkill, iterations: 1, reads: ["hibernate.md"] });
     }).toThrow(/did not load/);
   });
+
+  it("passes without a load event when loadEvent is false", () => {
+    const runNoSkill = (): string => "→ Read skills/hemingway/references/prose.md";
+    expect(() => {
+      assertSkillBehavior("p", "hemingway", {
+        run: runNoSkill,
+        iterations: 1,
+        loadEvent: false,
+        reads: ["prose.md"],
+      });
+    }).not.toThrow();
+  });
+
+  it("still requires the reads when loadEvent is false", () => {
+    const runNothing = (): string => "→ Read skills/hemingway/SKILL.md";
+    expect(() => {
+      assertSkillBehavior("p", "hemingway", {
+        run: runNothing,
+        iterations: 1,
+        loadEvent: false,
+        reads: ["prose.md"],
+      });
+    }).toThrow(/expected a Read matching/);
+  });
 });
 
 describe("assertSkillBehavior forbids", () => {

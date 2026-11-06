@@ -5,7 +5,7 @@
 import { join } from "node:path";
 import { it } from "vitest";
 
-import { assertSkillBehavior, assertSkillLoads } from "../../../scripts/eval-helpers";
+import { assertSkillBehavior } from "../../../scripts/eval-helpers";
 
 const javaClass = join(import.meta.dirname, "fixtures", "java-class");
 
@@ -65,7 +65,13 @@ it("triggers on a design spec with no style vocabulary", () => {
 // Chat coverage comes from the bootstrap's read-once instruction instead.
 
 // Same prompt as docs-creator's own case on purpose: this asserts the
-// companion rule — docs-creator pulls hemingway in — not hemingway's trigger.
-it("loads as a docs-creator companion on a skill reference", () => {
-  assertSkillLoads("add a bullet to the git-workflow pull-request reference", "hemingway");
+// companion rule — docs-creator pulls hemingway in — not hemingway's
+// trigger. The companion path sometimes resolves by reading the facet
+// directly instead of a router load event; two failing transcripts
+// (2026-11-05, 2026-11-06) both show the read. The read is the contract.
+it("applies as a docs-creator companion on a skill reference", () => {
+  assertSkillBehavior("add a bullet to the git-workflow pull-request reference", "hemingway", {
+    loadEvent: false,
+    reads: ["references/prose.md"],
+  });
 });

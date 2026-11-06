@@ -173,6 +173,10 @@ export interface AssertOptions extends RunOptions {
   iterations?: number;
   run?: typeof runPrompt;
   first?: boolean;
+  /** Require the router's load event. False when the case asserts the facet
+   * read instead — a companion can reach the facet by path without the
+   * router firing. `first` requires this to stay true. */
+  loadEvent?: boolean;
 }
 
 function pathMatches(reads: string[], pattern: string | RegExp): boolean {
@@ -194,6 +198,7 @@ export function assertSkillBehavior(
     iterations = ITERATIONS,
     run = runPrompt,
     first = false,
+    loadEvent = true,
     reads = [],
     forbids = [],
     commands: commandPatterns = [],
@@ -204,13 +209,15 @@ export function assertSkillBehavior(
     const output = run(prompt, { model, fixture, repo });
     const loaded = detectSkills(output);
     const label = `run ${String(i + 1)}/${String(iterations)}`;
-    assert.ok(loaded.includes(skill), `${label}: skill "${skill}" did not load\n${transcript(output)}`);
-    if (first) {
-      assert.equal(
-        loaded[0],
-        skill,
-        `${label}: expected "${skill}" to load first, got ${JSON.stringify(loaded)}\n${transcript(output)}`,
-      );
+    if (loadEvent) {
+      assert.ok(loaded.includes(skill), `${label}: skill "${skill}" did not load\n${transcript(output)}`);
+      if (first) {
+        assert.equal(
+          loaded[0],
+          skill,
+          `${label}: expected "${skill}" to load first, got ${JSON.stringify(loaded)}\n${transcript(output)}`,
+        );
+      }
     }
     const readPaths = detectReads(output);
     for (const pattern of reads) {
