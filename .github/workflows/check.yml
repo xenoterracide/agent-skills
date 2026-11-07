@@ -8,4 +8,4 @@ permissions:
   contents: read
 jobs:
   check:
-    uses: xenoterracide/github/.github/workflows/pnpm.yml@b1a2c550f99b179dfc0123fae5f098b474c7aa04 # develop
+    uses: xenoterracide/github/.github/workflows/pnpm.yml@1c3970da2c768e37291f2edccf1c496ac04cd090 # develop
