@@ -30,6 +30,13 @@ Read the reference that matches the task before starting:
 | Create, open, update, or review a PR; files changed      | `references/pull-request.md`            |
 | Write a commit message, PR title, or PR description      | `references/commit-creator.md`          |
 | Push rejected for `workflow` scope (`.github/workflows`) | `references/workflow-push-rejection.md` |
+| Sync a branch without ghb                                | `references/manual-sync.md`             |
+
+## Prerequisites
+
+`gh` and `ghb` are required tools, installed and on `PATH`. `ghb pr sync`
+keeps a branch current; `ghb pr verify` settles checks. Without ghb, read
+`references/manual-sync.md` for the guarded manual sequence.
 
 ## Required Companion Skills
 
@@ -49,16 +56,17 @@ These apply to every git workflow activity in this repository:
   confirmation. Only then merge, by any route: `gh pr merge` (including
   `--auto`), the MCP `merge_pull_request` tool, the GraphQL
   `mergePullRequest` mutation, or the REST merge endpoint.
-- **Merge direction matters.** `git merge origin/develop` into the topic
+- **Merge direction matters.** `git merge origin/HEAD` into the topic
   branch is safe, routine sync. "merge develop", "pull", and "merge origin"
   mean the sync. When unclear, ask.
 - **Never force push.** `--force` and `--force-with-lease` are blocked by
   repository rules and are unnecessary with squash merge. If a push is
   rejected, create a new commit instead.
 - **Squash merge.** This repository squash-merges PRs, so branch history is
-  cleaned on merge. Prefer `git merge origin/develop` over `git rebase` when
+  cleaned on merge. Prefer `git merge origin/HEAD` over `git rebase` when
   syncing, and commit to the same branch for updates rather than creating new
   branches.
 - **Verify checks before returning.** Always confirm required GitHub checks
-  pass before ending the task, and print the PR URL. Run the watch
-  redirected per `output-hygiene` — unique file, then tail.
+  pass before ending the task, and print the PR URL. `ghb pr verify` in a
+  background shell prints one line; without ghb, watch redirected per
+  `output-hygiene` — unique file, then tail.

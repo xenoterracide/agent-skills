@@ -43,15 +43,6 @@ re-sends it. One verbose command can cost more than the work around it.
    tail -15 "$log"; exit $ec
    ```
 
-   For `gh pr checks`, skip `--watch` and its table. Run this skill's
-   `scripts/gh-pr-wait.sh` (relative to its base directory) in a
-   background shell instead — one line of output, fail-fast, bounded at
-   30 minutes:
-
-   ```bash
-   "<base directory>/scripts/gh-pr-wait.sh" --required
-   ```
-
 4. Use `mktemp` for every file. Fixed names collide across sessions.
    Write to the harness's temp directory — `/tmp/opencode` on OpenCode,
    `/tmp` elsewhere.

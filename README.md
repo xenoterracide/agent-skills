@@ -13,7 +13,10 @@ workflows.
 > **Requires:** This plugin is designed to be used alongside the
 > [Superpowers plugin](https://github.com/obra/superpowers). Several skills
 > reference Superpowers process-discipline skills such as
-> `verification-before-completion` and `requesting-code-review`.
+> `verification-before-completion` and `requesting-code-review`. The
+> git-workflow skill requires
+> [ghb](https://github.com/xenoterracide/ghb), a local build until its
+> first npm publish; without ghb, its manual sync reference applies.
 
 - **Primary target**: [Kimi Code CLI](https://kimi.com/code)
 - **Compatible with**: any [agentskills.io](https://agentskills.io)-standard
