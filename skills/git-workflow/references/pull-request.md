@@ -27,8 +27,9 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
     - Rename a workflow or change its interface only with matching updates to
       both documents.
   - Verify required GitHub checks before returning to the user.
-    - Run `ghb pr verify` in a background shell — it polls currency,
-      mergeable state, and every check, then prints one line.
+    - Run `ghb pr verify` in a background shell — it fails fast on a stale
+      or unpushed branch, waits out mergeability and every check, then
+      prints one line.
     - Without ghb, watch the checks redirected per `output-hygiene` — unique
       file, then tail — or use the MCP equivalent.
     - Fix failures before requesting review. Never return with failing checks.
