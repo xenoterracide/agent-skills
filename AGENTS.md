@@ -202,8 +202,7 @@ Worktree branches appear in normal `git branch` output, marked `+`.
 - **Confirmed merges only**: Agents never merge the PR on their own
   initiative, by any route. The merge waits for the human's explicit yes; an
   instruction from before the human read the PR is not confirmation. Syncing
-  a topic branch with `ghb pr sync` or `git merge origin/HEAD` is safe
-  routine sync.
+  a topic branch with `ghb pr sync` is safe routine sync.
 - **No secrets**: This repository contains no credentials or private
   configuration.
 
