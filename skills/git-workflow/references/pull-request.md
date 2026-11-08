@@ -92,9 +92,18 @@ When committing and creating/updating a PR, follow this workflow:
    - Do not consider the task complete while required checks are failing
    - Always print the PR URL when returning so the user can easily review
    - Stop there. Merging waits for the human's explicit confirmation.
-   - On their yes, run the squash merge yourself, passing the PR's own title
-     and body so the squash commit carries them:
-     `gh pr merge <PR> --squash --match-head-commit <head SHA> --subject "<title>" --body "<body>" --delete-branch`
+
+### Merging on the Human's Yes
+
+On their yes, run the squash merge yourself, passing the PR's own title
+and body so the squash commit carries them. Pipe the body — it is
+multi-line, and an inline `--body` literalizes embedded newlines:
+
+```bash
+gh pr view <PR> --json body --jq .body |
+  gh pr merge <PR> --squash --match-head-commit <head SHA> \
+    --subject "<title>" --body-file - --delete-branch
+```
 
 ### Self-Review Before Submitting
 
