@@ -27,10 +27,16 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
     - Rename a workflow or change its interface only with matching updates to
       both documents.
   - Verify required GitHub checks before returning to the user.
-    - Watch the checks redirected per `output-hygiene` — unique file, then tail — or use the MCP equivalent.
+    - With ghb installed, run `ghb pr verify` in a background shell — it
+      polls currency, mergeable state, and every check, then prints one line.
+    - Otherwise watch the checks redirected per `output-hygiene` — unique
+      file, then tail — or use the MCP equivalent.
     - Fix failures before requesting review. Never return with failing checks.
 - **NEVER force push.** Force pushes (`--force` and `--force-with-lease`) are **blocked by repository rules** and will always fail. If a push is rejected, do not attempt force push — create a new commit instead.
-- Keep the branch synchronized with the base branch using a merge strategy.
+- Keep the branch synchronized with the base branch.
+  - Routine sync is `ghb pr sync` when ghb is installed — it merges the
+    default branch, pushes, and prints one line. Otherwise use
+    `git merge origin/develop`.
   - Delete and regenerate lockfiles instead of merging them.
 - Reply to every unresolved PR comment.
   - Leave a reply on each review comment to indicate its status.
@@ -67,6 +73,8 @@ When committing and creating/updating a PR, follow this workflow:
 4. **If on the default branch or no PR exists for current branch:**
    - Create a new feature branch (if not already on one)
    - Commit changes
+   - Sync with develop immediately before creating the PR — `ghb pr sync` or
+     `git merge origin/develop` — so the PR is born current
    - Push and create a new PR
 
 5. **Before finalizing:**
@@ -75,11 +83,16 @@ When committing and creating/updating a PR, follow this workflow:
    - Ensure PR description accurately reflects all changes including doc updates
 
 6. **After pushing, before returning to the user:**
-   - Watch the checks redirected per `output-hygiene` — unique file, then tail — (or MCP equivalent) to verify all required checks pass
+   - Verify with `ghb pr verify` when ghb is installed; otherwise watch the
+     checks redirected per `output-hygiene` — unique file, then tail — (or
+     MCP equivalent)
    - If any check fails, diagnose and remediate the issue before returning
    - Do not consider the task complete while required checks are failing
    - Always print the PR URL when returning so the user can easily review
    - Stop there. Merging waits for the human's explicit confirmation.
+   - On their yes, run the squash merge yourself, passing the PR's own title
+     and body so the squash commit carries them:
+     `gh pr merge <PR> --squash --match-head-commit <head SHA> --subject "<title>" --body "<body>" --delete-branch`
 
 ### Self-Review Before Submitting
 

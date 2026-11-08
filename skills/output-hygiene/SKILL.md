@@ -46,7 +46,7 @@ re-sends it. One verbose command can cost more than the work around it.
    For `gh pr checks`, skip `--watch` and its table. Run this skill's
    `scripts/gh-pr-wait.sh` (relative to its base directory) in a
    background shell instead — one line of output, fail-fast, bounded at
-   30 minutes:
+   10 minutes:
 
    ```bash
    "<base directory>/scripts/gh-pr-wait.sh" --required
