@@ -5,11 +5,6 @@
 version = 1
 
 [[annotations]]
-path = ".gitmodules"
-SPDX-FileCopyrightText = "NONE"
-SPDX-License-Identifier = "CC0-1.0"
-
-[[annotations]]
 path = "**/*.lockfile"
 SPDX-FileCopyrightText = "NONE"
 SPDX-License-Identifier = "CC0-1.0"
@@ -35,16 +30,26 @@ SPDX-FileCopyrightText = "NONE"
 SPDX-License-Identifier = "CC0-1.0"
 
 [[annotations]]
-path = "gradle/wrapper/*"
-SPDX-FileCopyrightText = "See MANIFEST.MF in jar"
-SPDX-License-Identifier = "Apache-2.0"
+path = "**/package.json"
+SPDX-FileCopyrightText = "Copyright © 2013-2026 Caleb Cushing"
+SPDX-License-Identifier = "MIT"
 
 [[annotations]]
-path = "mvnw"
-SPDX-FileCopyrightText = "Apache Software Foundation"
-SPDX-License-Identifier = "Apache-2.0"
+path = "**/tsconfig*.json"
+SPDX-FileCopyrightText = "NONE"
+SPDX-License-Identifier = "CC0-1.0"
 
 [[annotations]]
-path = "mvnw.cmd"
-SPDX-FileCopyrightText = "Apache Software Foundation"
-SPDX-License-Identifier = "Apache-2.0"
+path = "mcp/mcp.json"
+SPDX-FileCopyrightText = "Copyright © 2026 Caleb Cushing"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = ".kimi-plugin/plugin.json"
+SPDX-FileCopyrightText = "Copyright © 2026 Caleb Cushing"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = ".opencode/opencode.json"
+SPDX-FileCopyrightText = "Copyright © 2026 Caleb Cushing"
+SPDX-License-Identifier = "CC0-1.0"

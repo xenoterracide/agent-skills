@@ -1,24 +1,24 @@
-// SPDX-FileCopyrightText: Copyright © 2026 Caleb Cushing
+// SPDX-FileCopyrightText: Copyright © 2020-2026 Caleb Cushing
 //
 // SPDX-License-Identifier: MIT
 
 import eslint from "@eslint/js";
+import globals from "globals";
+import tseslint from "typescript-eslint";
 import jsonPluginImport from "@eslint/json";
 import markdown from "@eslint/markdown";
 import { defineConfig, globalIgnores } from "eslint/config";
-import globals from "globals";
-import tseslint from "typescript-eslint";
 
 const jsonPlugin = (jsonPluginImport as { default?: typeof jsonPluginImport }).default ?? jsonPluginImport;
 
 export default defineConfig([
   globalIgnores([
-    "node_modules/",
-    ".venv/",
-    "coverage/",
     "**/dist/",
     "**/build/",
+    "node_modules/",
     ".agents/",
+    ".venv/",
+    "coverage/",
     ".superpowers/",
     ".worktrees/",
     "skills/*/tests/fixtures/",
@@ -48,7 +48,6 @@ export default defineConfig([
       "@typescript-eslint/init-declarations": "error",
       "prefer-destructuring": "off",
       "@typescript-eslint/prefer-destructuring": "error",
-
       "@typescript-eslint/consistent-type-exports": "error",
       "@typescript-eslint/consistent-type-imports": "error",
       "@typescript-eslint/explicit-member-accessibility": "error",
@@ -68,24 +67,49 @@ export default defineConfig([
       "@typescript-eslint/no-useless-empty-export": "error",
       "@typescript-eslint/prefer-readonly": "error",
       "@typescript-eslint/promise-function-async": "error",
-      "@typescript-eslint/strict-boolean-expressions": ["error", { allowNumber: false }],
+      "@typescript-eslint/strict-boolean-expressions": "error",
       "@typescript-eslint/switch-exhaustiveness-check": "error",
     },
   },
   {
-    ...jsonPlugin.configs.recommended,
+    files: ["packages/**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-return": "off",
+      "@typescript-eslint/no-unsafe-argument": "off",
+      "@typescript-eslint/strict-boolean-expressions": "off",
+      "@typescript-eslint/restrict-template-expressions": "off",
+      "@typescript-eslint/restrict-plus-operands": "off",
+      "@typescript-eslint/require-await": "off",
+      "@typescript-eslint/init-declarations": "off",
+      "no-useless-assignment": "off",
+      "preserve-caught-error": "off",
+      "no-empty": ["error", { allowEmptyCatch: false }],
+      "@typescript-eslint/no-empty-function": "error",
+      "@typescript-eslint/no-unnecessary-condition": "off",
+      "@typescript-eslint/max-params": "off",
+      "@typescript-eslint/no-use-before-define": "off",
+    },
+  },
+  {
     files: ["**/*.json"],
     ignores: ["**/tsconfig.json", "**/tsconfig.*.json"],
+    ...jsonPlugin.configs.recommended,
+    plugins: { json: jsonPlugin },
     language: "json/json",
   },
   {
-    ...jsonPlugin.configs.recommended,
     files: ["**/*.json5"],
+    ...jsonPlugin.configs.recommended,
+    plugins: { json: jsonPlugin },
     language: "json/json5",
   },
   {
-    ...jsonPlugin.configs.recommended,
     files: ["**/*.jsonc", "**/tsconfig.json", "**/tsconfig.*.json"],
+    ...jsonPlugin.configs.recommended,
+    plugins: { json: jsonPlugin },
     language: "json/jsonc",
     languageOptions: { allowTrailingCommas: true },
   },

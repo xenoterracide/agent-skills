@@ -143,8 +143,8 @@ describe("heal.sh", () => {
       }
     });
 
-    it("pnpm install gated by pnpm-lock.yaml", () => {
-      const fixture = makeFixture({ markers: ["pnpm-lock.yaml"] });
+    it("pnpm install gated by package.json, frozen by the lockfile", () => {
+      const fixture = makeFixture({ markers: ["package.json", "pnpm-lock.yaml"] });
       try {
         const result = runHeal(fixture);
         expect(result.status).toBe(0);
@@ -155,13 +155,46 @@ describe("heal.sh", () => {
       }
     });
 
-    it("uv sync gated by uv.lock", () => {
-      const fixture = makeFixture({ markers: ["uv.lock"] });
+    it("package.json without a lockfile installs unfrozen", () => {
+      const fixture = makeFixture({ markers: ["package.json"] });
+      try {
+        const result = runHeal(fixture);
+        expect(result.status).toBe(0);
+        expect(readLog(fixture, "pnpm")).toBe("install --reporter=silent");
+      } finally {
+        rmSync(fixture.root, { recursive: true, force: true });
+      }
+    });
+
+    it("a lockfile without package.json does not install", () => {
+      const fixture = makeFixture({ markers: ["pnpm-lock.yaml"] });
+      try {
+        const result = runHeal(fixture);
+        expect(result.status).toBe(0);
+        expect(readLog(fixture, "pnpm")).toBeUndefined();
+      } finally {
+        rmSync(fixture.root, { recursive: true, force: true });
+      }
+    });
+
+    it("uv sync gated by pyproject.toml, frozen by uv.lock", () => {
+      const fixture = makeFixture({ markers: ["pyproject.toml", "uv.lock"] });
       try {
         const result = runHeal(fixture);
         expect(result.status).toBe(0);
         expect(readLog(fixture, "uv")).toBe("sync --frozen --quiet");
         expect(readLog(fixture, "pnpm")).toBeUndefined();
+      } finally {
+        rmSync(fixture.root, { recursive: true, force: true });
+      }
+    });
+
+    it("pyproject.toml without uv.lock syncs unfrozen", () => {
+      const fixture = makeFixture({ markers: ["pyproject.toml"] });
+      try {
+        const result = runHeal(fixture);
+        expect(result.status).toBe(0);
+        expect(readLog(fixture, "uv")).toBe("sync --quiet");
       } finally {
         rmSync(fixture.root, { recursive: true, force: true });
       }
@@ -172,7 +205,7 @@ describe("heal.sh", () => {
     it("a missing asdf warns and the rest still heals", () => {
       const fixture = makeFixture({
         tools: ["pnpm", "uv", "npm", "corepack", "git"],
-        markers: [".tool-versions", "pnpm-lock.yaml"],
+        markers: [".tool-versions", "package.json", "pnpm-lock.yaml"],
       });
       try {
         const result = runHeal(fixture);
@@ -185,7 +218,10 @@ describe("heal.sh", () => {
     });
 
     it("a failed step does not stop the rest", () => {
-      const fixture = makeFixture({ failing: { pnpm: "1" }, markers: ["pnpm-lock.yaml", "uv.lock"] });
+      const fixture = makeFixture({
+        failing: { pnpm: "1" },
+        markers: ["package.json", "pnpm-lock.yaml", "pyproject.toml", "uv.lock"],
+      });
       try {
         const result = runHeal(fixture);
         expect(result.status).toBe(0);
@@ -261,7 +297,7 @@ describe("heal.sh", () => {
     });
 
     it("runs from a subdirectory", () => {
-      const fixture = makeFixture({ markers: [".tool-versions", "pnpm-lock.yaml"] });
+      const fixture = makeFixture({ markers: [".tool-versions", "package.json", "pnpm-lock.yaml"] });
       const docs = join(fixture.root, "docs");
       mkdirSync(docs);
       try {
