@@ -13,6 +13,11 @@ its name.
 
 ## Preconditions
 
+- A symbolic remote HEAD: `git symbolic-ref --short
+refs/remotes/origin/HEAD` prints `origin/<default>`. A failure means
+  detached or missing — a remote branch named `HEAD` causes it in
+  checkouts built without a clone — and every `origin/HEAD` below then
+  resolves wrong. Fix it first: `git remote set-head origin -a`.
 - On the topic branch, not the default branch: `git branch --show-current`
   prints a non-empty name (empty is a detached HEAD), and it differs from
   the default branch — `git symbolic-ref --short refs/remotes/origin/HEAD`
