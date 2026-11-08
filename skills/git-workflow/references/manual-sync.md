@@ -13,9 +13,10 @@ its name.
 
 ## Preconditions
 
-- On the topic branch, not the default branch:
-  `git rev-parse --abbrev-ref HEAD` differs from
-  `git rev-parse --abbrev-ref origin/HEAD`. Refuse when they match.
+- On the topic branch, not the default branch: `git branch --show-current`
+  prints a non-empty name (empty is a detached HEAD), and it differs from
+  the default branch — `git symbolic-ref --short refs/remotes/origin/HEAD`
+  with its `origin/` prefix stripped. Refuse on empty or on a match.
 - A remote counterpart: `git rev-parse --verify origin/<branch>` succeeds.
   If it does not, `git push -u origin <branch>` first — the comparison
   steps read `origin/<branch>`, and the final push needs its upstream.
