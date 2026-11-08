@@ -76,9 +76,11 @@ When committing and creating/updating a PR, follow this workflow:
 4. **If on the default branch or no PR exists for current branch:**
    - Create a new feature branch (if not already on one)
    - Commit changes
-   - Sync immediately before creating the PR — `ghb pr sync`, or
-     `references/manual-sync.md` without ghb — so the PR is born current
-   - Push and create a new PR
+   - Push with `-u` — both sync paths read `origin/<branch>`, which the
+     first push creates
+   - Sync immediately — `ghb pr sync`, or `references/manual-sync.md`
+     without ghb — so the PR is born current
+   - Create the new PR
 
 5. **Before finalizing:**
    - Review if documentation needs updates (README.md, AGENTS.md)

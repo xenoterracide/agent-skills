@@ -13,8 +13,12 @@ its name.
 
 ## Preconditions
 
-- On the topic branch: `git branch --show-current` prints its name. Never
-  run this sequence on the default branch.
+- On the topic branch, not the default branch:
+  `git rev-parse --abbrev-ref HEAD` differs from
+  `git rev-parse --abbrev-ref origin/HEAD`. Refuse when they match.
+- A remote counterpart: `git rev-parse --verify origin/<branch>` succeeds.
+  If it does not, `git push -u origin <branch>` first — the comparison
+  steps read `origin/<branch>`, and the final push needs its upstream.
 - Clean working tree: `git status --porcelain --untracked-files=no` prints
   nothing. Commit or stash first.
 
