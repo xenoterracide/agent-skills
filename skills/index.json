@@ -36,6 +36,7 @@
       "files": [
         "SKILL.md",
         "references/commit-creator.md",
+        "references/manual-sync.md",
         "references/pull-request.md",
         "references/workflow-push-rejection.md"
       ]
@@ -68,7 +69,7 @@
     {
       "name": "output-hygiene",
       "version": "26.11.5",
-      "files": ["SKILL.md", "scripts/gh-pr-wait.sh"]
+      "files": ["SKILL.md"]
     },
     {
       "name": "shell-script-creator",

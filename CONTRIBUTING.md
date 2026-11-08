@@ -83,7 +83,7 @@ and run any changed examples manually.
 
 This repository uses squash merge.
 
-- Use `git merge origin/develop` to update your branch.
+- Update your branch with `ghb pr sync`, or `git merge origin/HEAD` by hand.
 - Commit additional changes to the same PR branch.
 - PR titles must follow conventional commit format.
 - PR descriptions must explain why the change exists.
