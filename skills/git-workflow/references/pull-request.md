@@ -30,8 +30,9 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
     - Run `ghb pr verify` in a background shell — it fails fast on a stale
       or unpushed branch, waits out mergeability and every check, then
       prints one line.
-    - Without ghb, watch the checks redirected per `output-hygiene` — unique
-      file, then tail — or use the MCP equivalent.
+    - Without ghb, watch the checks in a background shell redirected per
+      `output-hygiene` — `gh pr checks <PR> --watch`, unique file, then
+      tail — or the MCP checks equivalent.
     - Fix failures before requesting review. Never return with failing checks.
 - **NEVER force push.** Force pushes (`--force` and `--force-with-lease`) are **blocked by repository rules** and will always fail. If a push is rejected, do not attempt force push — create a new commit instead.
 - Keep the branch synchronized with the base branch.
@@ -88,8 +89,9 @@ When committing and creating/updating a PR, follow this workflow:
    - Ensure PR description accurately reflects all changes including doc updates
 
 6. **After pushing, before returning to the user:**
-   - Verify with `ghb pr verify`; without ghb, watch the checks redirected
-     per `output-hygiene` — unique file, then tail — (or MCP equivalent)
+   - Verify with `ghb pr verify`; without ghb, `gh pr checks <PR> --watch`
+     in a background shell, redirected per `output-hygiene` — unique file,
+     then tail — (or the MCP equivalent)
    - If any check fails, diagnose and remediate the issue before returning
    - Do not consider the task complete while required checks are failing
    - Always print the PR URL when returning so the user can easily review
@@ -98,13 +100,17 @@ When committing and creating/updating a PR, follow this workflow:
 ### Merging on the Human's Yes
 
 On their yes, run the squash merge yourself, passing the PR's own title
-and body so the squash commit carries them. Pipe the body — it is
-multi-line, and an inline `--body` literalizes embedded newlines:
+and body so the squash commit carries them. Read the inputs fresh at
+merge time — a sync since you showed the PR leaves a stale head SHA that
+fails the merge — and pipe the body, because an inline `--body`
+literalizes its newlines:
 
 ```bash
+sha=$(gh pr view <PR> --json headRefOid --jq .headRefOid)
+title=$(gh pr view <PR> --json title --jq .title)
 gh pr view <PR> --json body --jq .body |
-  gh pr merge <PR> --squash --match-head-commit <head SHA> \
-    --subject "<title>" --body-file - --delete-branch
+  gh pr merge <PR> --squash --match-head-commit "$sha" \
+    --subject "$title" --body-file - --delete-branch
 ```
 
 ### Self-Review Before Submitting
