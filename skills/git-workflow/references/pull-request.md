@@ -50,6 +50,18 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
   - Check thread resolution status with GraphQL `isResolved` and address only
     unresolved comments.
 
+## Settling Checks
+
+Settle checks with `ghb pr verify`, in a background shell redirected per
+`output-hygiene`. One command: it fails fast on a stale or unpushed
+branch, waits out mergeability and every pending check, requires
+`mergeStateStatus: CLEAN`, and prints one line.
+
+Without ghb: `gh pr checks <PR> --watch` in a background shell,
+redirected to a unique file, then tail — plus `gh pr view --json
+mergeStateStatus,reviewDecision` for policy state, which the watch
+cannot report.
+
 ## Workflow
 
 **NEVER update MERGED PRs.** If a PR is merged, create a new branch for any follow-up work.
@@ -99,11 +111,28 @@ When committing and creating/updating a PR, follow this workflow:
 
 ### Merging on the Human's Yes
 
-On their yes, run the squash merge yourself, passing the PR's own title
-and body so the squash commit carries them. Read the inputs fresh at
-merge time — a sync since you showed the PR leaves a stale head SHA that
-fails the merge — and pipe the body, because an inline `--body`
-literalizes its newlines:
+On their yes, verify the policy state, then run the squash merge
+yourself, passing the PR's own title and body so the squash commit
+carries them.
+
+Verify with `ghb pr verify`. Going raw, read `mergeStateStatus` and
+`reviewDecision` — never `mergeable` alone. `mergeable: MERGEABLE` says
+the diff applies, not that the policy accepts the merge: with
+`mergeStateStatus: BLOCKED` and `reviewDecision: CHANGES_REQUESTED` the
+merge is refused, every check green or not.
+
+Blocked on review: tell the human what holds the merge, then arm
+auto-merge with the same pinned inputs; it fires when the approval
+lands. Never `--admin` unless the human explicitly asks for it:
+
+```bash
+gh pr merge <PR> --squash --auto --match-head-commit "$sha" \
+  --subject "$title" --body-file -
+```
+
+Read the inputs fresh at merge time — a sync since you showed the PR
+leaves a stale head SHA that fails the merge — and pipe the body,
+because an inline `--body` literalizes its newlines:
 
 ```bash
 sha=$(gh pr view <PR> --json headRefOid --jq .headRefOid)
@@ -207,6 +236,9 @@ When addressing review comments on a PR:
    - Not an issue: `"Not applicable: [reason]"`
    - Question: `"Question: [clarification needed]"`
 4. **Verify fixes** - Confirm changes address the current code state
+
+Resolving a thread does not flip a `CHANGES_REQUESTED` review. Only the
+reviewer's fresh approval does; until then the merge stays blocked.
 
 **Note:** REST API doesn't expose resolved state - use GraphQL (`reviewThreads.isResolved`) or MCP tools to check unresolved comments.
 
