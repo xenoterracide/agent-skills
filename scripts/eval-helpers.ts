@@ -68,6 +68,11 @@ export interface RunOptions {
   model?: string;
   fixture?: string;
   repo?: boolean;
+  /** ghb availability in the sandbox. The sandbox inherits the host PATH,
+   * where a real ghb reaches the network; shadow it. "missing" (default)
+   * shadows ghb as an absent binary, so the run takes the raw fallback;
+   * "green" and "blocked" answer pr verify with that policy state. */
+  ghb?: "missing" | "green" | "blocked";
 }
 
 // Evals that need a repository opt in with repo: true. Git cannot track a
@@ -121,7 +126,42 @@ export function writeGhStub(dir: string): void {
   );
 }
 
-export function runPrompt(prompt: string, { model = MODEL, fixture, repo }: RunOptions = {}): string {
+// The stub shadows ghb on the sandbox PATH. A host ghb would reach the
+// network from inside the sandbox. "green" and "blocked" answer pr verify
+// with that policy state so the ghb path completes; "missing" fails like
+// an absent binary, so the run takes the raw fallback. argv is logged to
+// ghb.log.
+export function writeGhbStub(dir: string, availability: "missing" | "green" | "blocked"): void {
+  const bin = join(dir, "bin");
+  mkdirSync(bin, { recursive: true });
+  const verify =
+    availability === "blocked"
+      ? "PR #7: mergeStateStatus BLOCKED, reviewDecision CHANGES_REQUESTED — merge refused"
+      : "PR #7: current, mergeable, checks green";
+  const lines =
+    availability === "missing"
+      ? [
+          "#!/bin/sh",
+          'log="$(dirname "$0")/../ghb.log"',
+          'printf \'%s\\n\' "$*" >>"$log"',
+          'echo "ghb: command not found" >&2',
+          "exit 127",
+          "",
+        ]
+      : [
+          "#!/bin/sh",
+          'log="$(dirname "$0")/../ghb.log"',
+          'printf \'%s\\n\' "$*" >>"$log"',
+          'case "$1 $2" in',
+          `  "pr verify") echo "${verify}"; exit 0;;`,
+          "esac",
+          "exit 0",
+          "",
+        ];
+  writeFileSync(join(bin, "ghb"), lines.join("\n"), { mode: 0o755 });
+}
+
+export function runPrompt(prompt: string, { model = MODEL, fixture, repo, ghb = "missing" }: RunOptions = {}): string {
   const dir = mkdtempSync(join(tmpdir(), "skill-evals-"));
   let configDir: string | undefined = undefined;
   try {
@@ -140,6 +180,7 @@ export function runPrompt(prompt: string, { model = MODEL, fixture, repo }: RunO
     if (repo === true) {
       initSandboxRepo(dir);
       writeGhStub(dir);
+      writeGhbStub(dir, ghb);
     }
     const result = spawnSync("opencode", ["run", "--standalone", "-m", model, prompt], {
       encoding: "utf8",
@@ -203,10 +244,11 @@ export function assertSkillBehavior(
     forbids = [],
     commands: commandPatterns = [],
     repo,
+    ghb,
   }: BehaviorOptions = {},
 ): void {
   for (let i = 0; i < iterations; i++) {
-    const output = run(prompt, { model, fixture, repo });
+    const output = run(prompt, { model, fixture, repo, ghb });
     const loaded = detectSkills(output);
     const label = `run ${String(i + 1)}/${String(iterations)}`;
     if (loadEvent) {

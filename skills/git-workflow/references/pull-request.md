@@ -122,8 +122,9 @@ the diff applies, not that the policy accepts the merge: with
 merge is refused, every check green or not.
 
 Blocked on review: tell the human what holds the merge, then arm
-auto-merge with the same pinned inputs; it fires when the approval
-lands. Never `--admin` unless the human explicitly asks for it:
+auto-merge with the same pinned inputs; it fires when the block lifts —
+the reviewer approves or the review is dismissed. Never `--admin` unless
+the human explicitly asks for it:
 
 ```bash
 gh pr merge <PR> --squash --auto --match-head-commit "$sha" \
@@ -237,8 +238,9 @@ When addressing review comments on a PR:
    - Question: `"Question: [clarification needed]"`
 4. **Verify fixes** - Confirm changes address the current code state
 
-Resolving a thread does not flip a `CHANGES_REQUESTED` review. Only the
-reviewer's fresh approval does; until then the merge stays blocked.
+Resolving a thread does not flip a `CHANGES_REQUESTED` review. The block
+lifts only when the reviewer approves again or a user with write access
+dismisses the review; until then the merge stays blocked.
 
 **Note:** REST API doesn't expose resolved state - use GraphQL (`reviewThreads.isResolved`) or MCP tools to check unresolved comments.
 

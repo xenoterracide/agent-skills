@@ -17,6 +17,7 @@ import {
   initSandboxRepo,
   stripAnsi,
   writeGhStub,
+  writeGhbStub,
   type RunOptions,
 } from "./eval-helpers";
 
@@ -217,6 +218,35 @@ describe("writeGhStub", () => {
       expect(gh("pr", "view").status).toBe(1);
       expect(gh("pr", "create", "--title", "x", "--body-file", "-").stdout).toContain("pull/1");
       expect(readFileSync(join(dir, "gh.log"), "utf8")).toContain("--body-file");
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+});
+
+describe("writeGhbStub", () => {
+  it("answers pr verify with the policy state and records argv", () => {
+    const dir = mkdtempSync(join(tmpdir(), "sandbox-ghb-"));
+    try {
+      writeGhbStub(dir, "blocked");
+      const ghb = (...args: string[]): ReturnType<typeof spawnSync> =>
+        spawnSync(join(dir, "bin", "ghb"), args, { encoding: "utf8" });
+      const verify = ghb("pr", "verify");
+      expect(verify.status).toBe(0);
+      expect(verify.stdout).toContain("CHANGES_REQUESTED");
+      expect(readFileSync(join(dir, "ghb.log"), "utf8")).toContain("pr verify");
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("fails like an absent binary when missing", () => {
+    const dir = mkdtempSync(join(tmpdir(), "sandbox-ghb-"));
+    try {
+      writeGhbStub(dir, "missing");
+      const result = spawnSync(join(dir, "bin", "ghb"), ["pr", "verify"], { encoding: "utf8" });
+      expect(result.status).toBe(127);
+      expect(result.stderr).toContain("command not found");
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
