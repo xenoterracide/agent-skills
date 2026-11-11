@@ -15,6 +15,7 @@ directory doubles as an OpenCode-compatible HTTP skill catalog.
 - **License for skills/docs**: CC-BY-NC-SA-4.0
 - **License for configuration files**: CC0-1.0
 
+<<<<<<< before updating
 > **Agent Note:** This repo is the plugin source for
 > `xenoterracide-agent-skills` — not the Superpowers plugin, not an installed
 > plugin directory. Make all skill and plugin changes in this repository, then
@@ -203,6 +204,22 @@ Worktree branches appear in normal `git branch` output, marked `+`.
   a topic branch with `ghb pr sync` is safe routine sync.
 - **No secrets**: This repository contains no credentials or private
   configuration.
+=======
+- `npm run contribute` — bootstrap tooling (run once after clone)
+- `pnpm check` — run all checks
+- `pnpm lint:prettier` — prettier check
+- `pnpm lint:reuse` — REUSE compliance check
+- `pnpm typecheck` — TypeScript type check
+- `pnpm test` — vitest with coverage
+
+## Source of Truth
+
+- Template: `copier.yml` in [xenoterracide/base-template](https://github.com/xenoterracide/base-template)
+- Answers: `.copier-answers.yml` in this repo
+- Updates: `uv run --group dev copier update --trust` refreshes from template
+- Hooks heal the toolchain: `.envrc`, `contribute`, and the post hooks call
+  `.config/git/hooks/heal.sh`. A failed heal never breaks a checkout.
+>>>>>>> after updating
 
 ## License
 
