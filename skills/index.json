@@ -1,6 +1,11 @@
 {
   "skills": [
     {
+      "name": "calver",
+      "version": "26.11.5",
+      "files": ["SKILL.md"]
+    },
+    {
       "name": "code-review",
       "version": "26.11.5",
       "files": ["SKILL.md"]
