@@ -59,12 +59,14 @@ it("settles checks through ghb pr verify", () => {
 // The gate: without ghb, settling splits across a check watch and a policy
 // query, and the watch cannot report policy state. A run that watches and
 // stops has not settled checks per pull-request.md. ghb is stubbed missing
-// and the prompt names that, so the case takes the raw path without
-// depending on the agent discovering ghb's absence.
+// and the prompt names both that and the watch, as the ghb case names its
+// verify: unnamed, one roll in three read the stub scripts, called the
+// sandbox fake, and settled nothing. The policy query stays unnamed and
+// assertion-enforced — a run that watches and stops still fails here.
 it("settles checks the raw way with the watch and the policy query", () => {
   assertSkillBehavior(
     "ghb is not installed. pull request #7 is pushed and its checks are running; " +
-      "settle them and report when they are green",
+      "settle them with gh pr checks --watch and report when they are green",
     "git-workflow",
     {
       repo: true,
