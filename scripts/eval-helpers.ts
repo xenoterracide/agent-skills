@@ -144,6 +144,27 @@ export function writeGhStub(dir: string): void {
   );
 }
 
+// The deny stub shadows gh for runs without a sandbox repo. The host gh is
+// authenticated and the sandbox shares the host filesystem, so a run that
+// wanders out can reach the real network; every gh call must fail as an
+// unauthenticated gh would. argv is logged to gh.log.
+export function writeGhDenyStub(dir: string): void {
+  const bin = join(dir, "bin");
+  mkdirSync(bin, { recursive: true });
+  writeFileSync(
+    join(bin, "gh"),
+    [
+      "#!/bin/sh",
+      'log="$(dirname "$0")/../gh.log"',
+      'printf \'%s\\n\' "$*" >>"$log"',
+      'echo "You are not logged into any GitHub hosts. Run gh auth login to authenticate." >&2',
+      "exit 1",
+      "",
+    ].join("\n"),
+    { mode: 0o755 },
+  );
+}
+
 // The stub shadows ghb on the sandbox PATH. A host ghb would reach the
 // network from inside the sandbox. "green" and "blocked" answer pr verify
 // with that policy state so the ghb path completes; "missing" fails like
@@ -179,6 +200,16 @@ export function writeGhbStub(dir: string, availability: "missing" | "green" | "b
   writeFileSync(join(bin, "ghb"), lines.join("\n"), { mode: 0o755 });
 }
 
+// Tokens ride the environment as well as hosts.yml; the sandbox shares the
+// host process environment, so strip what an eval never needs.
+function envWithoutTokens(): NodeJS.ProcessEnv {
+  const env: NodeJS.ProcessEnv = { ...process.env };
+  delete env.GH_TOKEN;
+  delete env.GITHUB_TOKEN;
+  delete env.GH_ENTERPRISE_TOKEN;
+  return env;
+}
+
 export function runPrompt(prompt: string, { model = MODEL, fixture, repo, ghb = "missing" }: RunOptions = {}): string {
   const dir = mkdtempSync(join(tmpdir(), "skill-evals-"));
   let configDir: string | undefined = undefined;
@@ -199,15 +230,24 @@ export function runPrompt(prompt: string, { model = MODEL, fixture, repo, ghb = 
       initSandboxRepo(dir);
       writeGhStub(dir);
       writeGhbStub(dir, ghb);
+    } else {
+      writeGhDenyStub(dir);
     }
     const result = spawnSync("opencode", ["run", "--standalone", "-m", model, prompt], {
       encoding: "utf8",
       cwd: dir,
       env: {
-        ...process.env,
+        ...envWithoutTokens(),
         XDG_CONFIG_HOME: configDir,
+        // An eval must not spend the host credentials. An isolated gh
+        // config finds no hosts.yml, a nulled global gitconfig kills the
+        // credential helper, and the stubbed bin/gh answers before any
+        // absolute-path gh - one wander cost a real armed auto-merge.
+        GH_CONFIG_DIR: join(configDir, "gh"),
+        GIT_CONFIG_GLOBAL: "/dev/null",
+        GIT_CONFIG_SYSTEM: "/dev/null",
         PWD: dir,
-        ...(repo === true ? { PATH: [join(dir, "bin"), process.env.PATH ?? ""].join(":") } : {}),
+        PATH: [join(dir, "bin"), process.env.PATH ?? ""].join(":"),
       },
       timeout: 480_000,
       maxBuffer: 64 * 1024 * 1024,

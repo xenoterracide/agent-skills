@@ -16,6 +16,7 @@ import {
   harnessError,
   initSandboxRepo,
   stripAnsi,
+  writeGhDenyStub,
   writeGhStub,
   writeGhbStub,
   type RunOptions,
@@ -223,6 +224,23 @@ describe("writeGhStub", () => {
       expect(gh("pr", "checks", "7", "--watch").stdout).toContain("pass");
       expect(gh("pr", "create", "--title", "x", "--body-file", "-").stdout).toContain("pull/1");
       expect(readFileSync(join(dir, "gh.log"), "utf8")).toContain("--body-file");
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+});
+
+describe("writeGhDenyStub", () => {
+  it("fails every call like an unauthenticated gh and records argv", () => {
+    const dir = mkdtempSync(join(tmpdir(), "sandbox-gh-deny-"));
+    try {
+      writeGhDenyStub(dir);
+      const result = spawnSync(join(dir, "bin", "gh"), ["pr", "view", "258", "--json", "state"], {
+        encoding: "utf8",
+      });
+      expect(result.status).toBe(1);
+      expect(result.stderr).toContain("not logged into any GitHub hosts");
+      expect(readFileSync(join(dir, "gh.log"), "utf8")).toContain("pr view 258");
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
