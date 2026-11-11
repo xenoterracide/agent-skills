@@ -98,7 +98,10 @@ export function initSandboxRepo(dir: string): void {
 
 // The stub shadows gh on the sandbox PATH. It answers the preflight an
 // agent runs before creating a PR and accepts the create, so the flow
-// completes without touching the network; argv is logged to gh.log.
+// completes without touching the network; argv is logged to gh.log. A
+// named PR answers in an unsettled state — checks pending, policy blank —
+// because a run the sandbox contradicts stops settling and starts
+// investigating the sandbox itself.
 export function writeGhStub(dir: string): void {
   const bin = join(dir, "bin");
   mkdirSync(bin);
@@ -116,7 +119,22 @@ export function writeGhStub(dir: string): void {
       '      *) echo "xenoterracide/fixture";;',
       "    esac",
       "    exit 0;;",
-      '  "pr view") echo "no pull requests found" >&2; exit 1;;',
+      '  "pr view")',
+      '    case "$*" in',
+      "      *7*)",
+      '        case "$*" in',
+      '          *--json*) echo \'{"number":7,"url":"https://github.com/xenoterracide/fixture/pull/7","title":"feat: fixture","state":"OPEN","isDraft":false,"headRefName":"feat/fixture","baseRefName":"main","headRefOid":"0000000000000000000000000000000000000007","mergeable":null,"mergeStateStatus":"UNKNOWN","reviewDecision":"","statusCheckRollup":[{"__typename":"CheckRun","name":"check / check","status":"IN_PROGRESS"}]}\';;',
+      '          *) printf \'%s\\n\' "feat: fixture" "state: OPEN" "base: main" "head: feat/fixture" "checks: check / check  pending";;',
+      "        esac",
+      "        exit 0;;",
+      '      *) echo "no pull requests found" >&2; exit 1;;',
+      "    esac;;",
+      '  "pr checks")',
+      '    case "$*" in',
+      '      *--watch*) echo "check / check  pass";;',
+      '      *) echo "check / check  pending"; exit 8;;',
+      "    esac",
+      "    exit 0;;",
       '  "pr create") echo "https://github.com/xenoterracide/fixture/pull/1"; exit 0;;',
       "esac",
       "exit 0",

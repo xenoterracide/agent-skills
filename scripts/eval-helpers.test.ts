@@ -216,6 +216,11 @@ describe("writeGhStub", () => {
       expect(gh("auth", "status").stdout).toContain("Logged in");
       expect(gh("repo", "view", "--json", "defaultBranchRef").stdout).toContain("defaultBranchRef");
       expect(gh("pr", "view").status).toBe(1);
+      const verify = gh("pr", "view", "7", "--json", "mergeStateStatus,reviewDecision");
+      expect(verify.status).toBe(0);
+      expect(verify.stdout).toContain('"mergeStateStatus":"UNKNOWN"');
+      expect(gh("pr", "checks", "7").status).toBe(8);
+      expect(gh("pr", "checks", "7", "--watch").stdout).toContain("pass");
       expect(gh("pr", "create", "--title", "x", "--body-file", "-").stdout).toContain("pull/1");
       expect(readFileSync(join(dir, "gh.log"), "utf8")).toContain("--body-file");
     } finally {

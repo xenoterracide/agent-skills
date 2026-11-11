@@ -38,10 +38,10 @@ it("opens a PR with the body in a heredoc, not an inline --body", () => {
 // mergeable, and green. Raw gh splits the job across a check watch and a
 // view, and the view's mergeable field cannot report a policy block
 // (semver #352: four raw watch rounds while ghb sat unused). The prompt
-// names the PR: the sandbox stub has no PR to discover, and a discovery
-// dead-end asks a question the headless run cannot answer. ghb is stubbed
-// green, so the ghb path completes; a bare `gh pr checks` cannot satisfy
-// this case.
+// names the PR and the stub answers it unsettled; when the stub denied
+// the PR, a run abandoned settling to investigate the sandbox. ghb is
+// stubbed green, so the ghb path completes; a bare `gh pr checks` cannot
+// satisfy this case.
 it("settles checks through ghb pr verify", () => {
   assertSkillBehavior(
     "pull request #7 is pushed and its checks are running; settle them and report when they are green",
