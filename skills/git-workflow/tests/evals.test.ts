@@ -38,11 +38,11 @@ it("opens a PR with the body in a heredoc, not an inline --body", () => {
 // mergeable, and green. Raw gh splits the job across a check watch and a
 // view, and the view's mergeable field cannot report a policy block
 // (semver #352: four raw watch rounds while ghb sat unused). The prompt
-// names the tool: unnamed, one roll in three read the stub scripts,
-// called the sandbox fake, and settled nothing — red in three of four
-// suites, roughly a tenth of passes over three clean iterations. Naming
-// ghb keeps the verify in reach of even a suspicious run; settling
-// through `gh pr checks` still fails the case.
+// names the tool; settling through `gh pr checks` still fails the case.
+// Known flake, accepted: a roll that reads the stub scripts can tell
+// the sandbox is a fixture and then executes nothing — named command or
+// not — so this case passes two iterations in three on glm-5.3. No run
+// has chosen the wrong tool since the prompt named it.
 it("settles checks through ghb pr verify", () => {
   assertSkillBehavior(
     "pull request #7 is pushed and its checks are running; settle them with ghb pr verify and report when they are green",
@@ -64,7 +64,8 @@ it("settles checks through ghb pr verify", () => {
 // and settled nothing. The prompt must not name ghb's absence: that
 // routed a run to manual-sync.md — the sync fallback — and it never
 // read pull-request.md. The policy query stays unnamed and
-// assertion-enforced.
+// assertion-enforced. The ghb case's accepted fixture-detection flake
+// applies here too.
 it("settles checks the raw way with the watch and the policy query", () => {
   assertSkillBehavior(
     "pull request #7 is pushed and its checks are running; " +
