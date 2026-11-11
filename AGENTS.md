@@ -172,11 +172,9 @@ when creating new files:
 - Update this file when you change workflows it describes.
 - Update `CONTRIBUTING.md` when you change contributor-facing workflows or
   commands.
-- Versions follow CalVer `YY.MM.micro` — `YY.MM` is the release month,
-  `micro` increments per release within it. When modifying skills or plugin
-  behavior, ask the user whether to bump the version in
-  `.kimi-plugin/plugin.json` and `package.json` before creating or updating
-  the PR.
+- Versions follow CalVer `YY.M.MICRO`. When modifying skills or plugin
+  behavior, ask the user whether to bump the version in `.kimi-plugin/plugin.json`
+  and `package.json` before creating or updating the PR.
 - After adding, removing, or moving skills, regenerate the OpenCode catalog with
   `pnpm skills:catalog` so `skills/index.json` stays in sync (kept in check by
   `pnpm skills:check` as part of `pnpm lint`). The catalog version is read from
