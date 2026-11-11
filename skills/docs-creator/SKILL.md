@@ -6,8 +6,9 @@ description: |
   including its `SKILL.md` and `references/`. Use when deciding whether content
   belongs in `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, or a skill. Use when
   adding skills, fixing frontmatter, or improving skill trigger wording and
-  discoverability. Read the matching file in `references/` for the authoring
-  guidance.
+  discoverability. Invoke this skill and read the matching file in
+  `references/` for the authoring guidance; do not read those references
+  directly instead of loading the skill.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing
@@ -22,6 +23,15 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 # Docs Creator
 
 Routes to authoring guidance for the project's documentation and skill files.
+
+## Before writing
+
+Invoke this skill before creating, updating, or reviewing any file it covers.
+Read the routed reference from this table. Do not read `references/*` directly
+instead of loading this skill.
+
+Creating or changing `skills/**/SKILL.md` or `skills/**/references/*.md` is
+doc work. Load this skill first.
 
 Read the reference that matches the file being written or revised:
 
@@ -39,8 +49,8 @@ the reviewer subagent prompt used by `skill-reviewer.md`.
 
 ## Required Companion Skills
 
-Every piece of prose this skill writes or revises must pass `hemingway`'s
-rules. Apply them on each change. Do not submit prose that skipped the
+Load `hemingway` and read `references/prose.md` before drafting or revising
+prose. Apply its rules on each change. Do not submit prose that skipped the
 pass.
 
 ## Shared rules
