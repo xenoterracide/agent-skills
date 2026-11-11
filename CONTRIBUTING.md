@@ -9,31 +9,21 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 Thank you for contributing to the `xenoterracide-agent-skills` plugin. This
 document covers the workflow for human contributors.
 
-<<<<<<< before updating
 ## Getting Started
-=======
-    git clone <repo-url>
-    cd <project>
-    npm run contribute
->>>>>>> after updating
 
 Heal the toolchain and configure git hooks:
 
 ```bash
-pnpm contribute
+npm run contribute
 ```
 
 This runs `.config/git/hooks/heal.sh`: `asdf install`, corepack bootstrap,
 `pnpm install --frozen-lockfile`, `uv sync --frozen`, and the
 `core.hooksPath` config. Without direnv or pnpm, run the healer directly:
 
-<<<<<<< before updating
 ```bash
 sh .config/git/hooks/heal.sh
 ```
-=======
-    uv run --group dev copier update --trust
->>>>>>> after updating
 
 With direnv, entering the repository runs `.envrc`, which calls the same
 healer.
