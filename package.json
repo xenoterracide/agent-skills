@@ -35,22 +35,11 @@
     "lint": "pnpm lint:eslint && pnpm lint:prettier && pnpm lint:reuse && pnpm skills:check",
     "lint:eslint": "eslint .",
     "lint:prettier": "prettier --ignore-unknown --cache --check '**'",
-<<<<<<< before updating
     "lint:reuse": "pnpm reuse lint",
     "reuse": "uv run --frozen --group dev reuse",
     "skills:catalog": "node scripts/generate-skill-catalog.mjs",
     "skills:check": "node scripts/generate-skill-catalog.mjs --check",
     "test": "node --test scripts/*.test.mjs && vitest run scripts",
     "test:opencode": "node --test scripts/opencode-plugin.test.mjs"
-=======
-    "lint:reuse": "pnpm reuse download --all && pnpm reuse lint",
-    "precontribute": "npm run setup:corepack",
-    "reuse": "uv run --frozen --group dev reuse",
-    "setup:corepack": "npm install --global corepack && mkdir -p ~/.local/bin && corepack enable --install-directory ~/.local/bin",
-    "lint:eslint": "eslint .",
-    "lint": "pnpm lint:eslint && pnpm lint:prettier && pnpm lint:reuse",
-    "typecheck": "tsc --noEmit -p tsconfig.eslint.json",
-    "test": "vitest run --coverage"
->>>>>>> after updating
   }
 }
