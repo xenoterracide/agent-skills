@@ -10,6 +10,7 @@ A user-level skill plugin for AI coding agents. It ships reusable skills for
 Java, Gradle, GitHub, shell scripting, development planning, and documentation
 workflows.
 
+<<<<<<< before updating
 > **Requires:** This plugin is designed to be used alongside the
 > [Superpowers plugin](https://github.com/obra/superpowers). Several skills
 > reference Superpowers process-discipline skills such as
@@ -17,6 +18,12 @@ workflows.
 > git-workflow skill requires
 > [ghb](https://github.com/xenoterracide/ghb), a local build until its
 > first npm publish; without ghb, its manual sync reference applies.
+=======
+- `npm run contribute` installs tools and dependencies, and heals the
+  toolchain through `.config/git/hooks/heal.sh`. Node 25+ drops corepack,
+  so the bootstrap starts from npm.
+- `direnv allow` (if you use direnv) loads the environment.
+>>>>>>> after updating
 
 - **Primary target**: [Kimi Code CLI](https://kimi.com/code)
 - **Compatible with**: any [agentskills.io](https://agentskills.io)-standard
@@ -34,7 +41,11 @@ workflows.
 
 Then start a new session (`/new`) for skills to activate.
 
+<<<<<<< before updating
 ### OpenCode
+=======
+    uv run --group dev copier update --trust
+>>>>>>> after updating
 
 OpenCode V2 can load this repository as a plugin. The plugin:
 
