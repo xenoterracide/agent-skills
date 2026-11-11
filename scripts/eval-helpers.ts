@@ -211,10 +211,17 @@ function envWithoutTokens(): NodeJS.ProcessEnv {
 }
 
 export function runPrompt(prompt: string, { model = MODEL, fixture, repo, ghb = "missing" }: RunOptions = {}): string {
-  const dir = mkdtempSync(join(tmpdir(), "skill-evals-"));
+  // The sandbox must read as a working copy, not a fixture. A cwd named
+  // "skill-evals", or a bin/ and gh.log sitting in the repo root, tell a
+  // run it lives inside an eval; the runs that notice stop trusting the
+  // prompt's premise — one read the stub scripts and never called ghb.
+  // So: neutral dir names, and the stubs with their logs live next door,
+  // on the PATH but out of the sandbox.
+  const dir = mkdtempSync(join(tmpdir(), "work-"));
+  const toolsDir = mkdtempSync(join(tmpdir(), "tools-"));
   let configDir: string | undefined = undefined;
   try {
-    configDir = mkdtempSync(join(tmpdir(), "skill-evals-config-"));
+    configDir = mkdtempSync(join(tmpdir(), "config-"));
     cpSync(skillsDir, join(dir, "skills"), {
       recursive: true,
       filter: (source) => !relative(skillsDir, source).split(sep).includes("tests"),
@@ -228,10 +235,10 @@ export function runPrompt(prompt: string, { model = MODEL, fixture, repo, ghb = 
     }
     if (repo === true) {
       initSandboxRepo(dir);
-      writeGhStub(dir);
-      writeGhbStub(dir, ghb);
+      writeGhStub(toolsDir);
+      writeGhbStub(toolsDir, ghb);
     } else {
-      writeGhDenyStub(dir);
+      writeGhDenyStub(toolsDir);
     }
     const result = spawnSync("opencode", ["run", "--standalone", "-m", model, prompt], {
       encoding: "utf8",
@@ -241,13 +248,13 @@ export function runPrompt(prompt: string, { model = MODEL, fixture, repo, ghb = 
         XDG_CONFIG_HOME: configDir,
         // An eval must not spend the host credentials. An isolated gh
         // config finds no hosts.yml, a nulled global gitconfig kills the
-        // credential helper, and the stubbed bin/gh answers before any
-        // absolute-path gh - one wander cost a real armed auto-merge.
+        // credential helper, and the stubbed gh answers before any
+        // absolute-path gh — one wander cost a real armed auto-merge.
         GH_CONFIG_DIR: join(configDir, "gh"),
         GIT_CONFIG_GLOBAL: "/dev/null",
         GIT_CONFIG_SYSTEM: "/dev/null",
         PWD: dir,
-        PATH: [join(dir, "bin"), process.env.PATH ?? ""].join(":"),
+        PATH: [join(toolsDir, "bin"), process.env.PATH ?? ""].join(":"),
       },
       timeout: 480_000,
       maxBuffer: 64 * 1024 * 1024,
@@ -264,6 +271,7 @@ export function runPrompt(prompt: string, { model = MODEL, fixture, repo, ghb = 
     return output;
   } finally {
     rmSync(dir, { recursive: true, force: true });
+    rmSync(toolsDir, { recursive: true, force: true });
     if (configDir !== undefined) rmSync(configDir, { recursive: true, force: true });
   }
 }
