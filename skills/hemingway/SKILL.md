@@ -6,8 +6,9 @@ description: |
   notes, commit messages, PR titles and bodies, review replies, chat replies,
   comments, Javadoc, skill references, checklists, AsciiDoc. Also when
   explaining or summarizing for the user, when tightening existing prose, and
-  when naming or structuring code. Read the prose facet for writing, the code
-  facet for code.
+  when naming or structuring code. Invoke this skill and read the prose facet
+  before writing prose, or the code facet before writing or naming code. Do not
+  read `references/*` directly instead of loading the skill.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing
@@ -23,6 +24,12 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 Write the way Hemingway wrote. Short. Concrete. Every word and line earns its
 place.
+
+## Before writing
+
+Invoke this skill before you write or edit prose or code. Read the matching
+facet before the first change. Do not write from memory. Do not read
+`references/*` directly instead of loading this skill.
 
 | Writing                                                                        | Read                  |
 | ------------------------------------------------------------------------------ | --------------------- |
