@@ -33,3 +33,65 @@ it("opens a PR with the body in a heredoc, not an inline --body", () => {
     },
   );
 });
+
+// The gate: settling checks runs through ghb — one command for current,
+// mergeable, and green. Raw gh splits the job across a check watch and a
+// view, and the view's mergeable field cannot report a policy block
+// (semver #352: four raw watch rounds while ghb sat unused). The prompt
+// names the PR and the stub answers it unsettled; when the stub denied
+// the PR, a run abandoned settling to investigate the sandbox. ghb is
+// stubbed green, so the ghb path completes; a bare `gh pr checks` cannot
+// satisfy this case.
+it("settles checks through ghb pr verify", () => {
+  assertSkillBehavior(
+    "pull request #7 is pushed and its checks are running; settle them and report when they are green",
+    "git-workflow",
+    {
+      repo: true,
+      ghb: "green",
+      reads: [/pull-request\.md/],
+      commands: [/ghb pr verify/],
+    },
+  );
+});
+
+// The gate: without ghb, settling splits across a check watch and a policy
+// query, and the watch cannot report policy state. A run that watches and
+// stops has not settled checks per pull-request.md. ghb is stubbed missing
+// and the prompt names that, so the case takes the raw path without
+// depending on the agent discovering ghb's absence.
+it("settles checks the raw way with the watch and the policy query", () => {
+  assertSkillBehavior(
+    "ghb is not installed. pull request #7 is pushed and its checks are running; " +
+      "settle them and report when they are green",
+    "git-workflow",
+    {
+      repo: true,
+      ghb: "missing",
+      reads: [/pull-request\.md/],
+      commands: [/gh pr checks[^\n]*--watch/, /gh pr view(?=[^\n]*mergeStateStatus)(?=[^\n]*reviewDecision)/],
+    },
+  );
+});
+
+// The gate: mergeable says the diff applies, not that the policy accepts
+// the merge — a BLOCKED review refuses the merge with every check green,
+// and --admin bypasses policy, which is never the agent's call. The
+// confirm step must read the policy fields, not the diff field (semver
+// #352: mergeable MERGEABLE while the merge was BLOCKED). The raw branch
+// must read both fields: mergeStateStatus alone leaves reviewDecision
+// unchecked.
+it("confirms policy state and attempts no merge on a mergeable-only signal", () => {
+  assertSkillBehavior(
+    "gh pr view reports the pull request mergeable MERGEABLE with every check green. " +
+      "confirm it will merge, then merge it",
+    "git-workflow",
+    {
+      repo: true,
+      ghb: "missing",
+      reads: [/pull-request\.md/],
+      commands: [/ghb pr verify|gh pr view(?=[^\n]*mergeStateStatus)(?=[^\n]*reviewDecision)/],
+      forbids: [/gh pr merge/, /merge_pull_request/, /mergePullRequest/, /pulls\/\d+\/merge/, /--admin/],
+    },
+  );
+});

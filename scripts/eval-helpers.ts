@@ -68,6 +68,11 @@ export interface RunOptions {
   model?: string;
   fixture?: string;
   repo?: boolean;
+  /** ghb availability in the sandbox. The sandbox inherits the host PATH,
+   * where a real ghb reaches the network; shadow it. "missing" (default)
+   * shadows ghb as an absent binary, so the run takes the raw fallback;
+   * "green" and "blocked" answer pr verify with that policy state. */
+  ghb?: "missing" | "green" | "blocked";
 }
 
 // Evals that need a repository opt in with repo: true. Git cannot track a
@@ -93,7 +98,10 @@ export function initSandboxRepo(dir: string): void {
 
 // The stub shadows gh on the sandbox PATH. It answers the preflight an
 // agent runs before creating a PR and accepts the create, so the flow
-// completes without touching the network; argv is logged to gh.log.
+// completes without touching the network; argv is logged to gh.log. A
+// named PR answers in an unsettled state — checks pending, policy blank —
+// because a run the sandbox contradicts stops settling and starts
+// investigating the sandbox itself.
 export function writeGhStub(dir: string): void {
   const bin = join(dir, "bin");
   mkdirSync(bin);
@@ -111,7 +119,22 @@ export function writeGhStub(dir: string): void {
       '      *) echo "xenoterracide/fixture";;',
       "    esac",
       "    exit 0;;",
-      '  "pr view") echo "no pull requests found" >&2; exit 1;;',
+      '  "pr view")',
+      '    case "$*" in',
+      "      *7*)",
+      '        case "$*" in',
+      '          *--json*) echo \'{"number":7,"url":"https://github.com/xenoterracide/fixture/pull/7","title":"feat: fixture","state":"OPEN","isDraft":false,"headRefName":"feat/fixture","baseRefName":"main","headRefOid":"0000000000000000000000000000000000000007","mergeable":null,"mergeStateStatus":"UNKNOWN","reviewDecision":"","statusCheckRollup":[{"__typename":"CheckRun","name":"check / check","status":"IN_PROGRESS"}]}\';;',
+      '          *) printf \'%s\\n\' "feat: fixture" "state: OPEN" "base: main" "head: feat/fixture" "checks: check / check  pending";;',
+      "        esac",
+      "        exit 0;;",
+      '      *) echo "no pull requests found" >&2; exit 1;;',
+      "    esac;;",
+      '  "pr checks")',
+      '    case "$*" in',
+      '      *--watch*) echo "check / check  pass";;',
+      '      *) echo "check / check  pending"; exit 8;;',
+      "    esac",
+      "    exit 0;;",
       '  "pr create") echo "https://github.com/xenoterracide/fixture/pull/1"; exit 0;;',
       "esac",
       "exit 0",
@@ -121,11 +144,84 @@ export function writeGhStub(dir: string): void {
   );
 }
 
-export function runPrompt(prompt: string, { model = MODEL, fixture, repo }: RunOptions = {}): string {
-  const dir = mkdtempSync(join(tmpdir(), "skill-evals-"));
+// The deny stub shadows gh for runs without a sandbox repo. The host gh is
+// authenticated and the sandbox shares the host filesystem, so a run that
+// wanders out can reach the real network; every gh call must fail as an
+// unauthenticated gh would. argv is logged to gh.log.
+export function writeGhDenyStub(dir: string): void {
+  const bin = join(dir, "bin");
+  mkdirSync(bin, { recursive: true });
+  writeFileSync(
+    join(bin, "gh"),
+    [
+      "#!/bin/sh",
+      'log="$(dirname "$0")/../gh.log"',
+      'printf \'%s\\n\' "$*" >>"$log"',
+      'echo "You are not logged into any GitHub hosts. Run gh auth login to authenticate." >&2',
+      "exit 1",
+      "",
+    ].join("\n"),
+    { mode: 0o755 },
+  );
+}
+
+// The stub shadows ghb on the sandbox PATH. A host ghb would reach the
+// network from inside the sandbox. "green" and "blocked" answer pr verify
+// with that policy state so the ghb path completes; "missing" fails like
+// an absent binary, so the run takes the raw fallback. argv is logged to
+// ghb.log.
+export function writeGhbStub(dir: string, availability: "missing" | "green" | "blocked"): void {
+  const bin = join(dir, "bin");
+  mkdirSync(bin, { recursive: true });
+  const verify =
+    availability === "blocked"
+      ? "PR #7: mergeStateStatus BLOCKED, reviewDecision CHANGES_REQUESTED — merge refused"
+      : "PR #7: current, mergeable, checks green";
+  const lines =
+    availability === "missing"
+      ? [
+          "#!/bin/sh",
+          'log="$(dirname "$0")/../ghb.log"',
+          'printf \'%s\\n\' "$*" >>"$log"',
+          'echo "ghb: command not found" >&2',
+          "exit 127",
+          "",
+        ]
+      : [
+          "#!/bin/sh",
+          'log="$(dirname "$0")/../ghb.log"',
+          'printf \'%s\\n\' "$*" >>"$log"',
+          'case "$1 $2" in',
+          `  "pr verify") echo "${verify}"; exit 0;;`,
+          "esac",
+          "exit 0",
+          "",
+        ];
+  writeFileSync(join(bin, "ghb"), lines.join("\n"), { mode: 0o755 });
+}
+
+// Tokens ride the environment as well as hosts.yml; the sandbox shares the
+// host process environment, so strip what an eval never needs.
+function envWithoutTokens(): NodeJS.ProcessEnv {
+  const env: NodeJS.ProcessEnv = { ...process.env };
+  delete env.GH_TOKEN;
+  delete env.GITHUB_TOKEN;
+  delete env.GH_ENTERPRISE_TOKEN;
+  return env;
+}
+
+export function runPrompt(prompt: string, { model = MODEL, fixture, repo, ghb = "missing" }: RunOptions = {}): string {
+  // The sandbox must read as a working copy, not a fixture. A cwd named
+  // "skill-evals", or a bin/ and gh.log sitting in the repo root, tell a
+  // run it lives inside an eval; the runs that notice stop trusting the
+  // prompt's premise — one read the stub scripts and never called ghb.
+  // So: neutral dir names, and the stubs with their logs live next door,
+  // on the PATH but out of the sandbox.
+  const dir = mkdtempSync(join(tmpdir(), "work-"));
+  const toolsDir = mkdtempSync(join(tmpdir(), "tools-"));
   let configDir: string | undefined = undefined;
   try {
-    configDir = mkdtempSync(join(tmpdir(), "skill-evals-config-"));
+    configDir = mkdtempSync(join(tmpdir(), "config-"));
     cpSync(skillsDir, join(dir, "skills"), {
       recursive: true,
       filter: (source) => !relative(skillsDir, source).split(sep).includes("tests"),
@@ -139,16 +235,26 @@ export function runPrompt(prompt: string, { model = MODEL, fixture, repo }: RunO
     }
     if (repo === true) {
       initSandboxRepo(dir);
-      writeGhStub(dir);
+      writeGhStub(toolsDir);
+      writeGhbStub(toolsDir, ghb);
+    } else {
+      writeGhDenyStub(toolsDir);
     }
     const result = spawnSync("opencode", ["run", "--standalone", "-m", model, prompt], {
       encoding: "utf8",
       cwd: dir,
       env: {
-        ...process.env,
+        ...envWithoutTokens(),
         XDG_CONFIG_HOME: configDir,
+        // An eval must not spend the host credentials. An isolated gh
+        // config finds no hosts.yml, a nulled global gitconfig kills the
+        // credential helper, and the stubbed gh answers before any
+        // absolute-path gh — one wander cost a real armed auto-merge.
+        GH_CONFIG_DIR: join(configDir, "gh"),
+        GIT_CONFIG_GLOBAL: "/dev/null",
+        GIT_CONFIG_SYSTEM: "/dev/null",
         PWD: dir,
-        ...(repo === true ? { PATH: [join(dir, "bin"), process.env.PATH ?? ""].join(":") } : {}),
+        PATH: [join(toolsDir, "bin"), process.env.PATH ?? ""].join(":"),
       },
       timeout: 480_000,
       maxBuffer: 64 * 1024 * 1024,
@@ -165,6 +271,7 @@ export function runPrompt(prompt: string, { model = MODEL, fixture, repo }: RunO
     return output;
   } finally {
     rmSync(dir, { recursive: true, force: true });
+    rmSync(toolsDir, { recursive: true, force: true });
     if (configDir !== undefined) rmSync(configDir, { recursive: true, force: true });
   }
 }
@@ -203,10 +310,11 @@ export function assertSkillBehavior(
     forbids = [],
     commands: commandPatterns = [],
     repo,
+    ghb,
   }: BehaviorOptions = {},
 ): void {
   for (let i = 0; i < iterations; i++) {
-    const output = run(prompt, { model, fixture, repo });
+    const output = run(prompt, { model, fixture, repo, ghb });
     const loaded = detectSkills(output);
     const label = `run ${String(i + 1)}/${String(iterations)}`;
     if (loadEvent) {
