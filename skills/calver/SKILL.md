@@ -58,9 +58,3 @@ Examples (`YY.0M.MICRO`, preserve padding):
 `MICRO` starts at `0` so the first release in a period behaves like the start of
 a SemVer-style patch line, even though the date segments are not semantic
 major/minor.
-
-## This repository
-
-This repository uses `YY.M.MICRO` with `MICRO` starting at `0`. Bump the version
-in the files that carry it (for example `.kimi-plugin/plugin.json` and
-`package.json`) when a change warrants a release, as requested.
