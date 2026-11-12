@@ -44,7 +44,7 @@ directory doubles as an OpenCode-compatible HTTP skill catalog.
 Run setup once with:
 
 ```bash
-pnpm contribute
+npm run contribute
 ```
 
 With direnv, entering the repository runs `.envrc`, which installs pinned

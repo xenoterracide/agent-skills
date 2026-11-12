@@ -14,7 +14,7 @@ document covers the workflow for human contributors.
 Heal the toolchain and configure git hooks:
 
 ```bash
-pnpm contribute
+npm run contribute
 ```
 
 This runs `.config/git/hooks/heal.sh`: `asdf install`, corepack bootstrap,
