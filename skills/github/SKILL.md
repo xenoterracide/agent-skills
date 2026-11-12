@@ -33,6 +33,46 @@ mechanics (which are platform-agnostic), use the `git-workflow` skill instead.
 - Safer (no shell injection risks)
 - Better error messages
 
+## Create a PR Review with Inline Comments
+
+One review carries every anchored finding.
+
+1. Read the head SHA: `gh pr view <n> --json headRefOid --jq .headRefOid`.
+2. POST the review with its JSON body on stdin:
+
+```bash
+gh api --method POST "repos/{owner}/{repo}/pulls/<n>/reviews" --input - <<'EOF'
+{
+  "commit_id": "<head SHA>",
+  "event": "REQUEST_CHANGES",
+  "body": "Not on the diff:\n\n- `src/app.sh:8` ...",
+  "comments": [
+    {
+      "path": "src/app.sh",
+      "line": 12,
+      "side": "RIGHT",
+      "body": "**Important:** ..."
+    }
+  ]
+}
+EOF
+```
+
+- `event` is `REQUEST_CHANGES`, `COMMENT`, or `APPROVE`. Never approve.
+- `line` counts the file at `commit_id`. `side` is `RIGHT` for an added or
+  unchanged line, `LEFT` for a deletion. `start_line` begins a range.
+- A line outside the diff returns 422 and posts nothing. Remove that comment,
+  move its text to `body` under `Not on the diff`, and repost.
+- Skip a path and line that already carries the same finding:
+
+```bash
+gh api "repos/{owner}/{repo}/pulls/<n>/comments" \
+  --jq '.[] | "\(.path):\(.line)"'
+```
+
+With MCP tools: create a pending review, add each comment, then submit it
+with the event.
+
 ## GraphQL via CLI
 
 When MCP tools are unavailable, use `gh api graphql` for operations not covered by REST API:
