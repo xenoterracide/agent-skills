@@ -29,3 +29,9 @@ it("applies hemingway as a companion", () => {
     "hemingway",
   );
 });
+
+// Same prompt on purpose: this asserts the companion rule — code-review
+// pulls github in before posting the review — not github's own trigger.
+it("applies github as a companion", () => {
+  assertSkillLoads("review this pull request before I merge it", "github");
+});
