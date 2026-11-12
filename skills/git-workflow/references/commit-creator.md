@@ -48,12 +48,13 @@ of preference, from:
 1. The issue or ticket the change closes — summarize the real why in one line
    and link the issue (`Closes #123`) for the full detail; do not restate a
    guessed rationale.
-2. The reason the user gave in the request or conversation.
-3. The review comment, bug report, or failing test that triggered the change.
+2. The design doc or plan the change implements — cite its path.
+3. The reason the user gave in the request or conversation.
+4. The review comment, bug report, or failing test that triggered the change.
 
-If none of these gives you the motivation, do not guess: ask the user for one
-line, or omit the why and state only the what. A fabricated rationale in
-permanent history is worse than no rationale.
+If none of these gives you the motivation, do not guess and do not ask.
+Omit the why and state only the what. A fabricated rationale in permanent
+history is worse than no rationale.
 
 Keep the message self-contained: source the why from the conversation, but
 render it as a standing problem statement — write "the parser dropped trailing

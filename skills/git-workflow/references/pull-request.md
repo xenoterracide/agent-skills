@@ -15,7 +15,8 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
     `references/commit-creator.md`): an optional grounded why, then `-` bullets.
     No Markdown headings (`##`), bold, fenced blocks, or checkboxes (`- [x]`) —
     they land verbatim as noise in `git log`.
-- Commit and push your changes.
+- Commit and push each completed logical step. Do not hold the work for one
+  commit at the end.
   - Compile and test before committing.
     - Run relevant, specific tests first for quick feedback.
     - Prefer compile-only checks for quick validation.
@@ -93,7 +94,7 @@ When committing and creating/updating a PR, follow this workflow:
      `origin/<branch>`, which the first push creates
    - Sync immediately — `ghb pr sync`, or `references/manual-sync.md`
      without ghb — so the PR is born current
-   - Create the new PR
+   - Create the new PR as a draft: `gh pr create --draft`
 
 5. **Before finalizing:**
    - Review if documentation needs updates (README.md, AGENTS.md)
@@ -101,13 +102,26 @@ When committing and creating/updating a PR, follow this workflow:
    - Ensure PR description accurately reflects all changes including doc updates
 
 6. **After pushing, before returning to the user:**
-   - Verify with `ghb pr verify`; without ghb, `gh pr checks <PR> --watch`
-     in a background shell, redirected per `output-hygiene` — unique file,
-     then tail — (or the MCP equivalent)
+   - Settle the draft checks, flip the PR ready, then settle the full set —
+     see `Draft, Ready, and Checks`
    - If any check fails, diagnose and remediate the issue before returning
    - Do not consider the task complete while required checks are failing
    - Always print the PR URL when returning so the user can easily review
    - Stop there. Merging waits for the human's explicit confirmation.
+
+### Draft, Ready, and Checks
+
+A draft PR runs the cheap checks. Some repositories gate their expensive
+suites behind "ready", so the draft pass is the cheap signal.
+
+1. Watch the draft checks — `gh pr checks <PR> --watch`, redirected per
+   `output-hygiene`.
+2. When they pass, mark the PR ready: `gh pr ready <PR>`.
+3. Watch again. Ready releases the full set. Settle it through
+   `ghb pr verify` when available; without ghb, follow `Settling Checks`.
+4. Report the URL, head SHA, and green checks once the full set passes.
+
+A fix after ready stays on the same PR: commit and push. The PR stays ready.
 
 ### Merging on the Human's Yes
 
