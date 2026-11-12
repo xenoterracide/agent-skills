@@ -67,6 +67,7 @@ These apply to every git workflow activity in this repository:
   syncing, and commit to the same branch for updates rather than creating new
   branches.
 - **Verify checks before returning.** Always confirm required GitHub checks
-  pass before ending the task, and print the PR URL. `ghb pr verify` in a
-  background shell prints one line; without ghb, watch redirected per
-  `output-hygiene` — unique file, then tail.
+  pass before ending the task, and print the PR URL. Run `ghb pr verify` on a
+  ready PR only — a draft is permanently blocked. Settle the draft checks and
+  flip ready first (`pull-request.md`, `Draft, Ready, and Checks`). Without
+  ghb, watch redirected per `output-hygiene` — unique file, then tail.

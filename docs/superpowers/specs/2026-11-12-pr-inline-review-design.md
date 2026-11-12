@@ -54,16 +54,19 @@ durable after the chat is gone.
   review API mechanics.
 - New section, `Post the Review to the PR`, after `Direct Request`. It applies
   to both paths; a dispatch prompt that forbids external writes wins.
-  - Post before replying. One review holds every anchored finding. Not one
-    comment per finding.
+  - Post before replying. One review holds every anchored finding. Each
+    finding is one comment; never one review per finding.
   - Each comment carries severity, what is wrong, and why it matters. Chat no
     longer repeats it.
   - Event: `REQUEST_CHANGES` for any Critical or Important finding. `COMMENT`
     otherwise. Never `APPROVE`.
-  - Findings that do not anchor — unchanged code, a deleted line, a missing
-    file — go in the review body under `Not on the diff`.
+  - Findings outside the diff — a line it does not touch, a missing file — go
+    in the review body under `Not on the diff`. Context lines and deletions
+    anchor as `RIGHT` and `LEFT`.
   - A re-review after a push posts a fresh review. Skip a finding already
     posted at the same path and line on this PR.
+  - `COMMENT` does not lift an earlier `REQUEST_CHANGES`. The human dismisses
+    the review.
   - Reply with the verdict, severity counts, and the review URL.
 
 ### `skills/github/SKILL.md`
@@ -74,8 +77,9 @@ New section, `Create a PR Review with Inline Comments`:
 - POST `repos/{owner}/{repo}/pulls/{n}/reviews` with `--input -`. The JSON body
   holds `commit_id`, `event`, `body`, and `comments[]`.
 - Each comment: `path`, `line`, `side`, and optional `start_line`.
-  - `side` is `RIGHT` for added or unchanged lines, `LEFT` for deletions.
-  - `line` counts the file at `commit_id`.
+  - `side` is `RIGHT` for an added or unchanged line, `LEFT` for a deletion.
+  - `line` counts the file `side` picks: `RIGHT` counts the file at
+    `commit_id`, `LEFT` counts the base file.
   - A line outside the diff returns 422.
 - One bad anchor fails the whole review. Repost without that comment, with its
   text in the review body.

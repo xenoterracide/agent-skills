@@ -56,7 +56,7 @@ If none of these gives you the motivation, do not guess and do not ask.
 Omit the why and state only the what. A fabricated rationale in permanent
 history is worse than no rationale.
 
-Keep the message self-contained: source the why from the conversation, but
+Keep the message self-contained: source the why from the list above, but
 render it as a standing problem statement — write "the parser dropped trailing
 commas," not "you noticed the parser dropped commas."
 

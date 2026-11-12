@@ -28,9 +28,9 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
     - Rename a workflow or change its interface only with matching updates to
       both documents.
   - Verify required GitHub checks before returning to the user.
-    - Run `ghb pr verify` in a background shell — it fails fast on a stale
-      or unpushed branch, waits out mergeability and every check, then
-      prints one line.
+    - Run `ghb pr verify` only on a ready PR — it treats a draft as
+      permanently blocked. Settle the draft checks and flip ready first; see
+      `Draft, Ready, and Checks`.
     - Without ghb, watch the checks in a background shell redirected per
       `output-hygiene` — `gh pr checks <PR> --watch`, unique file, then
       tail — or the MCP checks equivalent.
@@ -111,8 +111,8 @@ When committing and creating/updating a PR, follow this workflow:
 
 ### Draft, Ready, and Checks
 
-A draft PR runs the cheap checks. Some repositories gate their expensive
-suites behind "ready", so the draft pass is the cheap signal.
+Repositories that gate expensive suites behind "ready" run only the cheap
+checks on a draft. With no gate, the draft runs the full set.
 
 1. Watch the draft checks — `gh pr checks <PR> --watch`, redirected per
    `output-hygiene`.
@@ -121,7 +121,7 @@ suites behind "ready", so the draft pass is the cheap signal.
    `ghb pr verify` when available; without ghb, follow `Settling Checks`.
 4. Report the URL, head SHA, and green checks once the full set passes.
 
-A fix after ready stays on the same PR: commit and push. The PR stays ready.
+A fix after ready stays on the same PR. Commit and push.
 
 ### Merging on the Human's Yes
 
@@ -209,8 +209,8 @@ Follow conventional commit format for PR titles (they become the squash merge co
 ### Commit Message and PR Body Format
 
 Follow `references/commit-creator.md` for commit message format, PR
-body structure, and the grounded "why" (sourced from the issue, the user's
-request, or review feedback — never fabricated). PR descriptions become
+body structure, and the grounded "why" (sourced from the sources listed
+there — never fabricated). PR descriptions become
 permanent commit history via squash merge.
 
 ### Creating a New PR
@@ -224,7 +224,7 @@ Pass the body with `--body-file -` and a quoted heredoc. Never embed newlines in
 TITLE=$(git log -1 --format="%s" HEAD)
 
 # Create PR with proper title and body
-gh pr create --title "$TITLE" --body-file - <<'EOF'
+gh pr create --draft --title "$TITLE" --body-file - <<'EOF'
 - Bullet point describing change 1
 - Bullet point describing change 2
 EOF

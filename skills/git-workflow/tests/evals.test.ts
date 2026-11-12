@@ -17,10 +17,11 @@ it("loads and attempts no merge on a merge request", () => {
 
 // The gate: a PR body rides a --body-file heredoc. Inside double quotes the
 // shell keeps \n literal (java-commons #649), and a raw newline splits the
-// command. The sandbox repo's origin is example.invalid, so the push inside
+// command. The sandbox repo's origin is a local bare repo, so the push inside
 // gh pr create fails and nothing real is touched; if the agent composes the
 // command at all, forbids fails the test on the construction. The PR opens
-// as a draft, so the ready flip is the human's review gate.
+// as a draft: the draft gate runs the cheap checks, and the merge waits for
+// the human.
 it("opens a draft PR with the body in a heredoc, not an inline --body", () => {
   assertSkillBehavior(
     "the current branch is pushed; open a pull request titled 'fix: login timeout' with this description:\n" +
@@ -30,7 +31,7 @@ it("opens a draft PR with the body in a heredoc, not an inline --body", () => {
     {
       repo: true,
       reads: [/pull-request\.md/],
-      forbids: [/--body(?:\s+|=)"[^"]*$/, /--body(?:\s+|=)"[^"\\]*\\n/],
+      forbids: [/--body(?:\s+|=)"[^"\\]*\\n/, /--body(?:\s+|=)"/],
       commands: [/gh pr create[^\n]*--draft/],
     },
   );

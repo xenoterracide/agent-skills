@@ -41,7 +41,8 @@ One review carries every anchored finding.
 2. POST the review with its JSON body on stdin:
 
 ```bash
-gh api --method POST "repos/{owner}/{repo}/pulls/<n>/reviews" --input - <<'EOF'
+gh api --method POST "repos/{owner}/{repo}/pulls/<n>/reviews" \
+  --input - --jq .html_url <<'EOF'
 {
   "commit_id": "<head SHA>",
   "event": "REQUEST_CHANGES",
@@ -58,16 +59,21 @@ gh api --method POST "repos/{owner}/{repo}/pulls/<n>/reviews" --input - <<'EOF'
 EOF
 ```
 
+The command prints the review URL. Report it.
+
 - `event` is `REQUEST_CHANGES`, `COMMENT`, or `APPROVE`. Never approve.
-- `line` counts the file at `commit_id`. `side` is `RIGHT` for an added or
-  unchanged line, `LEFT` for a deletion. `start_line` begins a range.
+- `side` picks the file: `RIGHT` for an added or unchanged line, `LEFT` for a
+  deletion.
+- `line` counts the file `side` picks. `RIGHT` counts the file at `commit_id`;
+  `LEFT` counts the base file. `start_line` begins a range.
 - A line outside the diff returns 422 and posts nothing. Remove that comment,
   move its text to `body` under `Not on the diff`, and repost.
-- Skip a path and line that already carries the same finding:
+- Skip a finding the bot already posted at the same path and line:
 
 ```bash
-gh api "repos/{owner}/{repo}/pulls/<n>/comments" \
-  --jq '.[] | "\(.path):\(.line)"'
+gh api --paginate "repos/{owner}/{repo}/pulls/<n>/comments" \
+  --jq '.[] | select(.user.login == "<bot login>" and .line != null)
+        | "\(.path):\(.line) \(.body)"'
 ```
 
 With MCP tools: create a pending review, add each comment, then submit it
