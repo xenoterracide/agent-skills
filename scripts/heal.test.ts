@@ -2,20 +2,9 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-import { rmSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
-import { HOOKS_PATH, makeFixture, readLog, runHeal } from "./heal-helpers";
-import type { Fixture, FixtureSetup } from "./heal-helpers";
-
-const withFixture = (setup: FixtureSetup, body: (fixture: Fixture) => void): void => {
-  const fixture = makeFixture(setup);
-  try {
-    body(fixture);
-  } finally {
-    rmSync(fixture.root, { recursive: true, force: true });
-  }
-};
+import { HOOKS_PATH, readLog, runHeal, withFixture } from "./heal-helpers";
 
 const skipsToolsWithoutMarkers = (): void => {
   withFixture({}, (fixture) => {
