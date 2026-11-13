@@ -52,11 +52,17 @@ tools, dependencies, and the git hooks.
 
 ### Lint and Format
 
+Formatting and license headers come from the pre-commit hook: lint-staged
+runs prettier, shfmt, and reuse annotate on staged files and restages them.
+Do not format or annotate by hand; commit and let the hook do both. Never
+commit with `--no-verify`.
+
+These commands verify the tree, they do not fix it:
+
 ```bash
 pnpm lint                         # prettier + REUSE checks
 pnpm lint:prettier                # Prettier check with cache
 pnpm lint:reuse                   # REUSE license compliance check
-pnpm exec prettier --write <file> # Format a single file
 ```
 
 ### Test
@@ -161,8 +167,9 @@ See `.prettierrc.cjs` for the full config.
 
 ### Licensing by File Type
 
-`.lintstagedrc.cjs` is the source of truth for license headers. Use this table
-when creating new files:
+`.lintstagedrc.cjs` is the source of truth for license headers. The
+pre-commit hook stamps them on commit — do not add headers by hand. Use the
+table when adding a glob for a new file type:
 
 | File type                              | License           | Formatter        |
 | -------------------------------------- | ----------------- | ---------------- |
@@ -176,8 +183,9 @@ when creating new files:
 | `*.properties`                         | CC0-1.0           | Prettier         |
 | dotfiles (`.gitignore`, etc.)          | CC0-1.0           | Prettier         |
 
-> Markdown skill files do **not** receive REUSE headers. Place the SPDX block
-> inside an HTML comment immediately after the YAML frontmatter.
+> Markdown files get no REUSE header from the hook (reuse cannot handle
+> frontmatter). Add the SPDX block by hand: inside an HTML comment immediately
+> after YAML frontmatter, or at the top of a file without frontmatter.
 
 ## Maintenance
 
