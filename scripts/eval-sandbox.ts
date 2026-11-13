@@ -89,10 +89,13 @@ function copySandboxContent(dir: string, fixture: string | undefined): void {
   }
 }
 
-function writeSandboxStubs(tools: string, { repo, ghb }: { repo: boolean; ghb: RunOptions["ghb"] }): void {
+function writeSandboxStubs(
+  tools: string,
+  { repo, ghb }: { repo: boolean; ghb: "missing" | "green" | "blocked" },
+): void {
   if (repo) {
     writeGhStub(tools);
-    writeGhbStub(tools, ghb ?? "missing");
+    writeGhbStub(tools, ghb);
   } else {
     writeGhDenyStub(tools);
   }
