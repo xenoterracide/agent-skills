@@ -15,11 +15,21 @@ directory doubles as an OpenCode-compatible HTTP skill catalog.
 - **License for skills/docs**: CC-BY-NC-SA-4.0
 - **License for configuration files**: CC0-1.0
 
+<<<<<<< before updating
 > **Agent Note:** This repo is the plugin source for
 > `xenoterracide-agent-skills` — not the Superpowers plugin, not an installed
 > plugin directory. Make all skill and plugin changes in this repository, then
 > reinstall. Never edit files under `~/.kimi-code/`, `~/.kimi-plugin/`,
 > `~/.config/opencode/`, or any other agent installation directory.
+=======
+- `npm run contribute` — bootstrap tooling (run once after clone)
+- `pnpm check` — run all checks
+- `pnpm lint:prettier` — prettier check
+- `pnpm lint:reuse` — REUSE compliance check
+- `pnpm lint:eslint` — ESLint check
+- `pnpm typecheck` — TypeScript type check
+- `pnpm test` — vitest with coverage
+>>>>>>> after updating
 
 ## Source of Truth
 

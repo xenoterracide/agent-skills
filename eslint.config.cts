@@ -7,9 +7,11 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 import jsonPluginImport from "@eslint/json";
 import markdown from "@eslint/markdown";
+import sonarImport from "eslint-plugin-sonarjs";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 const jsonPlugin = (jsonPluginImport as { default?: typeof jsonPluginImport }).default ?? jsonPluginImport;
+const sonarjs = (sonarImport as { default?: typeof sonarImport }).default ?? sonarImport;
 
 export default defineConfig([
   globalIgnores([
@@ -37,6 +39,7 @@ export default defineConfig([
         project: "./tsconfig.eslint.json",
       },
     },
+    plugins: { sonarjs },
     rules: {
       "max-params": "off",
       "@typescript-eslint/max-params": "error",
@@ -48,6 +51,14 @@ export default defineConfig([
       "@typescript-eslint/init-declarations": "error",
       "prefer-destructuring": "off",
       "@typescript-eslint/prefer-destructuring": "error",
+      "complexity": ["error", 10],
+      "max-classes-per-file": "error",
+      "max-depth": ["error", 3],
+      "max-lines": "error",
+      "max-lines-per-function": ["error", { max: 25 }],
+      "max-statements": ["error", 20, { ignoreTopLevelFunctions: false }],
+      "sonarjs/cognitive-complexity": "error",
+      "sonarjs/expression-complexity": ["error", { max: 3 }],
       "@typescript-eslint/consistent-type-exports": "error",
       "@typescript-eslint/consistent-type-imports": "error",
       "@typescript-eslint/explicit-member-accessibility": "error",
@@ -67,30 +78,9 @@ export default defineConfig([
       "@typescript-eslint/no-useless-empty-export": "error",
       "@typescript-eslint/prefer-readonly": "error",
       "@typescript-eslint/promise-function-async": "error",
+      "@typescript-eslint/restrict-template-expressions": ["error", { allowNumber: true }],
       "@typescript-eslint/strict-boolean-expressions": "error",
       "@typescript-eslint/switch-exhaustiveness-check": "error",
-    },
-  },
-  {
-    files: ["packages/**/*.ts"],
-    rules: {
-      "@typescript-eslint/no-unsafe-assignment": "off",
-      "@typescript-eslint/no-unsafe-call": "off",
-      "@typescript-eslint/no-unsafe-member-access": "off",
-      "@typescript-eslint/no-unsafe-return": "off",
-      "@typescript-eslint/no-unsafe-argument": "off",
-      "@typescript-eslint/strict-boolean-expressions": "off",
-      "@typescript-eslint/restrict-template-expressions": "off",
-      "@typescript-eslint/restrict-plus-operands": "off",
-      "@typescript-eslint/require-await": "off",
-      "@typescript-eslint/init-declarations": "off",
-      "no-useless-assignment": "off",
-      "preserve-caught-error": "off",
-      "no-empty": ["error", { allowEmptyCatch: false }],
-      "@typescript-eslint/no-empty-function": "error",
-      "@typescript-eslint/no-unnecessary-condition": "off",
-      "@typescript-eslint/max-params": "off",
-      "@typescript-eslint/no-use-before-define": "off",
     },
   },
   {
