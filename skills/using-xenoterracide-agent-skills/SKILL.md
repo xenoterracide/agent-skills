@@ -53,10 +53,10 @@ merge still waits for the human's yes.
 
 ## Writing Style
 
-Every message you send your partner, and every file you write, follows the
-`hemingway` skill. Short. Concrete. No filler. Prose rules live in
-`references/prose.md`; code rules in `references/code.md`. Read the facet
-once, before the first prose you write in a session — chat replies included.
+Invoke `hemingway` now. Read the prose facet before the first prose you
+write in a session — chat replies included. Read the code facet before
+writing or naming code. Every message you send your partner, and every file
+you write, follows it. Short. Concrete. No filler.
 
 ## Quiet command output
 

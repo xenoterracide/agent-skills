@@ -75,3 +75,22 @@ it("applies as a docs-creator companion on a skill reference", () => {
     reads: ["references/prose.md"],
   });
 });
+
+// Router-event assertions fail on these prompts: the task vocabulary routes
+// to docs-creator, and big-pickle sometimes writes without consulting any
+// style skill (2026-11-12, one blind run in three, no load and no read).
+// The facet read is the contract, same as the case above.
+it("applies as a docs-creator companion when creating a new skill", () => {
+  assertSkillBehavior(
+    "add a calver skill to this repo for bumping YY.M.MICRO versions; create skills/calver/SKILL.md and update AGENTS.md",
+    "hemingway",
+    { loadEvent: false, reads: ["references/prose.md"] },
+  );
+});
+
+it("applies as a docs-creator companion when editing AGENTS.md", () => {
+  assertSkillBehavior("update AGENTS.md to say this repo uses CalVer YY.M.MICRO", "hemingway", {
+    loadEvent: false,
+    reads: ["references/prose.md"],
+  });
+});
