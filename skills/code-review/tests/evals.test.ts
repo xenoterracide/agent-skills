@@ -4,7 +4,7 @@
 
 import { it } from "vitest";
 
-import { assertSkillLoads } from "../../../scripts/eval-helpers";
+import { assertSkillBehavior, assertSkillLoads } from "../../../scripts/eval-helpers";
 
 it("triggers on a dispatched reviewer prompt", () => {
   assertSkillLoads(
@@ -28,4 +28,13 @@ it("applies hemingway as a companion", () => {
     'review this diff before I merge it:\n--- a/app.sh\n+++ b/app.sh\n@@ -1 +1 @@\n-echo $1\n+echo "$1"',
     "hemingway",
   );
+});
+
+// Same prompt on purpose: this asserts the companion rule — code-review
+// pulls github in before posting the review. It proves both load in one
+// run, not causality: github's own description also matches "pull request".
+it("applies github as a companion", () => {
+  assertSkillBehavior("review this pull request before I merge it", "code-review", {
+    companions: ["github"],
+  });
 });

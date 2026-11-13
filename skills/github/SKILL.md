@@ -33,6 +33,54 @@ mechanics (which are platform-agnostic), use the `git-workflow` skill instead.
 - Safer (no shell injection risks)
 - Better error messages
 
+## Create a PR Review with Inline Comments
+
+One review carries every anchored finding.
+
+1. Read the head SHA: `gh pr view <n> --json headRefOid --jq .headRefOid`.
+2. POST the review with its JSON body on stdin:
+
+```bash
+gh api --method POST "repos/{owner}/{repo}/pulls/<n>/reviews" \
+  --input - --jq .html_url <<'EOF'
+{
+  "commit_id": "<head SHA>",
+  "event": "REQUEST_CHANGES",
+  "body": "Not on the diff:\n\n- `src/app.sh:8` ...",
+  "comments": [
+    {
+      "path": "src/app.sh",
+      "line": 12,
+      "side": "RIGHT",
+      "body": "**Important:** ..."
+    }
+  ]
+}
+EOF
+```
+
+The command prints the review URL. Report it.
+
+- `event` is `REQUEST_CHANGES`, `COMMENT`, or `APPROVE`. Never approve.
+- `side` picks the file: `RIGHT` for an added or unchanged line, `LEFT` for a
+  deletion.
+- `line` counts the file `side` picks. `RIGHT` counts the file at `commit_id`;
+  `LEFT` counts the base file.
+- A multi-line range starts at `start_line`. `start_side` is required with it
+  and matches the side. Omitting it returns 422.
+- A line outside the diff returns 422 and posts nothing. Remove that comment,
+  move its text to `body` under `Not on the diff`, and repost.
+- Skip a finding the bot already posted at the same path and line:
+
+```bash
+gh api --paginate "repos/{owner}/{repo}/pulls/<n>/comments" \
+  --jq '.[] | select(.user.login == "<bot login>" and .line != null)
+        | "\(.path):\(.line) \(.body)"'
+```
+
+With MCP tools: create a pending review, add each comment, then submit it
+with the event.
+
 ## GraphQL via CLI
 
 When MCP tools are unavailable, use `gh api graphql` for operations not covered by REST API:

@@ -45,6 +45,12 @@ or share interfaces. Say the pick and why in one line. Merges, pushes to
 shared branches, publishes, and destructive or security-sensitive actions
 still stop and ask.
 
+Commit each completed step and push it. Open the pull request as a draft
+once the first step is pushed. Do not ask. Watch the draft checks. When they
+pass, mark the PR ready with `gh pr ready`, then watch the checks that ready
+releases. Report the URL, head SHA, and green checks when those pass. The
+merge still waits for the human's yes.
+
 ## Writing Style
 
 Every message you send your partner, and every file you write, follows the
