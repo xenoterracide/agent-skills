@@ -20,7 +20,9 @@ expensive set.
 
 1. Commit each completed logical step and push it.
 2. Open the pull request as a draft without asking.
-3. Watch the draft checks. When they pass, mark the PR ready.
+3. Watch the draft checks. When they pass, mark the PR ready. A watch that
+   starts before checks register, or a repository with no checks, retries
+   three times, then flips ready. Absence is never green.
 4. Watch the checks that "ready" releases. Then report the URL, head SHA, and
    green checks.
 5. Never merge. The human's yes still gates the merge.
@@ -56,7 +58,9 @@ expensive set.
 
 - Commit each completed step and push it.
 - Open the PR as a draft once the first step is pushed. Do not ask.
-- When the draft checks pass, mark the PR ready with `gh pr ready`.
+- When the draft checks pass, mark the PR ready with `gh pr ready`. An empty
+  watch retries three times first; a repository with no checks flips ready
+  without waiting.
 - Watch the checks that "ready" releases.
 - Report the URL, head SHA, and green checks. Merge still waits for the human.
 

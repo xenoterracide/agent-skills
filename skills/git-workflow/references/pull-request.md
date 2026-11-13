@@ -116,10 +116,16 @@ checks on a draft. With no gate, the draft runs the full set.
 
 1. Watch the draft checks — `gh pr checks <PR> --watch`, redirected per
    `output-hygiene`.
+   - `no checks reported` often means CI has not registered yet. Wait 30
+     seconds and retry, up to three times.
+   - Still none means the repository runs no checks, or none on a draft.
+     Flip ready anyway. Never read absence as green.
 2. When they pass, mark the PR ready: `gh pr ready <PR>`.
-3. Watch again. Ready releases the full set. Settle it through
+3. Watch again. Ready releases the full set, which may also take a moment to
+   register; apply the same three retries. Settle it through
    `ghb pr verify` when available; without ghb, follow `Settling Checks`.
-4. Report the URL, head SHA, and green checks once the full set passes.
+4. Report the URL, head SHA, and green checks once the full set passes. Say
+   "no checks configured" when none ever appeared.
 
 A fix after ready stays on the same PR. Commit and push.
 

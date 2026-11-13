@@ -76,10 +76,12 @@ New section, `Create a PR Review with Inline Comments`:
 - Read the head SHA: `gh pr view <n> --json headRefOid --jq .headRefOid`.
 - POST `repos/{owner}/{repo}/pulls/{n}/reviews` with `--input -`. The JSON body
   holds `commit_id`, `event`, `body`, and `comments[]`.
-- Each comment: `path`, `line`, `side`, and optional `start_line`.
+- Each comment: `path`, `line`, `side`, and for a range `start_line` with
+  `start_side`.
   - `side` is `RIGHT` for an added or unchanged line, `LEFT` for a deletion.
   - `line` counts the file `side` picks: `RIGHT` counts the file at
     `commit_id`, `LEFT` counts the base file.
+  - `start_side` is required with `start_line`.
   - A line outside the diff returns 422.
 - One bad anchor fails the whole review. Repost without that comment, with its
   text in the review body.

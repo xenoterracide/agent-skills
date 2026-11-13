@@ -65,7 +65,9 @@ The command prints the review URL. Report it.
 - `side` picks the file: `RIGHT` for an added or unchanged line, `LEFT` for a
   deletion.
 - `line` counts the file `side` picks. `RIGHT` counts the file at `commit_id`;
-  `LEFT` counts the base file. `start_line` begins a range.
+  `LEFT` counts the base file.
+- A multi-line range starts at `start_line`. `start_side` is required with it
+  and matches the side. Omitting it returns 422.
 - A line outside the diff returns 422 and posts nothing. Remove that comment,
   move its text to `body` under `Not on the diff`, and repost.
 - Skip a finding the bot already posted at the same path and line:
