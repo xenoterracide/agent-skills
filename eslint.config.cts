@@ -51,7 +51,7 @@ export default defineConfig([
       "@typescript-eslint/init-declarations": "error",
       "prefer-destructuring": "off",
       "@typescript-eslint/prefer-destructuring": "error",
-      "complexity": ["error", 10],
+      complexity: ["error", 10],
       "max-classes-per-file": "error",
       "max-depth": ["error", 3],
       "max-lines": "error",

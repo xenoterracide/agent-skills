@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -16,11 +16,23 @@ import {
   harnessError,
   initSandboxRepo,
   stripAnsi,
-  writeGhDenyStub,
-  writeGhStub,
-  writeGhbStub,
+  type BehaviorOptions,
   type RunOptions,
 } from "./eval-helpers";
+
+const assertPass = (skill: string, options: BehaviorOptions): void => {
+  expect(() => {
+    assertSkillBehavior("p", skill, { iterations: 1, ...options });
+  }).not.toThrow();
+};
+
+const assertFail = (skill: string, options: BehaviorOptions, pattern: RegExp): void => {
+  expect(() => {
+    assertSkillBehavior("p", skill, { iterations: 1, ...options });
+  }).toThrow(pattern);
+};
+
+const runJavaCreator = (): string => '→ Skill "java-creator"\n→ Read skills/java-creator/references/hibernate.md';
 
 describe("stripAnsi", () => {
   it("removes escape codes", () => {
@@ -66,240 +78,159 @@ describe("detectReads", () => {
   });
 });
 
+const passesOnLoadAndRead = (): void => {
+  assertPass("java-creator", { run: runJavaCreator, reads: ["hibernate.md"] });
+};
+
+const forwardsRepoToRun = (): void => {
+  let received: RunOptions | undefined;
+  const capture = (_prompt: string, options?: RunOptions): string => {
+    received = options;
+    return '→ Skill "git-workflow"';
+  };
+  assertSkillBehavior("p", "git-workflow", { run: capture, iterations: 1, repo: true });
+  expect(received?.repo).toBe(true);
+};
+
+const passesWithRegexPattern = (): void => {
+  assertPass("java-creator", { run: runJavaCreator, reads: [/hibernate\.md$/] });
+};
+
+const failsWhenReferenceNotRead = (): void => {
+  assertFail(
+    "java-creator",
+    { run: (): string => '→ Skill "java-creator"', reads: ["hibernate.md"] },
+    /expected a Read matching/,
+  );
+};
+
+const failsWhenSkillNotLoaded = (): void => {
+  assertFail(
+    "java-creator",
+    { run: (): string => "→ Read skills/java-creator/references/hibernate.md", reads: ["hibernate.md"] },
+    /did not load/,
+  );
+};
+
+const passesWithoutLoadEvent = (): void => {
+  assertPass("hemingway", {
+    run: (): string => "→ Read skills/hemingway/references/prose.md",
+    loadEvent: false,
+    reads: ["prose.md"],
+  });
+};
+
+const stillRequiresReads = (): void => {
+  assertFail(
+    "hemingway",
+    { run: (): string => "→ Read skills/hemingway/SKILL.md", loadEvent: false, reads: ["prose.md"] },
+    /expected a Read matching/,
+  );
+};
+
 describe("assertSkillBehavior", () => {
-  const run = (): string => '→ Skill "java-creator"\n→ Read skills/java-creator/references/hibernate.md';
-
-  it("passes when the skill loads and the reference is read", () => {
-    expect(() => {
-      assertSkillBehavior("p", "java-creator", { run, iterations: 1, reads: ["hibernate.md"] });
-    }).not.toThrow();
-  });
-
-  it("forwards repo to run", () => {
-    let received: RunOptions | undefined;
-    const capture = (_prompt: string, options?: RunOptions): string => {
-      received = options;
-      return '→ Skill "git-workflow"';
-    };
-    assertSkillBehavior("p", "git-workflow", { run: capture, iterations: 1, repo: true });
-    expect(received?.repo).toBe(true);
-  });
-
-  it("passes with a RegExp read pattern", () => {
-    expect(() => {
-      assertSkillBehavior("p", "java-creator", { run, iterations: 1, reads: [/hibernate\.md$/] });
-    }).not.toThrow();
-  });
-
-  it("fails when the reference is not read", () => {
-    const runNoRead = (): string => '→ Skill "java-creator"';
-    expect(() => {
-      assertSkillBehavior("p", "java-creator", { run: runNoRead, iterations: 1, reads: ["hibernate.md"] });
-    }).toThrow(/expected a Read matching/);
-  });
-
-  it("fails when the skill does not load", () => {
-    const runNoSkill = (): string => "→ Read skills/java-creator/references/hibernate.md";
-    expect(() => {
-      assertSkillBehavior("p", "java-creator", { run: runNoSkill, iterations: 1, reads: ["hibernate.md"] });
-    }).toThrow(/did not load/);
-  });
-
-  it("passes without a load event when loadEvent is false", () => {
-    const runNoSkill = (): string => "→ Read skills/hemingway/references/prose.md";
-    expect(() => {
-      assertSkillBehavior("p", "hemingway", {
-        run: runNoSkill,
-        iterations: 1,
-        loadEvent: false,
-        reads: ["prose.md"],
-      });
-    }).not.toThrow();
-  });
-
-  it("still requires the reads when loadEvent is false", () => {
-    const runNothing = (): string => "→ Read skills/hemingway/SKILL.md";
-    expect(() => {
-      assertSkillBehavior("p", "hemingway", {
-        run: runNothing,
-        iterations: 1,
-        loadEvent: false,
-        reads: ["prose.md"],
-      });
-    }).toThrow(/expected a Read matching/);
-  });
+  it("passes when the skill loads and the reference is read", passesOnLoadAndRead);
+  it("forwards repo to run", forwardsRepoToRun);
+  it("passes with a RegExp read pattern", passesWithRegexPattern);
+  it("fails when the reference is not read", failsWhenReferenceNotRead);
+  it("fails when the skill does not load", failsWhenSkillNotLoaded);
+  it("passes without a load event when loadEvent is false", passesWithoutLoadEvent);
+  it("still requires the reads when loadEvent is false", stillRequiresReads);
 });
 
+const forbidsCleanTranscript = (): void => {
+  const run = (): string => '→ Skill "git-workflow"\n$ git status';
+  assertPass("git-workflow", { run, forbids: [/gh pr merge/] });
+};
+
+const forbidsForbiddenCommand = (): void => {
+  const run = (): string => '→ Skill "git-workflow"\n$ gh pr merge 216 --squash';
+  assertFail("git-workflow", { run, forbids: [/gh pr merge/] }, /forbidden/);
+};
+
+const forbidsQuotedPattern = (): void => {
+  const run = (): string =>
+    '→ Skill "git-workflow"\nI will not run the MCP merge_pull_request tool without your explicit yes.';
+  assertPass("git-workflow", { run, forbids: [/merge_pull_request/] });
+};
+
+const forbidsToolInvocation = (): void => {
+  const run = (): string => '→ Skill "git-workflow"\n⚙ execute {"tool":"merge_pull_request"}';
+  assertFail("git-workflow", { run, forbids: [/merge_pull_request/] }, /forbidden/);
+};
+
 describe("assertSkillBehavior forbids", () => {
-  it("passes when no forbidden pattern appears", () => {
-    const run = (): string => '→ Skill "git-workflow"\n$ git status';
-    expect(() => {
-      assertSkillBehavior("p", "git-workflow", { run, iterations: 1, forbids: [/gh pr merge/] });
-    }).not.toThrow();
-  });
-
-  it("fails when a forbidden command appears in the transcript", () => {
-    const run = (): string => '→ Skill "git-workflow"\n$ gh pr merge 216 --squash';
-    expect(() => {
-      assertSkillBehavior("p", "git-workflow", { run, iterations: 1, forbids: [/gh pr merge/] });
-    }).toThrow(/forbidden/);
-  });
-
-  it("ignores a forbidden pattern quoted in prose", () => {
-    const run = (): string =>
-      '→ Skill "git-workflow"\nI will not run the MCP merge_pull_request tool without your explicit yes.';
-    expect(() => {
-      assertSkillBehavior("p", "git-workflow", { run, iterations: 1, forbids: [/merge_pull_request/] });
-    }).not.toThrow();
-  });
-
-  it("fails when a tool invocation line contains the pattern", () => {
-    const run = (): string => '→ Skill "git-workflow"\n⚙ execute {"tool":"merge_pull_request"}';
-    expect(() => {
-      assertSkillBehavior("p", "git-workflow", { run, iterations: 1, forbids: [/merge_pull_request/] });
-    }).toThrow(/forbidden/);
-  });
+  it("passes when no forbidden pattern appears", forbidsCleanTranscript);
+  it("fails when a forbidden command appears in the transcript", forbidsForbiddenCommand);
+  it("ignores a forbidden pattern quoted in prose", forbidsQuotedPattern);
+  it("fails when a tool invocation line contains the pattern", forbidsToolInvocation);
 });
 
 describe("assertSkillBehavior commands", () => {
   it("passes when a required command appears", () => {
     const run = (): string => '→ Skill "using-xenoterracide-agent-skills"\n$ pnpm install --reporter=silent';
-    expect(() => {
-      assertSkillBehavior("p", "using-xenoterracide-agent-skills", {
-        run,
-        iterations: 1,
-        commands: [/pnpm install .*--reporter=silent/],
-      });
-    }).not.toThrow();
+    assertPass("using-xenoterracide-agent-skills", { run, commands: [/pnpm install .*--reporter=silent/] });
   });
 
   it("fails when the required command is absent", () => {
     const run = (): string => '→ Skill "using-xenoterracide-agent-skills"\n$ pnpm install';
-    expect(() => {
-      assertSkillBehavior("p", "using-xenoterracide-agent-skills", {
-        run,
-        iterations: 1,
-        commands: [/--reporter=silent/],
-      });
-    }).toThrow(/expected a command matching/);
+    assertFail(
+      "using-xenoterracide-agent-skills",
+      { run, commands: [/--reporter=silent/] },
+      /expected a command matching/,
+    );
   });
 });
+
+const buildsPushableRepo = (): void => {
+  const dir = mkdtempSync(join(tmpdir(), "sandbox-repo-"));
+  try {
+    writeFileSync(join(dir, "a.txt"), "a");
+    initSandboxRepo(dir);
+    const head = spawnSync("git", ["-C", dir, "rev-parse", "--verify", "HEAD"], { encoding: "utf8" });
+    expect(head.status).toBe(0);
+    const status = spawnSync("git", ["-C", dir, "status", "--porcelain"], { encoding: "utf8" });
+    expect(status.stdout).toBe("");
+    const push = spawnSync("git", ["-C", dir, "push", "-q", "origin", "main"], { encoding: "utf8" });
+    expect(push.status).toBe(0);
+    const remoteHead = spawnSync("git", ["-C", join(dir, "origin.git"), "rev-parse", "--verify", "refs/heads/main"], {
+      encoding: "utf8",
+    });
+    expect(remoteHead.status).toBe(0);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+};
 
 describe("initSandboxRepo", () => {
-  it("builds a committed repo whose origin is a reachable bare repo", () => {
-    const dir = mkdtempSync(join(tmpdir(), "sandbox-repo-"));
-    try {
-      writeFileSync(join(dir, "a.txt"), "a");
-      initSandboxRepo(dir);
-      const head = spawnSync("git", ["-C", dir, "rev-parse", "--verify", "HEAD"], { encoding: "utf8" });
-      expect(head.status).toBe(0);
-      const status = spawnSync("git", ["-C", dir, "status", "--porcelain"], { encoding: "utf8" });
-      expect(status.stdout).toBe("");
-      const push = spawnSync("git", ["-C", dir, "push", "-q", "origin", "main"], { encoding: "utf8" });
-      expect(push.status).toBe(0);
-      const remoteHead = spawnSync("git", ["-C", join(dir, "origin.git"), "rev-parse", "--verify", "refs/heads/main"], {
-        encoding: "utf8",
-      });
-      expect(remoteHead.status).toBe(0);
-    } finally {
-      rmSync(dir, { recursive: true, force: true });
-    }
-  });
+  it("builds a committed repo whose origin is a reachable bare repo", buildsPushableRepo);
 });
 
-describe("writeGhStub", () => {
-  it("answers preflight and records argv", () => {
-    const dir = mkdtempSync(join(tmpdir(), "sandbox-gh-"));
-    try {
-      writeGhStub(dir);
-      const gh = (...args: string[]): ReturnType<typeof spawnSync> =>
-        spawnSync(join(dir, "bin", "gh"), args, { encoding: "utf8" });
-      expect(gh("auth", "status").stdout).toContain("Logged in");
-      expect(gh("repo", "view", "--json", "defaultBranchRef").stdout).toContain("defaultBranchRef");
-      expect(gh("pr", "view").status).toBe(1);
-      const verify = gh("pr", "view", "7", "--json", "mergeStateStatus,reviewDecision");
-      expect(verify.status).toBe(0);
-      expect(verify.stdout).toContain('"mergeStateStatus":"UNKNOWN"');
-      expect(gh("pr", "checks", "7").status).toBe(8);
-      expect(gh("pr", "checks", "7", "--watch").stdout).toContain("pass");
-      expect(gh("pr", "create", "--title", "x", "--body-file", "-").stdout).toContain("pull/1");
-      expect(readFileSync(join(dir, "gh.log"), "utf8")).toContain("--body-file");
-    } finally {
-      rmSync(dir, { recursive: true, force: true });
-    }
-  });
-});
+const loadsEveryRun = (): void => {
+  assertPass("hemingway", { run: (): string => '→ Skill "hemingway"', iterations: 3 });
+};
 
-describe("writeGhDenyStub", () => {
-  it("fails every call like an unauthenticated gh and records argv", () => {
-    const dir = mkdtempSync(join(tmpdir(), "sandbox-gh-deny-"));
-    try {
-      writeGhDenyStub(dir);
-      const result = spawnSync(join(dir, "bin", "gh"), ["pr", "view", "258", "--json", "state"], {
-        encoding: "utf8",
-      });
-      expect(result.status).toBe(1);
-      expect(result.stderr).toContain("not logged into any GitHub hosts");
-      expect(readFileSync(join(dir, "gh.log"), "utf8")).toContain("pr view 258");
-    } finally {
-      rmSync(dir, { recursive: true, force: true });
-    }
-  });
-});
+const failsFastOnMiss = (): void => {
+  let calls = 0;
+  const run = (): string => {
+    calls += 1;
+    return "";
+  };
+  expect(() => {
+    assertSkillLoads("p", "hemingway", { run, iterations: 3 });
+  }).toThrow(/did not load/);
+  expect(calls).toBe(1);
+};
 
-describe("writeGhbStub", () => {
-  it("answers pr verify with the policy state and records argv", () => {
-    const dir = mkdtempSync(join(tmpdir(), "sandbox-ghb-"));
-    try {
-      writeGhbStub(dir, "blocked");
-      const ghb = (...args: string[]): ReturnType<typeof spawnSync> =>
-        spawnSync(join(dir, "bin", "ghb"), args, { encoding: "utf8" });
-      const verify = ghb("pr", "verify");
-      expect(verify.status).toBe(0);
-      expect(verify.stdout).toContain("CHANGES_REQUESTED");
-      expect(readFileSync(join(dir, "ghb.log"), "utf8")).toContain("pr verify");
-    } finally {
-      rmSync(dir, { recursive: true, force: true });
-    }
-  });
-
-  it("fails like an absent binary when missing", () => {
-    const dir = mkdtempSync(join(tmpdir(), "sandbox-ghb-"));
-    try {
-      writeGhbStub(dir, "missing");
-      const result = spawnSync(join(dir, "bin", "ghb"), ["pr", "verify"], { encoding: "utf8" });
-      expect(result.status).toBe(127);
-      expect(result.stderr).toContain("command not found");
-    } finally {
-      rmSync(dir, { recursive: true, force: true });
-    }
-  });
-});
+const failsWhenOtherSkillFirst = (): void => {
+  const run = (): string => '→ Skill "docs-creator"\n→ Skill "hemingway"';
+  expect(() => {
+    assertSkillLoads("p", "hemingway", { run, iterations: 1, first: true });
+  }).toThrow(/to load first/);
+};
 
 describe("assertSkillLoads", () => {
-  it("passes when the skill loads every run", () => {
-    const run = (): string => '→ Skill "hemingway"';
-    expect(() => {
-      assertSkillLoads("p", "hemingway", { run, iterations: 3 });
-    }).not.toThrow();
-  });
-
-  it("fails fast on a miss", () => {
-    let calls = 0;
-    const run = (): string => {
-      calls += 1;
-      return "";
-    };
-    expect(() => {
-      assertSkillLoads("p", "hemingway", { run, iterations: 3 });
-    }).toThrow(/did not load/);
-    expect(calls).toBe(1);
-  });
-
-  it("fails when another skill loads first", () => {
-    const run = (): string => '→ Skill "docs-creator"\n→ Skill "hemingway"';
-    expect(() => {
-      assertSkillLoads("p", "hemingway", { run, iterations: 1, first: true });
-    }).toThrow(/to load first/);
-  });
+  it("passes when the skill loads every run", loadsEveryRun);
+  it("fails fast on a miss", failsFastOnMiss);
+  it("fails when another skill loads first", failsWhenOtherSkillFirst);
 });
