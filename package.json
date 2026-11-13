@@ -13,6 +13,7 @@
     "@prettier/plugin-xml": "^3.4.2",
     "@types/node": "26",
     "eslint": "^10.14.0",
+    "eslint-plugin-sonarjs": "^4.2.2",
     "git-conventional-commits": "^2.8.0",
     "globals": "^17.14.0",
     "jiti": "^2.7.0",
