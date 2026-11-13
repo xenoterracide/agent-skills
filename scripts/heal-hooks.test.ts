@@ -9,22 +9,12 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
-import { HOOKS, HOOKS_PATH, makeFixture, readLog, runHeal, toolShim } from "./heal-helpers";
-import type { Fixture, FixtureSetup } from "./heal-helpers";
+import { HOOKS, HOOKS_PATH, makeFixture, readLog, runHeal, toolShim, withFixture } from "./heal-helpers";
 
 const hasFlock = spawnSync("flock", ["--version"], { env: { PATH: process.env.PATH } }).status === 0;
 
 const sleep = (ms: number): void => {
   Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
-};
-
-const withFixture = (setup: FixtureSetup, body: (fixture: Fixture) => void): void => {
-  const fixture = makeFixture(setup);
-  try {
-    body(fixture);
-  } finally {
-    rmSync(fixture.root, { recursive: true, force: true });
-  }
 };
 
 const awaitLock = (lock: string): void => {

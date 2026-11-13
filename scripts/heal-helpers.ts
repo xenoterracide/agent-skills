@@ -4,7 +4,7 @@
 
 import { spawnSync } from "node:child_process";
 import type { SpawnSyncReturns } from "node:child_process";
-import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -71,6 +71,15 @@ export const makeFixture = ({
     writeFileSync(join(root, marker), "");
   }
   return { root, bin, log, gitDir, heal: copyHeal(root) };
+};
+
+export const withFixture = (setup: FixtureSetup, body: (fixture: Fixture) => void): void => {
+  const fixture = makeFixture(setup);
+  try {
+    body(fixture);
+  } finally {
+    rmSync(fixture.root, { recursive: true, force: true });
+  }
 };
 
 const envFor = (
