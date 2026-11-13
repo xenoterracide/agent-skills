@@ -25,6 +25,8 @@ Load these skills whenever this skill applies:
 
 - **`hemingway`** — before writing the report. A prescribed format is
   structure; hemingway governs the prose inside it.
+- **`github`** — before posting the review to a pull request. It owns the
+  review API mechanics.
 
 ## Route the Diff First
 
@@ -50,3 +52,25 @@ No prompt prescribes the method, so this skill does:
 5. Every finding cites file:line, what is wrong, and why it matters.
 6. List declined-to-judge items, one line each, with the reason.
 7. End with a clear verdict: ready to merge, yes, no, or with fixes.
+
+## Post the Review to the PR
+
+Applies to both paths. A dispatch prompt that forbids external writes wins.
+
+When the change under review is a pull request, post the review before
+replying. A branch diff with no PR stays in chat.
+
+- One review holds every anchored finding. Each finding is one comment; never
+  one review per finding.
+- Lead each comment with its severity. Say what is wrong and why it matters.
+  Chat does not repeat it.
+- Event: `REQUEST_CHANGES` for any Critical or Important finding. `COMMENT`
+  otherwise. Never `APPROVE`.
+- Findings outside the diff go in the review body under `Not on the diff`: a
+  line the diff does not touch, a missing file. Cite `file:line` there. The
+  anchor is gone. Context lines and deletions anchor: `RIGHT` and `LEFT`.
+- A re-review after a push is a fresh review. Skip a finding already posted
+  at the same path and line.
+- `COMMENT` does not lift an earlier `REQUEST_CHANGES`. The block stays until
+  the human dismisses the review. Say so in the reply.
+- Reply with the verdict, the severity counts, and the review URL.

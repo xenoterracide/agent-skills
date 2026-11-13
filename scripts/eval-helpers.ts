@@ -294,6 +294,8 @@ export interface BehaviorOptions extends AssertOptions {
   reads?: (string | RegExp)[];
   forbids?: (string | RegExp)[];
   commands?: (string | RegExp)[];
+  /** Skills the primary skill must load alongside itself. */
+  companions?: string[];
 }
 
 export function assertSkillBehavior(
@@ -309,6 +311,7 @@ export function assertSkillBehavior(
     reads = [],
     forbids = [],
     commands: commandPatterns = [],
+    companions = [],
     repo,
     ghb,
   }: BehaviorOptions = {},
@@ -326,6 +329,12 @@ export function assertSkillBehavior(
           `${label}: expected "${skill}" to load first, got ${JSON.stringify(loaded)}\n${transcript(output)}`,
         );
       }
+    }
+    for (const companion of companions) {
+      assert.ok(
+        loaded.includes(companion),
+        `${label}: companion "${companion}" did not load with "${skill}", got ${JSON.stringify(loaded)}\n${transcript(output)}`,
+      );
     }
     const readPaths = detectReads(output);
     for (const pattern of reads) {
