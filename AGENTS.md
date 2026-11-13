@@ -86,6 +86,18 @@ pnpm evals                        # unit tests + every skill case
 pnpm evals skills/java-creator    # one skill
 ```
 
+Run a subset of cases with vitest's `-t` name filter. Preview the selection
+first — `vitest list` costs no tokens:
+
+```bash
+pnpm exec vitest list skills/hemingway -t "companion"
+EVAL_MODEL=opencode/big-pickle pnpm evals skills/hemingway -t "companion"
+```
+
+Name new cases so a group shares a distinctive phrase, so one `-t` filter
+selects it. `EVAL_ITERATIONS=1` runs one iteration per case for cheap
+wording checks before full verification.
+
 Evals are on demand and never run in CI. `EVAL_MODEL` and `EVAL_ITERATIONS`
 override the defaults. The suite bails at the first failure. Evaluate on a
 full-size coding model — flash-tier variants flake on companion and routing
