@@ -271,16 +271,17 @@ request to commit: stage the file and commit. lint-staged runs
 `prettier --write`, `shfmt`, and `reuse annotate` on staged files and
 restages them. Report that the commit did it.
 
-Never do the hook's job by hand:
+Write files you create without license or copyright headers. No header is
+the correct state before commit; `reuse annotate` stamps one at commit, and
+a hand-written header guesses the license the config already knows. Not "to
+make sure it's there", not to match neighboring files, not to match the
+repo's style.
 
-- Never write a license or copyright header into file content. Not to "make
-  sure it's there", not because neighboring files carry headers, not to
-  match the repo's style. `reuse annotate` stamps headers on commit; a
-  hand-written one guesses the license the config already knows.
-- Never run `prettier`, `shfmt`, or `reuse` — not `--write`, not `--check`,
-  not `lint`, not to verify. The hook's run at commit is the verification;
-  CI checks the tree again.
-- Never commit with `--no-verify`; it skips the hook.
+The hook's steps are not a checklist to run by hand. Never run `prettier`,
+`shfmt`, or `reuse` — not `--write`, not `--check`, not `lint`, not
+`download`, not to verify; never stage `LICENSES/` yourself. The hook's run
+at commit is the verification; CI checks the tree again. Never commit with
+`--no-verify`; it skips the hook.
 
 Run what the hook cannot fix — typecheck, tests, and lint rules without an
 autofix — through the repository's gate: one script, any name, whose body
