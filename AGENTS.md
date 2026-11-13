@@ -79,6 +79,10 @@ pnpm typecheck                    # tsc --noEmit
 pnpm lint:eslint                  # ESLint only
 ```
 
+Run `pnpm check` before finalizing — one command, one exit code. The
+granular scripts are for targeted feedback on a single failure class; run
+them serially only when diagnosing.
+
 ### Skill Evals
 
 `skills/*/tests/evals.test.ts` asserts that realistic prompts auto-load the
