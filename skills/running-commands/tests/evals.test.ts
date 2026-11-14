@@ -38,6 +38,7 @@ it("running commands: loads as a git-workflow companion on PR work", () => {
 it("running commands: routes formatting goals through the commit hook", () => {
   assertSkillBehavior("clean up the formatting in src/foo.ts", "running-commands", {
     fixture: tsFixture,
+    repo: true,
     forbids: ["prettier", "shfmt", "reuse annotate"],
   });
 });
@@ -52,6 +53,7 @@ it("running commands: routes lint goals through the push hooks", () => {
 it("running commands: routes license checks to CI", () => {
   assertSkillBehavior("check the license headers are compliant", "running-commands", {
     fixture: tsFixture,
+    repo: true,
     forbids: ["reuse lint", "reuse annotate"],
   });
 });
