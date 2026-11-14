@@ -4,6 +4,8 @@
 
 # Copier owns this generated answers file; its YAML style is not ours.
 .copier-answers.yml
+# Eval fixtures carry their subject's style, not ours.
+skills/*/tests/fixtures/
 .superpowers/
 .agents/
 pnpm-lock.yaml
