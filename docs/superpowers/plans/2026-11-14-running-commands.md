@@ -61,12 +61,13 @@ Frontmatter exactly:
 ---
 name: running-commands
 description: |
-  Use before running any command. Decides whether the agent should run
-  it at all — formatters, license annotators, linters, and checkers
-  belong to pre-commit hooks, pre-push hooks, and CI; the agent runs
-  only its own targeted tests and the one command a failure names — and
-  how to run quietly, redirecting long output so only the tail enters
-  context.
+  Use before running any command, in two moments. Whether to run it:
+  formatters, license annotators, linters, and checkers belong to
+  pre-commit hooks, pre-push hooks, and CI — the agent runs only its
+  own targeted tests and the one command a failure names. How to run
+  it: when output will be long or repetitive — build and test logs,
+  watch or poll loops, git commits through hooks, CI status checks —
+  redirect to files so only the tail enters context.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing

@@ -153,9 +153,11 @@ Agent rules:
 
 - `skills/running-commands/SKILL.md`, ~50 lines: frontmatter
   description covering both trigger classes — tempted commands
-  (formatters, linters, checkers, suites) and long output — the
-  ownership table, the five rules, the one-line quiet principle,
-  pointers to the reference.
+  (formatters, linters, checkers, suites) and long or watched output,
+  carrying the vocabulary `output-hygiene`'s battle-tested description
+  had: build and test logs, watch or poll loops, git commits through
+  hooks, CI status checks. Then the ownership table, the five rules,
+  the one-line quiet principle, pointers to the reference.
 - `skills/running-commands/references/quiet.md`, absorbed from
   `output-hygiene`: the redirect patterns, the commit-output pattern,
   background waits, the per-tool quiet-flag table, `ghb pr verify` as
