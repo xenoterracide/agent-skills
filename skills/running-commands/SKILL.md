@@ -1,13 +1,13 @@
 ---
 name: running-commands
 description: |
-  Use before running any command, in two moments. Whether to run it:
-  formatters, license annotators, linters, and checkers belong to
-  pre-commit hooks, pre-push hooks, and CI — the agent runs only its
-  own targeted tests and the one command a failure names. How to run
-  it: when output will be long or repetitive — build and test logs,
-  watch or poll loops, git commits through hooks, CI status checks —
-  redirect to files so only the tail enters context.
+  Use when a command's output will be long or repetitive: build and
+  test logs, watch or poll loops, git commits through hooks, CI status
+  checks. Redirects the output to files so only the tail enters the
+  agent's context. Also use before running formatters, license
+  annotators, linters, checkers, or test suites — pre-commit hooks,
+  pre-push hooks, and CI own them; the agent runs only its own
+  targeted tests and the one command a failure names.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing
