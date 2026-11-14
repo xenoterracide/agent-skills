@@ -30,18 +30,35 @@ efficiency.
 
 Before saying "done", "complete", "fixed", "passing", "ready", or "works":
 
-1. **Identify** the command that proves the claim.
-2. **Run** that command fresh, completely.
+1. **Identify** the command or status that proves the claim.
+2. **Fetch** the evidence. Invoke `running-commands`, then capture hook exit
+   codes, CI status, or the output from the agent's own targeted run. Never
+   fetch a fresh full re-run.
 3. **Read** the output, check exit codes, count failures.
 4. **Review** the diff for duplicate license headers, stale comments,
    formatting problems, unrelated changes, or obvious bugs.
 5. **Request review** — invoke `requesting-code-review` and dispatch a reviewer
    subagent. Fix Critical issues immediately. Fix Important issues before
    claiming completion.
-6. **Verify** the output and review feedback confirm the claim.
+6. **Verify** the evidence and review feedback confirm the claim.
 7. **Only then** make the claim — with evidence.
 
 Skip any step = lying, not verifying.
+
+## Done is a pipeline
+
+Done is not a moment. It is a pipeline:
+
+plan work complete → PR marked ready → wait for the tests gated behind ready → report to the human (URL, head SHA, checks).
+
+Mid-task status reports cite the latest fetched status. The done claim requires the ready-gated checks green.
+
+## Evidence, not re-runs
+
+`verification-before-completion` demands fresh full runs of linters, builds,
+and tests before every claim. That demand does not apply here. This checklist
+fetches evidence — hook exit codes, CI status, and targeted runs — and does not
+re-run what hooks or CI already own.
 
 ## Red Flags — STOP
 
@@ -68,11 +85,11 @@ Skip any step = lying, not verifying.
 
 ## Common Failures
 
-| Claim                   | Requires                     | Not sufficient              |
-| ----------------------- | ---------------------------- | --------------------------- |
-| Tests pass              | Test output shows 0 failures | Previous run, "should pass" |
-| Linter clean            | Linter output shows 0 errors | Partial check               |
-| Bug fixed               | Original symptom passes      | Code changed                |
-| License headers correct | `reuse lint` passes          | Looks right                 |
+| Claim                   | Requires                                             | Not sufficient              |
+| ----------------------- | ---------------------------------------------------- | --------------------------- |
+| Tests pass              | Touched-suite output or CI green                     | Previous run, "should pass" |
+| Linter clean            | Pre-push exit or CI                                  | Partial check               |
+| License headers correct | Pre-commit exit (annotate) or CI                     | Looks right                 |
+| Bug fixed               | Original symptom passes (agent's own run, unchanged) | Code changed                |
 
 This is non-negotiable.
