@@ -54,10 +54,10 @@ tools, dependencies, and the git hooks.
 
 Formatting and license headers come from the pre-commit hook: lint-staged
 runs prettier, shfmt, and reuse annotate on staged files and restages them.
-Do not format or annotate by hand; commit and let the hook do both. Never
+Do not format or annotate by hand. Commit and let the hook do both. Never
 commit with `--no-verify`.
 
-These commands verify the tree, they do not fix it:
+These commands verify the tree, not fix it:
 
 ```bash
 pnpm lint                         # prettier + REUSE checks
@@ -80,7 +80,7 @@ pnpm lint:eslint                  # ESLint only
 ```
 
 Run `pnpm check` before finalizing — one command, one exit code. The
-granular scripts are for targeted feedback on a single failure class; run
+granular scripts are for targeted feedback on a single failure class. Run
 them serially only when diagnosing.
 
 ### Skill Evals

@@ -265,29 +265,29 @@ Self-review the diff before creating or updating a PR — see the
 
 ## Rule 6: Let the Pre-Commit Hook Format and Annotate
 
-Before writing files, check for `.lintstagedrc.cjs`; when it exists the
-pre-commit hook runs lint-staged, and a request for formatting or license
-headers is a request to commit: stage the file and commit. lint-staged runs
+Before writing files, check for `.lintstagedrc.cjs`. When it exists, the
+pre-commit hook runs lint-staged. A request for formatting or license headers
+is a request to commit. Stage the file and commit. lint-staged runs
 `prettier --write`, `shfmt`, and `reuse annotate` on staged files and
 restages them. Report that the commit did it.
 
 Write files you create without license or copyright headers. No header is
-the correct state before commit; `reuse annotate` stamps one at commit, and
-a hand-written header guesses the license the config already knows. Not "to
+the correct state before commit. `reuse annotate` stamps one at commit. A
+hand-written header guesses the license the config already knows. Not "to
 make sure it's there", not to match neighboring files, not to match the
 repo's style.
 
 The hook's steps are not a checklist to run by hand. Never run `prettier`,
 `shfmt`, or `reuse` — not `--write`, not `--check`, not `lint`, not
-`download`, not to verify; never stage `LICENSES/` yourself. The hook's run
-at commit is the verification; CI checks the tree again. Never commit with
-`--no-verify`; it skips the hook.
+`download`, not to verify. Never stage `LICENSES/` yourself. The hook's run
+at commit is the verification. CI checks the tree again. Never commit with
+`--no-verify`. It skips the hook.
 
 Run what the hook cannot fix — typecheck, tests, and lint rules without an
 autofix — through the repository's gate: one script whose body chains
 whatever that repo needs (`tsc --noEmit && vitest run`; `./mvnw verify`). In
 a node repo, run that script — `pnpm check` in this family — never gradle or
-maven directly; they live inside the body. One round trip covers it: running
+maven directly. They live inside the body. One round trip covers it. Running
 the legs separately, one command at a time, buys nothing. Run a leg alone
 only when diagnosing a gate failure. CI may split the same checks into
 separate jobs — its packaging choice, not the agent's.

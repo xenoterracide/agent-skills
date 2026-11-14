@@ -48,7 +48,7 @@ Existing clones that last pulled before the hooks moved to
 
 Formatting and license headers come from the pre-commit hook: lint-staged
 runs prettier, shfmt, and reuse annotate on staged files and restages them.
-Do not format or annotate by hand; commit and let the hook do both. Never
+Do not format or annotate by hand. Commit and let the hook do both. Never
 commit with `--no-verify`.
 
 Verify the tree the hook produced before pushing:
