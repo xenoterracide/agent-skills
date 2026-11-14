@@ -158,10 +158,9 @@ Agent rules:
   pointers to the reference.
 - `skills/running-commands/references/quiet.md`, absorbed from
   `output-hygiene`: the redirect patterns, the commit-output pattern,
-  background waits, the per-tool quiet-flag table, `gh-pr-wait.sh`
-  usage.
-- `skills/running-commands/scripts/gh-pr-wait.sh`: moves from
-  `skills/output-hygiene/scripts/`, unchanged.
+  background waits, the per-tool quiet-flag table, `ghb pr verify` as
+  the CI wait — the poll `gh-pr-wait.sh` once served, deleted in
+  358d559 when ghb became its single implementation.
 - `skills/output-hygiene/` is deleted after its eval cases port.
 - The bootstrap keeps its compact quiet-flag table — one-time per
   session, serves sessions that never load the skill. The reference
@@ -218,8 +217,8 @@ Agent rules:
 ## Left to the builder
 
 - Write `skills/running-commands/SKILL.md` per Skill structure.
-- Write `references/quiet.md` absorbing `output-hygiene`'s rules and
-  script usage; move `scripts/gh-pr-wait.sh`; delete
+- Write `references/quiet.md` absorbing `output-hygiene`'s rules,
+  with `ghb pr verify` as the CI wait. Delete
   `skills/output-hygiene/`.
 - Port `output-hygiene`'s four eval cases to `running-commands` —
   prompts unchanged, including the git-workflow companion case; the
@@ -239,7 +238,7 @@ Agent rules:
 - Rewrite `skills/completion-checklist/SKILL.md` per Decisions.
 - Bootstrap: add the pointer line; its two `output-hygiene` mentions
   become `running-commands`.
-- `git-workflow` reference sweep (four mentions).
+- `git-workflow` reference sweep (five mentions).
 - Companion lines in the four domain skills.
 - Kimi manifest: `output-hygiene` was never listed; ask the
   maintainer whether `running-commands` earns a slot.

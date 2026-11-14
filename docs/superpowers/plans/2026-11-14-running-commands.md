@@ -40,24 +40,14 @@
 
 - Create: `skills/running-commands/SKILL.md`
 - Create: `skills/running-commands/references/quiet.md`
-- Create: `skills/running-commands/scripts/gh-pr-wait.sh` (copy; original stays until Task 3)
 - Regenerate: `skills/index.json`
 
 **Interfaces:**
 
-- Consumes: `skills/output-hygiene/SKILL.md` rules 1–5 (content source for the reference), `skills/output-hygiene/scripts/gh-pr-wait.sh` (copy source).
-- Produces: skill id `running-commands`; `skills/running-commands/scripts/gh-pr-wait.sh` (Task 3 deletes the old copy); `references/quiet.md` (Task 2 asserts reads against it).
+- Consumes: `skills/output-hygiene/SKILL.md` rules 1–5 (content source for the reference).
+- Produces: skill id `running-commands`; `references/quiet.md` (Task 2 asserts reads against it).
 
-- [ ] **Step 1: Copy the script**
-
-```bash
-mkdir -p skills/running-commands/scripts
-cp skills/output-hygiene/scripts/gh-pr-wait.sh skills/running-commands/scripts/
-```
-
-Copy, not move — `output-hygiene` keeps working until Task 3 deletes it.
-
-- [ ] **Step 2: Write `skills/running-commands/SKILL.md`**
+- [ ] **Step 1: Write `skills/running-commands/SKILL.md`**
 
 Frontmatter exactly:
 
@@ -79,7 +69,7 @@ metadata:
 
 Body, ~50 lines, in order: SPDX comment; `# Running Commands`; two-line intro (every command has one owner — hook, CI, or agent; run only yours, run yours quietly); `## Ownership` with the spec's four-row table verbatim; `## Rules` with the spec's five rules verbatim; `## Quiet output` — the one-line principle from rule 4 plus "per-tool flags, the commit pattern, and background waits live in `references/quiet.md` — read it before composing a command with long output."
 
-- [ ] **Step 3: Write `references/quiet.md`**
+- [ ] **Step 2: Write `references/quiet.md`**
 
 SPDX comment, `# Quiet Output`. Absorb `output-hygiene`'s content, restructured:
 
@@ -88,19 +78,19 @@ SPDX comment, `# Quiet Output`. Absorb `output-hygiene`'s content, restructured:
 - the background-watch pattern (redirect inside the call so the completion notification carries only the tail)
 - per-tool quiet flags: git `--quiet`/`status --porcelain`/`NO_COLOR=1`; pnpm `--reporter=silent`, npm and yarn `--silent`; uv `--quiet`; Maven `-B -q --no-transfer-progress`; Gradle `-q --console=plain`; gh has none — redirect
 - never a flag that hides warnings or failures; eslint's `--quiet` means errors only
-- `gh-pr-wait.sh` usage: forwards args to `gh pr checks`, polls 10 s, exits 0 pass / 1 fail / 2 pending after 30 m; CI waits (`ghb pr verify`) route through it
+- `ghb pr verify` as the CI wait — ghb owns the poll since `gh-pr-wait.sh` was deleted in 358d559; run it backgrounded per the redirect pattern; it polls until the suite settles and exits 0 pass / 1 fail / 2 still-pending
 
-- [ ] **Step 4: Regenerate the catalog and verify**
+- [ ] **Step 3: Regenerate the catalog and verify**
 
 Run: `pnpm skills:catalog && pnpm skills:check`
 Expected: both succeed; `skills/index.json` gains `running-commands`.
 
-- [ ] **Step 5: Verify the plugin tests**
+- [ ] **Step 4: Verify the plugin tests**
 
 Run: `pnpm test:opencode`
 Expected: PASS — the expected list is computed by `readdirSync`, no edits needed.
 
-- [ ] **Step 6: Commit, push, open the draft PR**
+- [ ] **Step 5: Commit, push, open the draft PR**
 
 ```bash
 git add skills/running-commands skills/index.json
@@ -155,7 +145,7 @@ git push --quiet
 
 **Files:**
 
-- Delete: `skills/output-hygiene/` (SKILL.md, tests, scripts original)
+- Delete: `skills/output-hygiene/` (SKILL.md, tests)
 - Modify: `skills/using-xenoterracide-agent-skills/SKILL.md` (two lines, the bootstrap pointer)
 - Modify: `skills/git-workflow/SKILL.md` (lines 43, 73)
 - Modify: `skills/git-workflow/references/pull-request.md` (lines 35, 57, 118)
@@ -163,7 +153,7 @@ git push --quiet
 
 **Interfaces:**
 
-- Consumes: Task 1's script copy (old file safe to delete).
+- Consumes: Task 1's skill id `running-commands` (the swept lines point at it).
 - Produces: zero live `output-hygiene` references; the bootstrap pointer line (Task 4's checklist cites the same skill).
 
 - [ ] **Step 1: Delete the old skill**
