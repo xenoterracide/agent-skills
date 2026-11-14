@@ -61,7 +61,8 @@ you write, follows it. Short. Concrete. No filler.
 ## Quiet command output
 
 Keep command output small. These flags keep failures visible and cut the
-rest. The `output-hygiene` skill carries the redirect patterns.
+rest. The `running-commands` skill carries the ownership rules and the
+redirect patterns.
 
 - git: add `--quiet` to `fetch`, `pull`, `push`, `commit`, `merge`; use
   `status --porcelain`; set `NO_COLOR=1` for captured output
@@ -69,7 +70,7 @@ rest. The `output-hygiene` skill carries the redirect patterns.
 - uv: `--quiet`
 - Maven: `-B -q --no-transfer-progress`
 - Gradle: `-q` and `--console=plain`
-- gh: no quiet mode — redirect per `output-hygiene`
+- gh: no quiet mode — redirect per `running-commands`
 
 ## Read Project Documentation First
 
