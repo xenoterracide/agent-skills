@@ -152,11 +152,10 @@ Agent rules:
 ## Skill structure
 
 - `skills/running-commands/SKILL.md`, ~50 lines: frontmatter
-  description covering both trigger classes — tempted commands
-  (formatters, linters, checkers, suites) and long or watched output,
-  carrying the vocabulary `output-hygiene`'s battle-tested description
-  had: build and test logs, watch or poll loops, git commits through
-  hooks, CI status checks. Then the ownership table, the five rules,
+  description restores `output-hygiene`'s opener verbatim — the
+  control run (develop worktree, glm-5.3) proved it 3/3 on watch
+  prompts where the merged form loaded 4/6 — and appends the
+  ownership class after it. Then the ownership table, the five rules,
   the one-line quiet principle, pointers to the reference.
 - `skills/running-commands/references/quiet.md`, absorbed from
   `output-hygiene`: the redirect patterns, the commit-output pattern,
