@@ -12,11 +12,15 @@ place.
 ## The rules
 
 1. **Short sentences.** One idea per sentence. Split clauses joined by "and",
-   "but", or a semicolon. Keep the "and" in a list.
+   "but", or a semicolon. Keep the "and" in a list. Cap an instruction at 20
+   words and a description at 25, the limits
+   [ASD-STE100](https://www.asd-ste100.org/) sets.
 2. **Concrete words.** Use short, plain words. "Use", not "utilize". "Run",
    not "execute".
 3. **Facts over explanations.** A fact explains itself. Show the specific
-   command, file, or example. Cut the connectives.
+   command, file, or example. Cut the connectives. Every sentence names a
+   file, a command, a value, or an actor. If you cannot name it, you do not
+   know it yet.
    Good: `Keep this key. Downstream systems still send it.`
    Bad: `Keep this key because downstream systems continue to send it and depend on it.`
 4. **Active voice.** Tell the reader what to do. "Run the test." Not "The test
@@ -36,6 +40,9 @@ place.
     words, red-flag lists, rationalization tables, and required sections are
     data. Do not delete data to save words. Remove prose before removing
     structure.
+11. **No synonyms.** One thing, one name. Two names for one thing make the
+    reader learn both. Nothing tells them the two are the same. Pick one. A
+    word can mean two things. Context tells the reader which.
 
 ## Why
 

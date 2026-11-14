@@ -13,7 +13,8 @@ place.
 
 1. **Short methods.** One job per method. Split anything that does two things.
 2. **Concrete names.** Name things for what they are. `findById`, not
-   `process`. `User`, not `Data`.
+   `process`. `User`, not `Data`. Keep one name for one thing; see "No
+   synonyms" in `references/prose.md`.
 3. **Imperative names.** Methods do things. `pay()`, not `paymentIsProcessed()`.
 4. **Name the role, not the relationship.** `UserFactory` names a role — keep
    it. `UserServiceImpl` names a relationship — name it for what it is. Drop
