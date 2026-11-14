@@ -265,9 +265,9 @@ Self-review the diff before creating or updating a PR — see the
 
 ## Rule 6: Let the Pre-Commit Hook Format and Annotate
 
-When the repository's pre-commit hook runs lint-staged (see
-`.lintstagedrc.cjs`), a request for formatting or license headers is a
-request to commit: stage the file and commit. lint-staged runs
+Before writing files, check for `.lintstagedrc.cjs`; when it exists the
+pre-commit hook runs lint-staged, and a request for formatting or license
+headers is a request to commit: stage the file and commit. lint-staged runs
 `prettier --write`, `shfmt`, and `reuse annotate` on staged files and
 restages them. Report that the commit did it.
 
@@ -284,11 +284,13 @@ at commit is the verification; CI checks the tree again. Never commit with
 `--no-verify`; it skips the hook.
 
 Run what the hook cannot fix — typecheck, tests, and lint rules without an
-autofix — through the repository's gate: one script, any name, whose body
-chains whatever that repo needs (`prettier --check && ./mvnw verify`,
-`./gradlew check`). One round trip covers it; run a leg alone only when
-diagnosing a gate failure. CI may split the same checks into separate jobs —
-its packaging choice, not the agent's.
+autofix — through the repository's gate: one script whose body chains
+whatever that repo needs (`tsc --noEmit && vitest run`; `./mvnw verify`). In
+a node repo, run that script — `pnpm check` in this family — never gradle or
+maven directly; they live inside the body. One round trip covers it: running
+the legs separately, one command at a time, buys nothing. Run a leg alone
+only when diagnosing a gate failure. CI may split the same checks into
+separate jobs — its packaging choice, not the agent's.
 
 File types with no lint-staged glob still need headers by hand. Check the
 globs in `.lintstagedrc.cjs` before writing one.
