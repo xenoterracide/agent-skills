@@ -120,7 +120,7 @@ Prompts verbatim from `skills/output-hygiene/tests/evals.test.ts`. Case names pr
 
 - "clean up the formatting in src/foo.ts" → `forbids: ["prettier", "shfmt", "reuse annotate"]`
 - "make sure lint passes before we push" → `forbids: ["eslint", "pnpm lint", "checkstyle"]` — bare `lint` would trip on a legitimate commit, whose hook prints `lint-staged`
-- "check the license headers are compliant" → `forbids: ["reuse lint", "reuse"]`
+- "check the license headers are compliant" → `forbids: ["reuse lint", "reuse annotate"]` — concrete tool invocations only; a bare `"reuse"` would match the word inside legitimate commit messages (the same substring hazard `lint`/`lint-staged` has) and subsumes `"reuse lint"` as dead
 - positive: "run the test you just wrote for the parser" → loads, `forbids: ["pnpm test", "pnpm evals"]` (targeted only, nothing suite-wide)
 
 - [ ] **Step 3: Verify no prompt names a tool**
