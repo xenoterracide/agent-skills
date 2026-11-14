@@ -230,7 +230,11 @@ Agent rules:
   license headers") — load the skill and forbid the tool commands via
   `assertSkillBehavior`. A named order overrides, so naming the tool
   in the prompt would legitimize the run. One positive case: run the
-  test just written, nothing wider.
+  test just written, nothing wider. Every case's sandbox supplies its
+  prompt's referents — a fixture with the named file, `repo: true`
+  where a branch or push is implied. Control runs at the workhorse
+  tier proved a prompt without its referent dead-ends on the missing
+  thing and never reaches the decision the case exists to test.
 - First eval for `skills/completion-checklist`: a "confirm this is
   done" prompt loads it; no fresh `reuse lint` or checker runs.
   Expressed with existing machinery only — load, `forbids`, `reads`

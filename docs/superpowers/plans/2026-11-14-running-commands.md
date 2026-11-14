@@ -119,7 +119,7 @@ gh pr create --draft --base develop --title "feat(skills): running-commands owns
 
 - [ ] **Step 1: Port the four output-hygiene cases, skill id `running-commands`**
 
-Prompts verbatim from `skills/output-hygiene/tests/evals.test.ts`. Case names prefixed `running commands:`. The three long-output cases (full test suite, watch checks, noisy commit hook) upgrade to `assertSkillBehavior` with `reads: ["references/quiet.md"]`. The git-workflow companion case (PR work) stays `assertSkillLoads` — it passes only after Task 3 sweeps git-workflow's pointer, which is why no eval executes before Task 6.
+Prompts verbatim from `skills/output-hygiene/tests/evals.test.ts`. Case names prefixed `running commands:`. The three long-output cases (full test suite, watch checks, noisy commit hook) upgrade to `assertSkillBehavior` with `reads: ["references/quiet.md"]`. The git-workflow companion case (PR work) stays `assertSkillLoads` — it passes only after Task 3 sweeps git-workflow's pointer, which is why no eval executes before Task 6. Amended after the eval rounds: the companion case gains `repo: true` — the control run (develop, glm-5.3) proved the prompt dead-ends without a repo, because "this branch" has no referent and the agent wanders instead of doing the PR work whose flow loads the companion.
 
 - [ ] **Step 2: Add the ownership cases**
 
@@ -129,6 +129,14 @@ Prompts verbatim from `skills/output-hygiene/tests/evals.test.ts`. Case names pr
 - "make sure lint passes before we push" → `forbids: ["eslint", "pnpm lint", "checkstyle"]` — bare `lint` would trip on a legitimate commit, whose hook prints `lint-staged`
 - "check the license headers are compliant" → `forbids: ["reuse lint", "reuse annotate"]` — concrete tool invocations only; a bare `"reuse"` would match the word inside legitimate commit messages (the same substring hazard `lint`/`lint-staged` has) and subsumes `"reuse lint"` as dead
 - positive: "run the test you just wrote for the parser" → loads, `forbids: ["pnpm test", "pnpm evals"]` (targeted only, nothing suite-wide)
+
+Case options, amended after the eval rounds — every case's sandbox supplies its prompt's referents; control runs at the workhorse tier proved a prompt without its referent dead-ends on the missing thing and never reaches the decision the case exists to test:
+
+- formatting case: `fixture: "ts"`
+- lint case: `repo: true`
+- license case: `fixture: "ts"`
+- targeted case: `fixture: "ts"`
+- Fixture `ts` lives at `skills/running-commands/tests/fixtures/ts/` and contains `src/foo.ts` (poorly formatted TypeScript, GPL-3.0-or-later inline header) and `src/parser.test.ts` (a trivial vitest case, same header). Follow the pnpm fixture's conventions under `skills/using-xenoterracide-agent-skills/tests/fixtures/`, and wire the fixture name the way `scripts/eval-sandbox.ts`'s `copySandboxContent` resolves it.
 
 - [ ] **Step 3: Verify no prompt names a tool**
 
