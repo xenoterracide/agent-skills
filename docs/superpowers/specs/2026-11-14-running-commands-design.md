@@ -236,10 +236,12 @@ Agent rules:
   tier proved a prompt without its referent dead-ends on the missing
   thing and never reaches the decision the case exists to test.
 - First eval for `skills/completion-checklist`: a "confirm this is
-  done" prompt loads it; no fresh `reuse lint` or checker runs.
-  Expressed with existing machinery only — load, `forbids`, `reads`
-  (`running-commands`). No new claim-text assertion helper, no
-  sandbox hook installation, without the maintainer's sanction.
+  done" prompt loads it; the case supplies its referents (sandbox
+  repo, stubbed-green `ghb pr verify`) and asserts the pipeline —
+  the agent settles through the stub and never runs a fresh checker.
+  Expressed with existing machinery only — load, `commands`,
+  `forbids`. No new claim-text assertion helper, no sandbox hook
+  installation, without the maintainer's sanction.
 - Rewrite `skills/completion-checklist/SKILL.md` per Decisions.
 - Bootstrap: add the pointer line; its two `output-hygiene` mentions
   become `running-commands`.

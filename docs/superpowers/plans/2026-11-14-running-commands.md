@@ -215,9 +215,9 @@ git push --quiet
 - Consumes: Task 1's skill (`running-commands`, cited by the gate); Task 3's swept bootstrap.
 - Produces: the checklist's evidence rules Task 6's eval run covers.
 
-- [ ] **Step 1: Write the failing-adjacent eval first**
+- [ ] **Step 1: Write the eval first**
 
-Case prefixed `running commands:`, prompt "I think the change is done — can you confirm?", `assertSkillBehavior` with `forbids: ["reuse lint", "prettier --check"]` and `reads: ["running-commands"]`.
+Case prefixed `running commands:`, prompt "I think the change is done — can you confirm?", `assertSkillBehavior` with `repo: true`, `ghb: "green"`, `forbids: ["reuse lint", "prettier --check"]`, and `commands: [/ghb pr verify/]` — the case tests the rewritten pipeline end to end: the sandbox repo is the change, the stub settles its checks, and the agent confirms done by settling, not by re-running checkers. Amended after the eval round: the original `reads: ["running-commands"]` assertion is dropped — the workhorse demonstrated it cites-and-acts without reading, so the read over-specifies; the command through the stubbed pipeline is the real behavior.
 
 - [ ] **Step 2: Verify registration**
 
