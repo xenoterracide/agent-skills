@@ -132,10 +132,10 @@ Prompts verbatim from `skills/output-hygiene/tests/evals.test.ts`. Case names pr
 
 Case options, amended after the eval rounds — every case's sandbox supplies its prompt's referents; control runs at the workhorse tier proved a prompt without its referent dead-ends on the missing thing and never reaches the decision the case exists to test:
 
-- formatting case: `fixture: "ts"`
+- formatting case: `fixture: "ts"`, `repo: true` — the owned route is commit-then-hook; a sandbox without a git repo makes that route impossible, and the workhorse correctly reasoned "no repo, no hook" and formatted directly (final-3 transcript)
 - lint case: `repo: true`
-- license case: `fixture: "ts"`
-- targeted case: `fixture: "ts"`
+- license case: `fixture: "ts"`, `repo: true` — same owned-route requirement: pre-commit's annotate runs at commit
+- targeted case: `fixture: "ts"` — the agent's own row; no git referent needed
 - Fixture `ts` lives at `skills/running-commands/tests/fixtures/ts/` and contains `src/foo.ts` (poorly formatted TypeScript, GPL-3.0-or-later inline header) and `src/parser.test.ts` (a trivial vitest case, same header). Follow the pnpm fixture's conventions under `skills/using-xenoterracide-agent-skills/tests/fixtures/`, and wire the fixture name the way `scripts/eval-sandbox.ts`'s `copySandboxContent` resolves it.
 
 - [ ] **Step 3: Verify no prompt names a tool**
