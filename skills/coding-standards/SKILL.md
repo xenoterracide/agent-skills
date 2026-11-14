@@ -266,35 +266,24 @@ Self-review the diff before creating or updating a PR — see the
 ## Rule 6: Let the Pre-Commit Hook Format and Annotate
 
 Before writing files, check for `.lintstagedrc.cjs`. When it exists, the
-pre-commit hook runs lint-staged. A request for formatting or license headers
-is a request to commit. Stage the file and commit. lint-staged runs
-`prettier --write`, `shfmt`, and `reuse annotate` on staged files and
-restages them. Report that the commit did it.
+pre-commit hook owns formatting and license headers. A request for
+formatting or license headers is a request to commit. Stage the file and
+commit.
 
 Write files you create without license or copyright headers. No header is
 the correct state before commit. `reuse annotate` stamps one at commit. A
-hand-written header guesses the license the config already knows. Not "to
-make sure it's there", not to match neighboring files, not to match the
-repo's style.
+hand-written header guesses the license the config already knows. Not to
+match neighboring files, not to match the repo's style.
 
-The hook's steps are not a checklist to run by hand. Never run `prettier`,
-`shfmt`, or `reuse` — not `--write`, not `--check`, not `lint`, not
-`download`, not to verify. Never stage `LICENSES/` yourself. The hook's run
-at commit is the verification. CI checks the tree again. Never commit with
-`--no-verify`. It skips the hook.
+Never run `prettier`, `shfmt`, or `reuse` — not `--write`, not `--check`,
+not `lint`, not `download`, not to verify. Never stage `LICENSES/`. The
+hook's run at commit is the verification. Never commit with `--no-verify`.
 
-Run what the hook cannot fix — typecheck, tests, and lint rules without an
-autofix — through the repository's gate: one script whose body chains
-whatever that repo needs (`tsc --noEmit && vitest run`; `./mvnw verify`). In
-a node repo, run that script — `pnpm check` in this family — never gradle or
-maven directly. They live inside the body. One round trip covers it. Running
-the legs separately, one command at a time, buys nothing. Run a leg alone
-only when diagnosing a gate failure. CI may split the same checks into
-separate jobs — its packaging choice, not the agent's.
+Run the repository's one gate script — `pnpm check` in this family — never
+gradle or maven directly. Run a leg alone only when diagnosing a gate
+failure.
 
-File types with no lint-staged glob still need headers by hand. Check the
-globs in `.lintstagedrc.cjs` before writing one.
+File types with no lint-staged glob still need headers by hand.
 
-A commit that leaves a file unformatted or headerless means the hook did not
-run: missing, bypassed, or not installed. Report that. Do not hand-fix the
-file to work around a broken hook.
+A commit that leaves a file unformatted or headerless means the hook did
+not run. Report that. Do not hand-fix the file.
