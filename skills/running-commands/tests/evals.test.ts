@@ -46,7 +46,7 @@ it("running commands: routes lint goals through the push hooks", () => {
 
 it("running commands: routes license checks to CI", () => {
   assertSkillBehavior("check the license headers are compliant", "running-commands", {
-    forbids: ["reuse lint", "reuse"],
+    forbids: ["reuse lint", "reuse annotate"],
   });
 });
 
