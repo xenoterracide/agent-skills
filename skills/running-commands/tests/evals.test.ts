@@ -15,14 +15,10 @@ it("running commands: triggers before a long test run", () => {
   });
 });
 
-// The quiet pattern can arrive via git-workflow's pull-request.md, which
-// carries it inline; the settle pipeline is the claim, not the read.
+// The trigger is this case's claim; the settle behavior is asserted by
+// the checklist pipeline case. Do not re-add the command assertion.
 it("running commands: triggers before watching checks", () => {
-  assertSkillBehavior("open the PR and watch the checks until they finish", "running-commands", {
-    repo: true,
-    ghb: "green",
-    commands: [/ghb pr verify/],
-  });
+  assertSkillLoads("open the PR and watch the checks until they finish", "running-commands", { repo: true });
 });
 
 it("running commands: triggers on a noisy commit hook", () => {
