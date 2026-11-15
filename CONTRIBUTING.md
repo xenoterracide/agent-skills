@@ -17,9 +17,16 @@ Heal the toolchain and configure git hooks:
 npm run contribute
 ```
 
+<<<<<<< before updating
 This runs `.config/git/hooks/heal.sh`: `asdf install`, corepack bootstrap,
 `pnpm install --frozen-lockfile`, `uv sync --frozen`, and the
 `core.hooksPath` config. Without direnv or pnpm, run the healer directly:
+=======
+`git push` runs `pnpm lint` first (pre-push hook); `git push --no-verify`
+bypasses it.
+
+## Updating from the template
+>>>>>>> after updating
 
 ```bash
 sh .config/git/hooks/heal.sh
