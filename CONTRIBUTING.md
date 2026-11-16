@@ -52,6 +52,9 @@ Run all checks before pushing:
 pnpm lint
 ```
 
+`git push` runs `pnpm lint` first (pre-push hook); `git push --no-verify`
+bypasses it.
+
 Format a single file with Prettier:
 
 ```bash
