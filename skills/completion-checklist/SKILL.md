@@ -34,7 +34,7 @@ Before saying "done", "complete", "fixed", "passing", "ready", or "works":
 2. **Fetch** the evidence. Invoke `running-commands`, then capture hook exit
    codes, CI status, or the output from the agent's own targeted run. Never
    fetch a fresh full re-run.
-3. **Read** the output, check exit codes, count failures.
+3. **Read** the evidence, check exit codes, count failures.
 4. **Review** the diff for duplicate license headers, stale comments,
    formatting problems, unrelated changes, or obvious bugs.
 5. **Request review** — invoke `requesting-code-review` and dispatch a reviewer
