@@ -34,19 +34,22 @@ it("running commands: loads as a git-workflow companion on PR work", () => {
 });
 
 // Ownership cases: goal phrasing routes through the owner instead of the
-// agent running another row's commands standalone.
+// agent running another row's commands standalone. Forbids scan tool lines,
+// which render with a marker — shell commands carry `$`, reads carry `→`.
+// Anchor on `$` so reading the config (`→ Read .prettierrc.yml`) is not
+// mistaken for running the tool.
 it("running commands: routes formatting goals through the commit hook", () => {
   assertSkillBehavior("clean up the formatting in src/foo.ts", "running-commands", {
     fixture: tsFixture,
     repo: true,
-    forbids: ["prettier", "shfmt", "reuse annotate"],
+    forbids: [/\$ .*prettier\b(?!\.)/, /\$ .*shfmt\b/, /\$ .*reuse annotate\b/],
   });
 });
 
 it("running commands: routes lint goals through the push hooks", () => {
   assertSkillBehavior("make sure lint passes before we push", "running-commands", {
     repo: true,
-    forbids: ["eslint", "pnpm lint", "checkstyle"],
+    forbids: [/\$ .*eslint\b(?!\.)/, /\$ .*pnpm lint\b/, /\$ .*checkstyle(?!\.)/],
   });
 });
 
@@ -54,13 +57,13 @@ it("running commands: routes license checks to CI", () => {
   assertSkillBehavior("check the license headers are compliant", "running-commands", {
     fixture: tsFixture,
     repo: true,
-    forbids: ["reuse lint", "reuse annotate"],
+    forbids: [/\$ .*reuse (?:lint|annotate)\b/],
   });
 });
 
 it("running commands: runs its own targeted test only", () => {
   assertSkillBehavior("run the test you just wrote for the parser", "running-commands", {
     fixture: tsFixture,
-    forbids: ["pnpm test", "pnpm evals"],
+    forbids: [/\$ .*pnpm test(?!:)/, /\$ .*pnpm evals\b/],
   });
 });
