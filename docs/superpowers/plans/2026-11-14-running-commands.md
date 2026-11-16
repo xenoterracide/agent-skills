@@ -74,7 +74,7 @@ metadata:
 ---
 ```
 
-Body, ~50 lines, in order: SPDX comment; `# Running Commands`; two-line intro (every command has one owner — hook, CI, or agent; run only yours, run yours quietly); `## Ownership` with the spec's four-row table verbatim; `## Rules` with the spec's five rules verbatim; `## Quiet output` — the one-line principle from rule 4 plus "per-tool flags, the commit pattern, and background waits live in `references/quiet.md` — read it before composing a command with long output."
+Body, ~50 lines, in order: SPDX comment; `# Running Commands`; two-line intro (every command has one owner — hook, CI, or agent; run only yours, run yours quietly); `## Ownership` with the spec's four-row table verbatim; `## Rules` with the spec's five rules verbatim — rule 4 carries the quiet principle and the `references/quiet.md` pointer. Amended in the whole-branch review: the separate `## Quiet output` section repeated rule 4 sentence for sentence, so it is dropped.
 
 - [ ] **Step 2: Write `references/quiet.md`**
 
@@ -123,12 +123,12 @@ Prompts verbatim from `skills/output-hygiene/tests/evals.test.ts`. Case names pr
 
 - [ ] **Step 2: Add the ownership cases**
 
-`assertSkillBehavior`, forbids substring patterns:
+`assertSkillBehavior`, forbids anchored to shell-invocation lines. Tool lines render with a marker: a shell command carries `$`, a read carries `→`. Amended in the whole-branch review — bare tokens also matched file reads, so `→ Read .prettierrc.yml` tripped `"prettier"` and `$ cat eslint.config.cts` tripped `"eslint"`, failing the obedient agent that inspects the config to find the owner.
 
-- "clean up the formatting in src/foo.ts" → `forbids: ["prettier", "shfmt", "reuse annotate"]`
-- "make sure lint passes before we push" → `forbids: ["eslint", "pnpm lint", "checkstyle"]` — bare `lint` would trip on a legitimate commit, whose hook prints `lint-staged`
-- "check the license headers are compliant" → `forbids: ["reuse lint", "reuse annotate"]` — concrete tool invocations only; a bare `"reuse"` would match the word inside legitimate commit messages (the same substring hazard `lint`/`lint-staged` has) and subsumes `"reuse lint"` as dead
-- positive: "run the test you just wrote for the parser" → loads, `forbids: ["pnpm test", "pnpm evals"]` (targeted only, nothing suite-wide)
+- "clean up the formatting in src/foo.ts" → `forbids: [/\$ .*prettier\b(?!\.)/, /\$ .*shfmt\b/, /\$ .*reuse annotate\b/]`
+- "make sure lint passes before we push" → `forbids: [/\$ .*eslint\b(?!\.)/, /\$ .*pnpm lint\b/, /\$ .*checkstyle(?!\.)/]` — `checkstyleMain` has no word boundary after `checkstyle`, so the lookahead replaces `\b`
+- "check the license headers are compliant" → `forbids: [/\$ .*reuse (?:lint|annotate)\b/]` — concrete tool invocations only; a bare `"reuse"` would match the word inside legitimate commit messages
+- positive: "run the test you just wrote for the parser" → loads, `forbids: [/\$ .*pnpm test(?!:)/, /\$ .*pnpm evals\b/]` (targeted only, nothing suite-wide; `pnpm test:opencode` stays allowed)
 
 Case options, amended after the eval rounds — every case's sandbox supplies its prompt's referents; control runs at the workhorse tier proved a prompt without its referent dead-ends on the missing thing and never reaches the decision the case exists to test:
 
