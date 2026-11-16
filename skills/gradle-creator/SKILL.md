@@ -28,6 +28,8 @@ Load these skills whenever this skill applies:
 - **`coding-standards`** — before writing or modifying code
 - **`completion-checklist`** — before claiming the change is done, complete,
   fixed, passing, or working
+- **`running-commands`** — before running formatters, linters, checkers,
+  or test suites
 
 ## Dependency Management
 
