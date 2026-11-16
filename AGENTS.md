@@ -56,7 +56,7 @@ tools, dependencies, and the git hooks.
 pnpm lint                         # eslint, prettier, shellcheck, catalog
 pnpm lint:prettier                # Prettier check with cache
 pnpm lint:shellcheck              # ShellCheck on shell files
-pnpm lint:reuse                   # REUSE license compliance check
+pnpm lint:reuse                   # REUSE compliance (CI's license job owns it)
 pnpm exec prettier --write <file> # Format a single file
 ```
 
@@ -120,8 +120,8 @@ for the reset.
 
 Hooks live in `.config/git/hooks`.
 
-- **pre-commit**: Runs `lint-staged` — prettier, shfmt, license annotation,
-  and shellcheck on changed files.
+- **pre-commit**: Runs `lint-staged` — prettier, shfmt, and license
+  annotation on changed files.
 - **commit-msg**: Validates conventional commit messages against
   `git-conventional-commits.yaml`.
 - **post-checkout / post-merge**: Run `heal.sh` when pins or lockfiles
