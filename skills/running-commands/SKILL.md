@@ -51,10 +51,3 @@ commands, and run them quietly.
    command from the user overrides — run it once, say the hook would have.
    Goal phrasing ("clean up the formatting") is not an order; route it
    through the owner: commit, and the hook formats.
-
-## Quiet output
-
-Run what's yours quietly: redirect long output to a mktemp file in the
-harness temp dir, tail on failure. Per-tool flags, the commit pattern, and
-background waits live in `references/quiet.md` — read it before composing a
-command with long output.
