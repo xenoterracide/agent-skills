@@ -151,6 +151,9 @@ export function runPrompt(prompt: string, { model = MODEL, fixture, repo, ghb = 
   try {
     config = mkdtempSync(join(tmpdir(), "config-"));
     copySandboxContent(dir, fixture);
+    if (repo === true) {
+      initSandboxRepo(dir);
+    }
     writeSandboxStubs(tools, { repo: repo === true, ghb });
     return sessionOutput(spawnOpencode(prompt, model, { dir, tools, config }));
   } finally {

@@ -30,6 +30,8 @@ Load these skills whenever this skill applies:
 - **`hemingway`** — for terse, concrete code and Javadoc style
 - **`completion-checklist`** — before claiming the change is done, complete,
   fixed, passing, or working
+- **`running-commands`** — before running formatters, linters, checkers,
+  or test suites
 
 ## Design Principles
 

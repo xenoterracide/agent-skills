@@ -40,7 +40,7 @@ keeps a branch current; `ghb pr verify` settles checks. Without ghb, read
 
 ## Required Companion Skills
 
-Load `output-hygiene` when running this workflow's commands — commits
+Load `running-commands` when running this workflow's commands — commits
 through hooks and checks watches both produce repetitive output.
 
 Apply `hemingway`'s rules before submitting prose: commit messages, PR
@@ -70,4 +70,4 @@ These apply to every git workflow activity in this repository:
   pass before ending the task, and print the PR URL. Run `ghb pr verify` on a
   ready PR only — a draft is permanently blocked. Settle the draft checks and
   flip ready first (`pull-request.md`, `Draft, Ready, and Checks`). Without
-  ghb, watch redirected per `output-hygiene` — unique file, then tail.
+  ghb, watch redirected per `running-commands` — unique file, then tail.

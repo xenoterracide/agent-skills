@@ -32,7 +32,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
       permanently blocked. Settle the draft checks and flip ready first; see
       `Draft, Ready, and Checks`.
     - Without ghb, watch the checks in a background shell redirected per
-      `output-hygiene` — `gh pr checks <PR> --watch`, unique file, then
+      `running-commands` — `gh pr checks <PR> --watch`, unique file, then
       tail — or the MCP checks equivalent.
     - Fix failures before requesting review. Never return with failing checks.
 - **NEVER force push.** Force pushes (`--force` and `--force-with-lease`) are **blocked by repository rules** and will always fail. If a push is rejected, do not attempt force push — create a new commit instead.
@@ -54,7 +54,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 ## Settling Checks
 
 Settle checks with `ghb pr verify`, in a background shell redirected per
-`output-hygiene`. One command: it fails fast on a stale or unpushed
+`running-commands`. One command: it fails fast on a stale or unpushed
 branch, waits out mergeability and every pending check, requires
 `mergeStateStatus: CLEAN`, and prints one line.
 
@@ -115,7 +115,7 @@ Repositories that gate expensive suites behind "ready" run only the cheap
 checks on a draft. With no gate, the draft runs the full set.
 
 1. Watch the draft checks — `gh pr checks <PR> --watch`, redirected per
-   `output-hygiene`.
+   `running-commands`.
    - `no checks reported` often means CI has not registered yet. Wait 30
      seconds and retry, up to three times.
    - Still none means the repository runs no checks, or none on a draft.
