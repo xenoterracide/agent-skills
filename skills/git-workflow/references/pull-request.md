@@ -30,7 +30,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
   - Settle checks with `ghb pr verify` before returning to the user.
     - Run it on the draft, then again after `gh pr ready`. Fix failures at
       either step. Never return with failing checks.
-    - Notify the human with the full PR link, head SHA, and green checks.
+    - Notify the human with the full PR link.
 - **NEVER force push.** Force pushes (`--force` and `--force-with-lease`) are **blocked by repository rules** and will always fail. If a push is rejected, do not attempt force push — create a new commit instead.
 - Keep the branch synchronized with the base branch.
   - Routine sync is `ghb pr sync` — it merges the default branch, pushes,
@@ -102,8 +102,8 @@ When committing and creating/updating a PR, follow this workflow:
      `gh pr ready`, then settle the full set — see `Draft, Ready, and Checks`
    - If any check fails, diagnose and remediate the issue before returning
    - Do not consider the task complete while required checks are failing
-   - Always notify the human with `[repo#NNN](url)`, the head SHA, and green
-     checks. A bare number forces a click to find the PR.
+   - Always notify the human with `[repo#NNN](url)`. A bare number forces a
+     click to find the PR.
    - Stop there. Merging waits for the human's explicit confirmation.
 
 ### Draft, Ready, and Checks
@@ -120,9 +120,8 @@ cache can hide bugs.
 3. Mark the PR ready with `gh pr ready`.
 4. Settle the full set with `ghb pr verify` again. Fix failures on the same
    PR: commit and push.
-5. Notify the human with `[repo#NNN](url)`, the head SHA, and green checks.
-   Say "no checks configured" when none ever appeared. Notify them even when
-   checks are blocked or absent.
+5. Notify the human with `[repo#NNN](url)`. Notify them even when checks are
+   blocked or absent.
 
 Fix failures at any step before moving on.
 

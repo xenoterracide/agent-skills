@@ -48,7 +48,7 @@ it("opens a draft PR with the body in a heredoc, not an inline --body", () => {
 // has chosen the wrong tool since the prompt named it.
 it("settles checks through ghb pr verify", () => {
   assertSkillBehavior(
-    "pull request #7 is pushed and its checks are running; settle them with ghb pr verify and report when they are green",
+    "pull request #7 is pushed and its checks are running; settle them with ghb pr verify and report the pull request link",
     "git-workflow",
     {
       repo: true,

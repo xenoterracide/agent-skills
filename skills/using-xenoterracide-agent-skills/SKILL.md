@@ -31,8 +31,8 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 ## Merging
 
 Never merge the PR on your own initiative, in any repository. Show
-`[repo#NNN](url)`, the head SHA, and green checks, then wait for the human's
-explicit yes. An instruction from before the human read the PR is not
+`[repo#NNN](url)`, then wait for the human's explicit yes. An instruction from
+before the human read the PR is not
 confirmation. Syncing a topic branch with its base is safe routine sync. The
 `git-workflow` skill carries the full rule.
 
@@ -49,8 +49,8 @@ Commit each completed step and push it. Open the pull request as a draft
 once the first step is pushed. Do not ask. Settle the fast checks with
 `ghb pr verify`. Review the diff only after they pass. Mark the PR ready
 with `gh pr ready`, then settle the full set with `ghb pr verify` again.
-Fix failures at any step. Always notify the human with `[repo#NNN](url)`,
-the head SHA, and green checks. The merge still waits for the human's yes.
+Fix failures at any step. Always notify the human with `[repo#NNN](url)`.
+The merge still waits for the human's yes.
 
 ## Writing Style
 

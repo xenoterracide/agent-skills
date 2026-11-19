@@ -51,9 +51,9 @@ titles and bodies, and reference edits must pass.
 These apply to every git workflow activity in this repository:
 
 - **Merge only on explicit confirmation.** Never merge the PR on your own
-  initiative. Show `[repo#NNN](url)`, the head SHA, and green checks, then
-  wait for the human's yes. An instruction from before the human read the PR
-  is not confirmation. Only then merge, by any route: `gh pr merge` (including
+  initiative. Show `[repo#NNN](url)`, then wait for the human's yes. An
+  instruction from before the human read the PR is not confirmation. Only
+  then merge, by any route: `gh pr merge` (including
   `--auto`), the MCP `merge_pull_request` tool, the GraphQL
   `mergePullRequest` mutation, or the REST merge endpoint.
 - **Merge direction matters.** `git merge origin/HEAD` into the topic
@@ -69,5 +69,4 @@ These apply to every git workflow activity in this repository:
 - **Verify checks before returning.** Run `ghb pr verify` on the draft,
   review the diff, mark the PR ready with `gh pr ready`, then run
   `ghb pr verify` again. Fix failures at any step. Notify the human with
-  `[repo#NNN](url)`, the head SHA, and green checks — see `pull-request.md`,
-  `Draft, Ready, and Checks`.
+  `[repo#NNN](url)` — see `pull-request.md`, `Draft, Ready, and Checks`.
