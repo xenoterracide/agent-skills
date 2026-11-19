@@ -15,22 +15,11 @@ directory doubles as an OpenCode-compatible HTTP skill catalog.
 - **License for skills/docs**: CC-BY-NC-SA-4.0
 - **License for configuration files**: CC0-1.0
 
-<<<<<<< before updating
 > **Agent Note:** This repo is the plugin source for
 > `xenoterracide-agent-skills` — not the Superpowers plugin, not an installed
 > plugin directory. Make all skill and plugin changes in this repository, then
 > reinstall. Never edit files under `~/.kimi-code/`, `~/.kimi-plugin/`,
 > `~/.config/opencode/`, or any other agent installation directory.
-=======
-- `npm run contribute` — bootstrap tooling (run once after clone)
-- `pnpm lint` — the pre-push set: prettier, shellcheck, reuse, plus
-  eslint (TypeScript) or checkstyle + spotbugs via Maven (java)
-- `pnpm check` — lint (minus reuse), typecheck, and tests
-- `pnpm lint:reuse` — REUSE check alone; the first commit's pre-commit
-  hook seeds `LICENSES`
-- `pnpm typecheck` — TypeScript type check
-- `pnpm test` — vitest with coverage
->>>>>>> after updating
 
 ## Source of Truth
 
@@ -64,10 +53,10 @@ tools, dependencies, and the git hooks.
 ### Lint and Format
 
 ```bash
-pnpm lint                         # eslint, prettier, shellcheck, catalog
+pnpm lint                         # eslint, prettier, shellcheck, reuse, catalog
 pnpm lint:prettier                # Prettier check with cache
 pnpm lint:shellcheck              # ShellCheck on shell files
-pnpm lint:reuse                   # REUSE compliance (CI's license job owns it)
+pnpm lint:reuse                   # REUSE compliance alone; lint also runs it
 pnpm exec prettier --write <file> # Format a single file
 ```
 
