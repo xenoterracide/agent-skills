@@ -72,6 +72,21 @@ redirect patterns.
 - Gradle: `-q` and `--console=plain`
 - gh: no quiet mode — redirect per `running-commands`
 
+## Working Directory
+
+Point each command at its directory. Do not walk there first.
+
+- Set `workdir` on the shell call. Do not write `cd` into the command. Each
+  call gets a new shell, so a `cd` never carries over.
+- Pin git with `git -C <path>` only when the session touches more than one
+  checkout. A session inside its repository needs no `-C`.
+- After creating a worktree, move the session into it before the first edit.
+  Then every tool call uses relative paths, and each command drops the
+  absolute prefix. In OpenCode the agent calls the session-move tool and the
+  human types `/cd`.
+- Name the session after the worktree, and tell the human its directory. They
+  resume the session, not the directory.
+
 ## Read Project Documentation First
 
 Before any investigation or code changes, read the project's canonical
