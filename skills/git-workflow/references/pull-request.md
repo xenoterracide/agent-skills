@@ -136,8 +136,8 @@ the diff applies, not that the policy accepts the merge: with
 `mergeStateStatus: BLOCKED` and `reviewDecision: CHANGES_REQUESTED` the
 merge is refused, every check green or not.
 
-Blocked on review: tell the human what holds the merge, then arm
-auto-merge with `--auto`; it fires when the block lifts — the reviewer
+Blocked on review: tell the human what holds the merge. Then arm
+auto-merge with `--auto`. It fires when the block lifts — the reviewer
 approves or the review is dismissed. Never `--admin` unless the human
 explicitly asks for it:
 
@@ -154,6 +154,8 @@ gh pr merge <PR> --squash --delete-branch
 git pull
 ```
 
+`gh` merges the head at merge time. A push after the yes needs a new yes.
+
 `gh` skips local cleanup when you run it from the feature worktree. Finish
 there with:
 
@@ -165,7 +167,8 @@ git branch -D <branch>
 git pull
 ```
 
-Auto-merge does not delete branches. Clean up after it fires.
+Auto-merge does not delete branches. After it fires, run the cleanup
+above and delete the remote branch with `git push origin --delete <branch>`.
 
 ### Self-Review Before Submitting
 
