@@ -134,7 +134,12 @@ every check green. Do not arm auto-merge. Tell the human what holds the
 merge and wait. Never use `--admin` unless the human asks.
 
 `gh` carries the PR title and body into the squash commit. Merge from the
-main worktree so `gh` removes the feature worktree and both branches:
+main worktree so `gh` removes the feature worktree and both branches.
+
+If the session runs in the feature worktree, move the session out first.
+Call `session_move` by itself with the main worktree path. It lands at the
+next safe boundary. Continue in the next turn. `gh pr merge --squash
+--delete-branch` removes that worktree.
 
 ```bash
 cd "$(git -C "$(git rev-parse --git-common-dir)/.." rev-parse --show-toplevel)"
@@ -144,7 +149,8 @@ git pull
 
 `gh` merges the head at merge time. A push after the yes needs a new yes.
 
-From the feature worktree, `gh` skips local cleanup. Finish with:
+From the feature worktree, `gh` skips local cleanup. Move the session out
+first. Wait for the next turn before running these commands:
 
 ```bash
 WORKTREE=$(git rev-parse --show-toplevel)
