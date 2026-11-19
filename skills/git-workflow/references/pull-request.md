@@ -127,26 +127,14 @@ Fix failures at any step before moving on.
 
 ### Merging on the Human's Yes
 
-On their yes, verify the policy state, then squash-merge with
-`--delete-branch`. `gh` uses the PR title and body for the squash commit.
+On their yes, verify with `ghb pr verify`. Going raw, read
+`mergeStateStatus` and `reviewDecision` — never `mergeable` alone. A
+`BLOCKED` review or `CHANGES_REQUESTED` decision refuses the merge with
+every check green. Do not arm auto-merge. Tell the human what holds the
+merge and wait. Never use `--admin` unless the human asks.
 
-Verify with `ghb pr verify`. Going raw, read `mergeStateStatus` and
-`reviewDecision` — never `mergeable` alone. `mergeable: MERGEABLE` says
-the diff applies, not that the policy accepts the merge: with
-`mergeStateStatus: BLOCKED` and `reviewDecision: CHANGES_REQUESTED` the
-merge is refused, every check green or not.
-
-Blocked on review: tell the human what holds the merge. Then arm
-auto-merge with `--auto`. It fires when the block lifts — the reviewer
-approves or the review is dismissed. Never `--admin` unless the human
-explicitly asks for it:
-
-```bash
-gh pr merge <PR> --squash --auto
-```
-
-Merge from the main worktree. `--delete-branch` removes the feature
-worktree, deletes the local branch, and deletes the remote branch:
+`gh` carries the PR title and body into the squash commit. Merge from the
+main worktree so `gh` removes the feature worktree and both branches:
 
 ```bash
 cd "$(git -C "$(git rev-parse --git-common-dir)/.." rev-parse --show-toplevel)"
@@ -156,8 +144,7 @@ git pull
 
 `gh` merges the head at merge time. A push after the yes needs a new yes.
 
-`gh` skips local cleanup when you run it from the feature worktree. Finish
-there with:
+From the feature worktree, `gh` skips local cleanup. Finish with:
 
 ```bash
 WORKTREE=$(git rev-parse --show-toplevel)
@@ -166,9 +153,6 @@ git worktree remove "$WORKTREE"
 git branch -D <branch>
 git pull
 ```
-
-Auto-merge does not delete branches. After it fires, run the cleanup
-above and delete the remote branch with `git push origin --delete <branch>`.
 
 ### Self-Review Before Submitting
 
