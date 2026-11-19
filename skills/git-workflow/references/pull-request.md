@@ -27,14 +27,10 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
     - Update `AGENTS.md` when build processes, tools, or agent workflows change.
     - Rename a workflow or change its interface only with matching updates to
       both documents.
-  - Verify required GitHub checks before returning to the user.
-    - Run `ghb pr verify` only on a ready PR — it treats a draft as
-      permanently blocked. Settle the draft checks and flip ready first; see
-      `Draft, Ready, and Checks`.
-    - Without ghb, watch the checks in a background shell redirected per
-      `running-commands` — `gh pr checks <PR> --watch`, unique file, then
-      tail — or the MCP checks equivalent.
-    - Fix failures before requesting review. Never return with failing checks.
+  - Settle checks with `ghb pr verify` before returning to the user.
+    - Run it on the draft, then again after `gh pr ready`. Fix failures at
+      either step. Never return with failing checks.
+    - Notify the human with `[repo#NNN](url)`.
 - **NEVER force push.** Force pushes (`--force` and `--force-with-lease`) are **blocked by repository rules** and will always fail. If a push is rejected, do not attempt force push — create a new commit instead.
 - Keep the branch synchronized with the base branch.
   - Routine sync is `ghb pr sync` — it merges the default branch, pushes,
@@ -58,10 +54,10 @@ Settle checks with `ghb pr verify`, in a background shell redirected per
 branch, waits out mergeability and every pending check, requires
 `mergeStateStatus: CLEAN`, and prints one line.
 
-Without ghb: `gh pr checks <PR> --watch` in a background shell,
-redirected to a unique file, then tail — plus `gh pr view --json
-mergeStateStatus,reviewDecision` for policy state, which the watch
-cannot report.
+Run it on the draft. Let ghb settle an empty check rollup; never declare
+absence green by hand. Run it again after `gh pr ready`. That run settles
+the full suite, which repositories gate behind ready and run without the
+draft's Gradle cache.
 
 ## Workflow
 
@@ -102,32 +98,32 @@ When committing and creating/updating a PR, follow this workflow:
    - Ensure PR description accurately reflects all changes including doc updates
 
 6. **After pushing, before returning to the user:**
-   - Settle the draft checks, flip the PR ready, then settle the full set —
-     see `Draft, Ready, and Checks`
+   - Settle the draft with `ghb pr verify`, mark the PR ready with
+     `gh pr ready`, then settle the full set — see `Draft, Ready, and Checks`
    - If any check fails, diagnose and remediate the issue before returning
    - Do not consider the task complete while required checks are failing
-   - Always print the PR URL when returning so the user can easily review
+   - Always notify the human with `[repo#NNN](url)`. A bare number forces a
+     click to find the PR.
    - Stop there. Merging waits for the human's explicit confirmation.
 
 ### Draft, Ready, and Checks
 
 Repositories that gate expensive suites behind "ready" run only the cheap
-checks on a draft. With no gate, the draft runs the full set.
+checks on a draft. The ready run uses a cold Gradle cache. The draft's warm
+cache can hide bugs.
 
-1. Watch the draft checks — `gh pr checks <PR> --watch`, redirected per
-   `running-commands`.
-   - `no checks reported` often means CI has not registered yet. Wait 30
-     seconds and retry, up to three times.
-   - Still none means the repository runs no checks, or none on a draft.
-     Flip ready anyway. Never read absence as green.
-2. When they pass, mark the PR ready: `gh pr ready <PR>`.
-3. Watch again. Ready releases the full set, which may also take a moment to
-   register; apply the same three retries. Settle it through
-   `ghb pr verify` when available; without ghb, follow `Settling Checks`.
-4. Report the URL, head SHA, and green checks once the full set passes. Say
-   "no checks configured" when none ever appeared.
+1. Settle the draft with `ghb pr verify`. See `Settling Checks`. Fix failures
+   before review. Do not spend dedicated review time before the fast checks
+   pass.
+2. Review the diff with `git diff` or `gh pr diff` once the fast checks are
+   green. Fix what you find on the same PR.
+3. Mark the PR ready with `gh pr ready`.
+4. Settle the full set with `ghb pr verify` again. Fix failures on the same
+   PR: commit and push.
+5. Notify the human with `[repo#NNN](url)`. Notify them even when checks are
+   blocked or absent.
 
-A fix after ready stays on the same PR. Commit and push.
+Fix failures at any step before moving on.
 
 ### Merging on the Human's Yes
 

@@ -30,11 +30,11 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 ## Merging
 
-Never merge the PR on your own initiative, in any repository. Show the PR
-URL, head SHA, and green checks, and wait for the human's explicit yes. An
-instruction from before the human read the PR is not confirmation. Syncing a
-topic branch with its base is safe routine sync. The `git-workflow` skill
-carries the full rule.
+Never merge the PR on your own initiative, in any repository. Show
+`[repo#NNN](url)`, then wait for the human's explicit yes. An instruction
+from before the human read the PR is not confirmation. Syncing a topic branch
+with its base is safe routine sync. The `git-workflow` skill carries the full
+rule.
 
 ## Plans and Execution
 
@@ -46,10 +46,11 @@ shared branches, publishes, and destructive or security-sensitive actions
 still stop and ask.
 
 Commit each completed step and push it. Open the pull request as a draft
-once the first step is pushed. Do not ask. Watch the draft checks. When they
-pass, mark the PR ready with `gh pr ready`, then watch the checks that ready
-releases. Report the URL, head SHA, and green checks when those pass. The
-merge still waits for the human's yes.
+once the first step is pushed. Do not ask. Settle the fast checks with
+`ghb pr verify`. Review the diff only after they pass. Mark the PR ready
+with `gh pr ready`, then settle the full set with `ghb pr verify` again.
+Fix failures at any step. Always notify the human with `[repo#NNN](url)`.
+The merge still waits for the human's yes.
 
 ## Writing Style
 

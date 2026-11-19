@@ -41,7 +41,7 @@ keeps a branch current; `ghb pr verify` settles checks. Without ghb, read
 ## Required Companion Skills
 
 Load `running-commands` when running this workflow's commands — commits
-through hooks and checks watches both produce repetitive output.
+through hooks and checks waits both produce repetitive output.
 
 Apply `hemingway`'s rules before submitting prose: commit messages, PR
 titles and bodies, and reference edits must pass.
@@ -51,11 +51,11 @@ titles and bodies, and reference edits must pass.
 These apply to every git workflow activity in this repository:
 
 - **Merge only on explicit confirmation.** Never merge the PR on your own
-  initiative. Show the PR — URL, head SHA, and green checks — and wait for
-  the human's yes. An instruction from before the human read the PR is not
-  confirmation. Only then merge, by any route: `gh pr merge` (including
-  `--auto`), the MCP `merge_pull_request` tool, the GraphQL
-  `mergePullRequest` mutation, or the REST merge endpoint.
+  initiative. Show `[repo#NNN](url)`, then wait for the human's yes. An
+  instruction from before the human read the PR is not confirmation. Only
+  then merge, by any route: `gh pr merge` (including `--auto`), the MCP
+  `merge_pull_request` tool, the GraphQL `mergePullRequest` mutation, or the
+  REST merge endpoint.
 - **Merge direction matters.** `git merge origin/HEAD` into the topic
   branch is safe, routine sync. "merge develop", "pull", and "merge origin"
   mean the sync. When unclear, ask.
@@ -66,8 +66,8 @@ These apply to every git workflow activity in this repository:
   cleaned on merge. Prefer `git merge origin/HEAD` over `git rebase` when
   syncing, and commit to the same branch for updates rather than creating new
   branches.
-- **Verify checks before returning.** Always confirm required GitHub checks
-  pass before ending the task, and print the PR URL. Run `ghb pr verify` on a
-  ready PR only — a draft is permanently blocked. Settle the draft checks and
-  flip ready first (`pull-request.md`, `Draft, Ready, and Checks`). Without
-  ghb, watch redirected per `running-commands` — unique file, then tail.
+- **Verify checks before returning.** Run `ghb pr verify` on the draft,
+  review the diff with `git diff` or `gh pr diff`, mark the PR ready with
+  `gh pr ready`, then run `ghb pr verify` again. Fix failures at any step.
+  Notify the human with `[repo#NNN](url)` — see `pull-request.md`,
+  `Draft, Ready, and Checks`.
