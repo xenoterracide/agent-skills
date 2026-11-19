@@ -18,16 +18,12 @@ it alongside this plugin for the referenced workflow to be available.
 ## Source of Truth
 
 When maintaining a skill plugin, always edit the plugin's source repository.
-Installed plugin files in `~/.kimi-code/`, `~/.kimi-plugin/`, or any agent
-installation directory are immutable. Treat them as binaries, not source.
 
 If you discover an issue in an installed skill:
 
 1. Locate the source repository for the plugin
 2. Make the fix there
 3. Reinstall from the updated source
-
-Never edit installed plugin files unless the user explicitly asks you to.
 
 ## File Structure
 
