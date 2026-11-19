@@ -67,6 +67,7 @@ These apply to every git workflow activity in this repository:
   syncing, and commit to the same branch for updates rather than creating new
   branches.
 - **Verify checks before returning.** Run `ghb pr verify` on the draft,
-  review the diff, mark the PR ready with `gh pr ready`, then run
-  `ghb pr verify` again. Fix failures at any step. Notify the human with
-  `[repo#NNN](url)` — see `pull-request.md`, `Draft, Ready, and Checks`.
+  review the diff with `git diff` or `gh pr diff`, mark the PR ready with
+  `gh pr ready`, then run `ghb pr verify` again. Fix failures at any step.
+  Notify the human with `[repo#NNN](url)` — see `pull-request.md`,
+  `Draft, Ready, and Checks`.

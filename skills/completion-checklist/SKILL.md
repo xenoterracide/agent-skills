@@ -51,11 +51,10 @@ Done is not a moment. It is a pipeline:
 
 plan work complete → draft checks through `ghb pr verify` → review the diff →
 PR marked ready with `gh pr ready` → full checks through `ghb pr verify` →
-notify the human with `[repo#NNN](url)`.
+notify with `[repo#NNN](url)` on every outcome.
 
-Send the link on every outcome, including blocked or absent checks. Mid-task
-status reports cite the latest fetched status. The done claim requires the
-ready-gated checks green.
+Mid-task status reports cite the latest fetched status. The done claim requires
+the ready-gated checks green.
 
 ## Evidence, not re-runs
 

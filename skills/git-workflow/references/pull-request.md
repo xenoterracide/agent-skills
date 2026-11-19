@@ -115,8 +115,8 @@ cache can hide bugs.
 1. Settle the draft with `ghb pr verify`. See `Settling Checks`. Fix failures
    before review. Do not spend dedicated review time before the fast checks
    pass.
-2. Review the diff once the fast checks are green. Fix what you find on the
-   same PR.
+2. Review the diff with `git diff` or `gh pr diff` once the fast checks are
+   green. Fix what you find on the same PR.
 3. Mark the PR ready with `gh pr ready`.
 4. Settle the full set with `ghb pr verify` again. Fix failures on the same
    PR: commit and push.
