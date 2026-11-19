@@ -127,9 +127,8 @@ Fix failures at any step before moving on.
 
 ### Merging on the Human's Yes
 
-On their yes, verify the policy state, then run the squash merge
-yourself, passing the PR's own title and body so the squash commit
-carries them.
+On their yes, verify the policy state, then squash-merge with
+`--delete-branch`. `gh` uses the PR title and body for the squash commit.
 
 Verify with `ghb pr verify`. Going raw, read `mergeStateStatus` and
 `reviewDecision` — never `mergeable` alone. `mergeable: MERGEABLE` says
@@ -138,26 +137,35 @@ the diff applies, not that the policy accepts the merge: with
 merge is refused, every check green or not.
 
 Blocked on review: tell the human what holds the merge, then arm
-auto-merge with the same pinned inputs; it fires when the block lifts —
-the reviewer approves or the review is dismissed. Never `--admin` unless
-the human explicitly asks for it:
+auto-merge with `--auto`; it fires when the block lifts — the reviewer
+approves or the review is dismissed. Never `--admin` unless the human
+explicitly asks for it:
 
 ```bash
-gh pr merge <PR> --squash --auto --match-head-commit "$sha" \
-  --subject "$title" --body-file -
+gh pr merge <PR> --squash --auto
 ```
 
-Read the inputs fresh at merge time — a sync since you showed the PR
-leaves a stale head SHA that fails the merge — and pipe the body,
-because an inline `--body` literalizes its newlines:
+Merge from the main worktree. `--delete-branch` removes the feature
+worktree, deletes the local branch, and deletes the remote branch:
 
 ```bash
-sha=$(gh pr view <PR> --json headRefOid --jq .headRefOid)
-title=$(gh pr view <PR> --json title --jq .title)
-gh pr view <PR> --json body --jq .body |
-  gh pr merge <PR> --squash --match-head-commit "$sha" \
-    --subject "$title" --body-file - --delete-branch
+cd "$(git -C "$(git rev-parse --git-common-dir)/.." rev-parse --show-toplevel)"
+gh pr merge <PR> --squash --delete-branch
+git pull
 ```
+
+`gh` skips local cleanup when you run it from the feature worktree. Finish
+there with:
+
+```bash
+WORKTREE=$(git rev-parse --show-toplevel)
+cd "$(git -C "$(git rev-parse --git-common-dir)/.." rev-parse --show-toplevel)"
+git worktree remove "$WORKTREE"
+git branch -D <branch>
+git pull
+```
+
+Auto-merge does not delete branches. Clean up after it fires.
 
 ### Self-Review Before Submitting
 
