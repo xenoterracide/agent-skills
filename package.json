@@ -1,6 +1,10 @@
 {
+<<<<<<< before updating
   "name": "@xenoterracide/agents",
   "version": "26.11.14",
+=======
+  "name": "agent-skills",
+>>>>>>> after updating
   "packageManager": "pnpm@12.21.0",
   "private": true,
   "type": "module",
@@ -29,6 +33,10 @@
     "vitest": "^5.0.5"
   },
   "scripts": {
+<<<<<<< before updating
+=======
+    "check": "pnpm lint:eslint && pnpm lint:prettier && pnpm lint:shellcheck && pnpm typecheck && pnpm test",
+>>>>>>> after updating
     "contribute": "sh .config/git/hooks/heal.sh",
     "evals": "vitest run",
     "typecheck": "tsc --noEmit",
@@ -39,9 +47,17 @@
     "lint:reuse": "pnpm reuse lint",
     "lint:shellcheck": "git ls-files -z -- '*.sh' '.envrc' ':(glob)**/git/hooks/*' | xargs -0 shellcheck",
     "reuse": "uv run --frozen --group dev reuse",
+<<<<<<< before updating
     "skills:catalog": "node scripts/generate-skill-catalog.mjs",
     "skills:check": "node scripts/generate-skill-catalog.mjs --check",
     "test": "node --test scripts/*.test.mjs && vitest run scripts",
     "test:opencode": "node --test scripts/opencode-plugin.test.mjs"
+=======
+    "setup:corepack": "npm install --global corepack && mkdir -p ~/.local/bin && corepack enable --install-directory ~/.local/bin",
+    "lint:eslint": "eslint .",
+    "lint": "pnpm lint:eslint && pnpm lint:prettier && pnpm lint:shellcheck && pnpm lint:reuse",
+    "typecheck": "tsc --noEmit -p tsconfig.eslint.json",
+    "test": "vitest run --coverage"
+>>>>>>> after updating
   }
 }
