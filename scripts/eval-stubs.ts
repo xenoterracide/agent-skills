@@ -85,8 +85,8 @@ export function writeGhDenyStub(dir: string): void {
 // The stub shadows ghb on the sandbox PATH. A host ghb would reach the
 // network from inside the sandbox. "green" and "blocked" answer pr verify
 // with that policy state so the ghb path completes; "missing" fails like
-// an absent binary, so the run takes the raw fallback. argv is logged to
-// ghb.log.
+// an absent binary, so the run uses the documented manual sync path.
+// argv is logged to ghb.log.
 export function writeGhbStub(dir: string, availability: "missing" | "green" | "blocked"): void {
   const bin = join(dir, "bin");
   mkdirSync(bin, { recursive: true });

@@ -63,7 +63,8 @@ it("settles checks through ghb pr verify", () => {
 // checks; the run after ready settles the full, uncached suite. Review
 // waits for the first pass. The prompt names both tools because unnamed,
 // one roll in three read the stub scripts and settled nothing. A raw
-// check watch fails the case: the workflow has no fallback.
+// check watch fails the case: the workflow has no fallback. The stub
+// answers every verify with the same line and models no DRAFT state.
 it("settles the draft and the ready checks through ghb", () => {
   assertSkillBehavior(
     "pull request #7 is a draft and its checks are running; " +
@@ -74,7 +75,7 @@ it("settles the draft and the ready checks through ghb", () => {
       repo: true,
       ghb: "green",
       reads: [/pull-request\.md/],
-      commands: [/ghb pr verify/, /gh pr ready/],
+      commands: [/ghb pr verify[\s\S]*gh pr ready[\s\S]*ghb pr verify/],
       forbids: [/gh pr checks/],
     },
   );

@@ -54,10 +54,10 @@ Settle checks with `ghb pr verify`, in a background shell redirected per
 branch, waits out mergeability and every pending check, requires
 `mergeStateStatus: CLEAN`, and prints one line.
 
-Run it on the draft. A check rollup that reads empty settles after three
-polls; absence is never a pass you declare by hand. Run it again after
-`gh pr ready`. That run settles the full suite, which repositories gate
-behind ready and run without the draft's Gradle cache.
+Run it on the draft. Let ghb settle an empty check rollup; never declare
+absence green by hand. Run it again after `gh pr ready`. That run settles
+the full suite, which repositories gate behind ready and run without the
+draft's Gradle cache.
 
 ## Workflow
 
