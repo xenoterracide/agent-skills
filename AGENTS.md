@@ -206,9 +206,8 @@ project-local `.worktrees/` is the fallback location and is ignored by
 `.gitignore` — an unignored worktree directory commits the whole tree.
 Worktree branches appear in normal `git branch` output, marked `+`.
 
-Move the session into the worktree once it exists, and name the session after
-the worktree. A worktree outside the repo makes an unmoved session repeat its
-absolute directory in every command.
+Working-directory rules, including the session move into a new worktree, live
+in `using-xenoterracide-agent-skills`.
 
 ## Security Considerations
 

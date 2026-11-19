@@ -74,18 +74,14 @@ redirect patterns.
 
 ## Working Directory
 
-Point each command at its directory. Do not walk there first.
+Set `workdir` on the shell call instead of writing `cd` into the command. Pin
+git with `git -C <path>` only when the session touches more than one checkout.
+The `running-commands` skill carries the full rule.
 
-- Set `workdir` on the shell call. Do not write `cd` into the command. Each
-  call gets a new shell, so a `cd` never carries over.
-- Pin git with `git -C <path>` only when the session touches more than one
-  checkout. A session inside its repository needs no `-C`.
-- After creating a worktree, move the session into it before the first edit.
-  Then every tool call uses relative paths, and each command drops the
-  absolute prefix. In OpenCode the agent calls the session-move tool and the
-  human types `/cd`.
-- Name the session after the worktree, and tell the human its directory. They
-  resume the session, not the directory.
+After creating a worktree, call `session_move` on its own. The move lands at
+the next safe boundary, so run destination-dependent work in a later call.
+Name the session after the worktree with `session_rename`. Tell the human the
+worktree directory. They resume the session, not the directory.
 
 ## Read Project Documentation First
 
