@@ -32,8 +32,8 @@ Before saying "done", "complete", "fixed", "passing", "ready", or "works":
 
 1. **Identify** the command or status that proves the claim.
 2. **Fetch** the evidence. Invoke `running-commands`, then capture hook exit
-   codes, CI status, or the output from the agent's own targeted run. Never
-   fetch a fresh full re-run.
+   codes, `ghb pr verify` output, or the output from the agent's own targeted
+   run. Never fetch a fresh full re-run.
 3. **Read** the evidence, check exit codes, count failures.
 4. **Review** the diff for duplicate license headers, stale comments,
    formatting problems, unrelated changes, or obvious bugs.
@@ -49,7 +49,9 @@ Skip any step = lying, not verifying.
 
 Done is not a moment. It is a pipeline:
 
-plan work complete → PR marked ready → wait for the tests gated behind ready → report to the human (URL, head SHA, checks).
+plan work complete → draft checks green through `ghb pr verify` → PR marked
+ready with `gh pr ready` → full checks green through `ghb pr verify` →
+notify the human with `[repo#NNN](url)`, head SHA, and checks.
 
 Mid-task status reports cite the latest fetched status. The done claim requires the ready-gated checks green.
 
