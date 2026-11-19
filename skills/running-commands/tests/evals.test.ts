@@ -33,6 +33,17 @@ it("running commands: loads as a git-workflow companion on PR work", () => {
   assertSkillLoads("open a PR for this branch and update its description", "running-commands", { repo: true });
 });
 
+// Working-directory case: the trigger is a command that runs outside the
+// session's directory. Loading is the claim; the command itself is left to
+// the harness, whose parameter differs.
+it("running commands: triggers on a command outside the session directory", () => {
+  assertSkillLoads(
+    "run the tests in the new worktree without repeating its path in every command",
+    "running-commands",
+    { repo: true },
+  );
+});
+
 // Ownership cases: goal phrasing routes through the owner instead of the
 // agent running another row's commands standalone. Forbids scan tool lines,
 // which render with a marker — shell commands carry `$`, reads carry `→`.
