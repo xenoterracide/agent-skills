@@ -137,7 +137,7 @@ merge and wait. Never use `--admin` unless the human asks.
 main worktree so `gh` removes the feature worktree and both branches.
 
 If the session runs in the feature worktree, record that path before any
-move. Manual cleanup needs it later:
+move. Manual cleanup may need it later:
 
 ```bash
 git rev-parse --show-toplevel
@@ -156,7 +156,8 @@ git branch -D <branch>
 git pull
 ```
 
-Otherwise, merge from the main worktree:
+Otherwise, run `gh pr merge <PR> --squash --delete-branch` from the main
+worktree:
 
 ```bash
 cd "$(git -C "$(git rev-parse --git-common-dir)/.." rev-parse --show-toplevel)"
