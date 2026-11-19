@@ -33,7 +33,7 @@
     "evals": "vitest run",
     "typecheck": "tsc --noEmit",
     "check": "pnpm typecheck && pnpm lint:eslint && pnpm skills:check && pnpm test",
-    "lint": "pnpm lint:eslint && pnpm lint:prettier && pnpm lint:shellcheck && pnpm skills:check",
+    "lint": "pnpm lint:eslint && pnpm lint:prettier && pnpm lint:shellcheck && pnpm skills:check && pnpm lint:reuse",
     "lint:eslint": "eslint .",
     "lint:prettier": "prettier --ignore-unknown --cache --check '**'",
     "lint:reuse": "pnpm reuse lint",

@@ -52,8 +52,11 @@ Run all checks before pushing:
 pnpm lint
 ```
 
-`git push` runs `pnpm lint` first (pre-push hook); `git push --no-verify`
-bypasses it.
+`pnpm check` runs the CI set; on TypeScript it skips reuse, which the
+license CI job runs. `git push` runs `pnpm lint` first (pre-push hook),
+reuse included; `git push --no-verify` bypasses it. The first commit's
+pre-commit hook stamps headers and seeds `LICENSES`; reuse checks fail
+before it runs.
 
 Format a single file with Prettier:
 

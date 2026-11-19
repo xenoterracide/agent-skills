@@ -53,10 +53,10 @@ tools, dependencies, and the git hooks.
 ### Lint and Format
 
 ```bash
-pnpm lint                         # eslint, prettier, shellcheck, catalog
+pnpm lint                         # eslint, prettier, shellcheck, reuse, catalog
 pnpm lint:prettier                # Prettier check with cache
 pnpm lint:shellcheck              # ShellCheck on shell files
-pnpm lint:reuse                   # REUSE compliance (CI's license job owns it)
+pnpm lint:reuse                   # REUSE compliance alone; lint also runs it
 pnpm exec prettier --write <file> # Format a single file
 ```
 
