@@ -4,10 +4,11 @@ description: |
   Use when a command's output will be long or repetitive: build and
   test logs, watch or poll loops, git commits through hooks, CI status
   checks. Redirects the output to files so only the tail enters the
-  agent's context. Also use before running formatters, license
-  annotators, linters, checkers, or test suites — pre-commit hooks,
-  pre-push hooks, and CI own them; the agent runs only its own
-  targeted tests and the one command a failure names.
+  agent's context. Also use when a command runs outside the session's
+  directory or uses `git -C`. Also use before running formatters, license
+  annotators, linters, checkers, or test suites — pre-commit hooks, pre-push
+  hooks, and CI own them; the agent runs only its own targeted tests and the
+  one command a failure names.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing
@@ -22,7 +23,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 # Running Commands
 
 Every command has one owner: a hook, CI, or the agent. Run only your own
-commands, and run them quietly.
+commands, in the right directory, and run them quietly.
 
 ## Ownership
 
@@ -33,7 +34,7 @@ commands, and run them quietly.
 | CI         | full-repo checkers, typecheck, full suites  | push      | `ghb pr verify` |
 | Agent      | targeted tests; the command a failure names | dev loop  | command output  |
 
-## Rules
+## Command rules
 
 1. Never run another row's commands standalone. Not before pushing, not
    before claiming done.
@@ -51,3 +52,8 @@ commands, and run them quietly.
    command from the user overrides — run it once, say the hook would have.
    Goal phrasing ("clean up the formatting") is not an order; route it
    through the owner: commit, and the hook formats.
+6. Set the working directory on the call: `workdir` where the harness has
+   it, `cd <dir> &&` otherwise. Do not repeat an absolute path in every
+   command. A `cd` inside a command lasts for that call only.
+7. Pin git with `git -C <path>` when the session touches more than one
+   checkout. A session inside its repository needs no `-C`.

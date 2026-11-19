@@ -206,6 +206,9 @@ project-local `.worktrees/` is the fallback location and is ignored by
 `.gitignore` — an unignored worktree directory commits the whole tree.
 Worktree branches appear in normal `git branch` output, marked `+`.
 
+Working-directory rules, including the session move into a new worktree, live
+in `using-xenoterracide-agent-skills`.
+
 ## Security Considerations
 
 - **CI detection**: Git hooks exit early when `CI` is set.
