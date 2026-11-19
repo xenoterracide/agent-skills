@@ -1,6 +1,6 @@
 {
   "name": "@xenoterracide/agents",
-  "version": "26.11.18",
+  "version": "26.11.19",
   "packageManager": "pnpm@12.21.0",
   "private": true,
   "type": "module",

@@ -76,8 +76,9 @@ When committing and creating/updating a PR, follow this workflow:
    - If the current branch has a CLOSED or MERGED PR, switch to the default branch and create a new one
    - Pull latest changes before starting work
 
-3. **If already on a feature branch with an existing OPEN PR:**
+3. **If working on an existing OPEN PR (including after `gh pr checkout <PR>`):**
    - Do NOT create a new branch
+   - If the head branch matches `renovate/*`, run `gh pr merge --disable-auto <PR>` before making changes (idempotent)
    - Pull latest changes first
    - Commit changes to the current branch
    - Push to update the existing PR
