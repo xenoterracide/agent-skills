@@ -6,6 +6,9 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 # Output Hygiene Watch Design
 
+> Superseded: live PR checks settle through `ghb pr verify`. This record keeps
+> the original design.
+
 ## Intent
 
 Rule 3 of the `output-hygiene` skill blocks the agent's turn behind a

@@ -60,22 +60,22 @@ it("settles checks through ghb pr verify", () => {
 });
 
 // The gate: the delivery runs ghb twice. The draft run settles the fast
-// checks; the run after ready settles the full, uncached suite. Review
-// waits for the first pass. The prompt names both tools because unnamed,
-// one roll in three read the stub scripts and settled nothing. A raw
-// check watch fails the case: the workflow has no fallback. The stub
-// answers every verify with the same line and models no DRAFT state.
+// checks; the run after ready settles the full, uncached suite. Review sits
+// between them. The prompt names both tools because unnamed, one roll in
+// three read the stub scripts and settled nothing. A raw check watch fails
+// the case: the workflow has no fallback. The stub answers every verify
+// with the same line and models no DRAFT state.
 it("settles the draft and the ready checks through ghb", () => {
   assertSkillBehavior(
     "pull request #7 is a draft and its checks are running; " +
-      "settle them with ghb pr verify, mark it ready with gh pr ready, " +
-      "settle the full set, then report the pull request link",
+      "settle them with ghb pr verify, review the diff, mark it ready with " +
+      "gh pr ready, settle the full set, then report the pull request link",
     "git-workflow",
     {
       repo: true,
       ghb: "green",
       reads: [/pull-request\.md/],
-      commands: [/ghb pr verify[\s\S]*gh pr ready[\s\S]*ghb pr verify/],
+      commands: [/ghb pr verify[\s\S]*(git diff|gh pr diff)[\s\S]*gh pr ready[\s\S]*ghb pr verify/],
       forbids: [/gh pr checks/],
     },
   );

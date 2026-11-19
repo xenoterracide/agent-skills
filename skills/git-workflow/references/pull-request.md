@@ -30,7 +30,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
   - Settle checks with `ghb pr verify` before returning to the user.
     - Run it on the draft, then again after `gh pr ready`. Fix failures at
       either step. Never return with failing checks.
-    - Notify the human with the full PR link.
+    - Notify the human with `[repo#NNN](url)`.
 - **NEVER force push.** Force pushes (`--force` and `--force-with-lease`) are **blocked by repository rules** and will always fail. If a push is rejected, do not attempt force push — create a new commit instead.
 - Keep the branch synchronized with the base branch.
   - Routine sync is `ghb pr sync` — it merges the default branch, pushes,
