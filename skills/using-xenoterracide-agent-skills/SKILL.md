@@ -79,12 +79,12 @@ Set the working directory on the shell call: `workdir` in OpenCode,
 when the session touches more than one checkout. The `running-commands` skill
 carries the full rule.
 
-After creating a worktree, move the session into it. Where the harness has a
-session move, call it alone with the worktree directory — `session_move` in
-OpenCode. The move lands at the next safe boundary, so run
-destination-dependent work after the current turn. Name the session after the
-worktree, with `session_rename` in OpenCode. Tell the human the worktree
-directory. They resume the session, not the directory.
+Where the harness has a session move, move the session into the new worktree.
+Call the move by itself, with the worktree directory — `session_move` in
+OpenCode. The move lands at the next safe boundary, so run work that needs the
+new directory after the current turn. Name the session after the worktree,
+with `session_rename` in OpenCode. Tell the human the worktree directory. They
+resume the session, not the directory.
 
 ## Read Project Documentation First
 
