@@ -127,36 +127,31 @@ Fix failures at any step before moving on.
 
 ### Merging on the Human's Yes
 
-On their yes, verify the policy state, then run the squash merge
-yourself, passing the PR's own title and body so the squash commit
-carries them.
+On their yes, verify with `ghb pr verify`. Going raw, read
+`mergeStateStatus` and `reviewDecision` — never `mergeable` alone. A
+`BLOCKED` review or `CHANGES_REQUESTED` decision refuses the merge with
+every check green. Do not arm auto-merge. Tell the human what holds the
+merge and wait. Never use `--admin` unless the human asks.
 
-Verify with `ghb pr verify`. Going raw, read `mergeStateStatus` and
-`reviewDecision` — never `mergeable` alone. `mergeable: MERGEABLE` says
-the diff applies, not that the policy accepts the merge: with
-`mergeStateStatus: BLOCKED` and `reviewDecision: CHANGES_REQUESTED` the
-merge is refused, every check green or not.
-
-Blocked on review: tell the human what holds the merge, then arm
-auto-merge with the same pinned inputs; it fires when the block lifts —
-the reviewer approves or the review is dismissed. Never `--admin` unless
-the human explicitly asks for it:
+`gh` carries the PR title and body into the squash commit. Merge from the
+main worktree so `gh` removes the feature worktree and both branches:
 
 ```bash
-gh pr merge <PR> --squash --auto --match-head-commit "$sha" \
-  --subject "$title" --body-file -
+cd "$(git -C "$(git rev-parse --git-common-dir)/.." rev-parse --show-toplevel)"
+gh pr merge <PR> --squash --delete-branch
+git pull
 ```
 
-Read the inputs fresh at merge time — a sync since you showed the PR
-leaves a stale head SHA that fails the merge — and pipe the body,
-because an inline `--body` literalizes its newlines:
+`gh` merges the head at merge time. A push after the yes needs a new yes.
+
+From the feature worktree, `gh` skips local cleanup. Finish with:
 
 ```bash
-sha=$(gh pr view <PR> --json headRefOid --jq .headRefOid)
-title=$(gh pr view <PR> --json title --jq .title)
-gh pr view <PR> --json body --jq .body |
-  gh pr merge <PR> --squash --match-head-commit "$sha" \
-    --subject "$title" --body-file - --delete-branch
+WORKTREE=$(git rev-parse --show-toplevel)
+cd "$(git -C "$(git rev-parse --git-common-dir)/.." rev-parse --show-toplevel)"
+git worktree remove "$WORKTREE"
+git branch -D <branch>
+git pull
 ```
 
 ### Self-Review Before Submitting
