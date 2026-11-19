@@ -76,8 +76,9 @@ When committing and creating/updating a PR, follow this workflow:
    - If the current branch has a CLOSED or MERGED PR, switch to the default branch and create a new one
    - Pull latest changes before starting work
 
-3. **If already on a feature branch with an existing OPEN PR:**
+3. **If working on an existing OPEN PR (including after `gh pr checkout <PR>`):**
    - Do NOT create a new branch
+   - If the head branch matches `renovate/*`, run `gh pr merge --disable-auto <PR>` before making changes (idempotent)
    - Pull latest changes first
    - Commit changes to the current branch
    - Push to update the existing PR
@@ -98,8 +99,10 @@ When committing and creating/updating a PR, follow this workflow:
    - Ensure PR description accurately reflects all changes including doc updates
 
 6. **After pushing, before returning to the user:**
-   - Settle the draft with `ghb pr verify`, mark the PR ready with
-     `gh pr ready`, then settle the full set — see `Draft, Ready, and Checks`
+   - Settle the draft with `ghb pr verify`, review the diff (`git diff` or
+     `gh pr diff`), mark ready with `gh pr ready`, then settle the full
+     set — see `Draft, Ready, and Checks`. Do not run `gh pr ready` before
+     the diff review.
    - If any check fails, diagnose and remediate the issue before returning
    - Do not consider the task complete while required checks are failing
    - Always notify the human with `[repo#NNN](url)`. A bare number forces a
@@ -116,8 +119,9 @@ cache can hide bugs.
    before review. Do not spend dedicated review time before the fast checks
    pass.
 2. Review the diff with `git diff` or `gh pr diff` once the fast checks are
-   green. Fix what you find on the same PR.
-3. Mark the PR ready with `gh pr ready`.
+   green. Fix what you find on the same PR. Do not mark the PR ready before
+   this review.
+3. Mark the PR ready with `gh pr ready` only after the diff review.
 4. Settle the full set with `ghb pr verify` again. Fix failures on the same
    PR: commit and push.
 5. Notify the human with `[repo#NNN](url)`. Notify them even when checks are

@@ -68,6 +68,6 @@ These apply to every git workflow activity in this repository:
   branches.
 - **Verify checks before returning.** Run `ghb pr verify` on the draft,
   review the diff with `git diff` or `gh pr diff`, mark the PR ready with
-  `gh pr ready`, then run `ghb pr verify` again. Fix failures at any step.
-  Notify the human with `[repo#NNN](url)` — see `pull-request.md`,
-  `Draft, Ready, and Checks`.
+  `gh pr ready`, then run `ghb pr verify` again. Do not run `gh pr ready`
+  before the diff review. Fix failures at any step. Notify the human with
+  `[repo#NNN](url)` — see `pull-request.md`, `Draft, Ready, and Checks`.

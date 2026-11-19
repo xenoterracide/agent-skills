@@ -101,3 +101,19 @@ it("confirms policy state and attempts no merge on a mergeable-only signal", () 
     },
   );
 });
+
+// The gate: a renovate/* PR can auto-merge when checks pass. Before any
+// fix, disable auto-merge so a green build cannot merge before review.
+// Disabling is idempotent and safe to run first.
+it("disables auto-merge before fixing a renovate PR", () => {
+  assertSkillBehavior(
+    "fix pull request #1234; its head branch is renovate/eslint-monorepo and it is open",
+    "git-workflow",
+    {
+      repo: true,
+      reads: [/pull-request\.md/],
+      commands: [/gh pr merge\b/, /\b1234\b/, /--disable-auto\b/],
+      forbids: [/--auto\b/],
+    },
+  );
+});
