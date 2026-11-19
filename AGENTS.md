@@ -18,8 +18,7 @@ directory doubles as an OpenCode-compatible HTTP skill catalog.
 > **Agent Note:** This repo is the plugin source for
 > `xenoterracide-agent-skills` — not the Superpowers plugin, not an installed
 > plugin directory. Make all skill and plugin changes in this repository, then
-> reinstall. Never edit files under `~/.kimi-code/`, `~/.kimi-plugin/`,
-> `~/.config/opencode/`, or any other agent installation directory.
+> reinstall.
 
 ## Source of Truth
 
