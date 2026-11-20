@@ -137,13 +137,13 @@ On their yes, verify with `ghb pr verify`. Going raw, read
 every check green. Do not arm auto-merge. Tell the human what holds the
 merge and wait. Never use `--admin` unless the human asks.
 
-`gh` carries the PR title and body into the squash commit. `gh pr merge`
-removes the feature worktree and both branches only when run from the main
-worktree.
+**Never merge a pull request from a feature worktree.** Moving the session out
+is a precondition of the merge, not cleanup after it. Do not merge from the
+feature worktree to save a turn. `gh pr merge --disable-auto <PR>` is not a
+merge; it only turns auto-merge off.
 
-**Never run `gh pr merge` from a feature worktree.** Moving the session out is
-a precondition of the merge, not cleanup after it. Do not merge from the
-feature worktree to save a turn.
+`gh` carries the PR title and body into the squash commit. Run `gh pr merge`
+from the main worktree so `gh` removes the feature worktree and both branches.
 
 If the session runs in the feature worktree, stop before the merge:
 
@@ -154,7 +154,7 @@ If the session runs in the feature worktree, stop before the merge:
 3. End the turn. Merge in the next turn from the main worktree.
 
 When the merge already ran from the feature worktree, `gh` skipped local
-cleanup. Run:
+cleanup. Find `<worktree-path>` with `git worktree list`, then run:
 
 ```bash
 git worktree remove <worktree-path>
@@ -162,11 +162,11 @@ git branch -D <branch>
 git pull
 ```
 
-Otherwise, run `gh pr merge <PR> --squash --delete-branch` from the main
-worktree:
+After the session move, run the merge from the main worktree in the next
+turn. `cd` is not a substitute for `session_move`: it lasts one command and
+leaves the session in the feature worktree.
 
 ```bash
-cd "$(git -C "$(git rev-parse --git-common-dir)/.." rev-parse --show-toplevel)"
 gh pr merge <PR> --squash --delete-branch
 git pull
 ```
