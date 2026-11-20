@@ -29,9 +29,11 @@ git log --oneline -1
 
 ## Background waits
 
-Watch and poll commands run as background shells; the completion
-notification is the wake-up. Redirect to a file and tail inside the call, so
-the notification carries only the tail:
+Run a watch or poll command in a background shell when it can run longer
+than the foreground timeout. The completion notification is the wake-up.
+
+Redirect a command with long or repetitive output to a file and tail inside
+the call. The notification then carries only the tail:
 
 ```bash
 log=$(mktemp /tmp/opencode/checks.XXXXXXXX 2>/dev/null || mktemp)
@@ -41,9 +43,9 @@ tail -15 "$log"; exit $ec
 
 ### CI waits
 
-`ghb pr verify` is the CI wait. ghb owns the poll since `gh-pr-wait.sh` was
-deleted in 358d559. Run it backgrounded, redirect per the pattern above. It
-polls until the suite settles and exits 0 pass, 1 fail, 2 still pending.
+`ghb pr verify` prints one line: pass, a failure, or pending. Run
+`ghb pr verify` without a redirect. Apply the background rule above when the
+poll can run longer than the foreground timeout.
 
 ## Quiet flags
 
@@ -57,7 +59,8 @@ Prefer a tool's quiet knob where it keeps error output:
 | uv        | `--quiet`                                     |
 | Maven     | `-B -q --no-transfer-progress`                |
 | Gradle    | `-q --console=plain`                          |
-| gh        | none — redirect                               |
+| gh        | none — redirect long output                   |
+| ghb       | none — already one line                       |
 
 Never use a flag that hides warnings or failures. eslint's `--quiet` means
 "errors only."

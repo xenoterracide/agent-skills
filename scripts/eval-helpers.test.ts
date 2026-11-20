@@ -159,11 +159,18 @@ const forbidsToolInvocation = (): void => {
   assertFail("git-workflow", { run, forbids: [/merge_pull_request/] }, /forbidden/);
 };
 
+const forbidsRedirectInToolInvocation = (): void => {
+  const run = (): string =>
+    '→ Skill "git-workflow"\n⚙ execute {"tool":"shell","command":"ghb pr verify > /tmp/log 2>&1"}';
+  assertFail("git-workflow", { run, forbids: [/ghb pr verify.*>/] }, /forbidden/);
+};
+
 describe("assertSkillBehavior forbids", () => {
   it("passes when no forbidden pattern appears", forbidsCleanTranscript);
   it("fails when a forbidden command appears in the transcript", forbidsForbiddenCommand);
   it("ignores a forbidden pattern quoted in prose", forbidsQuotedPattern);
   it("fails when a tool invocation line contains the pattern", forbidsToolInvocation);
+  it("fails when a tool invocation redirects ghb output", forbidsRedirectInToolInvocation);
 });
 
 describe("assertSkillBehavior commands", () => {

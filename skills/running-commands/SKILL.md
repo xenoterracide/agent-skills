@@ -2,13 +2,12 @@
 name: running-commands
 description: |
   Use when a command's output will be long or repetitive: build and
-  test logs, watch or poll loops, git commits through hooks, CI status
-  checks. Redirects the output to files so only the tail enters the
-  agent's context. Also use when a command runs outside the session's
-  directory or uses `git -C`. Also use before running formatters, license
-  annotators, linters, checkers, or test suites — pre-commit hooks, pre-push
-  hooks, and CI own them; the agent runs only its own targeted tests and the
-  one command a failure names.
+  test logs, watch or poll loops, git commits through hooks. Also use for
+  CI status checks, when a command runs outside the session's directory or
+  uses `git -C`. Also use before running formatters, license annotators,
+  linters, checkers, or test suites — pre-commit hooks, pre-push hooks, and
+  CI own them; the agent runs only its own targeted tests and the one command
+  a failure names.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing

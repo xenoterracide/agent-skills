@@ -49,10 +49,10 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 ## Settling Checks
 
-Settle checks with `ghb pr verify`, in a background shell redirected per
-`running-commands`. One command: it fails fast on a stale or unpushed
-branch, waits out mergeability and every pending check, requires
-`mergeStateStatus: CLEAN`, and prints one line.
+Settle checks with `ghb pr verify`. Run it directly. It fails fast on a
+stale or unpushed branch. It waits out mergeability and every pending check.
+It requires `mergeStateStatus: CLEAN`. It prints one line. See
+`running-commands` before backgrounding a long poll.
 
 Run it on the draft. Let ghb settle an empty check rollup; never declare
 absence green by hand. Run it again after `gh pr ready`. That run settles

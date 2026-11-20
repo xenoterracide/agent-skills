@@ -54,6 +54,9 @@ it("settles checks through ghb pr verify", () => {
       repo: true,
       ghb: "green",
       reads: [/pull-request\.md/],
+      // A redirect adds no value to ghb's one line. Forbid it on any
+      // command line, whatever marker the harness renders.
+      forbids: [/ghb pr verify.*>/],
       commands: [/ghb pr verify/],
     },
   );
