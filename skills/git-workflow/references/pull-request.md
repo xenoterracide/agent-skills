@@ -137,19 +137,21 @@ On their yes, verify with `ghb pr verify`. Going raw, read
 every check green. Do not arm auto-merge. Tell the human what holds the
 merge and wait. Never use `--admin` unless the human asks.
 
-`gh` carries the PR title and body into the squash commit. Merge from the
-main worktree so `gh` removes the feature worktree and both branches.
+`gh` carries the PR title and body into the squash commit. `gh pr merge`
+removes the feature worktree and both branches only when run from the main
+worktree.
 
-If the session runs in the feature worktree, record that path before any
-move. Manual cleanup may need it later:
+**Never run `gh pr merge` from a feature worktree.** Moving the session out is
+a precondition of the merge, not cleanup after it. Do not merge from the
+feature worktree to save a turn.
 
-```bash
-git rev-parse --show-toplevel
-```
+If the session runs in the feature worktree, stop before the merge:
 
-Copy that path into `<worktree-path>` below. Move the session out by calling
-`session_move` by itself with the main worktree path. It lands at the next
-safe boundary. Continue next turn.
+1. Record the path with `git rev-parse --show-toplevel`. Copy it into
+   `<worktree-path>` below.
+2. Call `session_move` by itself with the main worktree path. It lands at the
+   next safe boundary.
+3. End the turn. Merge in the next turn from the main worktree.
 
 When the merge already ran from the feature worktree, `gh` skipped local
 cleanup. Run:
