@@ -18,7 +18,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 Review completed work and report findings with evidence.
 
-## Stay in the Reviewer Seat
+## Know Your Seat
 
 When you write the review, do the work yourself. Delegate no part of it to
 another agent.
