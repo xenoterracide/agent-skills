@@ -16,8 +16,15 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 # Code Review
 
-Review completed work and report findings with evidence. Never spawn
-sub-reviewers; the review seat is this skill, not another reviewer.
+Review completed work and report findings with evidence.
+
+## Know Your Seat
+
+When you write the review, do the work yourself. Delegate no part of it to
+another agent.
+
+When you request a review, dispatch one reviewer through
+`requesting-code-review`. That dispatch is the requester's job. Make it.
 
 ## Required Companion Skills
 
