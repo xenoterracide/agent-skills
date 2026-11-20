@@ -140,7 +140,7 @@ merge and wait. Never use `--admin` unless the human asks.
 **Never merge a pull request from a feature worktree.** Moving the session out
 is a precondition of the merge, not cleanup after it. Do not merge from the
 feature worktree to save a turn. `gh pr merge --disable-auto <PR>` is not a
-merge. It only turns auto-merge off.
+merge. `--disable-auto` only turns auto-merge off.
 
 `gh` carries the PR title and body into the squash commit. Run `gh pr merge`
 from the main worktree so `gh` removes the feature worktree and both branches.
