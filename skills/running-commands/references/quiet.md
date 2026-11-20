@@ -29,9 +29,11 @@ git log --oneline -1
 
 ## Background waits
 
-Watch and poll commands run as background shells; the completion
-notification is the wake-up. Redirect to a file and tail inside the call, so
-the notification carries only the tail:
+Run a watch or poll command in a background shell when it can run longer
+than the foreground timeout. The completion notification is the wake-up.
+
+Redirect a command with long or repetitive output to a file and tail inside
+the call. The notification then carries only the tail:
 
 ```bash
 log=$(mktemp /tmp/opencode/checks.XXXXXXXX 2>/dev/null || mktemp)
@@ -42,11 +44,8 @@ tail -15 "$log"; exit $ec
 ### CI waits
 
 `ghb pr verify` prints one line: pass, a failure, or pending. Run
-`ghb pr verify` directly. Do not redirect its output. The redirect pattern
-above is for noisy commands.
-
-Use a background shell when the poll can run longer than the foreground
-timeout. The completion notification carries the line. No file needed.
+`ghb pr verify` without a redirect. Apply the background rule above when the
+poll can run longer than the foreground timeout.
 
 ## Quiet flags
 
