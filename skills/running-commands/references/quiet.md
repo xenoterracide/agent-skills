@@ -41,9 +41,12 @@ tail -15 "$log"; exit $ec
 
 ### CI waits
 
-`ghb pr verify` is the CI wait. ghb owns the poll since `gh-pr-wait.sh` was
-deleted in 358d559. Run it backgrounded, redirect per the pattern above. It
-polls until the suite settles and exits 0 pass, 1 fail, 2 still pending.
+`ghb pr verify` prints one line: pass, a failure, or pending. Run
+`ghb pr verify` directly. Do not redirect its output. The redirect pattern
+above is for noisy commands.
+
+Use a background shell when the poll can run longer than the foreground
+timeout. The completion notification carries the line. No file needed.
 
 ## Quiet flags
 
@@ -57,7 +60,8 @@ Prefer a tool's quiet knob where it keeps error output:
 | uv        | `--quiet`                                     |
 | Maven     | `-B -q --no-transfer-progress`                |
 | Gradle    | `-q --console=plain`                          |
-| gh        | none — redirect                               |
+| gh        | none — redirect long output                   |
+| ghb       | none — already one line                       |
 
 Never use a flag that hides warnings or failures. eslint's `--quiet` means
 "errors only."

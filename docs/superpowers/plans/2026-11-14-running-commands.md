@@ -85,7 +85,7 @@ SPDX comment, `# Quiet Output`. Absorb `output-hygiene`'s content, restructured:
 - the background-watch pattern (redirect inside the call so the completion notification carries only the tail)
 - per-tool quiet flags: git `--quiet`/`status --porcelain`/`NO_COLOR=1`; pnpm `--reporter=silent`, npm and yarn `--silent`; uv `--quiet`; Maven `-B -q --no-transfer-progress`; Gradle `-q --console=plain`; gh has none — redirect
 - never a flag that hides warnings or failures; eslint's `--quiet` means errors only
-- `ghb pr verify` as the CI wait — ghb owns the poll since `gh-pr-wait.sh` was deleted in 358d559; run it backgrounded per the redirect pattern; it polls until the suite settles and exits 0 pass / 1 fail / 2 still-pending
+- `ghb pr verify` as the CI wait. It replaced `gh-pr-wait.sh` in 358d559. It polls until the suite settles, then exits 0 pass, 1 fail, or 2 still-pending. Superseded: run it directly. Its one line needs no redirect.
 
 - [ ] **Step 3: Regenerate the catalog and verify**
 

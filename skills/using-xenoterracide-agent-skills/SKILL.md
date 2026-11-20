@@ -71,7 +71,8 @@ redirect patterns.
 - uv: `--quiet`
 - Maven: `-B -q --no-transfer-progress`
 - Gradle: `-q` and `--console=plain`
-- gh: no quiet mode — redirect per `running-commands`
+- gh: no quiet mode — redirect long output per `running-commands`
+- ghb: prints one line — run it directly
 
 ## Working Directory
 
