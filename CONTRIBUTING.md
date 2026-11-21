@@ -89,10 +89,14 @@ and run any changed examples manually.
 
 This repository uses squash merge.
 
+<<<<<<< before updating
 - Commit additional changes to the same PR branch.
 - PR titles must follow conventional commit format.
 - PR descriptions must explain why the change exists.
 - Use plain bullets, not checkboxes, in PR descriptions.
+=======
+    uvx copier update --trust
+>>>>>>> after updating
 
 ## License
 

@@ -34,7 +34,11 @@ workflows.
 
 Then start a new session (`/new`) for skills to activate.
 
+<<<<<<< before updating
 ### OpenCode
+=======
+    uvx copier update --trust
+>>>>>>> after updating
 
 OpenCode V2 can load this repository as a plugin. The plugin:
 
