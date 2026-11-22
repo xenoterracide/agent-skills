@@ -28,6 +28,9 @@ Load these skills whenever this skill applies:
 
 Always create AsciiDoc (`.adoc`) files in `docs/use-cases/`.
 
+Read `references/placement.md` before choosing where a spec goes. Use cases
+stay deferred; most tickets need none.
+
 ## Core Principles
 
 ### 1. Business-Readable Main Scenario
@@ -63,7 +66,6 @@ Extensions reference by anchor:
 
 - Reordering steps doesn't break references
 - Humans see full text in links
-- AI uses stable `step-validate` identifier
 
 ### 3. Ubiquitous Language
 
