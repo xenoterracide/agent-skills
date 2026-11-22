@@ -47,8 +47,7 @@ Eric Evans' whirlpool design from Domain-Driven Design.
 - **End:** demonstrate working software. Gather feedback. Reflect — what was
   wrong, what simplified, what grew complex. Adjust priorities.
 
-For XTC work, read `references/jira-iteration.md`. It maps the loop to Jira
-statuses and Subtasks.
+Record work breakdown in the tracker.
 
 ## Anti-Patterns
 
@@ -116,7 +115,6 @@ are the actors? What does "fulfilled" mean in this domain?
 
 ## Integration
 
-- **jira-workflow** — XTC statuses, board operations, and Subtask rules
 - **use-case-creator** — use cases evolve; update them as understanding grows
 - **testing** — tests capture and protect domain understanding
 - **coding-standards** — refactoring supports iteration

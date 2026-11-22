@@ -4,7 +4,7 @@
 
 import { it } from "vitest";
 
-import { assertSkillBehavior, assertSkillLoads } from "../../../scripts/eval-helpers";
+import { assertSkillLoads } from "../../../scripts/eval-helpers";
 
 it("triggers when scoping a new feature", () => {
   assertSkillLoads(
@@ -20,10 +20,6 @@ it("triggers when the domain model feels wrong", () => {
   );
 });
 
-it("iteration with XTC Subtasks", () => {
-  assertSkillBehavior(
-    "set up the first iteration for this XTC feature and break it into Subtasks",
-    "iterative-development",
-    { reads: ["references/jira-iteration.md"] },
-  );
+it("iteration-generic", () => {
+  assertSkillLoads("plan the next iteration and break it into tracker work items", "iterative-development");
 });

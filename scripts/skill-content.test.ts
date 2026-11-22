@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 import { expect, it } from "vitest";
@@ -138,4 +138,19 @@ it("pins the jira-workflow config contract", () => {
   ]) {
     expect(text).toContain(value);
   }
+});
+
+it("keeps iterative-development tracker-agnostic", () => {
+  const text = skillMarkdown()
+    .filter((path) => path.startsWith("skills/iterative-development/"))
+    .map((path) => readFileSync(path, "utf8").toLowerCase())
+    .join("\n");
+
+  for (const value of ["xtc", "jira", "jira-iteration", "subtask"]) {
+    expect(text).not.toContain(value);
+  }
+});
+
+it("removes the jira iteration reference", () => {
+  expect(existsSync("skills/iterative-development/references/jira-iteration.md")).toBe(false);
 });
