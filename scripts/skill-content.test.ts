@@ -94,6 +94,7 @@ it("ships the agent-skills project config", () => {
   expect(text).toContain("project: XTC");
   expect(text).toContain("board: 3");
   expect(text).toContain("work_types: [Epic, Feature, Task, Bug, Subtask]");
+  expect(text).toContain('project_prefix: "project:"');
 });
 
 it("keeps XTC facts out of jira-workflow", () => {
@@ -135,9 +136,11 @@ it("pins the jira-workflow config contract", () => {
     "to.name",
     "labels =",
     "project-wide",
+    "tracker.labels.project_prefix",
   ]) {
     expect(text).toContain(value);
   }
+  expect(text).not.toContain("project:");
 });
 
 it("keeps iterative-development tracker-agnostic", () => {
@@ -153,4 +156,11 @@ it("keeps iterative-development tracker-agnostic", () => {
 
 it("removes the jira iteration reference", () => {
   expect(existsSync("skills/iterative-development/references/jira-iteration.md")).toBe(false);
+});
+
+it("keeps the bootstrap pointed at project config", () => {
+  const text = readFileSync("skills/using-xenoterracide-agent-skills/SKILL.md", "utf8");
+
+  expect(text).not.toContain("XTC");
+  expect(text).toContain(".config/agent/project.yaml");
 });

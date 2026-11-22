@@ -136,7 +136,7 @@ tracker:
   board: 3
   work_types: [Epic, Feature, Task, Bug, Subtask]
   labels:
-    project_prefix: "project/"
+    project_prefix: "project:"
   statuses:
     captured: Added to backlog
     refining: Open

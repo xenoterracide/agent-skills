@@ -80,9 +80,10 @@ no issue sat in either state when transitions were checked.
 ## Read issues
 
 Run JQL `project = <tracker.project> ORDER BY key ASC` for live state. Board
-reads stay project-wide. Add `AND labels = "project:<repo>"` only when the user
-scopes a read to one repo; old issues without that label still appear in
-project-wide reads. Page with `nextPageToken` until `isLast`. Read one known
+reads stay project-wide. Add
+`AND labels = "<tracker.labels.project_prefix><repo>"` only when the user scopes a
+read to one repo; old issues without that label still appear in project-wide
+reads. Page with `nextPageToken` until `isLast`. Read one known
 issue by key. Use `getJiraBoardConfig` with `tracker.board` for columns and
 board/backlog datasets for parking.
 
@@ -97,8 +98,9 @@ Put the spec in the description. A spec goes at the highest visible level it
 applies to. A UX spec lives at the UX level even when it reaches down into
 code.
 
-New work starts in `captured` and gets the `project:<repo>` label. Labels are a
-full list, not appended.
+New work starts in `captured` and gets the
+`<tracker.labels.project_prefix><repo>` label. Labels are a full list, not
+appended.
 
 ## Update issues
 

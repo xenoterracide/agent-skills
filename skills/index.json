@@ -64,7 +64,7 @@
     {
       "name": "iterative-development",
       "version": "26.11.23",
-      "files": ["SKILL.md", "references/jira-iteration.md"]
+      "files": ["SKILL.md"]
     },
     {
       "name": "java-creator",

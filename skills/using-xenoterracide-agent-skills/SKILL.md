@@ -23,7 +23,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 - Each skill's `description` is the authoritative trigger. Invoke the skill
   whose description matches the task — process skills before implementation
   skills.
-- Use `jira-workflow` for XTC state and issue operations.
+- Use the tracker workflow skill named in `.config/agent/project.yaml` for issue operations.
 - Skills reference the Superpowers plugin's process-discipline skills (for
   example `verification-before-completion` and `requesting-code-review`);
   install Superpowers alongside this plugin for those to resolve.
