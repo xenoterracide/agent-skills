@@ -61,8 +61,37 @@ it("keeps issue-content ownership rules in the reference", () => {
   expect(text).toContain("comments hold discoveries");
 });
 
-it("keeps the design note intro readable", () => {
+it("keeps the design note config contract", () => {
   const text = readFileSync("docs/superpowers/specs/2026-11-20-jira-workflow-design.md", "utf8");
 
-  expect(text).toContain("update issues, move issues, and break work into Subtasks");
+  expect(text).toContain(".config/agent/project.yaml");
+  expect(text).toContain("schemas/project.schema.json");
+});
+
+it("defines the project config schema", () => {
+  const schema = JSON.parse(readFileSync("schemas/project.schema.json", "utf8"));
+
+  expect(schema.required).toEqual(["repo", "tracker"]);
+  expect(schema.additionalProperties).toBe(false);
+  expect(Object.keys(schema.properties.tracker.properties)).toEqual([
+    "kind",
+    "skill",
+    "site",
+    "project",
+    "board",
+    "work_types",
+    "labels",
+    "statuses",
+    "transitions",
+  ]);
+});
+
+it("ships the agent-skills project config", () => {
+  const text = readFileSync(".config/agent/project.yaml", "utf8");
+
+  expect(text).toContain("xenoterracide/agent-skills/develop/schemas/project.schema.json");
+  expect(text).toContain("repo: agent-skills");
+  expect(text).toContain("project: XTC");
+  expect(text).toContain("board: 3");
+  expect(text).toContain("work_types: [Epic, Feature, Task, Bug, Subtask]");
 });
