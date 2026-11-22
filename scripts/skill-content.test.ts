@@ -7,6 +7,12 @@ import { join } from "node:path";
 
 import { expect, it } from "vitest";
 
+interface SchemaShape {
+  required: string[];
+  additionalProperties: boolean;
+  properties: { tracker: { properties: Record<string, unknown> } };
+}
+
 function skillMarkdown(): string[] {
   const paths: string[] = [];
 
@@ -69,7 +75,7 @@ it("keeps the design note config contract", () => {
 });
 
 it("defines the project config schema", () => {
-  const schema = JSON.parse(readFileSync("schemas/project.schema.json", "utf8"));
+  const schema = JSON.parse(readFileSync("schemas/project.schema.json", "utf8")) as SchemaShape;
 
   expect(schema.required).toEqual(["repo", "tracker"]);
   expect(schema.additionalProperties).toBe(false);
