@@ -176,8 +176,9 @@ Never move on an unchecked ID.
 
 `schemas/project.schema.json` is the config contract. It uses JSON Schema Draft
 2020-12. It declares required `repo` and `tracker` keys. It constrains
-`tracker.kind` to `jira`. It requires `project`, `board`, `work_types`,
-`statuses`, and `transitions`. It sets `additionalProperties: false`.
+`tracker.kind` to `jira`. It requires every key the skills read: `kind`, `skill`,
+`site`, `project`, `board`, `work_types`, `labels`, `statuses`, and `transitions`.
+It sets `additionalProperties: false`.
 
 The `$schema` comment gives editors completion and inline errors. The plugin
 does not parse YAML or validate config at runtime. Static tests gate the facts

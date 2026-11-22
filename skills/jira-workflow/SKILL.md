@@ -115,9 +115,9 @@ dropped without error.
 
 Call `listJiraIssueTransitions`. Use a configured ID from `tracker.transitions`
 only when that ID appears in the result and its `to.name` matches the target
-status in `tracker.statuses`. If the ID is absent or stale, match `to.name`
-against `tracker.statuses` and use the returned ID. Never move on an unchecked
-ID. Transition names differ from status names.
+status in `tracker.statuses`. If the ID is absent or stale, match the live
+transition's `to.name` to the target role's value in `tracker.statuses` and use
+the returned ID. Never move on an unchecked ID. Transition names differ from status names.
 
 Rules:
 

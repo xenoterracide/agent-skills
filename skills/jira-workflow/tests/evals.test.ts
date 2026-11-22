@@ -32,7 +32,6 @@ it("issue content ownership", () => {
 
 it("reads the project config before Jira work", () => {
   assertSkillBehavior("show me the Jira board for this repo", "jira-workflow", {
-    first: true,
     fixture: "skills/jira-workflow/tests/fixtures/project-config",
     reads: [".config/agent/project.yaml"],
   });

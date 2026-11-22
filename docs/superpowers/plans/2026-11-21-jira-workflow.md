@@ -103,6 +103,8 @@ Create `schemas/project.schema.json`:
 - `type: object`, `required: ["repo", "tracker"]`, `additionalProperties: false`
 - `properties.repo`: string
 - `properties.tracker`: object with `additionalProperties: false`
+- `properties.tracker.required`: `kind`, `skill`, `site`, `project`, `board`,
+  `work_types`, `labels`, `statuses`, `transitions`. The skills read all nine.
   Declare `properties.tracker.properties` in this exact order so the Step 1 key
   assertion holds:
 

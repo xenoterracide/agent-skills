@@ -14,7 +14,7 @@
     "tracker": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["project", "board", "work_types", "statuses", "transitions"],
+      "required": ["kind", "skill", "site", "project", "board", "work_types", "labels", "statuses", "transitions"],
       "properties": {
         "kind": {
           "const": "jira",

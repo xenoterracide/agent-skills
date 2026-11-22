@@ -10,8 +10,10 @@ import { expect, it } from "vitest";
 interface SchemaShape {
   required: string[];
   additionalProperties: boolean;
-  properties: { tracker: { properties: Record<string, unknown> } };
+  properties: { tracker: { required: string[]; properties: Record<string, unknown> } };
 }
+
+const TRACKER_KEYS = ["kind", "skill", "site", "project", "board", "work_types", "labels", "statuses", "transitions"];
 
 function skillMarkdown(): string[] {
   const paths: string[] = [];
@@ -79,17 +81,8 @@ it("defines the project config schema", () => {
 
   expect(schema.required).toEqual(["repo", "tracker"]);
   expect(schema.additionalProperties).toBe(false);
-  expect(Object.keys(schema.properties.tracker.properties)).toEqual([
-    "kind",
-    "skill",
-    "site",
-    "project",
-    "board",
-    "work_types",
-    "labels",
-    "statuses",
-    "transitions",
-  ]);
+  expect(schema.properties.tracker.required).toEqual(TRACKER_KEYS);
+  expect(Object.keys(schema.properties.tracker.properties)).toEqual(TRACKER_KEYS);
 });
 
 it("ships the agent-skills project config", () => {
@@ -101,6 +94,13 @@ it("ships the agent-skills project config", () => {
   expect(text).toContain("board: 3");
   expect(text).toContain("work_types: [Epic, Feature, Task, Bug, Subtask]");
   expect(text).toContain('project_prefix: "project:"');
+});
+
+it("keeps the eval config fixture in sync", () => {
+  const config = readFileSync(".config/agent/project.yaml", "utf8");
+  const fixture = readFileSync("skills/jira-workflow/tests/fixtures/project-config/.config/agent/project.yaml", "utf8");
+
+  expect(fixture).toBe(config);
 });
 
 it("keeps XTC facts out of jira-workflow", () => {
@@ -143,6 +143,7 @@ it("pins the jira-workflow config contract", () => {
     "labels =",
     "project-wide",
     "tracker.labels.project_prefix",
+    "target role's value in `tracker.statuses`",
   ]) {
     expect(text).toContain(value);
   }
