@@ -20,5 +20,3 @@ Keep each discovery short. Mark replaced comments as superseded.
 
 A design note may live in the repo when the spec needs more detail. Link it
 from the description. Do not paste the note into comments.
-
-XTC is the tracker.

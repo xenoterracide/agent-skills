@@ -1,9 +1,9 @@
 ---
 name: jira-workflow
 description: |
-  Use when reading XTC, creating or updating a Jira issue or ticket, moving an
-  issue to a status, checking the board or backlog, or turning a plan into
-  Jira Subtasks. Use for XTC state, board columns, and issue operations.
+  Use when reading Jira issues, creating or updating an issue or ticket,
+  moving an issue to a status, checking the board or backlog, or turning a
+  plan into Subtasks. Use for Jira state, board columns, and issue operations.
 license: CC-BY-NC-SA-4.0
 metadata:
   copyright: Caleb Cushing
@@ -17,11 +17,10 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 # Jira Workflow
 
-XTC is the tracker for `agent-skills`. Read issue state live. Do not cache keys
-or statuses.
+Read `.config/agent/project.yaml` before Jira work. If missing, stop and name the path. Missing config stops all Jira work.
 
-Site: `https://xenoterracide.atlassian.net`. Cloud ID
-`fc5ce4e3-4638-4a37-9aaf-1a2591482c2e`. Project `XTC`. Board 3, KAN board.
+The config binds this rule set to one repo. Read issue state live. Do not cache
+keys or statuses. Use `tracker.site` to resolve the Atlassian site.
 
 ## Required Companion Skills
 
@@ -31,77 +30,75 @@ Site: `https://xenoterracide.atlassian.net`. Cloud ID
 
 Read `references/issue-content.md` before writing a description or comment.
 
-## Status model
+## Workflow roles
 
-| Status             | Meaning                                                    |
-| ------------------ | ---------------------------------------------------------- |
-| `Added to backlog` | Captured. Not refined. Starting state.                     |
-| `Open`             | Refinement. Ticket description holds the spec.             |
-| `To Do`            | Spec sufficient. Agent creates work breakdown as Subtasks. |
-| `In Progress`      | Agent works the Subtasks.                                  |
-| `In Review`        | PR open. Checks or review pending.                         |
-| `Done`             | Merged. Checks green.                                      |
-| `Canceled`         | Dropped.                                                   |
+The diagram uses logical roles. The config supplies the Jira status names in
+`tracker.statuses`.
 
-## Intended state flow
+| Role        | Config key                   | Meaning                                        |
+| ----------- | ---------------------------- | ---------------------------------------------- |
+| `captured`  | `tracker.statuses.captured`  | Captured. Not refined. Starting state.         |
+| `refining`  | `tracker.statuses.refining`  | Refinement. Ticket description holds the spec. |
+| `ready`     | `tracker.statuses.ready`     | Spec sufficient. Break down into work items.   |
+| `building`  | `tracker.statuses.building`  | Agent works the breakdown.                     |
+| `reviewing` | `tracker.statuses.reviewing` | PR open. Checks or review pending.             |
+| `done`      | `tracker.statuses.done`      | Merged. Checks green.                          |
+| `dropped`   | `tracker.statuses.dropped`   | Dropped.                                       |
 
 ```mermaid
 stateDiagram-v2
-    state "Added to backlog" as AddedToBacklog
-    state "To Do" as ToDo
-    state "In Progress" as InProgress
-    state "In Review" as InReview
+    [*] --> captured: capture
 
-    [*] --> AddedToBacklog: capture
+    captured --> refining: refine
+    captured --> ready: trivial fix
+    captured --> dropped: drop
 
-    AddedToBacklog --> Open: refine
-    AddedToBacklog --> ToDo: trivial fix
-    AddedToBacklog --> Canceled: drop
+    refining --> ready: spec sufficient
+    refining --> captured: pause
+    refining --> dropped: drop
 
-    Open --> ToDo: spec sufficient
-    Open --> AddedToBacklog: pause
-    Open --> Canceled: drop
+    ready --> building: start first work item
+    ready --> captured: de-prioritize
+    ready --> dropped: drop
 
-    ToDo --> InProgress: start first Subtask
-    ToDo --> AddedToBacklog: de-prioritize
-    ToDo --> Canceled: drop
+    building --> reviewing: PR open
+    building --> ready: blocked
+    building --> dropped: drop
 
-    InProgress --> InReview: PR open
-    InProgress --> ToDo: blocked
-    InProgress --> Canceled: drop
+    reviewing --> done: merged and green
+    reviewing --> building: changes requested
+    reviewing --> dropped: drop
 
-    InReview --> Done: merged and green
-    InReview --> InProgress: changes requested
-    InReview --> Canceled: drop
-
-    Done --> Open: revisit
-    Canceled --> AddedToBacklog: revive
+    done --> refining: revisit
+    dropped --> captured: revive
 ```
 
-Jira currently allows any status to move to any status. Keep Jira flexible.
-Edges out of `Added to backlog` and `Open` are intent. No issue sat in either
-state when transitions were checked. Those edges are not verified against
-Jira.
+Jira allows any status to move to any status. Keep it flexible. These edges are
+intent, not enforcement. Edges out of `captured` and `refining` are unverified:
+no issue sat in either state when transitions were checked.
 
 ## Read issues
 
-Run JQL `project = XTC ORDER BY key ASC` for live state. Page with
-`nextPageToken` until `isLast`. Read one known issue by key. Use
-`getJiraBoardConfig` for columns and board/backlog datasets for parking.
+Run JQL `project = <tracker.project> ORDER BY key ASC` for live state. Board
+reads stay project-wide. Add `AND labels = "project:<repo>"` only when the user
+scopes a read to one repo; old issues without that label still appear in
+project-wide reads. Page with `nextPageToken` until `isLast`. Read one known
+issue by key. Use `getJiraBoardConfig` with `tracker.board` for columns and
+board/backlog datasets for parking.
 
-Do not treat a status as a bucket. Drop `now`, `next`, and `squirrel` labels.
+Do not treat a status as a progress bucket.
 
 ## Create issues
 
-Create the issue in `XTC`. Use the work types `Epic`, `Feature`, `Task`,
-`Bug`, and `Subtask`. Do not invent `Spec`, `Ready`, `Plan`, `Decision`, or
-`Repo` types.
+Create issues in `tracker.project`. Use the work types in `tracker.work_types`.
+Do not invent types that are not configured.
 
 Put the spec in the description. A spec goes at the highest visible level it
 applies to. A UX spec lives at the UX level even when it reaches down into
 code.
 
-New work starts in `Added to backlog`.
+New work starts in `captured` and gets the `project:<repo>` label. Labels are a
+full list, not appended.
 
 ## Update issues
 
@@ -114,19 +111,21 @@ dropped without error.
 
 ## Move issues
 
-Take the transition ID from `listJiraIssueTransitions`. Match the transition
-whose `to.name` is the target status. Names differ: `completed` reaches `Done`.
+Call `listJiraIssueTransitions`. Use a configured ID from `tracker.transitions`
+only when that ID appears in the result and its `to.name` matches the target
+status in `tracker.statuses`. If the ID is absent or stale, match `to.name`
+against `tracker.statuses` and use the returned ID. Never move on an unchecked
+ID. Transition names differ from status names.
 
 Rules:
 
-- Do not add Subtasks in `Open`. Refine the description there.
-- Create the work breakdown in `To Do`. Each item becomes a Subtask on the
-  ticket.
-- Move to `In Progress` when the first Subtask starts.
-- Move to `In Review` when the PR opens.
-- Move to `Done` after merge and green checks.
-- Move to `Canceled` when dropped. Reopen from `Done` or `Canceled` into
-  `Open` or `Added to backlog` as the work requires.
+- Do not add work breakdown in `refining`. Refine the description there.
+- Create the breakdown in `ready`. Each item becomes a work item on the ticket.
+- Move to `building` when the first work item starts.
+- Move to `reviewing` when the PR opens.
+- Move to `done` after merge and green checks.
+- Move to `dropped` when dropped. Reopen from `done` or `dropped` into
+  `refining` or `captured` as the work requires.
 
 ## Integration
 

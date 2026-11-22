@@ -95,3 +95,47 @@ it("ships the agent-skills project config", () => {
   expect(text).toContain("board: 3");
   expect(text).toContain("work_types: [Epic, Feature, Task, Bug, Subtask]");
 });
+
+it("keeps XTC facts out of jira-workflow", () => {
+  const text = readFileSync("skills/jira-workflow/SKILL.md", "utf8");
+
+  for (const value of [
+    "XTC",
+    "board: 3",
+    "fc5ce4e3-4638-4a37-9aaf-1a2591482c2e",
+    "`Added to backlog`",
+    "`Open`",
+    "`To Do`",
+    "`In Progress`",
+    "`In Review`",
+    "`Done`",
+    "`Canceled`",
+  ]) {
+    expect(text).not.toContain(value);
+  }
+});
+
+it("keeps XTC facts out of jira-workflow references", () => {
+  for (const name of readdirSync("skills/jira-workflow/references")) {
+    if (!name.endsWith(".md")) continue;
+    const text = readFileSync(join("skills/jira-workflow/references", name), "utf8");
+
+    expect(text).not.toContain("XTC");
+    expect(text).not.toContain("fc5ce4e3-4638-4a37-9aaf-1a2591482c2e");
+  }
+});
+
+it("pins the jira-workflow config contract", () => {
+  const text = readFileSync("skills/jira-workflow/SKILL.md", "utf8");
+
+  for (const value of [
+    ".config/agent/project.yaml",
+    "stops",
+    "listJiraIssueTransitions",
+    "to.name",
+    "labels =",
+    "project-wide",
+  ]) {
+    expect(text).toContain(value);
+  }
+});
