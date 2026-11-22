@@ -34,6 +34,13 @@ function allSkillText(): string {
     .toLowerCase();
 }
 
+// Scope: skills/ only. XTC-14's design note and plan keep the retired policy
+// as historical ticket scope.
+
+it("scans nested skill markdown", () => {
+  expect(skillMarkdown()).toContain("skills/jira-workflow/references/issue-content.md");
+});
+
 it("keeps the recall file out of skills", () => {
   expect(allSkillText()).not.toContain("where-was-i");
 });
@@ -50,7 +57,7 @@ it("keeps issue-content ownership rules in the reference", () => {
 
   expect(text).toContain("description holds the spec");
   expect(text).toContain("status field holds progress");
-  expect(text).toContain("do not put the ticket's current status");
+  expect(text).toMatch(/do not put the ticket's current status,[\s\S]*?in the description\./);
   expect(text).toContain("comments hold discoveries");
 });
 
