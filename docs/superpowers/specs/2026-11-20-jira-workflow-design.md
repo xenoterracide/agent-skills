@@ -9,8 +9,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 ## Intent
 
 XTC is the tracker for `agent-skills`. Agents need one place that states how
-to read XTC, create issues, update
-issues, move issues, and break work into Subtasks.
+to read XTC, create issues, update issues, move issues, and break work into Subtasks.
 
 The status model now settled in XTC-14:
 

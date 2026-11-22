@@ -6,11 +6,13 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 # Issue Content
 
-The description holds the spec. It carries intent, goals, the status model,
-diagrams, decisions, open questions, non-goals, and acceptance criteria.
+The description holds the spec. It carries intent, goals, workflow state
+definitions, diagrams, decisions, open questions, non-goals, and acceptance
+criteria.
 
-Jira's status field holds progress. Do not put status, progress notes, or PR
-state in the description. Read the status field for state.
+Jira's status field holds progress. Do not put the ticket's current status,
+progress notes, or PR state in the description. Read the status field for
+state.
 
 Comments hold discoveries from implementation. Record tool behavior corrections,
 conflicts found in other skills, eval harness changes, and reverted changes.
