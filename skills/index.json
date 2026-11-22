@@ -74,7 +74,7 @@
     {
       "name": "jira-workflow",
       "version": "26.11.23",
-      "files": ["SKILL.md"]
+      "files": ["SKILL.md", "references/issue-content.md"]
     },
     {
       "name": "running-commands",

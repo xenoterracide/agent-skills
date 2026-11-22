@@ -23,3 +23,9 @@ it("loads when moving an issue to a status", () => {
 it("loads when turning a plan into Subtasks", () => {
   assertSkillBehavior("turn this XTC plan into Subtasks on the ticket", "jira-workflow");
 });
+
+it("issue content ownership", () => {
+  assertSkillBehavior("where should the spec and implementation notes go on this XTC ticket?", "jira-workflow", {
+    reads: ["references/issue-content.md"],
+  });
+});

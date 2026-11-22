@@ -17,8 +17,8 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 # Jira Workflow
 
-XTC is the execution tracker for `agent-skills`. `~/WHERE-WAS-I.md` is recall.
-Read issue state live. Do not cache keys or statuses.
+XTC is the tracker for `agent-skills`. Read issue state live. Do not cache keys
+or statuses.
 
 Site: `https://xenoterracide.atlassian.net`. Cloud ID
 `fc5ce4e3-4638-4a37-9aaf-1a2591482c2e`. Project `XTC`. Board 3, KAN board.
@@ -26,6 +26,10 @@ Site: `https://xenoterracide.atlassian.net`. Cloud ID
 ## Required Companion Skills
 
 - **`hemingway`** — issue descriptions and comments are prose
+
+## Issue content
+
+Read `references/issue-content.md` before writing a description or comment.
 
 ## Status model
 

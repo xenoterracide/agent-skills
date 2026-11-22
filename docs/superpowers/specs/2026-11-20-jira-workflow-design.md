@@ -8,8 +8,8 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 ## Intent
 
-XTC is the execution tracker for `agent-skills`. `~/WHERE-WAS-I.md` is recall.
-Agents need one place that states how to read XTC, create issues, update
+XTC is the tracker for `agent-skills`. Agents need one place that states how
+to read XTC, create issues, update
 issues, move issues, and break work into Subtasks.
 
 The status model now settled in XTC-14:
@@ -64,9 +64,6 @@ The skill may be stricter.
   skill.
 - Skills are plain Markdown under `skills/`. Catalog comes from
   `pnpm skills:catalog`. Version follows CalVer `YY.M.MICRO`.
-- `~/WHERE-WAS-I.md` stays source of truth until deleted. Update
-  `~/.config/opencode/AGENTS.md`, `~/.local/bin/renovate-audit`, and XTC-14
-  before deleting it.
 
 ## Approaches
 

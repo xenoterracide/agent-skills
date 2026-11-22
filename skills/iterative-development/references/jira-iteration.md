@@ -6,7 +6,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 # Jira Iteration Loop
 
-XTC carries the work. `~/WHERE-WAS-I.md` is recall, not the tracker.
+XTC carries the work.
 
 ```mermaid
 flowchart TD
