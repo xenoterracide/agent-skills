@@ -26,10 +26,11 @@ Load these skills whenever this skill applies:
 
 ## Output Format
 
-Always create AsciiDoc (`.adoc`) files in `docs/use-cases/`.
+Put the spec in the ticket description and in the repo. `docs/use-cases/` is
+the default directory. Read `references/placement.md` before choosing where a
+spec goes. Use cases stay deferred; most tickets need none.
 
-Read `references/placement.md` before choosing where a spec goes. Use cases
-stay deferred; most tickets need none.
+When a use case is warranted, write AsciiDoc (`.adoc`).
 
 ## Core Principles
 

@@ -81,8 +81,9 @@ Jira.
 
 ## Read issues
 
-Run JQL `project = XTC ORDER BY key ASC` for live state. Read one known issue
-by key. Use board and backlog datasets for columns and parking.
+Run JQL `project = XTC ORDER BY key ASC` for live state. Page with
+`nextPageToken` until `isLast`. Read one known issue by key. Use
+`getJiraBoardConfig` for columns and board/backlog datasets for parking.
 
 Do not treat a status as a bucket. Drop `now`, `next`, and `squirrel` labels.
 
@@ -109,9 +110,8 @@ dropped without error.
 
 ## Move issues
 
-Take the transition ID from `listJiraIssueTransitions`. Transition name is
-the transition's own name, not the target status. `starting` and `In Progress`
-both reach `In Progress` today.
+Take the transition ID from `listJiraIssueTransitions`. Match the transition
+whose `to.name` is the target status. Names differ: `completed` reaches `Done`.
 
 Rules:
 

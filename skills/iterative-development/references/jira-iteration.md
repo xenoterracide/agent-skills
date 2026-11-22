@@ -20,7 +20,7 @@ flowchart TD
     H --> I[Reflect; update ticket spec]
     I --> J{Next iteration?}
     J -- yes --> D
-    J -- no --> K[Closed]
+    J -- no --> K[No further iteration]
 ```
 
 ## Rules
