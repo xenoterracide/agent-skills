@@ -34,5 +34,3 @@ flowchart TD
 - Open the PR, then move the ticket to `In Review`.
 - Move to `Done` after merge and green checks.
 - Reflect. Update the ticket spec. Decide on another iteration.
-
-Use cases stay deferred. Most tickets need none.

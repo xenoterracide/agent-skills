@@ -28,7 +28,7 @@ Load these skills whenever this skill applies:
 
 Put the spec in the ticket description and in the repo. `docs/use-cases/` is
 the default directory. Read `references/placement.md` before choosing where a
-spec goes. Use cases stay deferred; most tickets need none.
+spec goes.
 
 When a use case is warranted, write AsciiDoc (`.adoc`).
 

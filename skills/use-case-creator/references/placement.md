@@ -16,5 +16,3 @@ the UX level even when it affects code all the way down.
 Long-term open question: should a dedicated `use-cases` repo own these
 files, or should owning repos keep them? No local or GitHub repo named
 `use-cases` or `specs` exists today.
-
-Use cases stay deferred. Most tickets need none.
