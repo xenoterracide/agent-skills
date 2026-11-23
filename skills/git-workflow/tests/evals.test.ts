@@ -115,14 +115,8 @@ it("moves out of a worktree before merging, from git-workflow", () => {
       repo: true,
       ghb: "green",
       reads: [/pull-request\.md/],
-      forbids: [
-        /gh pr merge\s+\d/,
-        /gh pr merge\b[^\n]*--(?:squash|merge|rebase|auto|admin)\b/,
-        /merge_pull_request/,
-        /mergePullRequest/,
-        /pulls\/\d+\/merge/,
-      ],
-      prose: { includes: [/main worktree|session_move|move the session/] },
+      forbids: [/gh pr merge\b(?!\s+--help\b)/, /merge_pull_request/, /mergePullRequest/, /pulls\/\d+\/merge/],
+      prose: { includes: [/main worktree|session_move|move the session/, /next turn|end the turn/] },
     },
   );
 });

@@ -73,8 +73,9 @@ it" prompt routes to `git-workflow`, so the command belongs in that case.
 env -u OPENCODE_SESSION_ID EVAL_ITERATIONS=1 EVAL_MODEL=opencode/big-pickle pnpm exec vitest run skills/git-workflow/tests/evals.test.ts skills/using-xenoterracide-agent-skills/tests/evals.test.ts -t "worktree before merging|approved PR with branch cleanup" --reporter=verbose
 ```
 
-Expected before the gate: the bootstrap worktree case fails on missing
-move-out prose. The `git-workflow` case already read the reference and passed.
+Expected before the gate: the bootstrap case fails on missing move-out and
+turn-boundary prose. The `git-workflow` case already read the reference and
+passed.
 
 - [x] **Step 4: Commit the failing tests**
 
@@ -135,3 +136,4 @@ git commit -m "feat: gate approved merges on worktree cleanup"
 - [x] Split the contradictory same-turn worktree merge cases.
 - [x] Assert both cleanup flags in a main-worktree turn.
 - [x] Forbid every merge route in the worktree cases.
+- [x] Require the turn boundary in worktree case prose.
