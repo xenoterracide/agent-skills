@@ -28,6 +28,7 @@ Read the reference that matches the task before starting:
 | Task                                                     | Read                                    |
 | -------------------------------------------------------- | --------------------------------------- |
 | Create, open, update, or review a PR; files changed      | `references/pull-request.md`            |
+| Merge an approved PR                                     | `references/pull-request.md`            |
 | Write a commit message, PR title, or PR description      | `references/commit-creator.md`          |
 | Push rejected for `workflow` scope (`.github/workflows`) | `references/workflow-push-rejection.md` |
 | Sync a branch without ghb                                | `references/manual-sync.md`             |
