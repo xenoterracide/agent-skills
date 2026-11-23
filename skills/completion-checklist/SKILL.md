@@ -53,8 +53,8 @@ plan work complete → draft checks through `ghb pr verify` → review the diff 
 PR marked ready with `gh pr ready` → full checks through `ghb pr verify` →
 notify with a clickable PR link on every outcome.
 
-Fill in the repository, owner, and PR number. Emit the rendered link. No
-backticks. No code fence:
+Fill in the repository, owner, and PR number. Emit the rendered link inline.
+No backticks. No code fence. Example:
 
 ```markdown
 [repo#NNN](https://github.com/owner/repo/pull/NNN)

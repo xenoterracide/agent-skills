@@ -11,6 +11,7 @@ import { describe, expect, it } from "vitest";
 import {
   assertSkillBehavior,
   assertSkillLoads,
+  detectProse,
   detectReads,
   detectSkills,
   harnessError,
@@ -75,6 +76,16 @@ describe("detectReads", () => {
 
   it("ignores other tool lines", () => {
     expect(detectReads('✱ Grep "foo" 1 match\n→ Skill "java-creator"')).toEqual([]);
+  });
+});
+
+describe("detectProse", () => {
+  it("keeps answer lines and drops tool lines", () => {
+    expect(detectProse('→ Skill "hemingway"\n$ git status\nhello\n\n✓ done')).toBe("hello");
+  });
+
+  it("drops fenced code blocks", () => {
+    expect(detectProse("hello\n```markdown\n[link](url)\n```\nworld")).toBe("hello\nworld");
   });
 });
 
@@ -186,6 +197,22 @@ describe("assertSkillBehavior commands", () => {
       { run, commands: [/--reporter=silent/] },
       /expected a command matching/,
     );
+  });
+});
+
+describe("assertSkillBehavior prose", () => {
+  const run = (): string => '→ Skill "hemingway"\nUse the rendered link.';
+
+  it("passes when included prose appears", () => {
+    assertPass("hemingway", { run, prose: { includes: [/rendered link/i] } });
+  });
+
+  it("fails when included prose is absent", () => {
+    assertFail("hemingway", { run, prose: { includes: [/clickable/] } }, /expected prose matching/);
+  });
+
+  it("fails when forbidden prose appears", () => {
+    assertFail("hemingway", { run, prose: { excludes: [/rendered link/] } }, /forbidden prose/);
   });
 });
 

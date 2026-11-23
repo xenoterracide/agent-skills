@@ -17,10 +17,18 @@ export function detectReads(output: string): string[] {
 }
 
 export function detectProse(output: string): string {
+  let fenced = false;
+
   return stripAnsi(output)
     .split(/\r?\n/)
     .map((line) => line.trim())
-    .filter((line) => line.length > 0 && !/^[$→⚙✱←✓✗]/.test(line))
+    .filter((line) => {
+      if (line.startsWith("```")) {
+        fenced = !fenced;
+        return false;
+      }
+      return line.length > 0 && !fenced && !/^[$→⚙✱←✓✗]/.test(line);
+    })
     .join("\n");
 }
 
