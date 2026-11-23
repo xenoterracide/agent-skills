@@ -95,7 +95,7 @@ When committing and creating/updating a PR, follow this workflow:
 
 5. **Before finalizing:**
    - Review if documentation needs updates (README.md, AGENTS.md)
-   - Remove completed plans from `docs/superpowers/plans/`.
+   - Keep plans local in `docs/superpowers/plans/`; the directory is gitignored.
    - Ensure PR description accurately reflects all changes including doc updates
 
 6. **After pushing, before returning to the user:**

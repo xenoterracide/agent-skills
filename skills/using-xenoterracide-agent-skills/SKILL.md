@@ -37,6 +37,11 @@ from before the human read the PR is not confirmation. Syncing a topic branch
 with its base is safe routine sync. The `git-workflow` skill carries the full
 rule.
 
+On approval, do not merge from a feature worktree. If the session runs in one,
+move it out with `session_move`. The move lands next turn. End the turn. Do not
+merge in it. Then merge from the main worktree with
+`gh pr merge <PR> --squash --delete-branch`.
+
 ## Plans and Execution
 
 Do not ask your partner to approve a plan or choose an execution method.

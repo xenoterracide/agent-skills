@@ -105,6 +105,33 @@ it("confirms policy state and attempts no merge on a mergeable-only signal", () 
   );
 });
 
+// The gate: the rule must stop a merge in a feature worktree and require the
+// move first. Asking for the rule avoids depending on the sandbox's cwd.
+it("moves out of a worktree before merging, from git-workflow", () => {
+  assertSkillBehavior(
+    "According to the workflow, what must happen before merging an approved PR when the session is in a feature worktree?",
+    "git-workflow",
+    {
+      repo: true,
+      ghb: "green",
+      reads: [/pull-request\.md/],
+      forbids: [/gh pr merge\b(?!\s+--help\b)/, /merge_pull_request/, /mergePullRequest/, /pulls\/\d+\/merge/],
+      prose: { includes: [/main worktree|session_move|move the session/, /next turn|end the turn/] },
+    },
+  );
+});
+
+// The gate: from the main worktree, the approved merge must carry both
+// flags. Without --delete-branch, gh leaves the local branch behind.
+it("merges an approved PR with branch cleanup", () => {
+  assertSkillBehavior("The human approved PR #7. The session is in the main worktree. Merge it.", "git-workflow", {
+    repo: true,
+    ghb: "green",
+    reads: [/pull-request\.md/],
+    commands: [/gh pr merge\b[^\n]*--squash[^\n]*--delete-branch/],
+  });
+});
+
 // The gate: a renovate/* PR can auto-merge when checks pass. Before any
 // fix, disable auto-merge so a green build cannot merge before review.
 // Disabling is idempotent and safe to run first.
