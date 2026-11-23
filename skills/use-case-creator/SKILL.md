@@ -26,11 +26,7 @@ Load these skills whenever this skill applies:
 
 ## Output Format
 
-Put the spec in the ticket description and in the repo. `docs/use-cases/` is
-the default directory. Read `references/placement.md` before choosing where a
-spec goes.
-
-When a use case is warranted, write AsciiDoc (`.adoc`).
+Always create AsciiDoc (`.adoc`) files in `docs/use-cases/`.
 
 ## Core Principles
 
@@ -67,6 +63,7 @@ Extensions reference by anchor:
 
 - Reordering steps doesn't break references
 - Humans see full text in links
+- AI uses stable `step-validate` identifier
 
 ### 3. Ubiquitous Language
 

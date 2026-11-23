@@ -94,7 +94,7 @@
     {
       "name": "use-case-creator",
       "version": "26.11.23",
-      "files": ["SKILL.md", "assets/uc-registration-example.adoc", "references/placement.md"]
+      "files": ["SKILL.md", "assets/uc-registration-example.adoc"]
     },
     {
       "name": "using-xenoterracide-agent-skills",
