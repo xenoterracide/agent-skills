@@ -105,6 +105,19 @@ it("confirms policy state and attempts no merge on a mergeable-only signal", () 
   );
 });
 
+// The gate: an approved merge must read the merge procedure, move out of
+// the feature worktree, and pass --delete-branch. Without it, gh skips
+// local cleanup and the operator removes the worktree and branch by hand.
+it("merges an approved PR with branch cleanup", () => {
+  assertSkillBehavior("The human approved PR #7. The session is in a feature worktree. Merge it.", "git-workflow", {
+    repo: true,
+    ghb: "green",
+    reads: [/pull-request\.md/],
+    commands: [/gh pr merge\b[^\n]*--squash[^\n]*--delete-branch/],
+    prose: { includes: [/main worktree|session_move/] },
+  });
+});
+
 // The gate: a renovate/* PR can auto-merge when checks pass. Before any
 // fix, disable auto-merge so a green build cannot merge before review.
 // Disabling is idempotent and safe to run first.

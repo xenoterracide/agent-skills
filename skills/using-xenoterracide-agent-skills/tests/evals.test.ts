@@ -25,3 +25,20 @@ it("quietens fetching origin", () => {
     commands: [/git (fetch|pull)[^\n]*(-q|--quiet)/],
   });
 });
+
+// The bootstrap is in every fresh session. It must carry the merge gate so
+// the approval turn cannot merge from a feature worktree and skip cleanup.
+// The eval harness has no session_move tool. The agent must stop and name
+// the move instead of merging from where it stands.
+it("moves out of a worktree before merging, from the bootstrap", () => {
+  assertSkillBehavior(
+    "Which skill should I use? The human approved PR #7. The session is in a feature worktree. Merge it.",
+    "using-xenoterracide-agent-skills",
+    {
+      repo: true,
+      ghb: "green",
+      forbids: [/gh pr merge/],
+      prose: { includes: [/main worktree|session_move|move the session/] },
+    },
+  );
+});
