@@ -16,20 +16,42 @@ export function detectReads(output: string): string[] {
   return [...stripAnsi(output).matchAll(/→ Read (.+)/g)].map((match) => match[1].trim());
 }
 
-export function detectProse(output: string): string {
-  let fenced = false;
+const FENCE = /^(`{3,})/;
+const CODE_LINE = /^(?: {4}|\t)/;
+const INLINE_CODE = /`+[^`]*`+/g;
+const TOOL_LINE = /^[$→⚙✱←✓✗]/;
 
-  return stripAnsi(output)
-    .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter((line) => {
-      if (line.startsWith("```")) {
-        fenced = !fenced;
-        return false;
-      }
-      return line.length > 0 && !fenced && !/^[$→⚙✱←✓✗]/.test(line);
-    })
-    .join("\n");
+function fenceTicks(line: string): string | undefined {
+  return FENCE.exec(line)?.[1];
+}
+
+function proseLine(line: string): string | undefined {
+  const trimmed = line.trim();
+
+  if (CODE_LINE.test(line) || trimmed.length === 0 || TOOL_LINE.test(trimmed)) return undefined;
+
+  return trimmed.replace(INLINE_CODE, "").replace(/\s+/g, " ").trim();
+}
+
+export function detectProse(output: string): string {
+  let fence = "";
+  const lines: string[] = [];
+
+  for (const line of stripAnsi(output).split(/\r?\n/)) {
+    const marker = fenceTicks(line.trim());
+
+    if (marker !== undefined) {
+      if (fence === "") fence = marker;
+      else if (marker.length >= fence.length) fence = "";
+      continue;
+    }
+    if (fence !== "") continue;
+
+    const prose = proseLine(line);
+    if (prose !== undefined && prose.length > 0) lines.push(prose);
+  }
+
+  return lines.join("\n");
 }
 
 // Tool invocations render with a marker prefix ($, →, ⚙, ✱, ←, ✓, ✗); the

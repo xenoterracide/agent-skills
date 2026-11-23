@@ -87,6 +87,14 @@ describe("detectProse", () => {
   it("drops fenced code blocks", () => {
     expect(detectProse("hello\n```markdown\n[link](url)\n```\nworld")).toBe("hello\nworld");
   });
+
+  it("strips inline code spans", () => {
+    expect(detectProse("link: ``[link](url)`` now")).toBe("link: now");
+  });
+
+  it("drops indented code lines", () => {
+    expect(detectProse("hello\n    [link](url)\nworld")).toBe("hello\nworld");
+  });
 });
 
 const passesOnLoadAndRead = (): void => {

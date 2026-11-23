@@ -64,3 +64,29 @@ it("rejects a fenced link", () => {
     });
   }).toThrow(/expected prose matching/);
 });
+
+it("rejects a double-backticked link", () => {
+  const run = (): string =>
+    '→ Skill "completion-checklist"\n``[agent-skills#7](https://github.com/xenoterracide/agent-skills/pull/7)``';
+
+  expect(() => {
+    assertSkillBehavior("p", "completion-checklist", {
+      iterations: 1,
+      run,
+      prose: { includes: LINK_INCLUDES, excludes: LINK_EXCLUDES },
+    });
+  }).toThrow(/prose/);
+});
+
+it("rejects an indented link", () => {
+  const run = (): string =>
+    '→ Skill "completion-checklist"\n    [agent-skills#7](https://github.com/xenoterracide/agent-skills/pull/7)';
+
+  expect(() => {
+    assertSkillBehavior("p", "completion-checklist", {
+      iterations: 1,
+      run,
+      prose: { includes: LINK_INCLUDES, excludes: LINK_EXCLUDES },
+    });
+  }).toThrow(/expected prose matching/);
+});
