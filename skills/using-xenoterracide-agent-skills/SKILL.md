@@ -32,14 +32,20 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 ## Merging
 
 Never merge the PR on your own initiative, in any repository. Show
-`[repo#NNN](url)`, then wait for the human's explicit yes. An instruction
-from before the human read the PR is not confirmation. Syncing a topic branch
-with its base is safe routine sync. The `git-workflow` skill carries the full
-rule.
+`[repo#NNN](url)` before asking for approval. An instruction from before the
+human read the PR is not confirmation. Syncing a topic branch with its base is
+safe routine sync. The `git-workflow` skill carries the full rule.
+
+Approval comes only from the "Approved, merge" choice in the question prompt.
+Show that prompt after checks, self-review, and reviewer findings are done.
+"Review comments submitted" routes to review-comment handling. "Hold" stops.
+Free text is feedback, not approval. New findings, a commit, a push, or a
+failed check void the answer. Ask again. If no question tool exists, list the
+three choices in text and accept an exact choice name only.
 
 On approval, do not merge from a feature worktree. If the session runs in one,
-move it out with `session_move`. The move lands next turn. End the turn. Do not
-merge in it. Then merge from the main worktree with
+move it out with `session_move`. Wait for the harness to confirm the
+main-worktree cwd. Continue in that turn. Merge from the main worktree with
 `gh pr merge <PR> --squash --delete-branch`.
 
 ## Plans and Execution
@@ -89,10 +95,9 @@ carries the full rule.
 
 Where the harness has a session move, move the session into the new worktree.
 Call the move by itself, with the worktree directory — `session_move` in
-OpenCode. The move lands at the next safe boundary, so run work that needs the
-new directory after the current turn. Name the session after the worktree,
-with `session_rename` in OpenCode. Tell the human the worktree directory. They
-resume the session, not the directory.
+OpenCode. Wait for the harness to confirm the new cwd, then continue in that
+turn. Name the session after the worktree, with `session_rename` in OpenCode.
+Tell the human the worktree directory. They resume the session, not the directory.
 
 ## Read Project Documentation First
 

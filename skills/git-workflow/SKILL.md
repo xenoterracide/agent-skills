@@ -2,8 +2,9 @@
 name: git-workflow
 description: |
   Use when creating, opening, updating, or submitting a pull request; when
-  asked to merge one; when files are created, modified, or deleted; when
-  addressing PR review comments or feedback; when writing a commit message,
+  asked to merge one or about its approval prompt; when files are created,
+  modified, or deleted; when addressing PR review comments or feedback; when
+  writing a commit message,
   PR title, or PR description; and when a git push is rejected citing
   `.github/workflows` or a missing `workflow` token scope. Read the matching
   file in `references/` for the detailed procedure before doing the work.

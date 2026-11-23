@@ -137,6 +137,26 @@ On their yes, verify with `ghb pr verify`. Going raw, read
 every check green. Do not arm auto-merge. Tell the human what holds the
 merge and wait. Never use `--admin` unless the human asks.
 
+#### Approval Prompt
+
+Ask only after the full check run and diff review. Ask after the reviewer
+subagent reports and its findings are fixed. Post `[repo#NNN](url)` first.
+
+Ask with three choices:
+
+- "Approved, merge" is the only choice that authorizes a merge.
+- "Review comments submitted" follows `Handling Review Comments`.
+- "Hold" stops.
+
+Free text is review feedback. Address it, verify, then ask again.
+
+The answer binds to the state at prompt time. New findings, a commit, a push,
+or a failed check void it. Ask again. A cancelled or unanswered prompt is not
+approval.
+
+Without a question tool, list the three choices as text. Accept an exact choice
+name only. Every other reply is feedback.
+
 **Never merge a pull request from a feature worktree.** Moving the session out
 is a precondition of the merge, not cleanup after it. Do not merge from the
 feature worktree to save a turn. `gh pr merge --disable-auto <PR>` is not a
@@ -145,13 +165,14 @@ merge. `--disable-auto` only turns auto-merge off.
 `gh` carries the PR title and body into the squash commit. Run `gh pr merge`
 from the main worktree so `gh` removes the feature worktree and both branches.
 
-If the session runs in the feature worktree, stop before the merge:
+If the session runs in the feature worktree, move out before the merge:
 
 1. Record the path with `git rev-parse --show-toplevel`. Copy it into
    `<worktree-path>` below.
 2. Call `session_move` by itself with the main worktree path. It lands at the
    next safe boundary.
-3. End the turn. Merge in the next turn from the main worktree.
+3. Wait for the harness to confirm the working directory changed to the main
+   worktree. Continue in that turn. Do not wait for another human message.
 
 When the merge already ran from the feature worktree, `gh` skipped local
 cleanup. Find `<worktree-path>` with `git worktree list`, then run:
@@ -162,9 +183,9 @@ git branch -D <branch>
 git pull
 ```
 
-After the session move, run the merge from the main worktree in the next
-turn. `cd` is not a substitute for `session_move`: it lasts one command and
-leaves the session in the feature worktree.
+After the harness confirms the move, run the merge from the main worktree in
+that turn. `cd` is not a substitute for `session_move`: it lasts one command
+and leaves the session in the feature worktree.
 
 ```bash
 gh pr merge <PR> --squash --delete-branch

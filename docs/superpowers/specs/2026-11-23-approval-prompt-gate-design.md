@@ -71,10 +71,11 @@ text answer is feedback. Only the first choice authorizes the merge. The
 answer applies to the state at prompt time. New findings, a commit, a push, or
 a failed check require a new prompt.
 
-The same paragraph drops "end the turn". The question answer arrives inside
-the turn. When the session runs in a feature worktree, move it out with
-`session_move`, wait for the harness to confirm the main-worktree cwd, and
-continue in that turn.
+The turn-boundary fix removes the pause from both the Merging paragraph and
+the Working Directory section. The question answer arrives inside the turn.
+When the session runs in a feature worktree, move it out with `session_move`,
+wait for the harness to confirm the main-worktree cwd, and continue in that
+turn.
 
 `pull-request.md` carries the full rule in "Merging on the Human's Yes":
 prompt order, the three choices, the void conditions, and the text fallback.
