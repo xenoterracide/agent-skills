@@ -4,11 +4,19 @@
 
 import assert from "node:assert/strict";
 
-import { detectCommands, detectReads, detectSkills, transcript } from "./eval-output";
+import { detectCommands, detectProse, detectReads, detectSkills, transcript } from "./eval-output";
 import { ITERATIONS, MODEL, runPrompt } from "./eval-sandbox";
 import type { RunOptions } from "./eval-sandbox";
 
-export { combineOutput, detectCommands, detectReads, detectSkills, harnessError, stripAnsi } from "./eval-output";
+export {
+  combineOutput,
+  detectCommands,
+  detectProse,
+  detectReads,
+  detectSkills,
+  harnessError,
+  stripAnsi,
+} from "./eval-output";
 export { writeGhDenyStub, writeGhStub, writeGhbStub } from "./eval-stubs";
 export { initSandboxRepo, ITERATIONS, runPrompt } from "./eval-sandbox";
 export type { RunOptions } from "./eval-sandbox";
@@ -29,6 +37,8 @@ export interface BehaviorOptions extends AssertOptions {
   commands?: (string | RegExp)[];
   /** Skills the primary skill must load alongside itself. */
   companions?: string[];
+  /** Patterns over agent prose. Tool lines are excluded. */
+  prose?: { includes?: (string | RegExp)[]; excludes?: (string | RegExp)[] };
 }
 
 interface CheckContext {
@@ -52,6 +62,10 @@ interface CommandCheck extends CheckContext {
   commands: (string | RegExp)[];
 }
 
+interface ProseCheck extends CheckContext {
+  prose: { includes: (string | RegExp)[]; excludes: (string | RegExp)[] };
+}
+
 interface Behavior extends AssertOptions {
   model: string;
   iterations: number;
@@ -62,6 +76,14 @@ interface Behavior extends AssertOptions {
   forbids: (string | RegExp)[];
   commands: (string | RegExp)[];
   companions: string[];
+  prose: { includes: (string | RegExp)[]; excludes: (string | RegExp)[] };
+}
+
+function normalizeProse(options: BehaviorOptions): Behavior["prose"] {
+  return {
+    includes: options.prose?.includes ?? [],
+    excludes: options.prose?.excludes ?? [],
+  };
 }
 
 function normalizeBehavior(options: BehaviorOptions): Behavior {
@@ -76,6 +98,7 @@ function normalizeBehavior(options: BehaviorOptions): Behavior {
     forbids: options.forbids ?? [],
     commands: options.commands ?? [],
     companions: options.companions ?? [],
+    prose: normalizeProse(options),
     repo: options.repo,
     ghb: options.ghb,
   };
@@ -131,8 +154,22 @@ function assertCommands({ label, output, forbids, commands }: CommandCheck): voi
   }
 }
 
+function assertProse({ label, output, prose }: ProseCheck): void {
+  const lines = detectProse(output);
+
+  for (const pattern of prose.includes) {
+    assert.ok(
+      lineMatches(pattern, lines),
+      `${label}: expected prose matching ${String(pattern)}, got:\n${transcript(output)}`,
+    );
+  }
+  for (const pattern of prose.excludes) {
+    assert.ok(!lineMatches(pattern, lines), `${label}: forbidden prose ${String(pattern)}\n${transcript(output)}`);
+  }
+}
+
 export function assertSkillBehavior(prompt: string, skill: string, options: BehaviorOptions = {}): void {
-  const { model, iterations, run, first, loadEvent, reads, forbids, commands, companions, fixture, repo, ghb } =
+  const { model, iterations, run, first, loadEvent, reads, forbids, commands, companions, prose, fixture, repo, ghb } =
     normalizeBehavior(options);
   for (let i = 0; i < iterations; i++) {
     const output = run(prompt, { model, fixture, repo, ghb });
@@ -140,6 +177,7 @@ export function assertSkillBehavior(prompt: string, skill: string, options: Beha
     assertLoaded({ label, output, skill, loadEvent, first, companions });
     assertReads({ label, output, reads });
     assertCommands({ label, output, forbids, commands });
+    assertProse({ label, output, prose });
   }
 }
 

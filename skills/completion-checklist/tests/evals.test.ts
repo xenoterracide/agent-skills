@@ -14,3 +14,18 @@ it("running commands: confirm done without fresh checker runs", () => {
     commands: [/ghb pr verify/],
   });
 });
+
+it("renders the PR notification as a clickable link", () => {
+  assertSkillBehavior(
+    "The work is complete and checks are green. Confirm done and notify me with the link to PR 7.",
+    "completion-checklist",
+    {
+      repo: true,
+      ghb: "green",
+      prose: {
+        includes: [/\[[^\]]+#\d+\]\(https:\/\/github\.com\/[^)]+\/pull\/\d+\)/],
+        excludes: [/`\[[^\]]+\]\([^)]+\)`/],
+      },
+    },
+  );
+});

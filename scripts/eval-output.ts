@@ -16,6 +16,14 @@ export function detectReads(output: string): string[] {
   return [...stripAnsi(output).matchAll(/→ Read (.+)/g)].map((match) => match[1].trim());
 }
 
+export function detectProse(output: string): string {
+  return stripAnsi(output)
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0 && !/^[$→⚙✱←✓✗]/.test(line))
+    .join("\n");
+}
+
 // Tool invocations render with a marker prefix ($, →, ⚙, ✱, ←, ✓, ✗); the
 // agent's prose does not. forbids scans these lines so a rule quoted in a
 // refusal does not read as an invocation.

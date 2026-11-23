@@ -171,3 +171,13 @@ it("keeps the bootstrap pointed at project config", () => {
   expect(text).not.toContain("XTC");
   expect(text).toContain(".config/agent/project.yaml");
 });
+
+it("instructs agents to emit a rendered PR link", () => {
+  const text = readFileSync("skills/completion-checklist/SKILL.md", "utf8");
+
+  expect(text).not.toMatch(/`\[repo#NNN\]\(url\)`/);
+  expect(text).toContain("```markdown");
+  expect(text).toMatch(/\[repo#NNN\]\(https:\/\/github\.com\/[^)]+\/pull\/NNN\)/);
+  expect(text).toMatch(/rendered link/i);
+  expect(text).toMatch(/no\s+backticks/i);
+});
