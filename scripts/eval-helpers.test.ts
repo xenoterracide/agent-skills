@@ -208,6 +208,18 @@ describe("assertSkillBehavior commands", () => {
   });
 });
 
+describe("events", () => {
+  const run = (): string => '→ Skill "git-workflow"\n✗ Asked 1 question failed';
+
+  it("asserts a tool event", () => {
+    assertPass("git-workflow", { run, events: [/Asked 1 question/] });
+  });
+
+  it("fails when the tool event is missing", () => {
+    assertFail("git-workflow", { run, events: [/gh pr ready/] }, /expected event matching/);
+  });
+});
+
 describe("assertSkillBehavior prose", () => {
   const run = (): string => '→ Skill "hemingway"\nUse the rendered link.';
 
