@@ -99,7 +99,7 @@ function normalizeBehavior(options: BehaviorOptions): Behavior {
     iterations: options.iterations ?? ITERATIONS,
     run: options.run ?? runPrompt,
     first: options.first ?? false,
-    loadEvent: options.loadEvent ?? true,
+    loadEvent: options.loadEvent !== false,
     reads: options.reads ?? [],
     forbids: options.forbids ?? [],
     commands: options.commands ?? [],
@@ -183,30 +183,22 @@ function assertProse({ label, output, prose }: ProseCheck): void {
 }
 
 export function assertSkillBehavior(prompt: string, skill: string, options: BehaviorOptions = {}): void {
-  const {
-    model,
-    iterations,
-    run,
-    first,
-    loadEvent,
-    reads,
-    forbids,
-    commands,
-    events,
-    companions,
-    prose,
-    fixture,
-    repo,
-    ghb,
-  } = normalizeBehavior(options);
-  for (let i = 0; i < iterations; i++) {
-    const output = run(prompt, { model, fixture, repo, ghb });
-    const label = `run ${String(i + 1)}/${String(iterations)}`;
-    assertLoaded({ label, output, skill, loadEvent, first, companions });
-    assertReads({ label, output, reads });
-    assertCommands({ label, output, forbids, commands });
-    assertEvents({ label, output, events });
-    assertProse({ label, output, prose });
+  const behavior = normalizeBehavior(options);
+  for (let i = 0; i < behavior.iterations; i++) {
+    const output = behavior.run(prompt, behavior);
+    const label = `run ${String(i + 1)}/${String(behavior.iterations)}`;
+    assertLoaded({
+      label,
+      output,
+      skill,
+      loadEvent: behavior.loadEvent,
+      first: behavior.first,
+      companions: behavior.companions,
+    });
+    assertReads({ label, output, reads: behavior.reads });
+    assertCommands({ label, output, forbids: behavior.forbids, commands: behavior.commands });
+    assertEvents({ label, output, events: behavior.events });
+    assertProse({ label, output, prose: behavior.prose });
   }
 }
 
