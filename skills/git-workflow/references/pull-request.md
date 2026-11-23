@@ -107,7 +107,7 @@ When committing and creating/updating a PR, follow this workflow:
    - Do not consider the task complete while required checks are failing
    - Always notify the human with `[repo#NNN](url)`. A bare number forces a
      click to find the PR.
-   - Stop there. Merging waits for the human's explicit confirmation.
+   - Stop there. Merging waits for the approval prompt's `Approved, merge` choice.
 
 ### Draft, Ready, and Checks
 
