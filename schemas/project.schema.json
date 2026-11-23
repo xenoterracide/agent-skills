@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/xenoterracide/agent-skills/develop/schemas/project.schema.json",
+  "title": "Agent project configuration",
+  "description": "Tracker facts for one repository. Skills own behavior; repos own these values.",
+  "type": "object",
+  "required": ["repo", "tracker"],
+  "additionalProperties": false,
+  "properties": {
+    "repo": {
+      "type": "string",
+      "description": "Repository name used in the project:<repo> Jira label."
+    },
+    "tracker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "skill", "site", "project", "board", "work_types", "labels", "statuses", "transitions"],
+      "properties": {
+        "kind": {
+          "const": "jira",
+          "description": "Tracker product. Jira is the only supported kind."
+        },
+        "skill": {
+          "type": "string",
+          "description": "Skill that owns this tracker's workflow rules."
+        },
+        "site": {
+          "type": "string",
+          "description": "Tracker host, without the URL scheme."
+        },
+        "project": {
+          "type": "string",
+          "description": "Jira project key."
+        },
+        "board": {
+          "type": "integer",
+          "description": "Jira board id."
+        },
+        "work_types": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "description": "Issue types this workflow uses."
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["project_prefix"],
+          "properties": {
+            "project_prefix": {
+              "type": "string",
+              "description": "Prefix for the per-repository Jira label."
+            }
+          }
+        },
+        "statuses": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["captured", "refining", "ready", "building", "reviewing", "done", "dropped"],
+          "properties": {
+            "captured": { "type": "string" },
+            "refining": { "type": "string" },
+            "ready": { "type": "string" },
+            "building": { "type": "string" },
+            "reviewing": { "type": "string" },
+            "done": { "type": "string" },
+            "dropped": { "type": "string" }
+          },
+          "description": "Logical workflow roles mapped to Jira status names."
+        },
+        "transitions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "captured_to_refining",
+            "captured_to_ready",
+            "captured_to_captured",
+            "captured_to_dropped",
+            "refining_to_ready",
+            "refining_to_captured",
+            "refining_to_dropped",
+            "ready_to_building",
+            "ready_to_captured",
+            "ready_to_dropped",
+            "building_to_reviewing",
+            "building_to_ready",
+            "building_to_dropped",
+            "reviewing_to_done",
+            "reviewing_to_building",
+            "reviewing_to_dropped",
+            "done_to_refining",
+            "dropped_to_captured"
+          ],
+          "properties": {
+            "captured_to_refining": { "type": "integer" },
+            "captured_to_ready": { "type": "integer" },
+            "captured_to_captured": { "type": "integer" },
+            "captured_to_dropped": { "type": "integer" },
+            "refining_to_ready": { "type": "integer" },
+            "refining_to_captured": { "type": "integer" },
+            "refining_to_dropped": { "type": "integer" },
+            "ready_to_building": { "type": "integer" },
+            "ready_to_captured": { "type": "integer" },
+            "ready_to_dropped": { "type": "integer" },
+            "building_to_reviewing": { "type": "integer" },
+            "building_to_ready": { "type": "integer" },
+            "building_to_dropped": { "type": "integer" },
+            "reviewing_to_done": { "type": "integer" },
+            "reviewing_to_building": { "type": "integer" },
+            "reviewing_to_dropped": { "type": "integer" },
+            "done_to_refining": { "type": "integer" },
+            "dropped_to_captured": { "type": "integer" }
+          },
+          "description": "Intended edges mapped to Jira transition ids. Validate against live transitions before use."
+        }
+      }
+    }
+  }
+}

@@ -47,6 +47,8 @@ Eric Evans' whirlpool design from Domain-Driven Design.
 - **End:** demonstrate working software. Gather feedback. Reflect — what was
   wrong, what simplified, what grew complex. Adjust priorities.
 
+Record work breakdown in the tracker.
+
 ## Anti-Patterns
 
 - **Big design up front** — designing the complete domain model before code.

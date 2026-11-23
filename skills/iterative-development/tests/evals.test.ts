@@ -19,3 +19,7 @@ it("triggers when the domain model feels wrong", () => {
     "iterative-development",
   );
 });
+
+it("iteration-generic", () => {
+  assertSkillLoads("plan the next iteration and break it into tracker work items", "iterative-development");
+});

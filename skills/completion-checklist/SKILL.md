@@ -51,7 +51,14 @@ Done is not a moment. It is a pipeline:
 
 plan work complete → draft checks through `ghb pr verify` → review the diff →
 PR marked ready with `gh pr ready` → full checks through `ghb pr verify` →
-notify with `[repo#NNN](url)` on every outcome.
+notify with a clickable PR link on every outcome.
+
+Fill in the repository, owner, and PR number. Emit the rendered link inline.
+No backticks. No code fence. Example:
+
+```markdown
+[repo#NNN](https://github.com/owner/repo/pull/NNN)
+```
 
 Mid-task status reports cite the latest fetched status. The done claim requires
 the ready-gated checks green.
