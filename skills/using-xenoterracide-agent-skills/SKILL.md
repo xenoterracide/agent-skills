@@ -62,7 +62,7 @@ once the first step is pushed. Do not ask. Settle the fast checks with
 `ghb pr verify`. Review the diff only after they pass. Mark the PR ready
 with `gh pr ready`, then settle the full set with `ghb pr verify` again.
 Fix failures at any step. Always notify the human with `[repo#NNN](url)`.
-The merge still waits for the human's yes.
+The merge waits for the approval prompt's `Approved, merge` choice.
 
 ## Writing Style
 

@@ -131,10 +131,10 @@ Fix failures at any step before moving on.
 
 ### Merging on the Human's Yes
 
-On their yes, verify with `ghb pr verify`. Going raw, read
-`mergeStateStatus` and `reviewDecision` — never `mergeable` alone. A
-`BLOCKED` review or `CHANGES_REQUESTED` decision refuses the merge with
-every check green. Do not arm auto-merge. Tell the human what holds the
+On the approval prompt's `Approved, merge` choice, verify with `ghb pr verify`.
+Going raw, read `mergeStateStatus` and `reviewDecision` — never `mergeable`
+alone. A `BLOCKED` review or `CHANGES_REQUESTED` decision refuses the merge
+with every check green. Do not arm auto-merge. Tell the human what holds the
 merge and wait. Never use `--admin` unless the human asks.
 
 #### Approval Prompt
@@ -192,7 +192,8 @@ gh pr merge <PR> --squash --delete-branch
 git pull
 ```
 
-`gh` merges the head at merge time. A push after the yes needs a new yes.
+`gh` merges the head at merge time. A push after the approval choice voids it;
+see the Approval Prompt subsection.
 
 ### Self-Review Before Submitting
 
