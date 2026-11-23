@@ -11,6 +11,7 @@ document covers the workflow for human contributors.
 
 ## Getting Started
 
+<<<<<<< before updating
 Heal the toolchain and configure git hooks:
 
 ```bash
@@ -51,12 +52,22 @@ Run all checks before pushing:
 ```bash
 pnpm lint
 ```
+=======
+`npm run contribute` installs tools and dependencies. It heals the toolchain
+through `.config/git/hooks/heal.sh`. Node 25+ drops corepack, so bootstrap
+starts from npm. With direnv, run `direnv allow` to load the environment.
 
-`pnpm check` runs the CI set; on TypeScript it skips reuse, which the
-license CI job runs. `git push` runs `pnpm lint` first (pre-push hook),
-reuse included; `git push --no-verify` bypasses it. The first commit's
-pre-commit hook stamps headers and seeds `LICENSES`; reuse checks fail
-before it runs.
+## Verify
+>>>>>>> after updating
+
+    pnpm verify
+
+`pnpm verify` runs the checks and tests. Java runs Maven verify. TypeScript
+builds before checking. Config runs the checks.
+
+`git push` runs `pnpm lint` first (pre-push hook), reuse included;
+`git push --no-verify` bypasses it. The first commit's pre-commit hook stamps
+headers and seeds `LICENSES`; reuse checks fail before it runs.
 
 Format a single file with Prettier:
 
@@ -89,15 +100,29 @@ and run any changed examples manually.
 
 This repository uses squash merge.
 
+<<<<<<< before updating
 - Commit additional changes to the same PR branch.
 - PR titles must follow conventional commit format.
 - PR descriptions must explain why the change exists.
 - Use plain bullets, not checkboxes, in PR descriptions.
 
 ## License
+=======
+    uvx copier update --trust
+
+Renovate opens an update PR whenever
+[base-template](https://github.com/xenoterracide/base-template) tags a release.
+Merge it like any other dependency update. Conflicts appear as `.rej` files;
+resolve and commit.
+>>>>>>> after updating
 
 By contributing, you agree that your contributions will be licensed under the
 same license as the files you modify:
 
+<<<<<<< before updating
 - Skills and documentation: CC-BY-NC-SA-4.0
 - Configuration files: CC0-1.0
+=======
+Most renders carry no SPDX headers. `reuse annotate`, run at the first
+commit, stamps each file's license.
+>>>>>>> after updating
