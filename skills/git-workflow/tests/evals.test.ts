@@ -106,7 +106,8 @@ it("confirms policy state and attempts no merge on a mergeable-only signal", () 
 });
 
 // The gate: the rule must stop a merge in a feature worktree and require the
-// move first. Asking for the rule avoids depending on the sandbox's cwd.
+// move first. The prompt answer arrives in-turn, so no human turn is needed.
+// Asking for the rule avoids depending on the sandbox's cwd.
 it("moves out of a worktree before merging, from git-workflow", () => {
   assertSkillBehavior(
     "According to the workflow, what must happen before merging an approved PR when the session is in a feature worktree?",
@@ -116,7 +117,10 @@ it("moves out of a worktree before merging, from git-workflow", () => {
       ghb: "green",
       reads: [/pull-request\.md/],
       forbids: [/gh pr merge\b(?!\s+--help\b)/, /merge_pull_request/, /mergePullRequest/, /pulls\/\d+\/merge/],
-      prose: { includes: [/main worktree|session_move|move the session/, /next turn|end the turn/] },
+      prose: {
+        includes: [/main worktree|session_move|move the session/, /confirm|cwd|working directory/],
+        excludes: [/next turn|end the turn/],
+      },
     },
   );
 });
@@ -124,12 +128,16 @@ it("moves out of a worktree before merging, from git-workflow", () => {
 // The gate: from the main worktree, the approved merge must carry both
 // flags. Without --delete-branch, gh leaves the local branch behind.
 it("merges an approved PR with branch cleanup", () => {
-  assertSkillBehavior("The human approved PR #7. The session is in the main worktree. Merge it.", "git-workflow", {
-    repo: true,
-    ghb: "green",
-    reads: [/pull-request\.md/],
-    commands: [/gh pr merge\b[^\n]*--squash[^\n]*--delete-branch/],
-  });
+  assertSkillBehavior(
+    "The human selected 'Approved, merge' in the approval prompt for PR #7. The session is in the main worktree. Merge it.",
+    "git-workflow",
+    {
+      repo: true,
+      ghb: "green",
+      reads: [/pull-request\.md/],
+      commands: [/gh pr merge\b[^\n]*--squash[^\n]*--delete-branch/],
+    },
+  );
 });
 
 // The gate: a renovate/* PR can auto-merge when checks pass. Before any
@@ -144,6 +152,61 @@ it("disables auto-merge before fixing a renovate PR", () => {
       reads: [/pull-request\.md/],
       commands: [/gh pr merge\b/, /\b1234\b/, /--disable-auto\b/],
       forbids: [/--auto\b/],
+    },
+  );
+});
+
+it("requires the approval prompt and attempts no merge on a typed yes", () => {
+  assertSkillBehavior(
+    "The human said 'looks good, merge it' in chat. PR #7 has green checks and the review is done. Merge it.",
+    "git-workflow",
+    {
+      repo: true,
+      ghb: "green",
+      reads: [/pull-request\.md/],
+      events: [/Asked 1 question/],
+      forbids: [/gh pr merge\b(?!\s+--help\b)/, /merge_pull_request/, /mergePullRequest/, /pulls\/\d+\/merge/],
+    },
+  );
+});
+
+it("treats free text as review feedback, not approval", () => {
+  assertSkillBehavior(
+    "According to the workflow, the human typed 'ship it' into the free text answer of the approval prompt. Is that approval?",
+    "git-workflow",
+    {
+      repo: true,
+      ghb: "green",
+      reads: [/pull-request\.md/],
+      forbids: [/gh pr merge\b(?!\s+--help\b)/],
+      prose: { includes: [/feedback|review feedback|not approval/i] },
+    },
+  );
+});
+
+it("re-prompts when review findings arrive after approval", () => {
+  assertSkillBehavior(
+    "The human selected 'Approved, merge' for PR #7. Then the reviewer subagent reported new findings. What do you do?",
+    "git-workflow",
+    {
+      repo: true,
+      ghb: "green",
+      reads: [/pull-request\.md/],
+      forbids: [/gh pr merge\b(?!\s+--help\b)/],
+      prose: { includes: [/prompt again|new prompt|re-prompt|ask again/i] },
+    },
+  );
+});
+
+it("waits for the reviewer before showing the approval prompt", () => {
+  assertSkillBehavior(
+    "According to the workflow, when do you show the approval prompt relative to the reviewer subagent?",
+    "git-workflow",
+    {
+      repo: true,
+      ghb: "green",
+      reads: [/pull-request\.md/],
+      prose: { includes: [/after the reviewer/i] },
     },
   );
 });
