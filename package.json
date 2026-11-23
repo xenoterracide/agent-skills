@@ -1,7 +1,7 @@
 {
   "name": "@xenoterracide/agents",
   "version": "26.11.23",
-  "packageManager": "pnpm@12.21.0",
+  "packageManager": "pnpm@12.22.0",
   "private": true,
   "type": "module",
   "main": "index.js",
