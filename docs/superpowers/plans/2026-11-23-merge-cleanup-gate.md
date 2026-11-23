@@ -22,14 +22,15 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 - Regenerate the catalog with `pnpm skills:catalog`.
 - No text assertions against skill files. Test the consuming agent.
 - SPDX headers on new Markdown files. Prettier on changed files via hook.
+- Run evals with `OPENCODE_SESSION_ID` unset. Otherwise the sandbox agent
+  reads the host worktree and the plan.
 
 ## Review Focus
 
-- Approval turn in a feature worktree: agent states it must move out before merging. Bootstrap eval.
-- Approved merge command carries both `--squash` and `--delete-branch`. Both evals.
+- Worktree rule question: no merge route, move-out prose. Both skills.
+- Main-worktree turn: `gh pr merge <PR> --squash --delete-branch`. `git-workflow` case.
 - Approval with no repo: no merge attempted. Existing `git-workflow` cases.
-- `git-workflow` still routes merge prompts to `pull-request.md`. New `git-workflow` eval.
-- No raw merge that leaves the local branch behind. Command assertion in both evals.
+- `git-workflow` routes merge prompts to `pull-request.md`. Main-worktree case.
 
 ---
 
@@ -42,38 +43,42 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 **Interfaces:**
 
-- Consumes: `assertSkillBehavior(prompt, skill, options)` from `scripts/eval-helpers.ts`. `options.repo`, `options.ghb`, `options.reads`, `options.commands`, `options.prose`.
-- Produces: two named eval cases for the gate.
+- Consumes: `assertSkillBehavior(prompt, skill, options)` from `scripts/eval-helpers.ts`.
+- Produces: three cases — a worktree-rule case per skill and one main-worktree merge case.
 
-- [ ] **Step 1: Add the `git-workflow` approved-merge case**
+- [x] **Step 1: Add the worktree-stop cases**
 
-Append a case named `merges an approved PR with branch cleanup`. Prompt:
-`The human approved PR #7. The session is in a feature worktree. Merge it.`
-Options: `repo: true`, `ghb: "green"`, `reads: [/pull-request\.md/]`,
-`commands: [/gh pr merge\b[^\n]*--squash[^\n]*--delete-branch/]`,
-`prose: { includes: [/main worktree|session_move/] }`.
+In `skills/git-workflow/tests/evals.test.ts`, add
+`moves out of a worktree before merging, from git-workflow`. Prompt asks
+what must happen before an approved merge when the session is in a feature
+worktree. Options: `repo: true`, `ghb: "green"`, `reads: [/pull-request\.md/]`,
+the full merge-route `forbids`, and move-out prose.
 
-- [ ] **Step 2: Add the bootstrap approved-merge case**
+In `skills/using-xenoterracide-agent-skills/tests/evals.test.ts`, add the
+matching `moves out of a worktree before merging, from the bootstrap` case
+without `reads`. A question keeps the case independent of the sandbox cwd.
 
-Append a case named `merges an approved PR with branch cleanup from the bootstrap`.
-Prompt: `Which skill should I use? The human approved PR #7. The session is in a feature worktree. Merge it.`
-Skill: `using-xenoterracide-agent-skills`. Options: `repo: true`,
-`ghb: "green"`, `commands: [/gh pr merge\b[^\n]*--squash[^\n]*--delete-branch/]`,
-`prose: { includes: [/main worktree|session_move/] }`.
+- [x] **Step 2: Add the main-worktree merge cases**
 
-- [ ] **Step 3: Run both cases and watch them fail**
+Add `merges an approved PR with branch cleanup` in
+`skills/git-workflow/tests/evals.test.ts`. Prompt says the session is in
+the main worktree. Options: `repo: true`, `ghb: "green"`,
+`reads: [/pull-request\.md/]`, and
+`commands: [/gh pr merge\b[^\n]*--squash[^\n]*--delete-branch/]`. A "merge
+it" prompt routes to `git-workflow`, so the command belongs in that case.
+
+- [x] **Step 3: Run the cases and watch the bootstrap gate fail**
 
 ```bash
-EVAL_ITERATIONS=1 EVAL_MODEL=opencode/big-pickle pnpm exec vitest run skills/git-workflow/tests/evals.test.ts skills/using-xenoterracide-agent-skills/tests/evals.test.ts -t "approved PR with branch cleanup" --reporter=verbose
+env -u OPENCODE_SESSION_ID EVAL_ITERATIONS=1 EVAL_MODEL=opencode/big-pickle pnpm exec vitest run skills/git-workflow/tests/evals.test.ts skills/using-xenoterracide-agent-skills/tests/evals.test.ts -t "worktree before merging|approved PR with branch cleanup" --reporter=verbose
 ```
 
-Expected: FAIL. The command assertion misses `--delete-branch`; the prose
-assertion misses the move-out statement.
+Expected before the gate: the bootstrap worktree case fails on missing
+move-out prose. The `git-workflow` case already read the reference and passed.
 
-- [ ] **Step 4: Commit the failing tests**
+- [x] **Step 4: Commit the failing tests**
 
 ```bash
-git add skills/git-workflow/tests/evals.test.ts skills/using-xenoterracide-agent-skills/tests/evals.test.ts
 git commit -m "test: gate the approved merge on branch cleanup"
 ```
 
@@ -81,8 +86,8 @@ git commit -m "test: gate the approved merge on branch cleanup"
 
 **Files:**
 
-- Modify: `skills/git-workflow/SKILL.md:26-33`
-- Modify: `skills/using-xenoterracide-agent-skills/SKILL.md:32-37`
+- Modify: `skills/git-workflow/SKILL.md`
+- Modify: `skills/using-xenoterracide-agent-skills/SKILL.md`
 - Modify: `.kimi-plugin/plugin.json`
 - Modify: `package.json`
 - Modify: `skills/index.json` (generated)
@@ -92,35 +97,41 @@ git commit -m "test: gate the approved merge on branch cleanup"
 - Consumes: cases from Task 1.
 - Produces: the gate that makes the cases pass.
 
-- [ ] **Step 1: Add the merge row to the routing table**
+- [x] **Step 1: Add the merge row to the routing table**
 
 In `skills/git-workflow/SKILL.md`, add a row to the table under "Read the
 reference that matches the task before starting": task `Merge an approved PR`,
 read `references/pull-request.md`.
 
-- [ ] **Step 2: Add the bootstrap gate**
+- [x] **Step 2: Add the bootstrap gate**
 
 In `skills/using-xenoterracide-agent-skills/SKILL.md`, under `## Merging`,
-after the consent paragraph, add: if the session runs in a feature worktree,
-move it out first with `session_move`. Merge from the main worktree with
-`gh pr merge <PR> --squash --delete-branch`. Point to `git-workflow` for the
-full rule. Keep it under 20 words per instruction.
+after the consent paragraph: in a feature worktree, move out with
+`session_move`. The move lands next turn. End the turn. Merge from the main
+worktree next turn with `gh pr merge <PR> --squash --delete-branch`. Point to
+`git-workflow` for the full rule.
 
-- [ ] **Step 3: Run the two cases and watch them pass**
+- [x] **Step 3: Run the cases and watch them pass**
 
 ```bash
-EVAL_ITERATIONS=1 EVAL_MODEL=opencode/big-pickle pnpm exec vitest run skills/git-workflow/tests/evals.test.ts skills/using-xenoterracide-agent-skills/tests/evals.test.ts -t "approved PR with branch cleanup" --reporter=verbose
+env -u OPENCODE_SESSION_ID EVAL_ITERATIONS=1 EVAL_MODEL=opencode/big-pickle pnpm exec vitest run skills/git-workflow/tests/evals.test.ts skills/using-xenoterracide-agent-skills/tests/evals.test.ts -t "worktree before merging|approved PR with branch cleanup" --reporter=verbose
 ```
 
 Expected: PASS.
 
-- [ ] **Step 4: Bump the version and regenerate the catalog**
+- [x] **Step 4: Bump the version and regenerate the catalog**
 
 Set both version fields to `26.11.24`. Run `pnpm skills:catalog`.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
-git add skills/git-workflow/SKILL.md skills/using-xenoterracide-agent-skills/SKILL.md .kimi-plugin/plugin.json package.json skills/index.json
 git commit -m "feat: gate approved merges on worktree cleanup"
 ```
+
+### Task 3: Review fixes
+
+- [x] Add the turn boundary to the bootstrap gate.
+- [x] Split the contradictory same-turn worktree merge cases.
+- [x] Assert both cleanup flags in a main-worktree turn.
+- [x] Forbid every merge route in the worktree cases.

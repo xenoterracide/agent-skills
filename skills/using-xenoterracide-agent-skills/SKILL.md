@@ -38,8 +38,10 @@ with its base is safe routine sync. The `git-workflow` skill carries the full
 rule.
 
 On approval, do not merge from a feature worktree. If the session runs in one,
-move it out with `session_move` first. Merge from the main worktree with
-`gh pr merge <PR> --squash --delete-branch`.
+move it out with `session_move`. The move lands next turn. End the turn; do not
+merge in it. Then merge from the main worktree with
+`gh pr merge <PR> --squash --delete-branch`. Follow `git-workflow` for the full
+rule.
 
 ## Plans and Execution
 

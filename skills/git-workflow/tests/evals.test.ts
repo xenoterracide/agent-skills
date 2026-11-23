@@ -105,16 +105,36 @@ it("confirms policy state and attempts no merge on a mergeable-only signal", () 
   );
 });
 
-// The gate: an approved merge must read the merge procedure, move out of
-// the feature worktree, and pass --delete-branch. Without it, gh skips
-// local cleanup and the operator removes the worktree and branch by hand.
+// The gate: the rule must stop a merge in a feature worktree and require the
+// move first. Asking for the rule avoids depending on the sandbox's cwd.
+it("moves out of a worktree before merging, from git-workflow", () => {
+  assertSkillBehavior(
+    "According to the workflow, what must happen before merging an approved PR when the session is in a feature worktree?",
+    "git-workflow",
+    {
+      repo: true,
+      ghb: "green",
+      reads: [/pull-request\.md/],
+      forbids: [
+        /gh pr merge\s+\d/,
+        /gh pr merge\b[^\n]*--(?:squash|merge|rebase|auto|admin)\b/,
+        /merge_pull_request/,
+        /mergePullRequest/,
+        /pulls\/\d+\/merge/,
+      ],
+      prose: { includes: [/main worktree|session_move|move the session/] },
+    },
+  );
+});
+
+// The gate: from the main worktree, the approved merge must carry both
+// flags. Without --delete-branch, gh leaves the local branch behind.
 it("merges an approved PR with branch cleanup", () => {
-  assertSkillBehavior("The human approved PR #7. The session is in a feature worktree. Merge it.", "git-workflow", {
+  assertSkillBehavior("The human approved PR #7. The session is in the main worktree. Merge it.", "git-workflow", {
     repo: true,
     ghb: "green",
     reads: [/pull-request\.md/],
     commands: [/gh pr merge\b[^\n]*--squash[^\n]*--delete-branch/],
-    prose: { includes: [/main worktree|session_move/] },
   });
 });
 

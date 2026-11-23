@@ -39,8 +39,8 @@ Causes:
 - No new skill.
 - No hook or wrapper that executes merges.
 - No change to the consent rule or to `pull-request.md`.
-- No text-grep tests of skill files. `writing-good-tests` rejects change
-  detectors.
+- No text-grep tests of skill files. Superpowers'
+  `test-driven-development/writing-good-tests` rejects change detectors.
 
 ## Constraints
 
@@ -55,20 +55,24 @@ Causes:
    depends on `git-workflow` winning the trigger at the approval turn.
 2. Add the gate to the injected bootstrap, plus the routing row. Chosen:
    the bootstrap is in context in every fresh session.
-3. Option 2 plus two behavioral evals. Chosen: adds regression proof at the
+3. Option 2 plus behavioral evals. Chosen: adds regression proof at the
    point of failure.
 
 ## Design
 
 The bootstrap "Merging" section gains one conditional keyed to the observed
-worktree: if the session runs in a feature worktree, move it out first. Then
-merge from the main worktree with `--squash --delete-branch`. It points to
+worktree. In a feature worktree, move the session out with `session_move`.
+The move lands next turn, so end the turn. Merge from the main worktree in
+the next turn with `gh pr merge <PR> --squash --delete-branch`. Point to
 `git-workflow` for the full rule.
 
 The `git-workflow` routing table gains a merge row pointing to
 `references/pull-request.md`.
 
-Two eval cases use an approved prompt. The `git-workflow` case requires the
-reference read and the merge command. The bootstrap case requires the merge
-command and a move-out statement. Both run against the sandbox `gh` stub,
-which logs commands without reaching the network.
+Both skills get a case that asks for the worktree rule. Those cases assert
+no merge route and move-out prose. One `git-workflow` case gives approval
+from the main worktree and asserts the reference read and the merge command
+with both flags. The command needs one home: a "merge it" prompt routes to
+`git-workflow`, not to the bootstrap skill. All cases run against the
+sandbox `gh` stub, which logs commands without reaching the network. Asking
+for the rule keeps the worktree cases independent of the sandbox's cwd.
