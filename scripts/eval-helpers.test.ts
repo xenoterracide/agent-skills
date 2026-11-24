@@ -208,6 +208,23 @@ describe("assertSkillBehavior commands", () => {
   });
 });
 
+describe("events", () => {
+  it("asserts a successful tool event", () => {
+    const run = (): string => '→ Skill "git-workflow"\n✓ Asked 1 question';
+    assertPass("git-workflow", { run, events: [/✓ Asked 1 question/] });
+  });
+
+  it("asserts a failed tool event when the pattern names it", () => {
+    const run = (): string => '→ Skill "git-workflow"\n✗ Asked 1 question failed';
+    assertPass("git-workflow", { run, events: [/✗ Asked 1 question failed/] });
+  });
+
+  it("fails when the tool event is missing", () => {
+    const run = (): string => '→ Skill "git-workflow"\n✓ Asked 1 question';
+    assertFail("git-workflow", { run, events: [/gh pr ready/] }, /expected event matching/);
+  });
+});
+
 describe("assertSkillBehavior prose", () => {
   const run = (): string => '→ Skill "hemingway"\nUse the rendered link.';
 

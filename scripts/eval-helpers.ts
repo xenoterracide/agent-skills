@@ -35,6 +35,7 @@ export interface BehaviorOptions extends AssertOptions {
   reads?: (string | RegExp)[];
   forbids?: (string | RegExp)[];
   commands?: (string | RegExp)[];
+  events?: (string | RegExp)[];
   /** Skills the primary skill must load alongside itself. */
   companions?: string[];
   /** Patterns over agent prose. Tool lines are excluded. */
@@ -62,6 +63,10 @@ interface CommandCheck extends CheckContext {
   commands: (string | RegExp)[];
 }
 
+interface EventCheck extends CheckContext {
+  events: (string | RegExp)[];
+}
+
 interface ProseCheck extends CheckContext {
   prose: { includes: (string | RegExp)[]; excludes: (string | RegExp)[] };
 }
@@ -75,6 +80,7 @@ interface Behavior extends AssertOptions {
   reads: (string | RegExp)[];
   forbids: (string | RegExp)[];
   commands: (string | RegExp)[];
+  events: (string | RegExp)[];
   companions: string[];
   prose: { includes: (string | RegExp)[]; excludes: (string | RegExp)[] };
 }
@@ -93,10 +99,11 @@ function normalizeBehavior(options: BehaviorOptions): Behavior {
     iterations: options.iterations ?? ITERATIONS,
     run: options.run ?? runPrompt,
     first: options.first ?? false,
-    loadEvent: options.loadEvent ?? true,
+    loadEvent: options.loadEvent !== false,
     reads: options.reads ?? [],
     forbids: options.forbids ?? [],
     commands: options.commands ?? [],
+    events: options.events ?? [],
     companions: options.companions ?? [],
     prose: normalizeProse(options),
     repo: options.repo,
@@ -154,6 +161,13 @@ function assertCommands({ label, output, forbids, commands }: CommandCheck): voi
   }
 }
 
+function assertEvents({ label, output, events }: EventCheck): void {
+  const lines = detectCommands(output).join("\n");
+  for (const pattern of events) {
+    assert.ok(lineMatches(pattern, lines), `${label}: expected event matching ${String(pattern)}, got:\n${lines}`);
+  }
+}
+
 function assertProse({ label, output, prose }: ProseCheck): void {
   const lines = detectProse(output);
 
@@ -169,15 +183,22 @@ function assertProse({ label, output, prose }: ProseCheck): void {
 }
 
 export function assertSkillBehavior(prompt: string, skill: string, options: BehaviorOptions = {}): void {
-  const { model, iterations, run, first, loadEvent, reads, forbids, commands, companions, prose, fixture, repo, ghb } =
-    normalizeBehavior(options);
-  for (let i = 0; i < iterations; i++) {
-    const output = run(prompt, { model, fixture, repo, ghb });
-    const label = `run ${String(i + 1)}/${String(iterations)}`;
-    assertLoaded({ label, output, skill, loadEvent, first, companions });
-    assertReads({ label, output, reads });
-    assertCommands({ label, output, forbids, commands });
-    assertProse({ label, output, prose });
+  const behavior = normalizeBehavior(options);
+  for (let i = 0; i < behavior.iterations; i++) {
+    const output = behavior.run(prompt, behavior);
+    const label = `run ${String(i + 1)}/${String(behavior.iterations)}`;
+    assertLoaded({
+      label,
+      output,
+      skill,
+      loadEvent: behavior.loadEvent,
+      first: behavior.first,
+      companions: behavior.companions,
+    });
+    assertReads({ label, output, reads: behavior.reads });
+    assertCommands({ label, output, forbids: behavior.forbids, commands: behavior.commands });
+    assertEvents({ label, output, events: behavior.events });
+    assertProse({ label, output, prose: behavior.prose });
   }
 }
 

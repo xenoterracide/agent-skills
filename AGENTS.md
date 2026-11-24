@@ -214,9 +214,10 @@ in `using-xenoterracide-agent-skills`.
 - **Lockfile integrity**: Use `pnpm install --frozen-lockfile` and `uv sync --frozen`.
 - **No force push**: Repository rules block force pushes.
 - **Confirmed merges only**: Agents never merge the PR on their own
-  initiative, by any route. The merge waits for the human's explicit yes; an
-  instruction from before the human read the PR is not confirmation. Syncing
-  a topic branch with `ghb pr sync` is safe routine sync.
+  initiative, by any route. Require the `Approved, merge` choice in the
+  approval prompt. Without a question tool, require that exact choice in text.
+  An earlier instruction is not confirmation. Syncing a topic branch with
+  `ghb pr sync` is safe routine sync.
 - **No secrets**: This repository contains no credentials or private
   configuration.
 
