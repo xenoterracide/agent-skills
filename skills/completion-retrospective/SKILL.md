@@ -17,8 +17,9 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 # Completion Retrospective
 
-Read `.config/agent/project.yaml` before tracker work. Use `jira-workflow` for
-issue operations and `hemingway` for prose.
+Read `.config/agent/project.yaml` before tracker work. When it is missing, stop
+and name the path. Use `jira-workflow` for issue operations and `hemingway` for
+prose.
 
 ## Required Companion Skills
 
@@ -33,9 +34,10 @@ ticket just moved to done.
 1. Read `.config/agent/project.yaml`. Read the ticket. Confirm its status
    matches `tracker.statuses.done`. Stop when it does not. If no key is
    available and no ticket was just moved, stop and name the missing key.
-2. Review the session before the move to done, including subagent work. Look for
-   redundant reads, extra tool calls, verbose command output, repeated
-   commands, long prose, and slow checks. Exclude this retrospective's own calls.
+2. Review the session before the move to done, including subagent work. When no
+   session history is available, report no findings. Look for redundant reads,
+   extra tool calls, verbose command output, repeated commands, long prose, and
+   slow checks. Exclude this retrospective's own calls.
 3. Write one finding per waste. Each finding names the skill, command, or file
    to change and the expected saving in tokens or steps. Findings without a
    named target become observations.
@@ -48,8 +50,9 @@ ticket just moved to done.
    list containing only `<tracker.labels.project_prefix><repo>`. Confirm the
    issue lands in `tracker.statuses.captured`. Use the `jira-workflow` move rule
    when it does not.
-6. Add one comment to the completed ticket when observations exist. Use a
-   separate comment call. Include findings skipped as duplicates.
+6. Add one comment to the completed ticket when observations exist.
+   Treat findings skipped as duplicates as observations. Use a separate
+   comment call with those findings.
    Skip the comment when no observations exist.
 7. Report the created keys. Report the comment ID only when a comment was
    posted. Report "no findings" when both lists are empty. Do not change the
