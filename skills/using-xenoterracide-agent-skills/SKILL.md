@@ -33,10 +33,10 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 Never merge the PR on your own initiative, in any repository. Show
 `[repo#NNN](url)` in a chat message before asking for approval. Question prompts
-do not render clickable links. Put no link in the question text. An instruction
-from before the human read the PR is not confirmation. Syncing a topic branch
-with its base is safe routine sync. The `git-workflow` skill carries the full
-rule.
+differ by UI. The TUI shows plain text. The web UI auto-links URLs. Put no link
+in the question text. An instruction from before the human read the PR is not
+confirmation. Syncing a topic branch with its base is safe routine sync. The
+`git-workflow` skill carries the full rule.
 
 Approval comes from the "Approved, merge" choice, or that exact choice in text
 when no question tool exists. Show the prompt after checks, self-review, and

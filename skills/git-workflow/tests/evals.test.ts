@@ -215,15 +215,20 @@ it("waits for the reviewer before showing the approval prompt", () => {
 
 it("keeps the PR link in chat, out of the approval question", () => {
   assertSkillBehavior(
-    "Use the git-workflow skill to answer: what PR link format belongs in the approval question text?",
+    "Use the git-workflow skill to answer: why does the approval question carry no PR link, and where does the link go?",
     "git-workflow",
     {
       repo: true,
       ghb: "green",
       reads: [/pull-request\.md/],
       prose: {
-        includes: [/chat message/i, /question text/i, /no link|without a link|plain text/i],
-        excludes: [/bare URL in the question|URL in the question text/i],
+        includes: [
+          /chat message/i,
+          /question text|approval question/i,
+          /no(?: PR)? link|without a link|plain text/i,
+          /TUI|terminal/i,
+          /web UI|browser/i,
+        ],
       },
     },
   );

@@ -140,9 +140,10 @@ merge and wait. Never use `--admin` unless the human asks.
 #### Approval Prompt
 
 Ask only after the full check run and diff review. Ask after the reviewer
-subagent reports and its findings are fixed. Question prompts do not render
-clickable links. Post `[repo#NNN](url)` in a chat message before the question.
-Put no link in the question text.
+subagent reports and its findings are fixed. Question prompts differ by UI.
+The TUI shows plain text. The web UI auto-links URLs. Post
+`[repo#NNN](url)` in a chat message before the question. Put no link in the
+question text.
 
 Ask with three choices:
 

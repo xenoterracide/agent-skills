@@ -62,14 +62,19 @@ it("requires the approval prompt, from the bootstrap", () => {
 
 it("keeps the PR link in chat, out of the approval question, from the bootstrap", () => {
   assertSkillBehavior(
-    "Which skill should I use? According to the workflow, where does the PR link go relative to the approval question?",
+    "Which skill should I use? According to the bootstrap's Merging section, why does the approval question carry no PR link, and where does the link go?",
     "using-xenoterracide-agent-skills",
     {
       repo: true,
       ghb: "green",
       prose: {
-        includes: [/chat message/i, /question text/i, /no link|without a link|plain text/i],
-        excludes: [/bare URL in the question|URL in the question text/i],
+        includes: [
+          /chat message/i,
+          /question text|approval question/i,
+          /no(?: PR)? link|without a link|plain text/i,
+          /TUI|terminal/i,
+          /web UI|browser/i,
+        ],
       },
     },
   );
