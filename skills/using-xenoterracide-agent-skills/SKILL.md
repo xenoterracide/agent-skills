@@ -32,10 +32,11 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 ## Merging
 
 Never merge the PR on your own initiative, in any repository. Show
-`[repo#NNN](url)` in a chat message before asking for approval. Keep the link
-out of the question text. An instruction from before the human read the PR is
-not confirmation. Syncing a topic branch with its base is safe routine sync.
-The `git-workflow` skill carries the full rule.
+`[repo#NNN](url)` in a chat message before asking for approval. Use the bare
+URL in the question text. Markdown link syntax renders as text. An instruction
+from before the human read the PR is not confirmation. Syncing a topic branch
+with its base is safe routine sync. The `git-workflow` skill carries the full
+rule.
 
 Approval comes only from the "Approved, merge" choice in the question prompt.
 Show that prompt after checks, self-review, and reviewer findings are done.

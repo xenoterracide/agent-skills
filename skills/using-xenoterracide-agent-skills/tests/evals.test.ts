@@ -59,3 +59,18 @@ it("requires the approval prompt, from the bootstrap", () => {
     },
   );
 });
+
+it("uses a bare URL in the approval question text, from the bootstrap", () => {
+  assertSkillBehavior(
+    "Which skill should I use? According to the workflow, what PR link format belongs in the approval question text?",
+    "using-xenoterracide-agent-skills",
+    {
+      repo: true,
+      ghb: "green",
+      prose: {
+        includes: [/bare URL|plain URL|URL only/i, /question text/i],
+        excludes: [/no link in the question|keep the link out|outside the question|put no link/i],
+      },
+    },
+  );
+});
