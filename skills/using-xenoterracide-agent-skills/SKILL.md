@@ -32,14 +32,21 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 ## Merging
 
 Never merge the PR on your own initiative, in any repository. Show
-`[repo#NNN](url)`, then wait for the human's explicit yes. An instruction
-from before the human read the PR is not confirmation. Syncing a topic branch
-with its base is safe routine sync. The `git-workflow` skill carries the full
-rule.
+`[repo#NNN](url)` in a chat message before asking for approval. Question prompts
+differ by UI. The TUI shows plain text. The web UI auto-links URLs. Put no link
+in the question text. An instruction from before the human read the PR is not
+confirmation. Syncing a topic branch with its base is safe routine sync. The
+`git-workflow` skill carries the full rule.
+
+Approval comes from the "Approved, merge" choice, or that exact choice in text
+when no question tool exists. Show the prompt after checks, self-review, and
+reviewer findings are done. "Review comments submitted" routes to review-comment
+handling. "Hold" stops. Free text is feedback, not approval. New findings, a
+commit, a push, or a failed check void the answer. Ask again.
 
 On approval, do not merge from a feature worktree. If the session runs in one,
-move it out with `session_move`. The move lands next turn. End the turn. Do not
-merge in it. Then merge from the main worktree with
+move it out with `session_move`. Wait for the harness to confirm the
+main-worktree cwd. Continue in that turn. Merge from the main worktree with
 `gh pr merge <PR> --squash --delete-branch`.
 
 ## Plans and Execution
@@ -56,7 +63,7 @@ once the first step is pushed. Do not ask. Settle the fast checks with
 `ghb pr verify`. Review the diff only after they pass. Mark the PR ready
 with `gh pr ready`, then settle the full set with `ghb pr verify` again.
 Fix failures at any step. Always notify the human with `[repo#NNN](url)`.
-The merge still waits for the human's yes.
+The merge waits for the approval prompt's `Approved, merge` choice.
 
 ## Writing Style
 
@@ -89,10 +96,9 @@ carries the full rule.
 
 Where the harness has a session move, move the session into the new worktree.
 Call the move by itself, with the worktree directory — `session_move` in
-OpenCode. The move lands at the next safe boundary, so run work that needs the
-new directory after the current turn. Name the session after the worktree,
-with `session_rename` in OpenCode. Tell the human the worktree directory. They
-resume the session, not the directory.
+OpenCode. Wait for the harness to confirm the new cwd, then continue in that
+turn. Name the session after the worktree, with `session_rename` in OpenCode.
+Tell the human the worktree directory. They resume the session, not the directory.
 
 ## Read Project Documentation First
 
