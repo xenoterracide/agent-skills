@@ -44,7 +44,8 @@ ticket just moved to done.
 4. Read open issues in `tracker.project`. Treat statuses other than
    `tracker.statuses.done` and `tracker.statuses.dropped` as open. Treat a
    finding as a duplicate when an open issue names the same target and the
-   same change, whatever the wording or count. Drop matches.
+   same change, whatever the wording or count. Drop matches from task
+   creation, but keep them as observations.
 5. Create a `Task` issue in `tracker.project` for each actionable finding.
    Use `Cut <named target>: <saving>` as the summary. Set the label to the full
    list containing only `<tracker.labels.project_prefix><repo>`. Confirm the
@@ -52,7 +53,7 @@ ticket just moved to done.
    when it does not.
 6. Add one comment to the completed ticket when observations exist.
    Treat findings skipped as duplicates as observations. Use a separate
-   comment call with those findings.
+   comment call with those observations.
    Skip the comment when no observations exist.
 7. Report the created keys. Report the comment ID only when a comment was
    posted. Report "no findings" when both lists are empty. Do not change the
