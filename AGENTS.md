@@ -22,7 +22,6 @@ directory doubles as an OpenCode-compatible HTTP skill catalog.
 
 ## Source of Truth
 
-<<<<<<< before updating
 | For                                  | See                              |
 | ------------------------------------ | -------------------------------- |
 | Install, update, usage, contribution | `README.md` (read this first)    |
@@ -220,14 +219,6 @@ in `using-xenoterracide-agent-skills`.
   a topic branch with `ghb pr sync` is safe routine sync.
 - **No secrets**: This repository contains no credentials or private
   configuration.
-=======
-- Template: `copier.yml` in [xenoterracide/base-template](https://github.com/xenoterracide/base-template)
-- Answers: `.copier-answers.yml` in this repo
-- Agent project config: `.config/agent/project.yaml` — tracker facts for agent workflows.
-- Updates: `uvx copier update --trust` refreshes from template
-- Hooks heal the toolchain: `.envrc`, `contribute`, and the post hooks call
-  `.config/git/hooks/heal.sh`. A failed heal never breaks a checkout.
->>>>>>> after updating
 
 ## License
 
