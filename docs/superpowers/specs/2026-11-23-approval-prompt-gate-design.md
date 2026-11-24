@@ -63,12 +63,12 @@ and expires when the state changes.
 ## Design
 
 The bootstrap "Merging" section gains a short gate. After review completes,
-post `[repo#NNN](url)` in chat and put the bare PR URL in the question text.
-Call the question tool with three choices: "Approved, merge", "Review comments
-submitted", and "Hold". The tool's free text answer is feedback. Only the first
-choice, or its text fallback, authorizes the merge. The answer applies to the
-state at prompt time. New findings, a commit, a push, or a failed check require
-a new prompt.
+post `[repo#NNN](url)` in chat. Question prompts do not render clickable links,
+so the question carries no link. Call the question tool with three choices:
+"Approved, merge", "Review comments submitted", and "Hold". The tool's free
+text answer is feedback. Only the first choice, or its text fallback,
+authorizes the merge. The answer applies to the state at prompt time. New
+findings, a commit, a push, or a failed check require a new prompt.
 
 The turn-boundary fix removes the pause from both the Merging paragraph and
 the Working Directory section. The question answer arrives inside the turn.

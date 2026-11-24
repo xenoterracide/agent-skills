@@ -140,9 +140,9 @@ merge and wait. Never use `--admin` unless the human asks.
 #### Approval Prompt
 
 Ask only after the full check run and diff review. Ask after the reviewer
-subagent reports and its findings are fixed. Markdown link syntax renders as
-text in question prompts. Post `[repo#NNN](url)` in a chat message before the
-question. Use the bare URL in the question text.
+subagent reports and its findings are fixed. Question prompts do not render
+clickable links. Post `[repo#NNN](url)` in a chat message before the question.
+Put no link in the question text.
 
 Ask with three choices:
 
