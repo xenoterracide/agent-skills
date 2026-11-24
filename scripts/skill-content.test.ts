@@ -181,3 +181,38 @@ it("instructs agents to emit a rendered PR link", () => {
   expect(text).toMatch(/rendered link/i);
   expect(text).toMatch(/no\s+backticks/i);
 });
+
+it("keeps tracker facts out of completion-retrospective", () => {
+  const text = readFileSync("skills/completion-retrospective/SKILL.md", "utf8");
+
+  for (const value of [
+    ".config/agent/project.yaml",
+    "tracker.statuses.done",
+    "tracker.statuses.captured",
+    "Exclude this retrospective's own calls",
+    "same target",
+    "Cut <named target>: <saving>",
+    "Skip the comment when no observations exist",
+    "name the missing key",
+  ]) {
+    expect(text).toContain(value);
+  }
+  for (const value of [
+    "XTC",
+    "board: 3",
+    "fc5ce4e3-4638-4a37-9aaf-1a2591482c2e",
+    "`Done`",
+    "`Open`",
+    "`To Do`",
+    "`Added to backlog`",
+  ]) {
+    expect(text).not.toContain(value);
+  }
+});
+
+it("runs the retrospective after a done move", () => {
+  const text = readFileSync("skills/jira-workflow/SKILL.md", "utf8");
+
+  expect(text).toContain("completion-retrospective");
+  expect(text).toMatch(/Move to done[\s\S]*?completion-retrospective/);
+});
