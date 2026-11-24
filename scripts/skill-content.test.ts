@@ -181,3 +181,52 @@ it("instructs agents to emit a rendered PR link", () => {
   expect(text).toMatch(/rendered link/i);
   expect(text).toMatch(/no\s+backticks/i);
 });
+
+const RETROSPECTIVE_REQUIRED = [
+  ".config/agent/project.yaml",
+  "tracker.statuses.done",
+  "tracker.statuses.captured",
+  "Exclude this retrospective's own calls",
+  "Treat findings skipped as duplicates as observations",
+  "same target",
+  "Cut <named target>: <saving>",
+  "Skip the comment when no observations exist",
+  "name the missing key",
+];
+
+const RETROSPECTIVE_FORBIDDEN = [
+  "XTC",
+  "board: 3",
+  "fc5ce4e3-4638-4a37-9aaf-1a2591482c2e",
+  "`Done`",
+  "`Open`",
+  "`To Do`",
+  "`Added to backlog`",
+];
+
+it("keeps tracker facts out of completion-retrospective", () => {
+  const text = readFileSync("skills/completion-retrospective/SKILL.md", "utf8");
+
+  for (const value of RETROSPECTIVE_REQUIRED) {
+    expect(text).toContain(value);
+  }
+  for (const value of RETROSPECTIVE_FORBIDDEN) {
+    expect(text).not.toContain(value);
+  }
+});
+
+it("runs the retrospective after a done move", () => {
+  const text = readFileSync("skills/jira-workflow/SKILL.md", "utf8");
+
+  expect(text).toContain("completion-retrospective");
+  expect(text).toMatch(/Move to `?done`?[\s\S]*?completion-retrospective/);
+});
+
+it("pins completion-retrospective discovery", () => {
+  const text = readFileSync("skills/completion-retrospective/SKILL.md", "utf8");
+
+  expect(text).toContain("name: completion-retrospective");
+  expect(text).toMatch(/description:[\s\S]*?Use when[\s\S]*?wasted tokens/);
+  expect(text).toContain("- **`jira-workflow`**");
+  expect(text).toContain("- **`hemingway`**");
+});

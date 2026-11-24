@@ -126,6 +126,8 @@ Rules:
 - Move to `building` when the first work item starts.
 - Move to `reviewing` when the PR opens.
 - Move to `done` after merge and green checks.
+- Run `completion-retrospective` after that move. Do not end the turn until
+  it finishes.
 - Move to `dropped` when dropped. Reopen from `done` or `dropped` into
   `refining` or `captured` as the work requires.
 
