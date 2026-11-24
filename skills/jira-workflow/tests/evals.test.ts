@@ -36,3 +36,10 @@ it("reads the project config before Jira work", () => {
     reads: [".config/agent/project.yaml"],
   });
 });
+
+it("completion retrospective hook follows a Jira done move", () => {
+  assertSkillBehavior("move this Jira issue to Done", "jira-workflow", {
+    fixture: "skills/jira-workflow/tests/fixtures/project-config",
+    companions: ["completion-retrospective"],
+  });
+});
