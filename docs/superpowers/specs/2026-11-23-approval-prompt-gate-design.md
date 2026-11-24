@@ -41,12 +41,10 @@ and expires when the state changes.
 
 - Keep the full procedure in `skills/git-workflow/references/pull-request.md`.
   The bootstrap carries one short gate. Each rule has one home.
-- Only OpenCode is in use. The question tool's behavior under headless
-  `opencode run` is unverified. The plan must check it before writing evals
-  that depend on it.
-- The eval helper detects commands, reads, skills, and prose. It has no tool
-  detector. Asserting the prompt may need a small helper extension after a
-  real transcript shows the rendering.
+- Only OpenCode is in use. Headless `opencode run` cancels question prompts.
+  Transcripts show `✗ Asked 1 question failed`; no human sees the question.
+- The eval helper detects commands, reads, skills, prose, and tool events.
+  Its `events` option asserts the observed cancellation.
 - Bump CalVer `26.11.24` to `26.11.25` in `.kimi-plugin/plugin.json` and
   `package.json`. Regenerate `skills/index.json`.
 - Keep SPDX headers and Prettier formatting.

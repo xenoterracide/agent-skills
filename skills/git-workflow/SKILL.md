@@ -55,8 +55,9 @@ These apply to every git workflow activity in this repository:
 - **Merge only on explicit approval.** Never merge the PR on your own
   initiative. Show `[repo#NNN](url)`, then wait for the approval prompt's
   `Approved, merge` choice. An instruction from before the human read the PR
-  is not approval. Approval comes only from that choice; see
-  `references/pull-request.md`. Only then merge, by any route: `gh pr merge`,
+  is not approval. Approval comes from that choice, or that exact choice in
+  text when no question tool exists; see `references/pull-request.md`.
+  Only then merge, by any route: `gh pr merge`,
   the MCP `merge_pull_request` tool, the GraphQL `mergePullRequest` mutation,
   or the REST merge endpoint.
 - **Merge direction matters.** `git merge origin/HEAD` into the topic
