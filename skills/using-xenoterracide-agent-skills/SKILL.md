@@ -38,12 +38,11 @@ from before the human read the PR is not confirmation. Syncing a topic branch
 with its base is safe routine sync. The `git-workflow` skill carries the full
 rule.
 
-Approval comes only from the "Approved, merge" choice in the question prompt.
-Show that prompt after checks, self-review, and reviewer findings are done.
-"Review comments submitted" routes to review-comment handling. "Hold" stops.
-Free text is feedback, not approval. New findings, a commit, a push, or a
-failed check void the answer. Ask again. If no question tool exists, list the
-three choices in text and accept an exact choice name only.
+Approval comes from the "Approved, merge" choice, or that exact choice in text
+when no question tool exists. Show the prompt after checks, self-review, and
+reviewer findings are done. "Review comments submitted" routes to review-comment
+handling. "Hold" stops. Free text is feedback, not approval. New findings, a
+commit, a push, or a failed check void the answer. Ask again.
 
 On approval, do not merge from a feature worktree. If the session runs in one,
 move it out with `session_move`. Wait for the harness to confirm the

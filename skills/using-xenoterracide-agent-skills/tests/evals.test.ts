@@ -74,3 +74,18 @@ it("uses a bare URL in the approval question text, from the bootstrap", () => {
     },
   );
 });
+
+it("accepts the exact text fallback choice, from the bootstrap", () => {
+  assertSkillBehavior(
+    "Which skill should I use? Quote the bootstrap sentence that says where approval comes from. According to that sentence alone, can an exact text reply on a harness without a question tool authorize a merge?",
+    "using-xenoterracide-agent-skills",
+    {
+      repo: true,
+      ghb: "green",
+      forbids: [/gh pr merge\b(?!\s+--help\b)/],
+      prose: {
+        includes: [/yes|accepts|authorizes/i, /exact choice|exact name|text fallback|no question tool/i],
+      },
+    },
+  );
+});

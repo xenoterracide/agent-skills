@@ -16,8 +16,8 @@ and expires when the state changes.
 
 ## Goals
 
-1. Only an "Approved, merge" selection in the question prompt authorizes a
-   merge in OpenCode.
+1. Only an "Approved, merge" selection in the question prompt, or that exact
+   choice in text when no question tool exists, authorizes a merge.
 2. The prompt comes after checks, self-review, reviewer subagent, and fix of
    its findings.
 3. New findings, a new commit, a push, or a failed check void the answer.
@@ -65,11 +65,12 @@ and expires when the state changes.
 ## Design
 
 The bootstrap "Merging" section gains a short gate. After review completes,
-post `[repo#NNN](url)` and call the question tool with three choices:
-"Approved, merge", "Review comments submitted", and "Hold". The tool's free
-text answer is feedback. Only the first choice authorizes the merge. The
-answer applies to the state at prompt time. New findings, a commit, a push, or
-a failed check require a new prompt.
+post `[repo#NNN](url)` in chat and put the bare PR URL in the question text.
+Call the question tool with three choices: "Approved, merge", "Review comments
+submitted", and "Hold". The tool's free text answer is feedback. Only the first
+choice, or its text fallback, authorizes the merge. The answer applies to the
+state at prompt time. New findings, a commit, a push, or a failed check require
+a new prompt.
 
 The turn-boundary fix removes the pause from both the Merging paragraph and
 the Working Directory section. The question answer arrives inside the turn.
@@ -77,7 +78,7 @@ When the session runs in a feature worktree, move it out with `session_move`,
 wait for the harness to confirm the main-worktree cwd, and continue in that
 turn.
 
-`pull-request.md` carries the full rule in "Merging on the Human's Yes":
+`pull-request.md` carries the full rule in "Merging on the Approval Prompt":
 prompt order, the three choices, the void conditions, and the text fallback.
 It points to "Handling Review Comments" for the feedback choice.
 

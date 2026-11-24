@@ -129,7 +129,7 @@ cache can hide bugs.
 
 Fix failures at any step before moving on.
 
-### Merging on the Human's Yes
+### Merging on the Approval Prompt
 
 On the approval prompt's `Approved, merge` choice, verify with `ghb pr verify`.
 Going raw, read `mergeStateStatus` and `reviewDecision` — never `mergeable`
