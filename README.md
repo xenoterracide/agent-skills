@@ -80,6 +80,33 @@ opened directory, set `javadocs: true` or open the repository root. An existing
 directory path instead of the Git specifier. Restart OpenCode or let it reload
 its configuration after installing.
 
+`gitAliases.offer` defaults to `true`. At session start, the plugin reads git
+aliases. When aliases exist, it injects a `Git aliases:` block into the first
+message. When a curated alias is missing or differs, it also injects an
+`Install git aliases:` offer.
+Set `gitAliases.offer: false` to skip the offer:
+
+```jsonc
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugins": [
+    {
+      "package": "github:xenoterracide/agent-skills",
+      "options": {
+        "gitAliases": {
+          "offer": false,
+        },
+      },
+    },
+  ],
+}
+```
+
+The agent must ask for confirmation before calling `install_git_aliases`. The
+tool writes curated aliases to global git config. Overwriting an existing alias
+needs separate confirmation that names the alias and accepts its curated value.
+`sessionInit: false` disables the aliases block, the offer, and the tool.
+
 You only need one OpenCode install path. If the HTTP catalog below is also
 configured, the plugin skips skill IDs that already exist.
 
