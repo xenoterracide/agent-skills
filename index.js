@@ -3,11 +3,13 @@
 // SPDX-License-Identifier: MIT
 
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const PLUGIN_ID = "xenoterracide-agent-skills";
+const INSTALL_GIT_ALIASES_TOOL = "install_git_aliases";
 
 export const DEFAULT_SKILLS_DIRECTORY = fileURLToPath(new URL("./skills/", import.meta.url));
 
@@ -115,6 +117,167 @@ export function classifyAliases(current) {
   }
 
   return { missing, conflicts };
+}
+
+export function buildInstallOffer({ missing, conflicts }) {
+  const lines = ["Install git aliases:"];
+
+  if (missing.length > 0) {
+    lines.push("Missing:", ...missing.map(({ name, value }) => `  ${name} = ${value}`));
+  }
+  if (conflicts.length > 0) {
+    lines.push(
+      "Conflicts:",
+      ...conflicts.map(({ name, current, curated }) => `  ${name} = current "${current}", curated "${curated}"`),
+    );
+  }
+
+  lines.push(
+    "",
+    "Ask for confirmation before calling `install_git_aliases`.",
+    "Overwriting an existing alias requires separate confirmation that names the alias and accepts its curated value.",
+    "To stop these offers, call `install_git_aliases` with `dismiss: true` and `confirm: true`.",
+  );
+
+  return lines.join("\n");
+}
+
+function stableJson(value) {
+  if (Array.isArray(value)) return `[${value.map(stableJson).join(",")}]`;
+  if (value !== null && typeof value === "object") {
+    const entries = Object.keys(value)
+      .sort()
+      .map((key) => `${JSON.stringify(key)}:${stableJson(value[key])}`);
+    return `{${entries.join(",")}}`;
+  }
+  return JSON.stringify(value);
+}
+
+function fingerprint(value) {
+  return createHash("sha256").update(stableJson(value)).digest("hex");
+}
+
+export function curatedFingerprint() {
+  return fingerprint(CURATED_GIT_ALIASES);
+}
+
+export function offerFingerprint(state) {
+  return fingerprint(state);
+}
+
+export function dismissalKey(state) {
+  return `gitAliases.dismissed.${curatedFingerprint()}.${offerFingerprint(state)}`;
+}
+
+function findCuratedAlias(name) {
+  return CURATED_GIT_ALIASES.find((alias) => alias.name === name);
+}
+
+function installContent(written, failed, skipped) {
+  const lines = [written.length > 0 ? `Installed git aliases: ${written.join(", ")}` : "No aliases installed."];
+  if (failed.length > 0) lines.push(`Failed to install: ${failed.join(", ")}`);
+  if (skipped.length > 0) lines.push(`Skipped conflicts: ${skipped.join(", ")}`);
+  return lines.join("\n");
+}
+
+async function executeInstallAliases(ctx, aliases, options, input) {
+  const target = input?.target ?? "global";
+  if (target !== "global") throw new Error(`Unsupported git config target: ${target}`);
+  if (input?.confirm !== true) throw new Error("Explicit confirmation is required");
+
+  const state = classifyAliases(aliases);
+  if (input?.dismiss === true) {
+    if (typeof ctx.storage?.set === "function") await ctx.storage.set(dismissalKey(state), true);
+    return { content: "Git alias install offers dismissed for this alias set." };
+  }
+
+  const requested = input.aliases ?? [];
+  const overwrites = input.overwrite ?? [];
+  if (!Array.isArray(requested) || !Array.isArray(overwrites)) {
+    throw new Error("aliases and overwrite must be arrays");
+  }
+
+  const conflicts = new Map(state.conflicts.map((conflict) => [conflict.name, conflict]));
+  const missing = new Set(state.missing.map((alias) => alias.name));
+  const accepted = new Map();
+  const skipped = [];
+
+  for (const name of requested) {
+    if (typeof name !== "string") throw new Error("Alias names must be strings");
+    const curated = findCuratedAlias(name);
+    if (!curated) throw new Error(`Unknown curated git alias: ${name}`);
+    if (conflicts.has(name)) {
+      skipped.push(`${name} (provide a confirmed overwrite to replace it)`);
+      continue;
+    }
+    if (missing.has(name)) accepted.set(name, curated.value);
+  }
+
+  for (const entry of overwrites) {
+    if (typeof entry?.name !== "string" || typeof entry.value !== "string") {
+      throw new Error("Overwrite entries must name an alias and provide a value");
+    }
+    const curated = findCuratedAlias(entry.name);
+    if (!curated) throw new Error(`Unknown curated git alias: ${entry.name}`);
+    if (entry.value !== curated.value)
+      throw new Error(`Overwrite value for ${entry.name} must match the curated value`);
+    if (!conflicts.has(entry.name)) throw new Error(`Git alias ${entry.name} has no conflict to overwrite`);
+    if (requested.includes(entry.name)) throw new Error(`Git alias ${entry.name} is both installed and overwritten`);
+    accepted.set(entry.name, curated.value);
+  }
+
+  const write = options.gitAliases?.writer ?? defaultGitAliasRunner;
+  const written = [];
+  const failed = [];
+  for (const [name, value] of accepted) {
+    let result;
+    try {
+      result = write(["config", "--global", `alias.${name}`, value]);
+    } catch (error) {
+      failed.push(`${name} (${error.message})`);
+      continue;
+    }
+    if (result?.status === 0) written.push(name);
+    else failed.push(`${name} (${result?.stderr ?? `status ${result?.status}`})`);
+  }
+
+  return { content: installContent(written, failed, skipped) };
+}
+
+async function registerInstallTool(ctx, aliases, options) {
+  if (typeof ctx?.tool?.transform !== "function") return;
+
+  try {
+    await ctx.tool.transform((editor) => {
+      if (editor.get(INSTALL_GIT_ALIASES_TOOL)) return;
+      editor.add({
+        name: INSTALL_GIT_ALIASES_TOOL,
+        description: "Install curated git aliases into global git config after explicit confirmation.",
+        input: {
+          type: "object",
+          properties: {
+            confirm: { type: "boolean" },
+            aliases: { type: "array", items: { type: "string" } },
+            overwrite: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: { name: { type: "string" }, value: { type: "string" } },
+                required: ["name", "value"],
+                additionalProperties: false,
+              },
+            },
+            dismiss: { type: "boolean" },
+            target: { type: "string", enum: ["global"] },
+          },
+          additionalProperties: false,
+        },
+        execute: (input) => executeInstallAliases(ctx, aliases, options, input),
+      });
+    });
+  } catch (error) {
+    warn("install tool registration failed", error);
+  }
 }
 
 function warn(message, error) {
@@ -241,8 +404,10 @@ async function isChildSession(ctx, sessionID) {
   return Boolean(session?.parentID);
 }
 
-export async function registerSessionInit(ctx, aliases = new Map()) {
-  const blocks = [buildAliasBlock(aliases)].filter((block) => block.length > 0);
+export async function registerSessionInit(ctx, aliases = new Map(), { offer = true } = {}) {
+  const aliasBlock = buildAliasBlock(aliases);
+  const state = classifyAliases(aliases);
+  const canOffer = offer && (state.missing.length > 0 || state.conflicts.length > 0);
 
   await ctx.session.hook("context", async (event) => {
     try {
@@ -257,6 +422,13 @@ export async function registerSessionInit(ctx, aliases = new Map()) {
       );
       if (hasMarker) return;
       if (await isChildSession(ctx, event.sessionID)) return;
+
+      const blocks = [aliasBlock];
+      if (canOffer) {
+        const key = dismissalKey(state);
+        const dismissed = typeof ctx.storage?.get === "function" && Boolean(await ctx.storage.get(key));
+        if (!dismissed) blocks.push(buildInstallOffer(state));
+      }
 
       const firstUserMessage = event.messages.find((message) => message?.role === "user");
       if (!firstUserMessage) {
@@ -300,18 +472,22 @@ export default {
     }
 
     let aliases = new Map();
-    if (options.sessionInit !== false && typeof ctx?.session?.hook === "function") {
-      try {
-        aliases = readGitAliases(options.gitAliases?.runner ?? defaultGitAliasRunner) ?? new Map();
-      } catch (error) {
-        warn("failed to load git aliases", error);
+    if (options.sessionInit !== false) {
+      if (typeof ctx?.session?.hook === "function") {
+        try {
+          aliases = readGitAliases(options.gitAliases?.runner ?? defaultGitAliasRunner) ?? new Map();
+        } catch (error) {
+          warn("failed to load git aliases", error);
+        }
+
+        try {
+          await registerSessionInit(ctx, aliases, { offer: options.gitAliases?.offer !== false });
+        } catch (error) {
+          warn("session bootstrap registration failed", error);
+        }
       }
 
-      try {
-        await registerSessionInit(ctx, aliases);
-      } catch (error) {
-        warn("session bootstrap registration failed", error);
-      }
+      await registerInstallTool(ctx, aliases, options);
     }
   },
 };

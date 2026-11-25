@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { mkdtempSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -11,22 +12,53 @@ import test from "node:test";
 import plugin, {
   DEFAULT_SKILLS_DIRECTORY,
   buildAliasBlock,
+  buildInstallOffer,
+  classifyAliases,
+  curatedFingerprint,
+  dismissalKey,
   isJavaProject,
+  offerFingerprint,
   parseGitAliasOutput,
   readGitAliases,
 } from "../index.js";
+
+const EXPECTED_CURATED_ALIASES = [
+  ["sync", "fetch --all --prune --quiet"],
+  ["sp", "status --porcelain=v1 --branch"],
+  ["last", "log -1 --oneline"],
+  ["lg", "log --oneline --decorate"],
+  ["ds", "diff --stat"],
+  ["dc", "diff --check"],
+  ["c", "!git add -A && git commit --quiet -F -"],
+  ["p", "push --quiet"],
+  ["pl", "pull --quiet --ff-only"],
+  ["bd", "branch -D --quiet"],
+  ["bc", "branch --show-current"],
+  ["nb", "switch --quiet -c"],
+  ["wtl", "worktree list"],
+  ["wta", "worktree add --quiet"],
+  ["wtr", "worktree remove"],
+  ["wtp", "worktree prune"],
+  ["mainwt", '!git -C "$(git rev-parse --git-common-dir)/.." rev-parse --show-toplevel'],
+];
+const EXPECTED_CURATED_NAMES = EXPECTED_CURATED_ALIASES.map(([name]) => name);
+const EXPECTED_CURATED_VALUES = Object.fromEntries(EXPECTED_CURATED_ALIASES);
 
 function createContext({
   options = {},
   existingSkills = [],
   existingMcp = {},
   gitAliasRunner = () => ({ status: 1, stdout: "" }),
+  gitAliasWriter,
+  storage = new Map(),
   parentID,
   rejectSkillIDs = [],
   location,
 } = {}) {
   const skills = [...existingSkills];
   const mcp = new Map(Object.entries(existingMcp));
+  const tools = [];
+  const storageReads = [];
   let contextHook;
   let skillTransformCalls = 0;
   let mcpTransformCalls = 0;
@@ -34,7 +66,11 @@ function createContext({
   const ctx = {
     options: {
       ...options,
-      gitAliases: { ...options.gitAliases, runner: gitAliasRunner },
+      gitAliases: {
+        ...options.gitAliases,
+        runner: gitAliasRunner,
+        writer: gitAliasWriter ?? options.gitAliases?.writer,
+      },
     },
     location,
     skill: {
@@ -76,16 +112,69 @@ function createContext({
         return { id: sessionID, parentID };
       },
     },
+    tool: {
+      async transform(callback) {
+        callback({
+          list: () => tools,
+          get: (id) => tools.find((tool) => tool.name === id || tool.id === id),
+          add: (tool) => tools.push(tool),
+          update: () => {},
+          remove: () => {},
+        });
+        return { dispose: async () => {} };
+      },
+      async list() {
+        return tools;
+      },
+      async get(id) {
+        return tools.find((tool) => tool.name === id || tool.id === id);
+      },
+    },
+    storage: {
+      async get(key) {
+        storageReads.push(key);
+        return storage.get(key);
+      },
+      async set(key, value) {
+        storage.set(key, value);
+      },
+      async remove(key) {
+        storage.delete(key);
+      },
+    },
   };
 
   return {
     ctx,
     skills,
     mcp,
+    tools,
+    storage,
+    storageReads,
     getContextHook: () => contextHook,
+    getTool: (id) => tools.find((tool) => tool.name === id || tool.id === id),
     getSkillTransformCalls: () => skillTransformCalls,
     getMcpTransformCalls: () => mcpTransformCalls,
   };
+}
+
+function createGitAliasWriter(response = { status: 0, stdout: "" }) {
+  const calls = [];
+  return {
+    calls,
+    writer: (args) => {
+      calls.push(args);
+      return response;
+    },
+  };
+}
+
+async function setupInstallTool({ gitAliasRunner, writer, options = {} } = {}) {
+  const harness = createContext({ gitAliasRunner, gitAliasWriter: writer, options });
+  await plugin.setup(harness.ctx);
+  const tool = harness.getTool("install_git_aliases");
+  assert.ok(tool, "install_git_aliases tool is registered");
+  return { ...harness, tool };
 }
 
 function createProjectDirectory(files = []) {
@@ -543,47 +632,7 @@ test("does not inject aliases into child sessions", async () => {
   assert.equal(event.messages[0].content[0].text, "hello");
 });
 
-test("classifies missing and conflicting curated aliases", async () => {
-  const { classifyAliases } = await import("../index.js");
-  const expectedNames = [
-    "sync",
-    "sp",
-    "last",
-    "lg",
-    "ds",
-    "dc",
-    "c",
-    "p",
-    "pl",
-    "bd",
-    "bc",
-    "nb",
-    "wtl",
-    "wta",
-    "wtr",
-    "wtp",
-    "mainwt",
-  ];
-  const expectedValues = {
-    sync: "fetch --all --prune --quiet",
-    sp: "status --porcelain=v1 --branch",
-    last: "log -1 --oneline",
-    lg: "log --oneline --decorate",
-    ds: "diff --stat",
-    dc: "diff --check",
-    c: "!git add -A && git commit --quiet -F -",
-    p: "push --quiet",
-    pl: "pull --quiet --ff-only",
-    bd: "branch -D --quiet",
-    bc: "branch --show-current",
-    nb: "switch --quiet -c",
-    wtl: "worktree list",
-    wta: "worktree add --quiet",
-    wtr: "worktree remove",
-    wtp: "worktree prune",
-    mainwt: '!git -C "$(git rev-parse --git-common-dir)/.." rev-parse --show-toplevel',
-  };
-
+test("classifies missing and conflicting curated aliases", () => {
   const { missing, conflicts } = classifyAliases(
     new Map([
       ["bc", "old value"],
@@ -592,13 +641,309 @@ test("classifies missing and conflicting curated aliases", async () => {
   );
 
   assert.deepEqual(conflicts, [
-    { name: "bc", current: "old value", curated: expectedValues.bc },
+    { name: "bc", current: "old value", curated: EXPECTED_CURATED_VALUES.bc },
   ]);
   assert.deepEqual(
     missing.map(({ name }) => name),
-    expectedNames.filter((name) => name !== "bc"),
+    EXPECTED_CURATED_NAMES.filter((name) => name !== "bc"),
   );
   for (const alias of missing) {
-    assert.equal(alias.value, expectedValues[alias.name]);
+    assert.equal(alias.value, EXPECTED_CURATED_VALUES[alias.name]);
   }
+});
+
+test("builds an install offer listing every missing curated alias", () => {
+  const offer = buildInstallOffer(classifyAliases(new Map()));
+
+  assert.match(offer, /^Install git aliases:/);
+  assert.match(offer, /^Missing:/m);
+  for (const [name, value] of EXPECTED_CURATED_ALIASES) {
+    assert.ok(offer.includes(`  ${name} = ${value}`), `offer omits ${name}`);
+  }
+});
+
+test("builds an install offer showing current and curated values for conflicts", () => {
+  const current = new Map(EXPECTED_CURATED_ALIASES);
+  current.set("bc", "old branch");
+  const offer = buildInstallOffer(classifyAliases(current));
+
+  assert.match(offer, /^Conflicts:/m);
+  assert.ok(offer.includes('  bc = current "old branch", curated "branch --show-current"'));
+  assert.equal(offer.includes("  sp = "), false);
+});
+
+test("install offer explains confirmation, overwrite, and dismissal", () => {
+  const offer = buildInstallOffer(classifyAliases(new Map()));
+
+  assert.ok(offer.includes("install_git_aliases"));
+  assert.match(offer, /confirm/i);
+  assert.match(offer, /separate confirmation/i);
+  assert.ok(offer.includes("dismiss: true"));
+  assert.ok(offer.includes("confirm: true"));
+});
+
+test("setup and context injection never write git config", async () => {
+  const { calls, writer } = createGitAliasWriter();
+  const { ctx, getContextHook } = createContext({ gitAliasWriter: writer });
+  await plugin.setup(ctx);
+
+  const event = {
+    sessionID: "ses_1",
+    messages: [{ role: "user", content: [{ type: "text", text: "hello" }] }],
+  };
+  await getContextHook()(event);
+
+  assert.deepEqual(calls, []);
+});
+
+test("gitAliases.offer false injects aliases without an install offer", async () => {
+  const gitAliasRunner = () => ({ status: 0, stdout: "alias.sp status --porcelain=v1 --branch\n" });
+  const { ctx, getContextHook } = createContext({
+    options: { gitAliases: { offer: false } },
+    gitAliasRunner,
+  });
+  await plugin.setup(ctx);
+
+  const event = {
+    sessionID: "ses_1",
+    messages: [{ role: "user", content: [{ type: "text", text: "hello" }] }],
+  };
+  await getContextHook()(event);
+
+  const bootstrap = event.messages[0].content[0].text;
+  assert.ok(bootstrap.includes("alias.sp status --porcelain=v1 --branch"));
+  assert.equal(bootstrap.includes("Install git aliases:"), false);
+});
+
+test("a stored dismissal suppresses the current install offer", async () => {
+  const state = classifyAliases(new Map());
+  const storage = new Map([[dismissalKey(state), true]]);
+  const { ctx, getContextHook } = createContext({ storage });
+  await plugin.setup(ctx);
+
+  const event = {
+    sessionID: "ses_1",
+    messages: [{ role: "user", content: [{ type: "text", text: "hello" }] }],
+  };
+  await getContextHook()(event);
+
+  assert.equal(event.messages[0].content[0].text.includes("Install git aliases:"), false);
+});
+
+test("dismissal keys combine the curated and offer fingerprints", () => {
+  const state = classifyAliases(new Map());
+
+  assert.equal(dismissalKey(state), `gitAliases.dismissed.${curatedFingerprint()}.${offerFingerprint(state)}`);
+});
+
+test("curated fingerprint changes when curated values change", () => {
+  const hash = (pairs) =>
+    createHash("sha256")
+      .update(JSON.stringify(pairs.map(([name, value]) => ({ name, value }))))
+      .digest("hex");
+  const altered = EXPECTED_CURATED_ALIASES.map(([name, value]) =>
+    name === "bc" ? [name, "changed branch"] : [name, value],
+  );
+
+  assert.equal(curatedFingerprint(), hash(EXPECTED_CURATED_ALIASES));
+  assert.notEqual(hash(altered), curatedFingerprint());
+});
+
+test("a changed conflicting set produces a new key and restores the offer", async () => {
+  const emptyState = classifyAliases(new Map());
+  const storage = new Map([[dismissalKey(emptyState), true]]);
+  const first = createContext({ storage });
+  await plugin.setup(first.ctx);
+
+  const firstEvent = {
+    sessionID: "ses_1",
+    messages: [{ role: "user", content: [{ type: "text", text: "hello" }] }],
+  };
+  await first.getContextHook()(firstEvent);
+  assert.equal(firstEvent.messages[0].content[0].text.includes("Install git aliases:"), false);
+
+  const conflictState = classifyAliases(new Map([["bc", "old branch"]]));
+  assert.notEqual(dismissalKey(conflictState), dismissalKey(emptyState));
+
+  const gitAliasRunner = () => ({ status: 0, stdout: "alias.bc old branch\n" });
+  const second = createContext({ storage, gitAliasRunner });
+  await plugin.setup(second.ctx);
+
+  const secondEvent = {
+    sessionID: "ses_2",
+    messages: [{ role: "user", content: [{ type: "text", text: "hello" }] }],
+  };
+  await second.getContextHook()(secondEvent);
+  assert.ok(secondEvent.messages[0].content[0].text.includes("Install git aliases:"));
+});
+
+test("sessionInit false never reads storage for offers", async () => {
+  const { ctx, storageReads } = createContext({ options: { sessionInit: false } });
+  await plugin.setup(ctx);
+
+  assert.deepEqual(storageReads, []);
+});
+
+test("confirmed aliases install as curated global git config", async () => {
+  const { calls, writer } = createGitAliasWriter();
+  const { tool } = await setupInstallTool({ writer });
+
+  const result = await tool.execute({ confirm: true, aliases: ["sync", "sp"] });
+
+  assert.deepEqual(calls, [
+    ["config", "--global", "alias.sync", "fetch --all --prune --quiet"],
+    ["config", "--global", "alias.sp", "status --porcelain=v1 --branch"],
+  ]);
+  assert.ok(result.content.includes("sync"));
+  assert.ok(result.content.includes("sp"));
+});
+
+test("an alias already set to its curated value is not written", async () => {
+  const { calls, writer } = createGitAliasWriter();
+  const gitAliasRunner = () => ({ status: 0, stdout: "alias.sp status --porcelain=v1 --branch\n" });
+  const { tool } = await setupInstallTool({ gitAliasRunner, writer });
+
+  await tool.execute({ confirm: true, aliases: ["sync", "sp"] });
+
+  assert.deepEqual(calls, [["config", "--global", "alias.sync", "fetch --all --prune --quiet"]]);
+});
+
+test("confirmation is required before any git config write", async () => {
+  for (const input of [{ confirm: false, aliases: ["sync"] }, { aliases: ["sync"] }]) {
+    const { calls, writer } = createGitAliasWriter();
+    const { tool } = await setupInstallTool({ writer });
+
+    await assert.rejects(() => tool.execute(input), /confirm/i);
+    assert.deepEqual(calls, []);
+  }
+});
+
+test("an empty alias list writes no git config", async () => {
+  const { calls, writer } = createGitAliasWriter();
+  const { tool } = await setupInstallTool({ writer });
+
+  const result = await tool.execute({ confirm: true, aliases: [] });
+
+  assert.deepEqual(calls, []);
+  assert.match(result.content, /[Nn]o aliases/);
+});
+
+test("failed git config writes are reported without throwing", async () => {
+  const { calls, writer } = createGitAliasWriter();
+  const failingWriter = (args) => {
+    writer(args);
+    return args[2] === "alias.sp" ? { status: 1, stderr: "permission denied" } : { status: 0 };
+  };
+  const { tool } = await setupInstallTool({ writer: failingWriter });
+
+  const result = await tool.execute({ confirm: true, aliases: ["sync", "sp"] });
+
+  assert.equal(calls.length, 2);
+  assert.match(result.content, /failed/i);
+  assert.match(result.content, /sp/);
+});
+
+test("sessionInit false does not register the install tool", async () => {
+  const { ctx, tools } = createContext({ options: { sessionInit: false } });
+  await plugin.setup(ctx);
+
+  assert.deepEqual(tools, []);
+});
+
+test("a conflicting alias in the install list is reported and not written", async () => {
+  const { calls, writer } = createGitAliasWriter();
+  const gitAliasRunner = () => ({ status: 0, stdout: "alias.bc old branch\n" });
+  const { tool } = await setupInstallTool({ gitAliasRunner, writer });
+
+  const result = await tool.execute({ confirm: true, aliases: ["bc", "sync"] });
+
+  assert.deepEqual(calls, [["config", "--global", "alias.sync", "fetch --all --prune --quiet"]]);
+  assert.match(result.content, /conflict/i);
+  assert.match(result.content, /bc/);
+});
+
+test("a confirmed overwrite writes the curated value for a conflict", async () => {
+  const { calls, writer } = createGitAliasWriter();
+  const gitAliasRunner = () => ({ status: 0, stdout: "alias.bc old branch\n" });
+  const { tool } = await setupInstallTool({ gitAliasRunner, writer });
+
+  await tool.execute({ confirm: true, overwrite: [{ name: "bc", value: EXPECTED_CURATED_VALUES.bc }] });
+
+  assert.deepEqual(calls, [["config", "--global", "alias.bc", "branch --show-current"]]);
+});
+
+test("invalid overwrite requests are rejected before any git config write", async () => {
+  const gitAliasRunner = () => ({ status: 0, stdout: "alias.bc old branch\n" });
+  const inputs = [
+    { confirm: true, overwrite: [{ name: "bc", value: "wrong value" }] },
+    { confirm: true, overwrite: [{ name: "not-curated", value: "anything" }] },
+    { confirm: true, overwrite: [{ name: "sync", value: EXPECTED_CURATED_VALUES.sync }] },
+    { overwrite: [{ name: "bc", value: EXPECTED_CURATED_VALUES.bc }] },
+  ];
+
+  for (const input of inputs) {
+    const { calls, writer } = createGitAliasWriter();
+    const { tool } = await setupInstallTool({ gitAliasRunner, writer });
+
+    await assert.rejects(() => tool.execute(input));
+    assert.deepEqual(calls, []);
+  }
+});
+
+test("unknown aliases and non-global targets are rejected before any git config write", async () => {
+  for (const input of [
+    { confirm: true, aliases: ["not-curated"] },
+    { confirm: true, target: "system", aliases: ["sync"] },
+  ]) {
+    const { calls, writer } = createGitAliasWriter();
+    const { tool } = await setupInstallTool({ writer });
+
+    await assert.rejects(() => tool.execute(input));
+    assert.deepEqual(calls, []);
+  }
+});
+
+test("an alias in both install and overwrite lists is rejected as ambiguous", async () => {
+  const { calls, writer } = createGitAliasWriter();
+  const gitAliasRunner = () => ({ status: 0, stdout: "alias.bc old branch\n" });
+  const { tool } = await setupInstallTool({ gitAliasRunner, writer });
+
+  await assert.rejects(
+    () =>
+      tool.execute({
+        confirm: true,
+        aliases: ["bc"],
+        overwrite: [{ name: "bc", value: EXPECTED_CURATED_VALUES.bc }],
+      }),
+    /both/i,
+  );
+  assert.deepEqual(calls, []);
+});
+
+test("confirmed dismissal stores the key and writes no git config", async () => {
+  const state = classifyAliases(new Map());
+  const { calls, writer } = createGitAliasWriter();
+  const { storage, tool, getContextHook } = await setupInstallTool({ writer });
+
+  await tool.execute({ confirm: true, dismiss: true });
+
+  assert.equal(storage.get(dismissalKey(state)), true);
+  assert.deepEqual(calls, []);
+
+  const event = {
+    sessionID: "ses_1",
+    messages: [{ role: "user", content: [{ type: "text", text: "hello" }] }],
+  };
+  await getContextHook()(event);
+  assert.equal(event.messages[0].content[0].text.includes("Install git aliases:"), false);
+});
+
+test("dismissal without confirmation stores nothing", async () => {
+  const { calls, writer } = createGitAliasWriter();
+  const { storage, tool } = await setupInstallTool({ writer });
+
+  await assert.rejects(() => tool.execute({ dismiss: true }), /confirm/i);
+
+  assert.equal(storage.size, 0);
+  assert.deepEqual(calls, []);
 });
