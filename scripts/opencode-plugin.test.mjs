@@ -8,12 +8,19 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
-import plugin, { DEFAULT_SKILLS_DIRECTORY, isJavaProject } from "../index.js";
+import plugin, {
+  DEFAULT_SKILLS_DIRECTORY,
+  buildAliasBlock,
+  isJavaProject,
+  parseGitAliasOutput,
+  readGitAliases,
+} from "../index.js";
 
 function createContext({
   options = {},
   existingSkills = [],
   existingMcp = {},
+  gitAliasRunner = () => ({ status: 1, stdout: "" }),
   parentID,
   rejectSkillIDs = [],
   location,
@@ -25,7 +32,10 @@ function createContext({
   let mcpTransformCalls = 0;
 
   const ctx = {
-    options,
+    options: {
+      ...options,
+      gitAliases: { ...options.gitAliases, runner: gitAliasRunner },
+    },
     location,
     skill: {
       async transform(callback) {
@@ -357,9 +367,238 @@ test("preserves string user content when injecting the bootstrap", async () => {
   assert.equal(event.messages[0].content[1].text, "hello");
 });
 
-test("does not register the session hook when sessionInit is false", async () => {
-  const { ctx, getContextHook } = createContext({ options: { sessionInit: false } });
+test("does not read git aliases or register the session hook when sessionInit is false", async () => {
+  let runs = 0;
+  const gitAliasRunner = () => {
+    runs += 1;
+    return { status: 0, stdout: "alias.sp status --porcelain=v1 --branch\n" };
+  };
+  const { ctx, getContextHook } = createContext({
+    options: { sessionInit: false },
+    gitAliasRunner,
+  });
   await plugin.setup(ctx);
 
+  assert.equal(runs, 0);
   assert.equal(getContextHook(), undefined);
+});
+
+test("formats parsed git aliases for injection", () => {
+  const stdout = "alias.sp status --porcelain=v1 --branch\nalias.bc branch --show-current\n";
+  const block = buildAliasBlock(parseGitAliasOutput(stdout));
+
+  assert.match(block, /^Git aliases:/);
+  assert.ok(block.includes("alias.sp status --porcelain=v1 --branch"));
+  assert.ok(block.includes("alias.bc branch --show-current"));
+  assert.ok(block.indexOf("alias.bc") < block.indexOf("alias.sp"));
+});
+
+test("injects git aliases from git config before the first user text", async () => {
+  const stdout = "alias.sp status --porcelain=v1 --branch\nalias.bc branch --show-current\n";
+  let runs = 0;
+  const gitAliasRunner = (args) => {
+    runs += 1;
+    assert.deepEqual(args, ["config", "--get-regexp", "^alias\\."]);
+    return { status: 0, stdout };
+  };
+  const { ctx, getContextHook } = createContext({ gitAliasRunner });
+  await plugin.setup(ctx);
+
+  assert.equal(runs, 1);
+
+  const event = {
+    sessionID: "ses_1",
+    messages: [{ role: "user", content: [{ type: "text", text: "hello" }] }],
+  };
+  await getContextHook()(event);
+
+  const bootstrap = event.messages[0].content[0].text;
+  assert.ok(bootstrap.includes("Git aliases:"));
+  assert.ok(bootstrap.includes("alias.sp status --porcelain=v1 --branch"));
+  assert.ok(bootstrap.indexOf("Git aliases:") < bootstrap.indexOf("alias.sp"));
+  assert.equal(event.messages[0].content[1].text, "hello");
+});
+
+test("injects git aliases when no user message exists", async () => {
+  const gitAliasRunner = () => ({
+    status: 0,
+    stdout: "alias.bc branch --show-current\n",
+  });
+  const { ctx, getContextHook } = createContext({ gitAliasRunner });
+  await plugin.setup(ctx);
+
+  const event = { sessionID: "ses_1", messages: [] };
+  await getContextHook()(event);
+
+  assert.equal(event.messages.length, 1);
+  assert.equal(event.messages[0].role, "user");
+  assert.ok(event.messages[0].content[0].text.includes("alias.bc branch --show-current"));
+});
+
+test("returns an empty map without warning when git has no aliases", () => {
+  const originalWarn = console.warn;
+  const warnings = [];
+  console.warn = (...args) => warnings.push(args);
+  try {
+    assert.deepEqual(readGitAliases(() => ({ status: 1, stdout: "" })), new Map());
+    assert.deepEqual(warnings, []);
+  } finally {
+    console.warn = originalWarn;
+  }
+});
+
+test("returns undefined and warns when git config fails", () => {
+  const originalWarn = console.warn;
+  const warnings = [];
+  console.warn = (...args) => warnings.push(args);
+  try {
+    assert.equal(readGitAliases(() => ({ status: 2, stdout: "", stderr: "fatal" })), undefined);
+    assert.equal(warnings.length, 1);
+  } finally {
+    console.warn = originalWarn;
+  }
+});
+
+test("returns undefined and warns when the alias runner throws", () => {
+  const originalWarn = console.warn;
+  const warnings = [];
+  console.warn = (...args) => warnings.push(args);
+  try {
+    assert.equal(
+      readGitAliases(() => {
+        throw new Error("boom");
+      }),
+      undefined,
+    );
+    assert.equal(warnings.length, 1);
+  } finally {
+    console.warn = originalWarn;
+  }
+});
+
+test("returns undefined and warns on malformed git alias output", () => {
+  const originalWarn = console.warn;
+  const warnings = [];
+  console.warn = (...args) => warnings.push(args);
+  try {
+    assert.equal(
+      readGitAliases(() => ({ status: 0, stdout: "alias.sp status\nbroken line\n" })),
+      undefined,
+    );
+    assert.equal(warnings.length, 1);
+  } finally {
+    console.warn = originalWarn;
+  }
+});
+
+test("injects no alias block when git has no aliases", async () => {
+  const { ctx, getContextHook } = createContext();
+  await plugin.setup(ctx);
+
+  const event = {
+    sessionID: "ses_1",
+    messages: [{ role: "user", content: [{ type: "text", text: "hello" }] }],
+  };
+  await getContextHook()(event);
+
+  assert.equal(event.messages[0].content[0].text.includes("Git aliases:"), false);
+});
+
+test("warns once and injects no aliases when git config fails", async () => {
+  const originalWarn = console.warn;
+  const warnings = [];
+  console.warn = (...args) => warnings.push(args);
+  try {
+    const gitAliasRunner = () => ({ status: 2, stdout: "", stderr: "fatal" });
+    const { ctx, getContextHook } = createContext({ gitAliasRunner });
+    await plugin.setup(ctx);
+
+    const event = {
+      sessionID: "ses_1",
+      messages: [{ role: "user", content: [{ type: "text", text: "hello" }] }],
+    };
+    await assert.doesNotReject(() => getContextHook()(event));
+
+    assert.equal(warnings.length, 1);
+    assert.equal(event.messages[0].content[0].text.includes("Git aliases:"), false);
+  } finally {
+    console.warn = originalWarn;
+  }
+});
+
+test("does not inject aliases into child sessions", async () => {
+  const gitAliasRunner = () => ({
+    status: 0,
+    stdout: "alias.sp status --porcelain=v1 --branch\n",
+  });
+  const { ctx, getContextHook } = createContext({ gitAliasRunner, parentID: "ses_parent" });
+  await plugin.setup(ctx);
+
+  const event = {
+    sessionID: "ses_child",
+    messages: [{ role: "user", content: [{ type: "text", text: "hello" }] }],
+  };
+  await getContextHook()(event);
+
+  assert.equal(event.messages[0].content[0].text, "hello");
+});
+
+test("classifies missing and conflicting curated aliases", async () => {
+  const { classifyAliases } = await import("../index.js");
+  const expectedNames = [
+    "sync",
+    "sp",
+    "last",
+    "lg",
+    "ds",
+    "dc",
+    "c",
+    "p",
+    "pl",
+    "bd",
+    "bc",
+    "nb",
+    "wtl",
+    "wta",
+    "wtr",
+    "wtp",
+    "mainwt",
+  ];
+  const expectedValues = {
+    sync: "fetch --all --prune --quiet",
+    sp: "status --porcelain=v1 --branch",
+    last: "log -1 --oneline",
+    lg: "log --oneline --decorate",
+    ds: "diff --stat",
+    dc: "diff --check",
+    c: "!git add -A && git commit --quiet -F -",
+    p: "push --quiet",
+    pl: "pull --quiet --ff-only",
+    bd: "branch -D --quiet",
+    bc: "branch --show-current",
+    nb: "switch --quiet -c",
+    wtl: "worktree list",
+    wta: "worktree add --quiet",
+    wtr: "worktree remove",
+    wtp: "worktree prune",
+    mainwt: '!git -C "$(git rev-parse --git-common-dir)/.." rev-parse --show-toplevel',
+  };
+
+  const { missing, conflicts } = classifyAliases(
+    new Map([
+      ["bc", "old value"],
+      ["extra", "x"],
+    ]),
+  );
+
+  assert.deepEqual(conflicts, [
+    { name: "bc", current: "old value", curated: expectedValues.bc },
+  ]);
+  assert.deepEqual(
+    missing.map(({ name }) => name),
+    expectedNames.filter((name) => name !== "bc"),
+  );
+  for (const alias of missing) {
+    assert.equal(alias.value, expectedValues[alias.name]);
+  }
 });

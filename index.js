@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: MIT
 
+import { spawnSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -13,6 +14,108 @@ export const DEFAULT_SKILLS_DIRECTORY = fileURLToPath(new URL("./skills/", impor
 export const JAVADOCS_MCP_URL = "https://www.javadocs.dev/mcp";
 
 export const BOOTSTRAP_MARKER = "xenoterracide-agent-skills/using-xenoterracide-agent-skills";
+
+export const CURATED_GIT_ALIASES = Object.freeze(
+  [
+    { name: "sync", value: "fetch --all --prune --quiet" },
+    { name: "sp", value: "status --porcelain=v1 --branch" },
+    { name: "last", value: "log -1 --oneline" },
+    { name: "lg", value: "log --oneline --decorate" },
+    { name: "ds", value: "diff --stat" },
+    { name: "dc", value: "diff --check" },
+    { name: "c", value: "!git add -A && git commit --quiet -F -" },
+    { name: "p", value: "push --quiet" },
+    { name: "pl", value: "pull --quiet --ff-only" },
+    { name: "bd", value: "branch -D --quiet" },
+    { name: "bc", value: "branch --show-current" },
+    { name: "nb", value: "switch --quiet -c" },
+    { name: "wtl", value: "worktree list" },
+    { name: "wta", value: "worktree add --quiet" },
+    { name: "wtr", value: "worktree remove" },
+    { name: "wtp", value: "worktree prune" },
+    {
+      name: "mainwt",
+      value: '!git -C "$(git rev-parse --git-common-dir)/.." rev-parse --show-toplevel',
+    },
+  ].map((alias) => Object.freeze(alias)),
+);
+
+function defaultGitAliasRunner(args) {
+  return spawnSync("git", args, { encoding: "utf8" });
+}
+
+export function parseGitAliasOutput(stdout) {
+  const aliases = new Map();
+
+  for (const line of stdout.split(/\r?\n/)) {
+    if (line.trim() === "") continue;
+
+    const separator = line.indexOf(" ");
+    if (!line.startsWith("alias.") || separator === -1) {
+      throw new Error(`malformed git alias line: ${line}`);
+    }
+
+    aliases.set(line.slice("alias.".length, separator), line.slice(separator + 1));
+  }
+
+  return aliases;
+}
+
+export function readGitAliases(run = defaultGitAliasRunner) {
+  let result;
+  try {
+    result = run(["config", "--get-regexp", "^alias\\."]);
+  } catch (error) {
+    warn("failed to read git aliases", error);
+    return undefined;
+  }
+
+  if (result?.error) {
+    warn("failed to read git aliases", result.error);
+    return undefined;
+  }
+
+  if (result?.status === 0) {
+    try {
+      return parseGitAliasOutput(result.stdout ?? "");
+    } catch (error) {
+      warn("failed to parse git aliases", error);
+      return undefined;
+    }
+  }
+
+  if (result?.status === 1 && (result.stdout ?? "") === "") return new Map();
+
+  warn("failed to read git aliases", result?.stderr ?? `git exited with status ${result?.status}`);
+  return undefined;
+}
+
+export function buildAliasBlock(aliases) {
+  const lines = [...aliases]
+    .sort(([left], [right]) => left.localeCompare(right))
+    .map(([name, value]) => `alias.${name} ${value}`);
+  if (lines.length === 0) return "";
+  return `Git aliases:\n${lines.join("\n")}`;
+}
+
+export function classifyAliases(current) {
+  const missing = [];
+  const conflicts = [];
+
+  for (const curated of CURATED_GIT_ALIASES) {
+    if (!current.has(curated.name)) {
+      missing.push(curated);
+      continue;
+    }
+
+    const value = current.get(curated.name);
+    if (value !== curated.value) {
+      conflicts.push({ name: curated.name, current: value, curated: curated.value });
+    }
+  }
+
+  return { missing, conflicts };
+}
 
 function warn(message, error) {
   if (error === undefined) console.warn(`[${PLUGIN_ID}] ${message}`);
@@ -121,12 +224,13 @@ export async function registerJavadocs(ctx, mode = "auto") {
   });
 }
 
-export function buildSessionBootstrap() {
+export function buildSessionBootstrap(blocks = []) {
   return [
     "<EXTREMELY_IMPORTANT>",
     BOOTSTRAP_MARKER,
     "At the start of this session, before taking any other action, invoke the `using-xenoterracide-agent-skills` skill and follow its instructions.",
     "</EXTREMELY_IMPORTANT>",
+    ...blocks.filter((block) => typeof block === "string" && block.length > 0),
   ].join("\n");
 }
 
@@ -137,7 +241,9 @@ async function isChildSession(ctx, sessionID) {
   return Boolean(session?.parentID);
 }
 
-export async function registerSessionInit(ctx) {
+export async function registerSessionInit(ctx, aliases = new Map()) {
+  const blocks = [buildAliasBlock(aliases)].filter((block) => block.length > 0);
+
   await ctx.session.hook("context", async (event) => {
     try {
       if (!Array.isArray(event?.messages)) return;
@@ -154,7 +260,7 @@ export async function registerSessionInit(ctx) {
 
       const firstUserMessage = event.messages.find((message) => message?.role === "user");
       if (!firstUserMessage) {
-        event.messages.push({ role: "user", content: [{ type: "text", text: buildSessionBootstrap() }] });
+        event.messages.push({ role: "user", content: [{ type: "text", text: buildSessionBootstrap(blocks) }] });
         return;
       }
 
@@ -163,7 +269,7 @@ export async function registerSessionInit(ctx) {
       } else if (!Array.isArray(firstUserMessage.content)) {
         firstUserMessage.content = [];
       }
-      firstUserMessage.content.unshift({ type: "text", text: buildSessionBootstrap() });
+      firstUserMessage.content.unshift({ type: "text", text: buildSessionBootstrap(blocks) });
     } catch (error) {
       warn("session bootstrap failed", error);
     }
@@ -193,9 +299,16 @@ export default {
       }
     }
 
+    let aliases = new Map();
     if (options.sessionInit !== false && typeof ctx?.session?.hook === "function") {
       try {
-        await registerSessionInit(ctx);
+        aliases = readGitAliases(options.gitAliases?.runner ?? defaultGitAliasRunner) ?? new Map();
+      } catch (error) {
+        warn("failed to load git aliases", error);
+      }
+
+      try {
+        await registerSessionInit(ctx, aliases);
       } catch (error) {
         warn("session bootstrap registration failed", error);
       }
