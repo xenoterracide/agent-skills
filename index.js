@@ -184,6 +184,7 @@ async function executeInstallAliases(ctx, aliases, options, input) {
   const target = input?.target ?? "global";
   if (target !== "global") throw new Error(`Unsupported git config target: ${target}`);
   if (input?.confirm !== true) throw new Error("Explicit confirmation is required");
+  if (aliases === undefined) throw new Error("Git aliases could not be read; installs are unavailable");
 
   const state = classifyAliases(aliases);
   if (input?.dismiss === true) {
@@ -404,10 +405,11 @@ async function isChildSession(ctx, sessionID) {
   return Boolean(session?.parentID);
 }
 
-export async function registerSessionInit(ctx, aliases = new Map(), { offer = true } = {}) {
-  const aliasBlock = buildAliasBlock(aliases);
-  const state = classifyAliases(aliases);
-  const canOffer = offer && (state.missing.length > 0 || state.conflicts.length > 0);
+export async function registerSessionInit(ctx, aliases, { offer = true } = {}) {
+  const readSucceeded = aliases !== undefined;
+  const aliasBlock = readSucceeded ? buildAliasBlock(aliases) : "";
+  const state = readSucceeded ? classifyAliases(aliases) : undefined;
+  const canOffer = readSucceeded && offer && (state.missing.length > 0 || state.conflicts.length > 0);
 
   await ctx.session.hook("context", async (event) => {
     try {
@@ -471,11 +473,11 @@ export default {
       }
     }
 
-    let aliases = new Map();
+    let aliases;
     if (options.sessionInit !== false) {
       if (typeof ctx?.session?.hook === "function") {
         try {
-          aliases = readGitAliases(options.gitAliases?.runner ?? defaultGitAliasRunner) ?? new Map();
+          aliases = readGitAliases(options.gitAliases?.runner ?? defaultGitAliasRunner);
         } catch (error) {
           warn("failed to load git aliases", error);
         }

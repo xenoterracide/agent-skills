@@ -610,6 +610,33 @@ test("warns once and injects no aliases when git config fails", async () => {
 
     assert.equal(warnings.length, 1);
     assert.equal(event.messages[0].content[0].text.includes("Git aliases:"), false);
+    assert.equal(event.messages[0].content[0].text.includes("Install git aliases:"), false);
+  } finally {
+    console.warn = originalWarn;
+  }
+});
+
+test("warns once and injects no offers when the alias runner throws", async () => {
+  const originalWarn = console.warn;
+  const warnings = [];
+  console.warn = (...args) => warnings.push(args);
+  try {
+    const gitAliasRunner = () => {
+      throw new Error("boom");
+    };
+    const { ctx, getContextHook } = createContext({ gitAliasRunner });
+    await plugin.setup(ctx);
+
+    const event = {
+      sessionID: "ses_1",
+      messages: [{ role: "user", content: [{ type: "text", text: "hello" }] }],
+    };
+    await assert.doesNotReject(() => getContextHook()(event));
+
+    assert.equal(warnings.length, 1);
+    const bootstrap = event.messages[0].content[0].text;
+    assert.equal(bootstrap.includes("Git aliases:"), false);
+    assert.equal(bootstrap.includes("Install git aliases:"), false);
   } finally {
     console.warn = originalWarn;
   }
@@ -848,6 +875,23 @@ test("sessionInit false does not register the install tool", async () => {
   await plugin.setup(ctx);
 
   assert.deepEqual(tools, []);
+});
+
+test("a failed alias read rejects installs before any git config write", async () => {
+  const originalWarn = console.warn;
+  const warnings = [];
+  console.warn = (...args) => warnings.push(args);
+  try {
+    const { calls, writer } = createGitAliasWriter();
+    const gitAliasRunner = () => ({ status: 2, stdout: "", stderr: "fatal" });
+    const { tool } = await setupInstallTool({ gitAliasRunner, writer });
+
+    await assert.rejects(() => tool.execute({ confirm: true, aliases: ["sync"] }), /read|alias/i);
+    assert.deepEqual(calls, []);
+    assert.equal(warnings.length, 1);
+  } finally {
+    console.warn = originalWarn;
+  }
 });
 
 test("a conflicting alias in the install list is reported and not written", async () => {
