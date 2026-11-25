@@ -529,7 +529,10 @@ test("returns an empty map without warning when git has no aliases", () => {
   const warnings = [];
   console.warn = (...args) => warnings.push(args);
   try {
-    assert.deepEqual(readGitAliases(() => ({ status: 1, stdout: "" })), new Map());
+    assert.deepEqual(
+      readGitAliases(() => ({ status: 1, stdout: "" })),
+      new Map(),
+    );
     assert.deepEqual(warnings, []);
   } finally {
     console.warn = originalWarn;
@@ -541,7 +544,10 @@ test("returns undefined and warns when git config fails", () => {
   const warnings = [];
   console.warn = (...args) => warnings.push(args);
   try {
-    assert.equal(readGitAliases(() => ({ status: 2, stdout: "", stderr: "fatal" })), undefined);
+    assert.equal(
+      readGitAliases(() => ({ status: 2, stdout: "", stderr: "fatal" })),
+      undefined,
+    );
     assert.equal(warnings.length, 1);
   } finally {
     console.warn = originalWarn;
@@ -667,9 +673,7 @@ test("classifies missing and conflicting curated aliases", () => {
     ]),
   );
 
-  assert.deepEqual(conflicts, [
-    { name: "bc", current: "old value", curated: EXPECTED_CURATED_VALUES.bc },
-  ]);
+  assert.deepEqual(conflicts, [{ name: "bc", current: "old value", curated: EXPECTED_CURATED_VALUES.bc }]);
   assert.deepEqual(
     missing.map(({ name }) => name),
     EXPECTED_CURATED_NAMES.filter((name) => name !== "bc"),
