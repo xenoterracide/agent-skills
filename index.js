@@ -49,15 +49,16 @@ function defaultGitAliasRunner(args) {
 export function parseGitAliasOutput(stdout) {
   const aliases = new Map();
 
-  for (const line of stdout.split(/\r?\n/)) {
-    if (line.trim() === "") continue;
+  for (const record of stdout.split("\0")) {
+    if (record === "") continue;
 
-    const separator = line.indexOf(" ");
-    if (!line.startsWith("alias.") || separator === -1) {
-      throw new Error(`malformed git alias line: ${line}`);
+    const separator = record.indexOf("\n");
+    if (!record.startsWith("alias.") || separator === -1) {
+      throw new Error(`malformed git alias record: ${record}`);
     }
 
-    aliases.set(line.slice("alias.".length, separator), line.slice(separator + 1));
+    const key = record.slice(0, separator).replace(/\r$/, "");
+    aliases.set(key.slice("alias.".length), record.slice(separator + 1));
   }
 
   return aliases;
@@ -66,7 +67,7 @@ export function parseGitAliasOutput(stdout) {
 export function readGitAliases(run = defaultGitAliasRunner) {
   let result;
   try {
-    result = run(["config", "--get-regexp", "^alias\\."]);
+    result = run(["config", "--null", "--get-regexp", "^alias\\."]);
   } catch (error) {
     warn("failed to read git aliases", error);
     return undefined;
@@ -186,7 +187,10 @@ async function executeInstallAliases(ctx, aliases, options, input) {
   if (input?.confirm !== true) throw new Error("Explicit confirmation is required");
   if (aliases === undefined) throw new Error("Git aliases could not be read; installs are unavailable");
 
-  const state = classifyAliases(aliases);
+  const current = readGitAliases(options.gitAliases?.runner ?? defaultGitAliasRunner);
+  if (current === undefined) throw new Error("Git aliases could not be read; installs are unavailable");
+
+  const state = classifyAliases(current);
   if (input?.dismiss === true) {
     if (typeof ctx.storage?.set === "function") await ctx.storage.set(dismissalKey(state), true);
     return { content: "Git alias install offers dismissed for this alias set." };

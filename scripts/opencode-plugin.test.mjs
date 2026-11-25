@@ -460,7 +460,7 @@ test("does not read git aliases or register the session hook when sessionInit is
   let runs = 0;
   const gitAliasRunner = () => {
     runs += 1;
-    return { status: 0, stdout: "alias.sp status --porcelain=v1 --branch\n" };
+    return { status: 0, stdout: "alias.sp\nstatus --porcelain=v1 --branch\0" };
   };
   const { ctx, getContextHook } = createContext({
     options: { sessionInit: false },
@@ -473,7 +473,7 @@ test("does not read git aliases or register the session hook when sessionInit is
 });
 
 test("formats parsed git aliases for injection", () => {
-  const stdout = "alias.sp status --porcelain=v1 --branch\nalias.bc branch --show-current\n";
+  const stdout = "alias.sp\nstatus --porcelain=v1 --branch\0alias.bc\nbranch --show-current\0";
   const block = buildAliasBlock(parseGitAliasOutput(stdout));
 
   assert.match(block, /^Git aliases:/);
@@ -483,11 +483,11 @@ test("formats parsed git aliases for injection", () => {
 });
 
 test("injects git aliases from git config before the first user text", async () => {
-  const stdout = "alias.sp status --porcelain=v1 --branch\nalias.bc branch --show-current\n";
+  const stdout = "alias.sp\nstatus --porcelain=v1 --branch\0alias.bc\nbranch --show-current\0";
   let runs = 0;
   const gitAliasRunner = (args) => {
     runs += 1;
-    assert.deepEqual(args, ["config", "--get-regexp", "^alias\\."]);
+    assert.deepEqual(args, ["config", "--null", "--get-regexp", "^alias\\."]);
     return { status: 0, stdout };
   };
   const { ctx, getContextHook } = createContext({ gitAliasRunner });
@@ -511,7 +511,7 @@ test("injects git aliases from git config before the first user text", async () 
 test("injects git aliases when no user message exists", async () => {
   const gitAliasRunner = () => ({
     status: 0,
-    stdout: "alias.bc branch --show-current\n",
+    stdout: "alias.bc\nbranch --show-current\0",
   });
   const { ctx, getContextHook } = createContext({ gitAliasRunner });
   await plugin.setup(ctx);
@@ -577,13 +577,22 @@ test("returns undefined and warns on malformed git alias output", () => {
   console.warn = (...args) => warnings.push(args);
   try {
     assert.equal(
-      readGitAliases(() => ({ status: 0, stdout: "alias.sp status\nbroken line\n" })),
+      readGitAliases(() => ({ status: 0, stdout: "alias.sp status\0" })),
       undefined,
     );
     assert.equal(warnings.length, 1);
   } finally {
     console.warn = originalWarn;
   }
+});
+
+test("parses multi-line alias values without dropping other aliases", () => {
+  const aliases = parseGitAliasOutput(
+    "alias.multi\necho one\nalias.fake nope\0alias.sp\nstatus --porcelain=v1 --branch\0",
+  );
+
+  assert.deepEqual(aliases.get("multi"), "echo one\nalias.fake nope");
+  assert.deepEqual(aliases.get("sp"), "status --porcelain=v1 --branch");
 });
 
 test("injects no alias block when git has no aliases", async () => {
@@ -651,7 +660,7 @@ test("warns once and injects no offers when the alias runner throws", async () =
 test("does not inject aliases into child sessions", async () => {
   const gitAliasRunner = () => ({
     status: 0,
-    stdout: "alias.sp status --porcelain=v1 --branch\n",
+    stdout: "alias.sp\nstatus --porcelain=v1 --branch\0",
   });
   const { ctx, getContextHook } = createContext({ gitAliasRunner, parentID: "ses_parent" });
   await plugin.setup(ctx);
@@ -728,7 +737,7 @@ test("setup and context injection never write git config", async () => {
 });
 
 test("gitAliases.offer false injects aliases without an install offer", async () => {
-  const gitAliasRunner = () => ({ status: 0, stdout: "alias.sp status --porcelain=v1 --branch\n" });
+  const gitAliasRunner = () => ({ status: 0, stdout: "alias.sp\nstatus --porcelain=v1 --branch\0" });
   const { ctx, getContextHook } = createContext({
     options: { gitAliases: { offer: false } },
     gitAliasRunner,
@@ -796,7 +805,7 @@ test("a changed conflicting set produces a new key and restores the offer", asyn
   const conflictState = classifyAliases(new Map([["bc", "old branch"]]));
   assert.notEqual(dismissalKey(conflictState), dismissalKey(emptyState));
 
-  const gitAliasRunner = () => ({ status: 0, stdout: "alias.bc old branch\n" });
+  const gitAliasRunner = () => ({ status: 0, stdout: "alias.bc\nold branch\0" });
   const second = createContext({ storage, gitAliasRunner });
   await plugin.setup(second.ctx);
 
@@ -831,7 +840,7 @@ test("confirmed aliases install as curated global git config", async () => {
 
 test("an alias already set to its curated value is not written", async () => {
   const { calls, writer } = createGitAliasWriter();
-  const gitAliasRunner = () => ({ status: 0, stdout: "alias.sp status --porcelain=v1 --branch\n" });
+  const gitAliasRunner = () => ({ status: 0, stdout: "alias.sp\nstatus --porcelain=v1 --branch\0" });
   const { tool } = await setupInstallTool({ gitAliasRunner, writer });
 
   await tool.execute({ confirm: true, aliases: ["sync", "sp"] });
@@ -900,7 +909,7 @@ test("a failed alias read rejects installs before any git config write", async (
 
 test("a conflicting alias in the install list is reported and not written", async () => {
   const { calls, writer } = createGitAliasWriter();
-  const gitAliasRunner = () => ({ status: 0, stdout: "alias.bc old branch\n" });
+  const gitAliasRunner = () => ({ status: 0, stdout: "alias.bc\nold branch\0" });
   const { tool } = await setupInstallTool({ gitAliasRunner, writer });
 
   const result = await tool.execute({ confirm: true, aliases: ["bc", "sync"] });
@@ -910,9 +919,39 @@ test("a conflicting alias in the install list is reported and not written", asyn
   assert.match(result.content, /bc/);
 });
 
+test("an alias set after setup is treated as a conflict at install time", async () => {
+  const { calls, writer } = createGitAliasWriter();
+  let reads = 0;
+  const gitAliasRunner = () => {
+    reads += 1;
+    return reads === 1 ? { status: 1, stdout: "" } : { status: 0, stdout: "alias.bc\ncustom branch\0" };
+  };
+  const { tool } = await setupInstallTool({ gitAliasRunner, writer });
+
+  const result = await tool.execute({ confirm: true, aliases: ["bc", "sync"] });
+
+  assert.deepEqual(calls, [["config", "--global", "alias.sync", "fetch --all --prune --quiet"]]);
+  assert.match(result.content, /conflict/i);
+  assert.match(result.content, /bc/);
+});
+
+test("a confirmed overwrite applies to a conflict created after setup", async () => {
+  const { calls, writer } = createGitAliasWriter();
+  let reads = 0;
+  const gitAliasRunner = () => {
+    reads += 1;
+    return reads === 1 ? { status: 1, stdout: "" } : { status: 0, stdout: "alias.bc\ncustom branch\0" };
+  };
+  const { tool } = await setupInstallTool({ gitAliasRunner, writer });
+
+  await tool.execute({ confirm: true, overwrite: [{ name: "bc", value: EXPECTED_CURATED_VALUES.bc }] });
+
+  assert.deepEqual(calls, [["config", "--global", "alias.bc", "branch --show-current"]]);
+});
+
 test("a confirmed overwrite writes the curated value for a conflict", async () => {
   const { calls, writer } = createGitAliasWriter();
-  const gitAliasRunner = () => ({ status: 0, stdout: "alias.bc old branch\n" });
+  const gitAliasRunner = () => ({ status: 0, stdout: "alias.bc\nold branch\0" });
   const { tool } = await setupInstallTool({ gitAliasRunner, writer });
 
   await tool.execute({ confirm: true, overwrite: [{ name: "bc", value: EXPECTED_CURATED_VALUES.bc }] });
@@ -921,7 +960,7 @@ test("a confirmed overwrite writes the curated value for a conflict", async () =
 });
 
 test("invalid overwrite requests are rejected before any git config write", async () => {
-  const gitAliasRunner = () => ({ status: 0, stdout: "alias.bc old branch\n" });
+  const gitAliasRunner = () => ({ status: 0, stdout: "alias.bc\nold branch\0" });
   const inputs = [
     { confirm: true, overwrite: [{ name: "bc", value: "wrong value" }] },
     { confirm: true, overwrite: [{ name: "not-curated", value: "anything" }] },
@@ -953,7 +992,7 @@ test("unknown aliases and non-global targets are rejected before any git config 
 
 test("an alias in both install and overwrite lists is rejected as ambiguous", async () => {
   const { calls, writer } = createGitAliasWriter();
-  const gitAliasRunner = () => ({ status: 0, stdout: "alias.bc old branch\n" });
+  const gitAliasRunner = () => ({ status: 0, stdout: "alias.bc\nold branch\0" });
   const { tool } = await setupInstallTool({ gitAliasRunner, writer });
 
   await assert.rejects(
