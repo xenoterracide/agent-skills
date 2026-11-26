@@ -24,6 +24,8 @@ it("completion retrospective loads from a fresh prompt naming the epic", () => {
     {
       companions: ["jira-workflow", "hemingway"],
       fixture: "skills/jira-workflow/tests/fixtures/project-config",
+      reads: [".config/agent/project.yaml"],
+      prose: { includes: [/no findings/i] },
     },
   );
 });
