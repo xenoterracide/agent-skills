@@ -13,7 +13,18 @@ interface SchemaShape {
   properties: { tracker: { required: string[]; properties: Record<string, unknown> } };
 }
 
-const TRACKER_KEYS = ["kind", "skill", "site", "project", "board", "work_types", "labels", "statuses", "transitions"];
+const TRACKER_KEYS = [
+  "kind",
+  "skill",
+  "site",
+  "project",
+  "retrospective_epic",
+  "board",
+  "work_types",
+  "labels",
+  "statuses",
+  "transitions",
+];
 
 function skillMarkdown(): string[] {
   const paths: string[] = [];
@@ -91,6 +102,7 @@ it("ships the agent-skills project config", () => {
   expect(text).toContain("xenoterracide/agent-skills/develop/schemas/project.schema.json");
   expect(text).toContain("repo: agent-skills");
   expect(text).toContain("project: XTC");
+  expect(text).toContain("retrospective_epic: XTC-86");
   expect(text).toContain("board: 3");
   expect(text).toContain("work_types: [Epic, Feature, Task, Bug, Subtask]");
   expect(text).toContain('project_prefix: "project:"');
@@ -192,6 +204,30 @@ const RETROSPECTIVE_REQUIRED = [
   "Cut <named target>: <saving>",
   "Skip the comment when no observations exist",
   "name the missing key",
+  "tracker.retrospective_epic",
+  "outward",
+  "Relates",
+  "Set priority to Low",
+  "1 Low, 2-3 Medium, 4-7 High, 8 or more Highest",
+  "Count one link per completed ticket",
+  "Count only outward `Relates` links whose target status is `tracker.statuses.done`",
+  "Ignore repeat mentions inside one session",
+  "Treat a missing link as count 1",
+  "rankBeforeIssue",
+  "rankAfterIssue",
+  "Leave other backlog ranks unchanged",
+  "Skip keys with no slot among epic children",
+  "Split the target sequence into contiguous runs of affected keys",
+  "For the run ending at the last position",
+  "Process its keys in target order",
+  "Process its keys in reverse target order",
+  "Process all keys except the last in target order",
+  "When no unaffected child exists",
+  "Confirm the target sequence",
+  "Stop and report the mismatch when the order differs",
+  "without follow-up questions",
+  "findings summary",
+  "No automatic reparenting of legacy tasks",
 ];
 
 const RETROSPECTIVE_FORBIDDEN = [

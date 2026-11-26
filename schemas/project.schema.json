@@ -14,7 +14,18 @@
     "tracker": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["kind", "skill", "site", "project", "board", "work_types", "labels", "statuses", "transitions"],
+      "required": [
+        "kind",
+        "skill",
+        "site",
+        "project",
+        "retrospective_epic",
+        "board",
+        "work_types",
+        "labels",
+        "statuses",
+        "transitions"
+      ],
       "properties": {
         "kind": {
           "const": "jira",
@@ -31,6 +42,10 @@
         "project": {
           "type": "string",
           "description": "Jira project key."
+        },
+        "retrospective_epic": {
+          "type": "string",
+          "description": "Epic that tracks completion-retrospective work."
         },
         "board": {
           "type": "integer",

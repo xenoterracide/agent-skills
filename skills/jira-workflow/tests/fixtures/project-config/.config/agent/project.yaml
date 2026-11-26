@@ -10,6 +10,7 @@ tracker:
   skill: jira-workflow
   site: xenoterracide.atlassian.net
   project: XTC
+  retrospective_epic: XTC-86
   board: 3
   work_types: [Epic, Feature, Task, Bug, Subtask]
   labels:

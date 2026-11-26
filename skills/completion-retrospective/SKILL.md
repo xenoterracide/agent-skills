@@ -19,12 +19,19 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 Read `.config/agent/project.yaml` before tracker work. When it is missing, stop
 and name the path. Use `jira-workflow` for issue operations and `hemingway` for
-prose.
+prose. Follow this procedure without follow-up questions.
 
 ## Required Companion Skills
 
-- **`jira-workflow`** — issue reads, creates, moves, and comments
+- **`jira-workflow`** — issue reads, creates, moves, comments, links, and ranks
 - **`hemingway`** — issue descriptions and comments are prose
+
+## Tracker calls
+
+Use `createJiraIssueLink` with `linkType: Relates`. Pass the finding issue as
+`inwardIssue` and the completed ticket as `outwardIssue`. Use `editJiraIssue`
+with `rankBeforeIssue` or `rankAfterIssue` for rank calls. Omit
+`rankCustomFieldId`.
 
 ## Procedure
 
@@ -44,20 +51,53 @@ ticket just moved to done.
 4. Read open issues in `tracker.project`. Treat statuses other than
    `tracker.statuses.done` and `tracker.statuses.dropped` as open. Treat a
    finding as a duplicate when an open issue names the same target and the
-   same change, whatever the wording or count. Drop matches from task
-   creation, but keep them as observations.
+   same change, whatever the wording or count. When the issue has no outward
+   `Relates` link to a completed ticket, keep the repeat as an observation.
+   Do not create a task, add a link, or change priority. When the issue has
+   such a link, add an outward `Relates` link from the issue to the completed
+   ticket when absent. Count one link per completed ticket.
+   Count only outward `Relates` links whose target status is `tracker.statuses.done`.
+   Ignore repeat mentions inside one session. Map the distinct count to
+   `1 Low, 2-3 Medium, 4-7 High, 8 or more Highest`. Change priority only when
+   the bucket changes.
 5. Create a `Task` issue in `tracker.project` for each actionable finding.
+   Parent each `Task` to `tracker.retrospective_epic`. Set priority to Low.
    Use `Cut <named target>: <saving>` as the summary. Set the label to the full
    list containing only `<tracker.labels.project_prefix><repo>`. Confirm the
    issue lands in `tracker.statuses.captured`. Use the `jira-workflow` move rule
-   when it does not.
-6. Add one comment to the completed ticket when observations exist.
+   when it does not. Add one outward `Relates` link from the new task to the
+   completed ticket.
+6. Rank the affected keys. Affected keys are children of
+   `tracker.retrospective_epic` that were created in this run or whose
+   `Relates` links changed in this run.
+   Skip keys with no slot among epic children.
+   Read children of `tracker.retrospective_epic` in rank order.
+   Record the slots held by affected keys. Treat a missing link as count 1.
+   Sort affected keys by priority bucket highest first, then distinct
+   completed-ticket link count largest first, then key ascending.
+   Build the target sequence by replacing the recorded slots with the sorted
+   keys. Keep every other child in its current position.
+   Leave other backlog ranks unchanged.
+   Split the target sequence into contiguous runs of affected keys.
+   For each run followed by an unaffected child, use `rankBeforeIssue`.
+   Process its keys in target order. Anchor each call to that child.
+   For the run ending at the last position, use `rankAfterIssue`.
+   Process its keys in reverse target order.
+   Anchor each call to the child before the run.
+   When no unaffected child exists, use `rankBeforeIssue`.
+   Process all keys except the last in target order.
+   Anchor each call to the last key.
+   Re-read children in rank order. Confirm the target sequence.
+   Stop and report the mismatch when the order differs.
+7. Add one comment to the completed ticket when observations exist.
    Treat findings skipped as duplicates as observations. Use a separate
    comment call with those observations.
    Skip the comment when no observations exist.
-7. Report the created keys. Report the comment ID only when a comment was
+8. Report the created keys. Report the comment ID only when a comment was
    posted. Report "no findings" when both lists are empty. Do not change the
-   completed ticket's status.
+   completed ticket's status. Add a findings summary. For each finding, list
+   its target, saving, duplicate status, issue key or observation, and any
+   priority, link, or rank change.
 
 ## Issue text
 
@@ -74,3 +114,9 @@ Use this shape for each observation in the comment:
 ```markdown
 Observation: <what happened>. No change proposed.
 ```
+
+## Non-goals
+
+- No automatic reparenting of legacy tasks.
+- No new status or transition.
+- No change to observation comments.
