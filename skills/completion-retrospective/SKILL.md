@@ -67,19 +67,23 @@ ticket just moved to done.
    issue lands in `tracker.statuses.captured`. Use the `jira-workflow` move rule
    when it does not. Add one outward `Relates` link from the new task to the
    completed ticket.
-6. Rank the affected keys. Affected keys are tasks created in this run plus
-   issues whose `Relates` links changed in this run. Read children of
-   `tracker.retrospective_epic` in rank order. Record the slots held by
-   affected keys. Treat a missing link as count 1.
+6. Rank the affected keys. Affected keys are children of
+   `tracker.retrospective_epic` that were created in this run or whose
+   `Relates` links changed in this run.
+   Skip keys with no slot among epic children.
+   Read children of `tracker.retrospective_epic` in rank order.
+   Record the slots held by affected keys. Treat a missing link as count 1.
    Sort affected keys by priority bucket highest first, then distinct
    completed-ticket link count largest first, then key ascending.
    Build the target sequence by replacing the recorded slots with the sorted
    keys. Keep every other child in its current position.
-   Apply rank calls only to affected keys.
    Leave other backlog ranks unchanged.
-   For each affected key in target order, use `rankAfterIssue` with its
-   immediate predecessor in the target sequence. When the key is first, use
-   `rankBeforeIssue` with its immediate successor.
+   Process affected keys from the last target position to the first.
+   Use `rankBeforeIssue` with the key's immediate successor in the target
+   sequence. When no successor exists, use `rankAfterIssue` with the
+   immediate predecessor. When neither neighbor exists, skip the rank call.
+   Re-read children in rank order. Confirm the target sequence.
+   Stop and report the mismatch when the order differs.
 7. Add one comment to the completed ticket when observations exist.
    Treat findings skipped as duplicates as observations. Use a separate
    comment call with those observations.
