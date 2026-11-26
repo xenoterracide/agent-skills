@@ -13,7 +13,18 @@ interface SchemaShape {
   properties: { tracker: { required: string[]; properties: Record<string, unknown> } };
 }
 
-const TRACKER_KEYS = ["kind", "skill", "site", "project", "board", "work_types", "labels", "statuses", "transitions"];
+const TRACKER_KEYS = [
+  "kind",
+  "skill",
+  "site",
+  "project",
+  "retrospective_epic",
+  "board",
+  "work_types",
+  "labels",
+  "statuses",
+  "transitions",
+];
 
 function skillMarkdown(): string[] {
   const paths: string[] = [];
@@ -91,6 +102,7 @@ it("ships the agent-skills project config", () => {
   expect(text).toContain("xenoterracide/agent-skills/develop/schemas/project.schema.json");
   expect(text).toContain("repo: agent-skills");
   expect(text).toContain("project: XTC");
+  expect(text).toContain("retrospective_epic: XTC-86");
   expect(text).toContain("board: 3");
   expect(text).toContain("work_types: [Epic, Feature, Task, Bug, Subtask]");
   expect(text).toContain('project_prefix: "project:"');
