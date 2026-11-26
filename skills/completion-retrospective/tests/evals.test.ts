@@ -16,3 +16,14 @@ it("completion retrospective loads after a done ticket", () => {
     },
   );
 });
+
+it("completion retrospective loads from a fresh prompt naming the epic", () => {
+  assertSkillBehavior(
+    "XTC-93 is done. Review the session for wasted steps and record the savings as tasks under the retrospective epic XTC-87. Add Relates links from the new tasks to XTC-93 and rank the affected epic children. Follow the workflow without follow-up questions.",
+    "completion-retrospective",
+    {
+      companions: ["jira-workflow", "hemingway"],
+      fixture: "skills/jira-workflow/tests/fixtures/project-config",
+    },
+  );
+});
