@@ -78,10 +78,13 @@ ticket just moved to done.
    Build the target sequence by replacing the recorded slots with the sorted
    keys. Keep every other child in its current position.
    Leave other backlog ranks unchanged.
-   Process affected keys from the last target position to the first.
-   Use `rankBeforeIssue` with the key's immediate successor in the target
-   sequence. When no successor exists, use `rankAfterIssue` with the
-   immediate predecessor. When neither neighbor exists, skip the rank call.
+   Split the target sequence into contiguous runs of affected keys.
+   For each run with an unaffected child after it, call `rankBeforeIssue`
+   on each key in target order with that child as the anchor.
+   For the final run, call `rankAfterIssue` on each key in reverse target order
+   with the unaffected child before it as the anchor.
+   When no unaffected child exists, call `rankBeforeIssue` on each key except
+   the last with the last key as the anchor.
    Re-read children in rank order. Confirm the target sequence.
    Stop and report the mismatch when the order differs.
 7. Add one comment to the completed ticket when observations exist.
