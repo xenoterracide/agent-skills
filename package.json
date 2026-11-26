@@ -1,6 +1,10 @@
 {
+<<<<<<< before updating
   "name": "@xenoterracide/agents",
   "version": "26.11.27",
+=======
+  "name": "agent-skills",
+>>>>>>> after updating
   "packageManager": "pnpm@12.23.0",
   "private": true,
   "type": "module",
