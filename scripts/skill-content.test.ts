@@ -204,6 +204,20 @@ const RETROSPECTIVE_REQUIRED = [
   "Cut <named target>: <saving>",
   "Skip the comment when no observations exist",
   "name the missing key",
+  "tracker.retrospective_epic",
+  "outward",
+  "Relates",
+  "Set priority to Low",
+  "1 Low, 2-3 Medium, 4-7 High, 8 or more Highest",
+  "Count one link per completed ticket",
+  "Ignore repeat mentions inside one session",
+  "Treat a missing link as count 1",
+  "rankBeforeIssue",
+  "rankAfterIssue",
+  "Leave other backlog ranks unchanged",
+  "without follow-up questions",
+  "findings summary",
+  "No automatic reparenting of legacy tasks",
 ];
 
 const RETROSPECTIVE_FORBIDDEN = [
