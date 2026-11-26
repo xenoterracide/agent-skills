@@ -79,12 +79,15 @@ ticket just moved to done.
    keys. Keep every other child in its current position.
    Leave other backlog ranks unchanged.
    Split the target sequence into contiguous runs of affected keys.
-   For each run with an unaffected child after it, call `rankBeforeIssue`
-   on each key in target order with that child as the anchor.
-   For the final run, call `rankAfterIssue` on each key in reverse target order
-   with the unaffected child before it as the anchor.
-   When no unaffected child exists, call `rankBeforeIssue` on each key except
-   the last with the last key as the anchor.
+   For each run followed by an unaffected child, use `rankBeforeIssue`.
+   Process its keys in target order. Anchor each call to that child.
+   For the run ending at the last position, use `rankAfterIssue`.
+   Process its keys in reverse target order.
+   Anchor each call to the child before the run.
+   When no unaffected child exists, use `rankBeforeIssue`.
+   Process all keys except the last in target order.
+   Anchor each call to the last key.
+   Skip a call when the key already holds its target slot.
    Re-read children in rank order. Confirm the target sequence.
    Stop and report the mismatch when the order differs.
 7. Add one comment to the completed ticket when observations exist.
