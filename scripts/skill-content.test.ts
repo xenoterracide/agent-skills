@@ -210,6 +210,7 @@ const RETROSPECTIVE_REQUIRED = [
   "Set priority to Low",
   "1 Low, 2-3 Medium, 4-7 High, 8 or more Highest",
   "Count one link per completed ticket",
+  "Count only outward `Relates` links whose target status is `tracker.statuses.done`",
   "Ignore repeat mentions inside one session",
   "Treat a missing link as count 1",
   "rankBeforeIssue",

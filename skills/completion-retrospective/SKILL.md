@@ -23,8 +23,15 @@ prose. Follow this procedure without follow-up questions.
 
 ## Required Companion Skills
 
-- **`jira-workflow`** — issue reads, creates, moves, and comments
+- **`jira-workflow`** — issue reads, creates, moves, comments, links, and ranks
 - **`hemingway`** — issue descriptions and comments are prose
+
+## Tracker calls
+
+Use `createJiraIssueLink` with `linkType: Relates`. Pass the finding issue as
+`inwardIssue` and the completed ticket as `outwardIssue`. Use `editJiraIssue`
+with `rankBeforeIssue` or `rankAfterIssue` for rank calls. Omit
+`rankCustomFieldId`.
 
 ## Procedure
 
@@ -49,6 +56,7 @@ ticket just moved to done.
    Do not create a task, add a link, or change priority. When the issue has
    such a link, add an outward `Relates` link from the issue to the completed
    ticket when absent. Count one link per completed ticket.
+   Count only outward `Relates` links whose target status is `tracker.statuses.done`.
    Ignore repeat mentions inside one session. Map the distinct count to
    `1 Low, 2-3 Medium, 4-7 High, 8 or more Highest`. Change priority only when
    the bucket changes.
@@ -64,13 +72,14 @@ ticket just moved to done.
    `tracker.retrospective_epic` in rank order. Record the slots held by
    affected keys. Treat a missing link as count 1.
    Sort affected keys by priority bucket highest first, then distinct
-   completed-ticket link count largest first, then key ascending. Place the
-   sorted keys into the recorded slots.
+   completed-ticket link count largest first, then key ascending.
+   Build the target sequence by replacing the recorded slots with the sorted
+   keys. Keep every other child in its current position.
    Apply rank calls only to affected keys.
    Leave other backlog ranks unchanged.
-   For each affected key in target order, use `rankAfterIssue` with the
-   preceding child in the target sequence. When the key is first, use
-   `rankBeforeIssue` with the next child. Do not pass `rankCustomFieldId`.
+   For each affected key in target order, use `rankAfterIssue` with its
+   immediate predecessor in the target sequence. When the key is first, use
+   `rankBeforeIssue` with its immediate successor.
 7. Add one comment to the completed ticket when observations exist.
    Treat findings skipped as duplicates as observations. Use a separate
    comment call with those observations.
