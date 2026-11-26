@@ -222,7 +222,6 @@ const RETROSPECTIVE_REQUIRED = [
   "Process its keys in target order",
   "Process its keys in reverse target order",
   "Process all keys except the last in target order",
-  "Skip a call when the key already holds its target slot",
   "When no unaffected child exists",
   "Confirm the target sequence",
   "Stop and report the mismatch when the order differs",

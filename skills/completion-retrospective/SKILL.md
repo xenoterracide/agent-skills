@@ -87,7 +87,6 @@ ticket just moved to done.
    When no unaffected child exists, use `rankBeforeIssue`.
    Process all keys except the last in target order.
    Anchor each call to the last key.
-   Skip a call when the key already holds its target slot.
    Re-read children in rank order. Confirm the target sequence.
    Stop and report the mismatch when the order differs.
 7. Add one comment to the completed ticket when observations exist.
