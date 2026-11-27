@@ -228,6 +228,10 @@ const RETROSPECTIVE_REQUIRED = [
   "without follow-up questions",
   "findings summary",
   "No automatic reparenting of legacy tasks",
+  "Use the duplicate issue as the repeat target",
+  "This applies when the target has no outward `Relates` link",
+  "Add the target to the affected keys when its priority bucket changes",
+  "When no open issue matches the finding, keep the repeat as an observation",
 ];
 
 const RETROSPECTIVE_FORBIDDEN = [
@@ -238,6 +242,7 @@ const RETROSPECTIVE_FORBIDDEN = [
   "`Open`",
   "`To Do`",
   "`Added to backlog`",
+  "`Relates` link to a completed ticket, keep the repeat as an observation",
 ];
 
 it("keeps tracker facts out of completion-retrospective", () => {
