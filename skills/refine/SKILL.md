@@ -39,10 +39,8 @@ This skill owns the `refine phase` and the `tracker.statuses.refining` role.
 3. Ask refinement questions until all outstanding questions are answered. Put
    the agreed spec in the issue description. Do not add a breakdown while the
    issue is in `tracker.statuses.refining`.
-4. When all outstanding questions have been answered, ask whether to move the
-   issue to `tracker.statuses.ready`. Move through `jira-workflow` only on yes.
-   On no, leave the issue in `tracker.statuses.refining` and stop. The caller
-   may resume later. Do not infer the next phase.
+4. Stop when all outstanding questions have been answered. Leave the issue in
+   `tracker.statuses.refining`. Do not infer the next phase.
 
 ## Non-goals
 

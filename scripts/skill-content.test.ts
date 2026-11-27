@@ -174,6 +174,9 @@ it("pins the jira-workflow config contract", () => {
     "target role's value in `tracker.statuses`",
     "Follow the named phase skill",
     "Do not infer a phase from the phase just finished",
+    "Move to `reviewing` when the PR opens",
+    "Move to `dropped` when dropped",
+    "Reopen from `done` or `dropped`",
   ]) {
     expect(text).toContain(value);
   }

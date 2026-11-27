@@ -52,10 +52,8 @@ it("pins the refine phase contract", () => {
     "before questions",
     "Do not add a breakdown",
     "until all outstanding questions are answered",
-    "ask whether to move the issue to `tracker.statuses.ready`",
-    "Move through `jira-workflow` only on yes",
-    "leave the issue in `tracker.statuses.refining` and stop",
-    "The caller may resume later",
+    "Stop when all outstanding questions have been answered",
+    "Leave the issue in `tracker.statuses.refining`",
     "not in `tracker.statuses.captured` or `tracker.statuses.refining`",
     "When the issue is already in `tracker.statuses.refining`, keep it there",
   ]);
