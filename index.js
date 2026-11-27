@@ -98,7 +98,7 @@ export function buildAliasBlock(aliases) {
     .sort(([left], [right]) => left.localeCompare(right))
     .map(([name, value]) => `alias.${name} ${value}`);
   if (lines.length === 0) return "";
-  return `Git aliases:\n${lines.join("\n")}`;
+  return `Git aliases:\n${lines.join("\n")}\nUse these aliases for every matching git command. Do not expand them.`;
 }
 
 export function classifyAliases(current) {
@@ -397,8 +397,8 @@ export function buildSessionBootstrap(blocks = []) {
     "<EXTREMELY_IMPORTANT>",
     BOOTSTRAP_MARKER,
     "At the start of this session, before taking any other action, invoke the `using-xenoterracide-agent-skills` skill and follow its instructions.",
-    "</EXTREMELY_IMPORTANT>",
     ...blocks.filter((block) => typeof block === "string" && block.length > 0),
+    "</EXTREMELY_IMPORTANT>",
   ].join("\n");
 }
 

@@ -482,6 +482,32 @@ test("formats parsed git aliases for injection", () => {
   assert.ok(block.indexOf("alias.bc") < block.indexOf("alias.sp"));
 });
 
+test("adds an imperative to the injected alias block", () => {
+  const stdout = "alias.sp\nstatus --porcelain=v1 --branch\0";
+  const block = buildAliasBlock(parseGitAliasOutput(stdout));
+  assert.match(block, /Use these aliases for every matching git command\. Do not expand them\./);
+});
+
+test("keeps injected blocks inside the importance wrapper", async () => {
+  const gitAliasRunner = () => ({ status: 0, stdout: "alias.sp\nstatus --porcelain=v1 --branch\0" });
+  const { ctx, getContextHook } = createContext({ gitAliasRunner });
+  await plugin.setup(ctx);
+  const event = { sessionID: "ses_1", messages: [{ role: "user", content: [{ type: "text", text: "hello" }] }] };
+  await getContextHook()(event);
+
+  const bootstrap = event.messages[0].content[0].text;
+  const open = bootstrap.indexOf("<EXTREMELY_IMPORTANT>");
+  const aliases = bootstrap.indexOf("Git aliases:");
+  const offer = bootstrap.indexOf("Install git aliases:");
+  const close = bootstrap.indexOf("</EXTREMELY_IMPORTANT>");
+  assert.ok(open > -1);
+  assert.ok(open < aliases);
+  assert.ok(aliases < close);
+  assert.ok(offer > open);
+  assert.ok(offer < close);
+  assert.ok(bootstrap.indexOf("Use these aliases for every matching git command.") < close);
+});
+
 test("injects git aliases from git config before the first user text", async () => {
   const stdout = "alias.sp\nstatus --porcelain=v1 --branch\0alias.bc\nbranch --show-current\0";
   let runs = 0;

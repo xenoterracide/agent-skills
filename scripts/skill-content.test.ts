@@ -53,6 +53,22 @@ function allSkillText(): string {
     .toLowerCase();
 }
 
+function expectDoc(path: string, present: string[], absent: string[]): void {
+  const text = readFileSync(path, "utf8");
+  for (const value of present) expect(text).toContain(value);
+  for (const value of absent) expect(text).not.toContain(value);
+}
+
+const forbiddenGit =
+  /git (sync|sp|pl|p |bc|wtl|wtr|bd|last|fetch --all --prune|fetch origin|worktree list|worktree remove|branch -D|branch --show-current|status|pull|push)/;
+
+const gitDocs = [
+  ["using-xenoterracide-agent-skills/SKILL.md", ["outcome they need", "Keep fetch and pull output quiet"]],
+  ["git-workflow/references/pull-request.md", ["Fetch and prune"]],
+  ["git-workflow/references/manual-sync.md", ["modified tracked files", "Keep the output quiet"]],
+  ["git-workflow/references/workflow-push-rejection.md", ["latest remote state"]],
+] as const;
+
 // Scope: skills/ only. XTC-14's design note and plan keep the retired policy
 // as historical ticket scope.
 
@@ -265,4 +281,13 @@ it("pins completion-retrospective discovery", () => {
   expect(text).toMatch(/description:[\s\S]*?Use when[\s\S]*?wasted tokens/);
   expect(text).toContain("- **`jira-workflow`**");
   expect(text).toContain("- **`hemingway`**");
+});
+
+it("describes git workflows without prescribing commands", () => {
+  for (const [path, phrases] of gitDocs) {
+    const text = readFileSync(`skills/${path}`, "utf8");
+    for (const phrase of phrases) expect(text).toContain(phrase);
+    expect(text).not.toMatch(forbiddenGit);
+  }
+  expectDoc("skills/running-commands/references/quiet.md", ["git commit -m"], ["git c >", "git last"]);
 });
