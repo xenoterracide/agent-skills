@@ -251,11 +251,11 @@ it("keeps tracker facts out of completion-retrospective", () => {
   }
 });
 
-it("runs the retrospective after a done move", () => {
-  const text = readFileSync("skills/jira-workflow/SKILL.md", "utf8");
+it("runs the retrospective from the retrospective phase skill", () => {
+  const text = readFileSync("skills/retrospective/SKILL.md", "utf8");
 
   expect(text).toContain("completion-retrospective");
-  expect(text).toMatch(/Move to `?done`?[\s\S]*?completion-retrospective/);
+  expect(text).toMatch(/tracker\.statuses\.done[\s\S]*?completion-retrospective/);
 });
 
 it("pins completion-retrospective discovery", () => {

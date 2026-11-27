@@ -63,3 +63,14 @@ it("pins the implement phase contract", () => {
     "name the missing breakdown",
   ]);
 });
+
+it("pins the retrospective phase contract", () => {
+  pinPhaseSkill("retrospective", "done", [
+    "retrospective phase",
+    "tracker.statuses.done",
+    "merged code",
+    "green checks",
+    "Do not change the issue status",
+    "completion-retrospective",
+  ]);
+});
