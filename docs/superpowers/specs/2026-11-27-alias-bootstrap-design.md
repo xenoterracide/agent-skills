@@ -17,7 +17,7 @@ The plugin injects a `Git aliases:` list with every session bootstrap. It append
 - The one-time bootstrap marker stays unchanged. Repeated context calls still skip injection.
 - Git workflow steps describe outcomes. The agent chooses commands from the session. No step declares aliases or canonical git commands.
 - Static tests pin the wrapper order, the imperative, and the workflow descriptions. No eval is added.
-- Version moves to `26.11.32`. The catalog is regenerated.
+- Version moves to `26.11.31`. The catalog is regenerated.
 
 ## Non-goals
 
