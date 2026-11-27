@@ -67,6 +67,11 @@
       "files": ["SKILL.md", "references/code.md", "references/prose.md"]
     },
     {
+      "name": "implement",
+      "version": "26.11.30",
+      "files": ["SKILL.md"]
+    },
+    {
       "name": "iterative-development",
       "version": "26.11.30",
       "files": ["SKILL.md"]
