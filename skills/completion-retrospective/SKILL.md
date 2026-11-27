@@ -97,8 +97,7 @@ ticket just moved to done.
    Re-read children in rank order. Confirm the target sequence.
    Stop and report the mismatch when the order differs.
 7. Add one comment to the completed ticket when observations exist.
-   Treat findings skipped as duplicates as observations. Use a separate
-   comment call with those observations.
+   Use a separate comment call with the observations from step 4.
    Skip the comment when no observations exist.
 8. Report the created keys. Report the comment ID only when a comment was
    posted. Report "no findings" when both lists are empty. Do not change the

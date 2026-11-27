@@ -177,6 +177,7 @@ it("pins the jira-workflow config contract", () => {
     "Move to `reviewing` when the PR opens",
     "Move to `dropped` when dropped",
     "Reopen from `done` or `dropped`",
+    "Move to `done` after merge and green checks",
   ]) {
     expect(text).toContain(value);
   }

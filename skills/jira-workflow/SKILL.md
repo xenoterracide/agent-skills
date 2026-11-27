@@ -124,6 +124,8 @@ Rules:
 - Follow the named phase skill for `refining`, `building`, and `done` work.
   Do not infer a phase from the phase just finished.
 - Move to `reviewing` when the PR opens.
+- Move to `done` after merge and green checks. The caller then names the
+  `retrospective` phase.
 - Move to `dropped` when dropped. Reopen from `done` or `dropped` into
   `refining` or `captured` as the work requires.
 - Use this skill for tracker reads, creates, updates, moves, links, and ranks.

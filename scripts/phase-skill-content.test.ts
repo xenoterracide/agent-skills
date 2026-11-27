@@ -50,6 +50,7 @@ it("pins the refine phase contract", () => {
     "refine phase",
     "tracker.statuses.refining",
     "before questions",
+    "move it to `tracker.statuses.refining` before questions",
     "Do not add a breakdown",
     "until all outstanding questions are answered",
     "Stop when all outstanding questions have been answered",
@@ -66,6 +67,7 @@ it("pins the implement phase contract", () => {
     "tracker.statuses.building",
     "breakdown",
     "first work item",
+    "Move the issue to `tracker.statuses.building` when that item starts",
     "no child is in `tracker.statuses.ready`",
     "name the missing ready breakdown",
   ]);

@@ -11,7 +11,8 @@ const RETROSPECTIVE_REQUIRED = [
   "tracker.statuses.done",
   "tracker.statuses.captured",
   "Exclude this retrospective's own calls",
-  "Treat findings skipped as duplicates as observations",
+  "Add one comment to the completed ticket when observations exist",
+  "Use a separate comment call with the observations from step 4",
   "same target",
   "Cut <named target>: <saving>",
   "Skip the comment when no observations exist",
@@ -55,6 +56,7 @@ const RETROSPECTIVE_FORBIDDEN = [
   "`To Do`",
   "`Added to backlog`",
   "`Relates` link to a completed ticket, keep the repeat as an observation",
+  "Treat findings skipped as duplicates as observations",
 ];
 
 it("keeps tracker facts out of completion-retrospective", () => {
