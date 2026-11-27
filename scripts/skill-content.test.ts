@@ -53,6 +53,14 @@ function allSkillText(): string {
     .toLowerCase();
 }
 
+function expectAll(text: string, values: string[]): void {
+  for (const value of values) expect(text).toContain(value);
+}
+
+function expectNone(text: string, values: string[]): void {
+  for (const value of values) expect(text).not.toContain(value);
+}
+
 // Scope: skills/ only. XTC-14's design note and plan keep the retired policy
 // as historical ticket scope.
 
@@ -265,4 +273,28 @@ it("pins completion-retrospective discovery", () => {
   expect(text).toMatch(/description:[\s\S]*?Use when[\s\S]*?wasted tokens/);
   expect(text).toContain("- **`jira-workflow`**");
   expect(text).toContain("- **`hemingway`**");
+});
+
+it("uses git aliases in agent instructions", () => {
+  const bootstrap = readFileSync("skills/using-xenoterracide-agent-skills/SKILL.md", "utf8");
+  expect(bootstrap).toContain("Use the aliases from the `Git aliases:` session block.");
+  expectAll(bootstrap, ["git sync", "git sp", "git pl"]);
+  expectNone(bootstrap, ["git fetch --all --prune", "git status\n"]);
+
+  const pullRequest = readFileSync("skills/git-workflow/references/pull-request.md", "utf8");
+  expectAll(pullRequest, ["git sp", "git sync", "git wtl", "git wtr", "git bd", "git pl"]);
+  expectNone(pullRequest, ["git worktree list", "git branch -D", "git fetch --all --prune"]);
+
+  const manualSync = readFileSync("skills/git-workflow/references/manual-sync.md", "utf8");
+  expectAll(manualSync, ["git bc", "git sp", "git sync", "git p"]);
+  expectNone(manualSync, ["git fetch --all --prune", "git branch --show-current"]);
+  expect(manualSync).toContain("git status --porcelain --untracked-files=no");
+
+  const rejection = readFileSync("skills/git-workflow/references/workflow-push-rejection.md", "utf8");
+  expect(rejection).toContain("git sync");
+  expect(rejection).not.toContain("git fetch origin");
+
+  const quiet = readFileSync("skills/running-commands/references/quiet.md", "utf8");
+  expectAll(quiet, ["git c", "git last"]);
+  expect(quiet).not.toContain("git commit -m");
 });

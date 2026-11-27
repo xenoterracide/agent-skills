@@ -67,12 +67,12 @@ When committing and creating/updating a PR, follow this workflow:
 
 1. **Check current branch status** - Use MCP tools (preferred) or `gh` CLI:
    - Use `pull_request_read` or `list_pull_requests` MCP tools to check PR state
-   - Or run `git status` and `gh pr view --json number,url,headRefName,state`
+   - Or run `git sp` and `gh pr view --json number,url,headRefName,state`
    - Determine: current branch, existing PR status (OPEN/CLOSED/MERGED)
 
 2. **Ensure branch is current** — see the `using-xenoterracide-agent-skills`
    skill for full startup checks:
-   - Fetch and prune: `git fetch --all --prune`
+   - Fetch and prune: `git sync`
    - If the current branch has a CLOSED or MERGED PR, switch to the default branch and create a new one
    - Pull latest changes before starting work
 
@@ -178,12 +178,12 @@ If the session runs in the feature worktree, move out before the merge:
    worktree. Continue in that turn. Do not wait for another human message.
 
 When the merge already ran from the feature worktree, `gh` skipped local
-cleanup. Find `<worktree-path>` with `git worktree list`, then run:
+cleanup. Find `<worktree-path>` with `git wtl`, then run:
 
 ```bash
-git worktree remove <worktree-path>
-git branch -D <branch>
-git pull
+git wtr <worktree-path>
+git bd <branch>
+git pl
 ```
 
 After the harness confirms the move, run the merge from the main worktree in
@@ -192,7 +192,7 @@ and leaves the session in the feature worktree.
 
 ```bash
 gh pr merge <PR> --squash --delete-branch
-git pull
+git pl
 ```
 
 `gh` merges the head at merge time. A push after the approval choice voids it;

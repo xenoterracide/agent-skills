@@ -29,6 +29,11 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
   install Superpowers alongside this plugin for those to resolve.
 - User instructions always take precedence over skill guidance.
 
+## Git aliases
+
+Use the aliases from the `Git aliases:` session block. Do not expand them.
+Git workflow and running-commands examples already use them.
+
 ## Merging
 
 Never merge the PR on your own initiative, in any repository. Show
@@ -78,8 +83,7 @@ Keep command output small. These flags keep failures visible and cut the
 rest. The `running-commands` skill carries the ownership rules and the
 redirect patterns.
 
-- git: add `--quiet` to `fetch`, `pull`, `push`, `commit`, `merge`; use
-  `status --porcelain`; set `NO_COLOR=1` for captured output
+- git: use the injected aliases; they carry the quiet flags
 - pnpm: `--reporter=silent` (npm and yarn: `--silent`)
 - uv: `--quiet`
 - Maven: `-B -q --no-transfer-progress`
@@ -121,15 +125,15 @@ PR state as structured data, no shell parsing.
 **Alternative: git and gh:**
 
 ```bash
-git fetch --all --prune
-git status
+git sync
+git sp
 gh pr view --json number,url,headRefName,state,baseRefName
 ```
 
 Then act on the PR state:
 
 - **No PR** — switch to the default branch and pull:
-  `git checkout "$(git rev-parse --abbrev-ref origin/HEAD)"` then `git pull`
+  `git checkout "$(git rev-parse --abbrev-ref origin/HEAD)"` then `git pl`
 - **PR OPEN** — pull the base branch into the current branch and continue
   work on it
 - **PR CLOSED or MERGED** — the branch is stale. Switch to the default

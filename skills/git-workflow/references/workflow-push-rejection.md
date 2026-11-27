@@ -24,7 +24,7 @@ a workflow file. Rule that out before concluding it is a scope limitation.
 `ghb pr sync` fixes it in one command — fetch, merge the remote default
 branch, push. Without ghb:
 
-1. Fetch the latest remote state: `git fetch origin`
+1. Fetch the latest remote state: `git sync`
 2. Check how far behind you are: `git log --oneline HEAD..origin/HEAD`
 3. Merge the latest base into your branch: `git merge origin/HEAD`
 4. Push again
