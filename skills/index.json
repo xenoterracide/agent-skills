@@ -92,6 +92,11 @@
       "files": ["SKILL.md"]
     },
     {
+      "name": "retrospective",
+      "version": "26.11.30",
+      "files": ["SKILL.md"]
+    },
+    {
       "name": "running-commands",
       "version": "26.11.30",
       "files": ["SKILL.md", "references/quiet.md"]
