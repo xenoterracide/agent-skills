@@ -94,10 +94,10 @@ without spawning a session.
 
 ### Model and cost
 
-`EVAL_MODEL` selects the model and defaults to `opencode/glm-5.3`.
-Flash-class models proved too inconsistent at auto-loading skills, so the
-default trades cost for reliable triggers. `EVAL_ITERATIONS` overrides the run
-count. A full 3/3 pass costs tokens, but the suite is on demand only.
+`EVAL_MODEL` selects the model and defaults to `opencode/big-pickle`.
+Big-pickle is the weakest model in use. A pass there covers stronger models.
+Flash-class models proved too inconsistent at auto-loading skills.
+`EVAL_ITERATIONS` overrides the run count. The suite is on demand only.
 
 ### Tooling
 
@@ -114,4 +114,4 @@ resolution while `tsc` 7, a native binary, reads the tree.
   the remaining cases.
 - **Harness rejections.** A provider budget or rate limit fails the case as a
   harness error, not a trigger miss.
-- **Cost.** Mitigation: on demand only, a cheap default model, and N=3.
+- **Cost.** Mitigation: on demand only, a free default model, and N=3.

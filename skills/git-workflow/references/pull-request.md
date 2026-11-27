@@ -67,12 +67,12 @@ When committing and creating/updating a PR, follow this workflow:
 
 1. **Check current branch status** - Use MCP tools (preferred) or `gh` CLI:
    - Use `pull_request_read` or `list_pull_requests` MCP tools to check PR state
-   - Or run `git status` and `gh pr view --json number,url,headRefName,state`
+   - Or inspect the branch and working tree, then run `gh pr view --json number,url,headRefName,state`
    - Determine: current branch, existing PR status (OPEN/CLOSED/MERGED)
 
 2. **Ensure branch is current** — see the `using-xenoterracide-agent-skills`
    skill for full startup checks:
-   - Fetch and prune: `git fetch --all --prune`
+   - Fetch and prune remote refs.
    - If the current branch has a CLOSED or MERGED PR, switch to the default branch and create a new one
    - Pull latest changes before starting work
 
@@ -178,22 +178,14 @@ If the session runs in the feature worktree, move out before the merge:
    worktree. Continue in that turn. Do not wait for another human message.
 
 When the merge already ran from the feature worktree, `gh` skipped local
-cleanup. Find `<worktree-path>` with `git worktree list`, then run:
-
-```bash
-git worktree remove <worktree-path>
-git branch -D <branch>
-git pull
-```
+cleanup. List the worktrees to find `<worktree-path>`. Remove that worktree,
+delete the branch, and pull the default branch.
 
 After the harness confirms the move, run the merge from the main worktree in
 that turn. `cd` is not a substitute for `session_move`: it lasts one command
 and leaves the session in the feature worktree.
 
-```bash
-gh pr merge <PR> --squash --delete-branch
-git pull
-```
+Run `gh pr merge <PR> --squash --delete-branch`, then pull the default branch.
 
 `gh` merges the head at merge time. A push after the approval choice voids it;
 see the Approval Prompt subsection.

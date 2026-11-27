@@ -29,6 +29,12 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
   install Superpowers alongside this plugin for those to resolve.
 - User instructions always take precedence over skill guidance.
 
+## Git commands
+
+A `Git aliases:` block may list git commands available in this session.
+Skill steps describe the outcome they need. Choose from the commands in this session.
+Keep fetch and pull output quiet. Show failures.
+
 ## Merging
 
 Never merge the PR on your own initiative, in any repository. Show
@@ -78,8 +84,7 @@ Keep command output small. These flags keep failures visible and cut the
 rest. The `running-commands` skill carries the ownership rules and the
 redirect patterns.
 
-- git: add `--quiet` to `fetch`, `pull`, `push`, `commit`, `merge`; use
-  `status --porcelain`; set `NO_COLOR=1` for captured output
+- git: `--quiet` on fetch, pull, push, and merge; keep failures visible
 - pnpm: `--reporter=silent` (npm and yarn: `--silent`)
 - uv: `--quiet`
 - Maven: `-B -q --no-transfer-progress`
@@ -118,20 +123,17 @@ merged PRs and outdated code.
 **Preferred: MCP tools** — `list_pull_requests` or `pull_request_read` give
 PR state as structured data, no shell parsing.
 
-**Alternative: git and gh:**
+**Without MCP tools:**
 
-```bash
-git fetch --all --prune
-git status
-gh pr view --json number,url,headRefName,state,baseRefName
-```
+- Inspect the current branch and working tree.
+- Fetch remote refs and prune deleted branches.
+- Run `gh pr view --json number,url,headRefName,state,baseRefName`.
 
 Then act on the PR state:
 
-- **No PR** — switch to the default branch and pull:
-  `git checkout "$(git rev-parse --abbrev-ref origin/HEAD)"` then `git pull`
+- **No PR** — switch to the default branch and pull it.
 - **PR OPEN** — pull the base branch into the current branch and continue
-  work on it
+  work on it.
 - **PR CLOSED or MERGED** — the branch is stale. Switch to the default
   branch, pull, delete the stale branch, create a fresh one.
 
