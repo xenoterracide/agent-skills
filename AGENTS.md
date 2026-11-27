@@ -99,9 +99,11 @@ selects it. `EVAL_ITERATIONS=1` runs one iteration per case for cheap
 wording checks before full verification.
 
 Evals are on demand and never run in CI. `EVAL_MODEL` and `EVAL_ITERATIONS`
-override the defaults. The suite bails at the first failure. Evaluate on a
-full-size coding model — flash-tier variants flake on companion and routing
-compliance, loading the primary skill while skipping its companions.
+override the defaults. The suite bails at the first failure. Start with
+`EVAL_MODEL=opencode/big-pickle`. It is the weakest model in use, so a pass
+there covers stronger models. Do not use a flash-tier model; it flakes on
+companion and routing compliance, loading the primary skill while skipping its
+companions.
 
 The default reporter prints nothing until the suite ends, so a long run looks
 stuck and a killed run leaves no trace. Stream per-test progress instead:
@@ -112,8 +114,8 @@ pnpm exec vitest run --reporter=verbose 2>&1 | tee /tmp/opencode/evals.log
 
 A full run takes an hour or more; use a background shell and read the log. A
 failure quoting `Policy budget exceeded` or `Free usage limit reached` means
-the provider quota ran dry — point `EVAL_MODEL` at another provider or wait
-for the reset.
+the provider quota ran dry — fall back to another provider or wait for the
+reset.
 
 ### Git Hooks
 
