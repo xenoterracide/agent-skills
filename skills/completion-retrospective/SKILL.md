@@ -57,7 +57,7 @@ ticket just moved to done.
 
    Add an outward `Relates` link from the repeat target to the completed
    ticket when absent.
-   This applies when the target has no outward `Relates` link.
+   This applies when the target has no outward `Relates` link to the completed ticket.
    Count one link per completed ticket.
    Count only outward `Relates` links whose target status is `tracker.statuses.done`.
    Ignore repeat mentions inside one session. Map the distinct count to

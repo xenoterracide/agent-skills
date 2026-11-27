@@ -229,7 +229,7 @@ const RETROSPECTIVE_REQUIRED = [
   "findings summary",
   "No automatic reparenting of legacy tasks",
   "Use the duplicate issue as the repeat target",
-  "This applies when the target has no outward `Relates` link",
+  "This applies when the target has no outward `Relates` link to the completed ticket",
   "Add the target to the affected keys when its priority bucket changes",
   "When no open issue matches the finding, keep the repeat as an observation",
 ];
