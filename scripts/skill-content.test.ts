@@ -156,6 +156,8 @@ it("pins the jira-workflow config contract", () => {
     "project-wide",
     "tracker.labels.project_prefix",
     "target role's value in `tracker.statuses`",
+    "Follow the named phase skill",
+    "Do not infer a phase from the phase just finished",
   ]) {
     expect(text).toContain(value);
   }
