@@ -81,8 +81,9 @@ directory path instead of the Git specifier. Restart OpenCode or let it reload
 its configuration after installing.
 
 `gitAliases.offer` defaults to `true`. At session start, the plugin reads git
-aliases. When aliases exist, it injects a `Git aliases:` block into the first
-message. When a curated alias is missing or differs, it also injects an
+aliases. When aliases exist, it injects a `Git aliases:` block inside the
+importance wrapper of the first message. The block tells the agent to use those
+aliases. When a curated alias is missing or differs, it also injects an
 `Install git aliases:` offer.
 Set `gitAliases.offer: false` to skip the offer:
 
