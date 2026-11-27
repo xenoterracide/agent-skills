@@ -30,9 +30,12 @@ This skill owns the `refine phase` and the `tracker.statuses.refining` role.
 ## Procedure
 
 1. Read `.config/agent/project.yaml`. Read the named issue. Stop and name the
-   current status when the issue is not in `tracker.statuses.captured`.
-2. Move the issue to `tracker.statuses.refining` before questions. Use the
-   `jira-workflow` move rule. Do not cache the status.
+   current status when the issue is not in `tracker.statuses.captured` or
+   `tracker.statuses.refining`.
+2. When the issue is in `tracker.statuses.captured`, move it to
+   `tracker.statuses.refining` before questions. When the issue is already in
+   `tracker.statuses.refining`, keep it there. Use the `jira-workflow` move
+   rule. Do not cache the status.
 3. Ask refinement questions until all outstanding questions are answered. Put
    the agreed spec in the issue description. Do not add a breakdown while the
    issue is in `tracker.statuses.refining`.

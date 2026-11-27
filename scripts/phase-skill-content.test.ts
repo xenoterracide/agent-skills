@@ -25,8 +25,9 @@ const PHASE_FORBIDDEN = [
   "rankCustomFieldId",
 ];
 
-export function pinPhaseSkill(skill: string, role: string, required: string[]): void {
+function pinPhaseSkill(skill: string, role: string, required: string[]): void {
   const text = readFileSync(`skills/${skill}/SKILL.md`, "utf8");
+  const normalized = text.replace(/\s+/g, " ");
 
   expect(text).toContain(`name: ${skill}`);
   expect(text).toContain("Use when");
@@ -37,7 +38,7 @@ export function pinPhaseSkill(skill: string, role: string, required: string[]): 
   expect(text).toContain(`tracker.statuses.${role}`);
 
   for (const value of required) {
-    expect(text).toContain(value);
+    expect(normalized).toContain(value);
   }
   for (const value of PHASE_FORBIDDEN) {
     expect(text).not.toContain(value);
@@ -51,11 +52,12 @@ it("pins the refine phase contract", () => {
     "before questions",
     "Do not add a breakdown",
     "until all outstanding questions are answered",
-    "ask whether to move the",
-    "issue to `tracker.statuses.ready`",
+    "ask whether to move the issue to `tracker.statuses.ready`",
     "Move through `jira-workflow` only on yes",
     "leave the issue in `tracker.statuses.refining` and stop",
-    "may resume later",
+    "The caller may resume later",
+    "not in `tracker.statuses.captured` or `tracker.statuses.refining`",
+    "When the issue is already in `tracker.statuses.refining`, keep it there",
   ]);
 });
 
