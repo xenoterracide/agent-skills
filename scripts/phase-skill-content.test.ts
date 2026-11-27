@@ -52,3 +52,14 @@ it("pins the refine phase contract", () => {
     "Do not add a breakdown",
   ]);
 });
+
+it("pins the implement phase contract", () => {
+  pinPhaseSkill("implement", "building", [
+    "implement phase",
+    "tracker.statuses.ready",
+    "tracker.statuses.building",
+    "breakdown",
+    "first work item",
+    "name the missing breakdown",
+  ]);
+});
