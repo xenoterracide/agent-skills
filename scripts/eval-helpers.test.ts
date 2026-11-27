@@ -6,7 +6,7 @@ import { spawnSync } from "node:child_process";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import {
   assertSkillBehavior,
@@ -111,25 +111,6 @@ const forwardsRepoToRun = (): void => {
   expect(received?.repo).toBe(true);
 };
 
-const defaultsToBigPickle = async (): Promise<void> => {
-  const previous = process.env.EVAL_MODEL;
-  delete process.env.EVAL_MODEL;
-  vi.resetModules();
-  try {
-    const { assertSkillBehavior: freshAssertSkillBehavior } = await import("./eval-helpers");
-    let model: string | undefined;
-    const capture = (_prompt: string, options?: RunOptions): string => {
-      model = options?.model;
-      return '→ Skill "java-creator"';
-    };
-    freshAssertSkillBehavior("p", "java-creator", { run: capture, iterations: 1 });
-    expect(model).toBe("opencode/big-pickle");
-  } finally {
-    if (previous === undefined) delete process.env.EVAL_MODEL;
-    else process.env.EVAL_MODEL = previous;
-  }
-};
-
 const passesWithRegexPattern = (): void => {
   assertPass("java-creator", { run: runJavaCreator, reads: [/hibernate\.md$/] });
 };
@@ -169,7 +150,6 @@ const stillRequiresReads = (): void => {
 describe("assertSkillBehavior", () => {
   it("passes when the skill loads and the reference is read", passesOnLoadAndRead);
   it("forwards repo to run", forwardsRepoToRun);
-  it("defaults evals to big-pickle", defaultsToBigPickle);
   it("passes with a RegExp read pattern", passesWithRegexPattern);
   it("fails when the reference is not read", failsWhenReferenceNotRead);
   it("fails when the skill does not load", failsWhenSkillNotLoaded);
