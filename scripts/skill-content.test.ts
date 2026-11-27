@@ -63,10 +63,10 @@ const forbiddenGit =
   /git (sync|sp|pl|p |bc|wtl|wtr|bd|last|fetch --all --prune|fetch origin|worktree list|worktree remove|branch -D|branch --show-current|status|pull|push)/;
 
 const gitDocs = [
-  ["using-xenoterracide-agent-skills/SKILL.md", "outcome they need"],
-  ["git-workflow/references/pull-request.md", "Fetch and prune"],
-  ["git-workflow/references/manual-sync.md", "modified tracked files"],
-  ["git-workflow/references/workflow-push-rejection.md", "latest remote state"],
+  ["using-xenoterracide-agent-skills/SKILL.md", ["outcome they need", "Keep fetch and pull output quiet"]],
+  ["git-workflow/references/pull-request.md", ["Fetch and prune"]],
+  ["git-workflow/references/manual-sync.md", ["modified tracked files", "Keep the output quiet"]],
+  ["git-workflow/references/workflow-push-rejection.md", ["latest remote state"]],
 ] as const;
 
 // Scope: skills/ only. XTC-14's design note and plan keep the retired policy
@@ -284,9 +284,9 @@ it("pins completion-retrospective discovery", () => {
 });
 
 it("describes git workflows without prescribing commands", () => {
-  for (const [path, phrase] of gitDocs) {
+  for (const [path, phrases] of gitDocs) {
     const text = readFileSync(`skills/${path}`, "utf8");
-    expect(text).toContain(phrase);
+    for (const phrase of phrases) expect(text).toContain(phrase);
     expect(text).not.toMatch(forbiddenGit);
   }
   expectDoc("skills/running-commands/references/quiet.md", ["git commit -m"], ["git c >", "git last"]);

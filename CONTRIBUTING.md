@@ -81,8 +81,8 @@ Skill trigger evals live in `skills/<skill>/tests/evals.test.ts`. Each case
 forks a real agent session in a sandbox and passes only when the skill loads in
 all three runs. Evals are on demand and never run in CI; `EVAL_MODEL` and
 `EVAL_ITERATIONS` override the defaults. The suite bails at the first failure.
-Start with `EVAL_MODEL=opencode/big-pickle`, the weakest model in use. A pass
-there covers stronger models.
+Evals default to `opencode/big-pickle`, the weakest model in use. A pass there
+covers stronger models.
 
 Before opening a PR, also validate YAML frontmatter, confirm Prettier passes,
 and run any changed examples manually.

@@ -14,7 +14,7 @@ import { writeGhDenyStub, writeGhStub, writeGhbStub } from "./eval-stubs";
 const root = join(import.meta.dirname, "..");
 const skillsDir = join(root, "skills");
 
-export const MODEL = process.env.EVAL_MODEL ?? "opencode/glm-5.3";
+export const MODEL = process.env.EVAL_MODEL ?? "opencode/big-pickle";
 
 function readIterations(): number {
   const raw = process.env.EVAL_ITERATIONS;

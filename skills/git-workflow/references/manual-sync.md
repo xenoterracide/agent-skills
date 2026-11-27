@@ -30,7 +30,8 @@ refs/remotes/origin/HEAD` prints `origin/<default>`. A failure means
 
 ## Sequence
 
-1. Fetch every remote and prune deleted branches.
+1. Fetch every remote and prune deleted branches. Keep the output quiet. Show
+   failures.
 
 2. Compare your branch with its own remote, `origin/<branch>`:
 

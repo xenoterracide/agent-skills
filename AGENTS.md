@@ -99,11 +99,10 @@ selects it. `EVAL_ITERATIONS=1` runs one iteration per case for cheap
 wording checks before full verification.
 
 Evals are on demand and never run in CI. `EVAL_MODEL` and `EVAL_ITERATIONS`
-override the defaults. The suite bails at the first failure. Start with
-`EVAL_MODEL=opencode/big-pickle`. It is the weakest model in use, so a pass
-there covers stronger models. Do not use a flash-tier model; it flakes on
-companion and routing compliance, loading the primary skill while skipping its
-companions.
+override the defaults. The default model is `opencode/big-pickle`, the weakest
+model in use. A pass there covers stronger models. The suite bails at the first
+failure. Do not use a flash-tier model; it flakes on companion and routing
+compliance, loading the primary skill while skipping its companions.
 
 The default reporter prints nothing until the suite ends, so a long run looks
 stuck and a killed run leaves no trace. Stream per-test progress instead:

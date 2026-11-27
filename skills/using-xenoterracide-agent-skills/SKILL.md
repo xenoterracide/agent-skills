@@ -33,6 +33,7 @@ SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 A `Git aliases:` block may list git commands available in this session.
 Skill steps describe the outcome they need. Choose from the commands in this session.
+Keep fetch and pull output quiet. Show failures.
 
 ## Merging
 
@@ -83,7 +84,7 @@ Keep command output small. These flags keep failures visible and cut the
 rest. The `running-commands` skill carries the ownership rules and the
 redirect patterns.
 
-- git: keep failures visible; use a quiet command the session provides
+- git: `--quiet` on fetch, pull, push, and merge; keep failures visible
 - pnpm: `--reporter=silent` (npm and yarn: `--silent`)
 - uv: `--quiet`
 - Maven: `-B -q --no-transfer-progress`
