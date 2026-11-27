@@ -271,3 +271,16 @@ it("pins completion-retrospective discovery", () => {
   expect(text).toContain("- **`jira-workflow`**");
   expect(text).toContain("- **`hemingway`**");
 });
+
+it("keeps phase rules out of jira-workflow", () => {
+  const text = readFileSync("skills/jira-workflow/SKILL.md", "utf8");
+
+  for (const value of [
+    "completion-retrospective",
+    "when the first work item starts",
+    "merged code",
+    "breakdown in `tracker.statuses.ready`",
+  ]) {
+    expect(text).not.toContain(value);
+  }
+});

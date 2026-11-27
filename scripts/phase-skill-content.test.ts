@@ -50,6 +50,12 @@ it("pins the refine phase contract", () => {
     "tracker.statuses.refining",
     "before questions",
     "Do not add a breakdown",
+    "until all outstanding questions are answered",
+    "ask whether to move the",
+    "issue to `tracker.statuses.ready`",
+    "Move through `jira-workflow` only on yes",
+    "leave the issue in `tracker.statuses.refining` and stop",
+    "may resume later",
   ]);
 });
 

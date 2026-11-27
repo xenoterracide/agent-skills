@@ -33,10 +33,13 @@ This skill owns the `refine phase` and the `tracker.statuses.refining` role.
    current status when the issue is not in `tracker.statuses.captured`.
 2. Move the issue to `tracker.statuses.refining` before questions. Use the
    `jira-workflow` move rule. Do not cache the status.
-3. Ask refinement questions. Put the agreed spec in the issue description.
-   Do not add a breakdown while the issue is in `tracker.statuses.refining`.
-4. When the spec is sufficient, report that the issue is ready for breakdown.
-   Do not infer the next phase. The caller names it.
+3. Ask refinement questions until all outstanding questions are answered. Put
+   the agreed spec in the issue description. Do not add a breakdown while the
+   issue is in `tracker.statuses.refining`.
+4. When all outstanding questions have been answered, ask whether to move the
+   issue to `tracker.statuses.ready`. Move through `jira-workflow` only on yes.
+   On no, leave the issue in `tracker.statuses.refining` and stop. The caller
+   may resume later. Do not infer the next phase.
 
 ## Non-goals
 

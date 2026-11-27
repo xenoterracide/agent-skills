@@ -121,15 +121,10 @@ the returned ID. Never move on an unchecked ID. Transition names differ from sta
 
 Rules:
 
-- Do not add work breakdown in `refining`. Refine the description there.
-- Create the breakdown in `ready`. Each item becomes a work item on the ticket.
-- Move to `building` when the first work item starts.
-- Move to `reviewing` when the PR opens.
-- Move to `done` after merge and green checks.
-- Run `completion-retrospective` after that move. Do not end the turn until
-  it finishes.
-- Move to `dropped` when dropped. Reopen from `done` or `dropped` into
-  `refining` or `captured` as the work requires.
+- Follow the named phase skill for `refining`, `building`, and `done` work.
+  Do not infer a phase from the phase just finished.
+- Use this skill for tracker reads, creates, updates, moves, links, and ranks.
+  Phase skills call this skill. They do not repeat its facts.
 
 ## Integration
 
