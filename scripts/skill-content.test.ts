@@ -53,12 +53,10 @@ function allSkillText(): string {
     .toLowerCase();
 }
 
-function expectAll(text: string, values: string[]): void {
-  for (const value of values) expect(text).toContain(value);
-}
-
-function expectNone(text: string, values: string[]): void {
-  for (const value of values) expect(text).not.toContain(value);
+function expectDoc(path: string, present: string[], absent: string[]): void {
+  const text = readFileSync(path, "utf8");
+  for (const value of present) expect(text).toContain(value);
+  for (const value of absent) expect(text).not.toContain(value);
 }
 
 // Scope: skills/ only. XTC-14's design note and plan keep the retired policy
@@ -275,26 +273,10 @@ it("pins completion-retrospective discovery", () => {
   expect(text).toContain("- **`hemingway`**");
 });
 
-it("uses git aliases in agent instructions", () => {
-  const bootstrap = readFileSync("skills/using-xenoterracide-agent-skills/SKILL.md", "utf8");
-  expect(bootstrap).toContain("Use the aliases from the `Git aliases:` session block.");
-  expectAll(bootstrap, ["git sync", "git sp", "git pl"]);
-  expectNone(bootstrap, ["git fetch --all --prune", "git status\n"]);
-
-  const pullRequest = readFileSync("skills/git-workflow/references/pull-request.md", "utf8");
-  expectAll(pullRequest, ["git sp", "git sync", "git wtl", "git wtr", "git bd", "git pl"]);
-  expectNone(pullRequest, ["git worktree list", "git branch -D", "git fetch --all --prune"]);
-
-  const manualSync = readFileSync("skills/git-workflow/references/manual-sync.md", "utf8");
-  expectAll(manualSync, ["git bc", "git sp", "git sync", "git p"]);
-  expectNone(manualSync, ["git fetch --all --prune", "git branch --show-current"]);
-  expect(manualSync).toContain("git status --porcelain --untracked-files=no");
-
-  const rejection = readFileSync("skills/git-workflow/references/workflow-push-rejection.md", "utf8");
-  expect(rejection).toContain("git sync");
-  expect(rejection).not.toContain("git fetch origin");
-
-  const quiet = readFileSync("skills/running-commands/references/quiet.md", "utf8");
-  expectAll(quiet, ["git c", "git last"]);
-  expect(quiet).not.toContain("git commit -m");
+it("describes git workflows without prescribing commands", () => {
+  expectDoc("skills/using-xenoterracide-agent-skills/SKILL.md", ["outcome they need"], ["git sync", "git sp"]);
+  expectDoc("skills/git-workflow/references/pull-request.md", ["Fetch and prune"], ["git sp", "git sync"]);
+  expectDoc("skills/git-workflow/references/manual-sync.md", ["modified tracked files"], ["git bc", "git sync"]);
+  expectDoc("skills/git-workflow/references/workflow-push-rejection.md", ["latest remote state"], ["git sync"]);
+  expectDoc("skills/running-commands/references/quiet.md", ["git commit -m"], ["git c >", "git last"]);
 });

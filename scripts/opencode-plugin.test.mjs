@@ -496,8 +496,13 @@ test("keeps injected aliases inside the importance wrapper", async () => {
   await getContextHook()(event);
 
   const bootstrap = event.messages[0].content[0].text;
-  assert.ok(bootstrap.indexOf("Git aliases:") > -1);
-  assert.ok(bootstrap.indexOf("Git aliases:") < bootstrap.indexOf("</EXTREMELY_IMPORTANT>"));
+  const open = bootstrap.indexOf("<EXTREMELY_IMPORTANT>");
+  const aliases = bootstrap.indexOf("Git aliases:");
+  const close = bootstrap.indexOf("</EXTREMELY_IMPORTANT>");
+  assert.ok(open > -1);
+  assert.ok(open < aliases);
+  assert.ok(aliases < close);
+  assert.ok(bootstrap.indexOf("Use these aliases for every matching git command.") < close);
 });
 
 test("injects git aliases from git config before the first user text", async () => {

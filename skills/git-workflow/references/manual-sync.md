@@ -18,23 +18,19 @@ refs/remotes/origin/HEAD` prints `origin/<default>`. A failure means
   detached or missing — a remote branch named `HEAD` causes it in
   checkouts built without a clone — and every `origin/HEAD` below then
   resolves wrong. Fix it first: `git remote set-head origin -a`.
-- On the topic branch, not the default branch: `git bc`
-  prints a non-empty name (empty is a detached HEAD), and it differs from
-  the default branch — `git symbolic-ref --short refs/remotes/origin/HEAD`
-  with its `origin/` prefix stripped. Refuse on empty or on a match.
-- A remote counterpart: `git rev-parse --verify origin/<branch>` succeeds.
-  If it does not, `git p -u origin <branch>` first — the comparison
-  steps read `origin/<branch>`, and the final push needs its upstream.
-- Clean working tree: `git status --porcelain --untracked-files=no` prints
-  nothing. Commit or stash first.
+- On the topic branch, not the default branch: read the current branch name.
+  It must be non-empty (empty is a detached HEAD) and differ from the default
+  branch — `git symbolic-ref --short refs/remotes/origin/HEAD` with its
+  `origin/` prefix stripped. Refuse on empty or on a match.
+- A remote counterpart: `origin/<branch>` must exist. If it does not, push
+  the branch with an upstream first — the comparison steps read
+  `origin/<branch>`, and the final push needs its upstream.
+- Clean working tree: no modified tracked files. Untracked files do not
+  block this check. Commit or stash changes first.
 
 ## Sequence
 
-1. Fetch every remote and prune deleted branches:
-
-   ```bash
-   git sync
-   ```
+1. Fetch every remote and prune deleted branches.
 
 2. Compare your branch with its own remote, `origin/<branch>`:
 
@@ -69,17 +65,13 @@ refs/remotes/origin/HEAD` prints `origin/<default>`. A failure means
    git merge origin/HEAD
    ```
 
-   On conflict, `git sp` shows the damage. Resolve it, or
+   On conflict, inspect the working tree. Resolve it, or
    abort and hand the decision to a human.
 
 5. Regenerate lockfiles instead of merging them — delete the lockfile and
    rebuild with the project's package manager so it matches the merged
    manifest.
 
-6. Push:
-
-   ```bash
-   git p
-   ```
+6. Push the branch.
 
 Never force push. If the push is rejected, create a new commit instead.

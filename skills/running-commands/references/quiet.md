@@ -22,9 +22,9 @@ Commits print hook output only on failure:
 
 ```bash
 log=$(mktemp /tmp/opencode/commit.XXXXXXXX 2>/dev/null || mktemp)
-printf '%s\n' "..." | git c >"$log" 2>&1 ||
+git commit -m "..." >"$log" 2>&1 ||
   { tail -40 "$log"; exit 1; }
-git last
+git log --oneline -1
 ```
 
 ## Background waits

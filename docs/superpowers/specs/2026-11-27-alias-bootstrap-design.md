@@ -15,8 +15,8 @@ The plugin injects a `Git aliases:` list with every session bootstrap. It append
 - `buildAliasBlock` ends with the imperative `Use these aliases for every matching git command. Do not expand them.`
 - `buildSessionBootstrap` places every block inside the `<EXTREMELY_IMPORTANT>` wrapper.
 - The one-time bootstrap marker stays unchanged. Repeated context calls still skip injection.
-- Skills use a curated alias wherever the example has an exact equivalent. Commands with extra flags stay canonical.
-- Static tests pin the wrapper order, the imperative, and the skill examples. No eval is added.
+- Git workflow steps describe outcomes. The agent chooses commands from the session. No step declares aliases or canonical git commands.
+- Static tests pin the wrapper order, the imperative, and the workflow descriptions. No eval is added.
 - Version moves to `26.11.32`. The catalog is regenerated.
 
 ## Non-goals
