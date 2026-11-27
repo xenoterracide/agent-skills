@@ -68,7 +68,8 @@ it("pins the implement phase contract", () => {
     "tracker.statuses.building",
     "breakdown",
     "first work item",
-    "name the missing breakdown",
+    "no child is in `tracker.statuses.ready`",
+    "name the missing ready breakdown",
   ]);
 });
 

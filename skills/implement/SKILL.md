@@ -31,8 +31,8 @@ This skill owns the `implement phase` and the `tracker.statuses.building` role.
 
 1. Read `.config/agent/project.yaml`. Read the named issue. Read its child
    work items. Require at least one child in `tracker.statuses.ready`.
-2. When no breakdown exists, stop and name the missing breakdown. Do not move
-   the issue.
+2. When no breakdown exists or no child is in `tracker.statuses.ready`, stop
+   and name the missing ready breakdown. Do not move the issue.
 3. Start the first work item. Move the issue to
    `tracker.statuses.building` when that item starts. Use the `jira-workflow`
    move rule.
