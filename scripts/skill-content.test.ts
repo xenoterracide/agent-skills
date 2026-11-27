@@ -172,6 +172,12 @@ it("pins the jira-workflow config contract", () => {
     "project-wide",
     "tracker.labels.project_prefix",
     "target role's value in `tracker.statuses`",
+    "Follow the named phase skill",
+    "Do not infer a phase from the phase just finished",
+    "Move to `reviewing` when the PR opens",
+    "Move to `dropped` when dropped",
+    "Reopen from `done` or `dropped`",
+    "Move to `done` after merge and green checks",
   ]) {
     expect(text).toContain(value);
   }
@@ -210,77 +216,17 @@ it("instructs agents to emit a rendered PR link", () => {
   expect(text).toMatch(/no\s+backticks/i);
 });
 
-const RETROSPECTIVE_REQUIRED = [
-  ".config/agent/project.yaml",
-  "tracker.statuses.done",
-  "tracker.statuses.captured",
-  "Exclude this retrospective's own calls",
-  "Treat findings skipped as duplicates as observations",
-  "same target",
-  "Cut <named target>: <saving>",
-  "Skip the comment when no observations exist",
-  "name the missing key",
-  "tracker.retrospective_epic",
-  "outward",
-  "Relates",
-  "Set priority to Low",
-  "1 Low, 2-3 Medium, 4-7 High, 8 or more Highest",
-  "Count one link per completed ticket",
-  "Count only outward `Relates` links whose target status is `tracker.statuses.done`",
-  "Ignore repeat mentions inside one session",
-  "Treat a missing link as count 1",
-  "rankBeforeIssue",
-  "rankAfterIssue",
-  "Leave other backlog ranks unchanged",
-  "Skip keys with no slot among epic children",
-  "Split the target sequence into contiguous runs of affected keys",
-  "For the run ending at the last position",
-  "Process its keys in target order",
-  "Process its keys in reverse target order",
-  "Process all keys except the last in target order",
-  "When no unaffected child exists",
-  "Confirm the target sequence",
-  "Stop and report the mismatch when the order differs",
-  "without follow-up questions",
-  "findings summary",
-  "No automatic reparenting of legacy tasks",
-];
-
-const RETROSPECTIVE_FORBIDDEN = [
-  "XTC",
-  "board: 3",
-  "fc5ce4e3-4638-4a37-9aaf-1a2591482c2e",
-  "`Done`",
-  "`Open`",
-  "`To Do`",
-  "`Added to backlog`",
-];
-
-it("keeps tracker facts out of completion-retrospective", () => {
-  const text = readFileSync("skills/completion-retrospective/SKILL.md", "utf8");
-
-  for (const value of RETROSPECTIVE_REQUIRED) {
-    expect(text).toContain(value);
-  }
-  for (const value of RETROSPECTIVE_FORBIDDEN) {
-    expect(text).not.toContain(value);
-  }
-});
-
-it("runs the retrospective after a done move", () => {
+it("keeps phase rules out of jira-workflow", () => {
   const text = readFileSync("skills/jira-workflow/SKILL.md", "utf8");
 
-  expect(text).toContain("completion-retrospective");
-  expect(text).toMatch(/Move to `?done`?[\s\S]*?completion-retrospective/);
-});
-
-it("pins completion-retrospective discovery", () => {
-  const text = readFileSync("skills/completion-retrospective/SKILL.md", "utf8");
-
-  expect(text).toContain("name: completion-retrospective");
-  expect(text).toMatch(/description:[\s\S]*?Use when[\s\S]*?wasted tokens/);
-  expect(text).toContain("- **`jira-workflow`**");
-  expect(text).toContain("- **`hemingway`**");
+  for (const value of [
+    "completion-retrospective",
+    "when the first work item starts",
+    "merged code",
+    "breakdown in `tracker.statuses.ready`",
+  ]) {
+    expect(text).not.toContain(value);
+  }
 });
 
 it("describes git workflows without prescribing commands", () => {

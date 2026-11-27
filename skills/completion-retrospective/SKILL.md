@@ -51,15 +51,22 @@ ticket just moved to done.
 4. Read open issues in `tracker.project`. Treat statuses other than
    `tracker.statuses.done` and `tracker.statuses.dropped` as open. Treat a
    finding as a duplicate when an open issue names the same target and the
-   same change, whatever the wording or count. When the issue has no outward
-   `Relates` link to a completed ticket, keep the repeat as an observation.
-   Do not create a task, add a link, or change priority. When the issue has
-   such a link, add an outward `Relates` link from the issue to the completed
-   ticket when absent. Count one link per completed ticket.
+   same change, whatever the wording or count.
+
+   Use the duplicate issue as the repeat target.
+
+   Add the outward `Relates` link when the completed ticket is not already linked.
+   Count one link per completed ticket.
    Count only outward `Relates` links whose target status is `tracker.statuses.done`.
    Ignore repeat mentions inside one session. Map the distinct count to
    `1 Low, 2-3 Medium, 4-7 High, 8 or more Highest`. Change priority only when
    the bucket changes.
+
+   Add the target to the affected keys when its priority bucket changes.
+
+   When no open issue matches the finding, keep the repeat as an observation.
+   Do not create a task, add a link, or change priority.
+
 5. Create a `Task` issue in `tracker.project` for each actionable finding.
    Parent each `Task` to `tracker.retrospective_epic`. Set priority to Low.
    Use `Cut <named target>: <saving>` as the summary. Set the label to the full
@@ -90,8 +97,7 @@ ticket just moved to done.
    Re-read children in rank order. Confirm the target sequence.
    Stop and report the mismatch when the order differs.
 7. Add one comment to the completed ticket when observations exist.
-   Treat findings skipped as duplicates as observations. Use a separate
-   comment call with those observations.
+   Use a separate comment call with the observations from step 4.
    Skip the comment when no observations exist.
 8. Report the created keys. Report the comment ID only when a comment was
    posted. Report "no findings" when both lists are empty. Do not change the
