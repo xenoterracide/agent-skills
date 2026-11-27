@@ -82,6 +82,11 @@
       "files": ["SKILL.md", "references/issue-content.md"]
     },
     {
+      "name": "refine",
+      "version": "26.11.30",
+      "files": ["SKILL.md"]
+    },
+    {
       "name": "running-commands",
       "version": "26.11.30",
       "files": ["SKILL.md", "references/quiet.md"]
